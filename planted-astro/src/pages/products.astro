@@ -28,8 +28,13 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
         <div class="products-grid">
             {sortedProducts.map((product) => (
                 <a href={`${base}/products/${product.data.slug}`} class="product-card" data-color={product.data.color} data-category={product.data.category}>
-                    <div class="product-card-inner" style={product.data.images.background ? `background-image: url('${product.data.images.background}'); background-size: cover; background-position: center;` : ''}>
+                    <div class="product-card-inner">
                         {product.data.isNew && <span class="product-badge-new">New</span>}
+                        {product.data.images.background && (
+                            <div class="product-grid-overlay">
+                                <img src={product.data.images.background} alt="">
+                            </div>
+                        )}
                         <div class="product-image product-image-pack">
                             <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
                         </div>
@@ -156,6 +161,31 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
         z-index: 10;
     }
 
+    .product-grid-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .product-grid-overlay img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-card:hover .product-grid-overlay {
+        opacity: 1;
+    }
+
     .product-image {
         width: 100%;
         height: 100%;
@@ -167,6 +197,7 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
         left: 0;
         padding: 1.5rem;
         transition: opacity 0.4s ease;
+        z-index: 2;
     }
 
     .product-image-pack {
