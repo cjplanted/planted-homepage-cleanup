@@ -4,10 +4,11 @@ interface Props {
 }
 
 const { currentPage = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 
 <nav class="nav" id="nav">
-    <a href="/" class="logo">
+    <a href={base} class="logo">
         <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
             <path fill="#61269e" d="m193.54,34.47l-2.66-34.47H0l3.78,46.08c1.65,22.09,20.09,20.09,20.09,20.09,0,0,126.37-9.87,148.05-11.64,23.55-2.11,21.62-20.06,21.62-20.06Z"/>
             <path fill="#fff" d="m166.22,32.32h0c1.12-1.28,2.97-1.43,4.25-.34,1.31,1.09,1.46,2.93.34,4.21-1.09,1.28-2.93,1.42-4.25.34-1.28-1.09-1.42-2.93-.34-4.21Z"/>
@@ -24,10 +25,10 @@ const { currentPage = '' } = Astro.props;
 
     <div class="nav-right">
         <div class="nav-links">
-            <a href="/products" class:list={[{ active: currentPage === 'products' }]}>Products</a>
-            <a href="/recipes" class:list={[{ active: currentPage === 'recipes' }]}>Recipes</a>
-            <a href="/#locator">Find Us</a>
-            <a href="/our-story" class:list={[{ active: currentPage === 'our-story' }]}>Our Story</a>
+            <a href={`${base}products`} class:list={[{ active: currentPage === 'products' }]}>Products</a>
+            <a href={`${base}recipes`} class:list={[{ active: currentPage === 'recipes' }]}>Recipes</a>
+            <a href={`${base}#locator`}>Find Us</a>
+            <a href={`${base}our-story`} class:list={[{ active: currentPage === 'our-story' }]}>Our Story</a>
         </div>
 
         <button class="nav-toggle" id="navToggle" aria-label="Open menu">
@@ -41,10 +42,10 @@ const { currentPage = '' } = Astro.props;
 <!-- Mobile Menu -->
 <div class="nav-menu" id="navMenu">
     <button class="close-menu" id="closeMenu" aria-label="Close menu">&#10005;</button>
-    <a href="/products">Products</a>
-    <a href="/recipes">Recipes</a>
-    <a href="/#locator">Find Us</a>
-    <a href="/our-story">Our Story</a>
+    <a href={`${base}products`}>Products</a>
+    <a href={`${base}recipes`}>Recipes</a>
+    <a href={`${base}#locator`}>Find Us</a>
+    <a href={`${base}our-story`}>Our Story</a>
 </div>
 
 <style>

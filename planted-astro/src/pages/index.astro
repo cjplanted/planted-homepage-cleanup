@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
+const base = import.meta.env.BASE_URL;
 
 const products = await getCollection('products');
 const featuredProducts = products
@@ -21,7 +22,7 @@ const settings = await getEntry('settings', 'global');
         <div class="hero-video-wrapper">
             <div class="hero-video-container" id="heroVideo">
                 <video class="hero-video" autoplay muted loop playsinline>
-                    <source src="/video/hero.mp4" type="video/mp4">
+                    <source src={`${base}video/hero.mp4`} type="video/mp4">
                 </video>
             </div>
         </div>
@@ -55,7 +56,7 @@ const settings = await getEntry('settings', 'global');
     <section class="products" id="products">
         <div class="products-header">
             <h2 class="reveal">Our highlights</h2>
-            <a href="/products" class="all-products-btn reveal">
+            <a href={`${base}products`} class="all-products-btn reveal">
                 → All Products
             </a>
         </div>
@@ -122,7 +123,7 @@ const settings = await getEntry('settings', 'global');
     <section class="recipes-section" id="recipes">
         <div class="recipes-header">
             <h2 class="reveal">Get cooking</h2>
-            <a href="/recipes" class="reveal">All 50+ recipes →</a>
+            <a href={`${base}recipes`} class="reveal">All 50+ recipes →</a>
         </div>
 
         <div class="recipes-scroll">
