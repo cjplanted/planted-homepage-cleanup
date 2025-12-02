@@ -10,7 +10,8 @@
     "isNew": true,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/duck-pdp.png?v=1743509753",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Planted-Duck_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Planted-Duck_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/duck-pdp.png"
     },
     "features": ["100% Plant-Based", "Asian-Inspired", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, Hoisin sauce, five-spice blend, soy sauce, natural flavoring, salt, vitamin B12",

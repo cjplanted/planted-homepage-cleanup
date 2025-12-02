@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tandoori-new.png?v=1747136243",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tikkaskewers_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tikkaskewers_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png"
     },
     "features": ["100% Plant-Based", "Tandoori Spiced", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, tandoori spice blend (cumin, coriander, paprika, garam masala), pea fiber, natural flavoring, salt, vitamin B12",

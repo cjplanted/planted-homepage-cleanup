@@ -16,6 +16,7 @@ const products = defineCollection({
         images: z.object({
             main: z.string(),
             background: z.string().optional(),
+            dish: z.string().optional(),
         }),
         features: z.array(z.string()).optional(),
         ingredients: z.string().optional(),

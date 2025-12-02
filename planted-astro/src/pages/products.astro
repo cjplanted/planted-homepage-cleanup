@@ -30,9 +30,14 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
                 <a href={`${base}/products/${product.data.slug}`} class="product-card" data-color={product.data.color} data-category={product.data.category}>
                     <div class="product-card-inner" style={product.data.images.background ? `background-image: url('${product.data.images.background}'); background-size: cover; background-position: center;` : ''}>
                         {product.data.isNew && <span class="product-badge-new">New</span>}
-                        <div class="product-image">
+                        <div class="product-image product-image-pack">
                             <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
                         </div>
+                        {product.data.images.dish && (
+                            <div class="product-image product-image-dish">
+                                <img src={product.data.images.dish} alt={`${product.data.name} ${product.data.variant} dish`}>
+                            </div>
+                        )}
                     </div>
                     <div class="product-info">
                         <div class="product-name">{product.data.name}</div>
@@ -157,6 +162,27 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
         display: flex;
         align-items: center;
         justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1.5rem;
+        transition: opacity 0.4s ease;
+    }
+
+    .product-image-pack {
+        opacity: 1;
+    }
+
+    .product-image-dish {
+        opacity: 0;
+    }
+
+    .product-card:hover .product-image-pack {
+        opacity: 0;
+    }
+
+    .product-card:hover .product-image-dish {
+        opacity: 1;
     }
 
     .product-image img {

@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-herbs-new.png?v=1747136126",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-herbs_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-herbs_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "Herb-Infused", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, sunflower oil, herbs (parsley, chives, marjoram), pea fiber, natural flavoring, salt, vitamin B12",

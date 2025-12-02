@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/neni-pdp.png?v=1743510040",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Neni_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Neni_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "NENI Collaboration", "Aromatic Spices", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, NENI spice blend (cumin, coriander, paprika, turmeric), pea fiber, natural flavoring, salt, vitamin B12",

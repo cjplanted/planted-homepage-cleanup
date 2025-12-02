@@ -10,7 +10,8 @@
     "isNew": true,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwurfel-classic-pack.png?v=1761044986",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-classic.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-classic.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-classic.png"
     },
     "features": ["100% Plant-Based", "Intense Umami", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, soy protein, rapeseed oil, natural flavoring, salt, vitamin B12",

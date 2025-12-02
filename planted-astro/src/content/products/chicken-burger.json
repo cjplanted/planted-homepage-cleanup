@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/burger-new.png?v=1747136419",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Burger-grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Burger-grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/burger.png"
     },
     "features": ["100% Plant-Based", "High in Protein", "Perfect for Grilling", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, pea fiber, natural flavoring, spices, salt, vitamin B12",

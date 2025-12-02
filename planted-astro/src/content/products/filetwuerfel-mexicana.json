@@ -10,7 +10,8 @@
     "isNew": true,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwurfel-mexicana---pack.png?v=1760958539",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-mexicana.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-mexicana.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-mexicana.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "Mexican-Inspired", "Made in Switzerland"],
     "ingredients": "Water, soy protein, rapeseed oil, Mexican spice blend (cumin, chili, oregano, garlic), natural flavoring, salt, vitamin B12",

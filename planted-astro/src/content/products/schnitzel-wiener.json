@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel-new.png?v=1747136641",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel.png"
     },
     "features": ["100% Plant-Based", "Crispy Coating", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, wheat flour, breadcrumbs, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",

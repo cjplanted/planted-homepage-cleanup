@@ -10,7 +10,8 @@
     "isNew": true,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tenders-new.png?v=1747136517",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tenders_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tenders_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "Extra Crispy", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, wheat flour, breadcrumbs, pea fiber, natural flavoring, salt, vitamin B12",

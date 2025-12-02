@@ -10,7 +10,8 @@
     "isNew": false,
     "images": {
         "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/pulled-bbq-new.png?v=1747135991",
-        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Pulled-BBQ_grid.png"
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Pulled-BBQ_grid.png",
+        "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-pulled.jpg"
     },
     "features": ["100% Plant-Based", "Smoky BBQ Flavor", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, sunflower protein, pea protein, rapeseed oil, BBQ sauce (tomatoes, smoked paprika, molasses), natural flavoring, salt, vitamin B12",
