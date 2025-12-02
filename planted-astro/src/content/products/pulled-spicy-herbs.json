@@ -9,7 +9,8 @@
     "color": "green",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/pulled-spicyherbs-new.png?v=1747135888"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/pulled-spicyherbs-new.png?v=1747135888",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/spicy-herbs_grid.png"
     },
     "features": ["100% Plant-Based", "Spicy & Flavorful", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, sunflower protein, pea protein, rapeseed oil, herbs, chili, chipotle, natural flavoring, salt, vitamin B12",

@@ -28,9 +28,8 @@ const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))]
         <div class="products-grid">
             {sortedProducts.map((product) => (
                 <a href={`${base}/products/${product.data.slug}`} class="product-card" data-color={product.data.color} data-category={product.data.category}>
-                    <div class="product-card-inner">
+                    <div class="product-card-inner" style={product.data.images.background ? `background-image: url('${product.data.images.background}'); background-size: cover; background-position: center;` : ''}>
                         {product.data.isNew && <span class="product-badge-new">New</span>}
-                        {!product.data.inStock && <span class="product-badge-oos">Out of Stock</span>}
                         <div class="product-image">
                             <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
                         </div>

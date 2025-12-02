@@ -9,7 +9,8 @@
     "color": "yellow",
     "isNew": true,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/nuggets-pack.png?v=1758813102"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/nuggets-pack.png?v=1758813102",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/nuggets.png"
     },
     "features": ["100% Plant-Based", "Crispy Coating", "Perfect for Snacking", "Made in Switzerland"],
     "ingredients": "Water, pea protein, wheat flour, breadcrumbs, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",

@@ -9,7 +9,8 @@
     "color": "olive",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png?v=1743510071"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png?v=1743510071",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-herbs_grid.png"
     },
     "features": ["100% Plant-Based", "Perfect for Grilling", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, lemon zest, herbs, pea fiber, natural flavoring, salt, vitamin B12",

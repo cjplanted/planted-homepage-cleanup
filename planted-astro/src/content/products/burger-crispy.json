@@ -9,7 +9,8 @@
     "color": "coral",
     "isNew": true,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/crispy-burger-pack.png?v=1758792139"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/crispy-burger-pack.png?v=1758792139",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Burger-grid.png"
     },
     "features": ["100% Plant-Based", "Extra Crispy", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, wheat flour, breadcrumbs, rapeseed oil, pea fiber, natural flavoring, spices, salt, vitamin B12",

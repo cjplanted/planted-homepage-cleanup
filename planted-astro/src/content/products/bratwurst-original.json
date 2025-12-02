@@ -9,7 +9,8 @@
     "color": "terracotta",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-original-new.png?v=1747136145"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-original-new.png?v=1747136145",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausages-original_grid.png"
     },
     "features": ["100% Plant-Based", "36% More Protein", "76% Less Saturated Fat", "Made in Switzerland"],
     "ingredients": "Water, pea protein, sunflower oil, pea fiber, spices, natural flavoring, salt, vitamin B12",

@@ -9,7 +9,8 @@
     "color": "yellow",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/chicken-nature-new.png?v=1747135663"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/chicken-nature-new.png?v=1747135663",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/nature_grid.png"
     },
     "features": ["100% Plant-Based", "High in Protein", "Source of Fiber", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",

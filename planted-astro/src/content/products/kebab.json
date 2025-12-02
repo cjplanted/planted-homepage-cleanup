@@ -9,7 +9,8 @@
     "color": "terracotta",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/kebab-new.png?v=1747135550"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/kebab-new.png?v=1747135550",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Kebab_grid.png"
     },
     "features": ["100% Plant-Based", "Crispy Texture", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, spices (cumin, coriander, paprika), pea fiber, natural flavoring, salt, vitamin B12",

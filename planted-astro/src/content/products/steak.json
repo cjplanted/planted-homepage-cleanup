@@ -9,7 +9,8 @@
     "color": "burgundy",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/festive-packshot.png?v=1762765654"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/festive-packshot.png?v=1762765654",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/Steak_grid.png?v=1763478024"
     },
     "features": ["100% Plant-Based", "High in Protein", "Rich in Iron", "Source of Vitamin B12"],
     "ingredients": "Water, soy protein, rapeseed oil, natural flavoring, salt, iron, vitamin B12",

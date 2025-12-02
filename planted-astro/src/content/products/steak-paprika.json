@@ -9,7 +9,8 @@
     "color": "red",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/steak-paprika-new.png?v=1747135415"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/steak-paprika-new.png?v=1747135415",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/paprika-test-2.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "Quick to Cook", "Source of Vitamin B12"],
     "ingredients": "Water, soy protein, rapeseed oil, paprika, natural flavoring, spices, salt, vitamin B12",

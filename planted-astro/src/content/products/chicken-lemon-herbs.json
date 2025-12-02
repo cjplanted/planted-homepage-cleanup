@@ -9,7 +9,8 @@
     "color": "olive",
     "isNew": false,
     "images": {
-        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/chicken-lh-new.png?v=1747135794"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/chicken-lh-new.png?v=1747135794",
+        "background": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/lemon-and-herbs_grid.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "High in Protein", "Made in Switzerland"],
     "ingredients": "Water, pea protein, rapeseed oil, lemon zest, herbs (parsley, thyme, rosemary), pea fiber, natural flavoring, salt, vitamin B12",
