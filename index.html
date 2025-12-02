@@ -101,11 +101,15 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 1rem 1.5rem;
+            padding: 0 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        
+        .nav.hidden {
+            transform: translateY(-100%);
         }
         
         .nav.scrolled {
@@ -129,7 +133,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            padding-top: 0.25rem;
+            padding-top: 0.75rem;
         }
         
         .nav-links {
@@ -213,7 +217,7 @@
         
         .close-menu {
             position: absolute;
-            top: 1rem;
+            top: 0.75rem;
             right: 1.5rem;
             width: 50px;
             height: 50px;
@@ -232,7 +236,7 @@
             min-height: 100vh;
             min-height: 100dvh;
             background: var(--planted-cream);
-            padding: 5rem 1.5rem 3rem;
+            padding: 4rem 1.5rem 3rem;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -449,159 +453,293 @@
         }
         
         /* ============================================
-           PRODUCTS SECTION
+           PRODUCTS SECTION - Planted Style Carousel
            ============================================ */
         .products {
             background: var(--planted-cream);
-            padding: 6rem 1.5rem;
+            padding: 5rem 0 4rem;
+            overflow: hidden;
         }
         
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .section-header h2 {
-            font-size: clamp(2.2rem, 10vw, 4.5rem);
-            color: var(--planted-purple);
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-        
-        .section-header p {
-            color: var(--planted-black);
-            opacity: 0.6;
-            font-size: 1.05rem;
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-            max-width: 1100px;
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 1.5rem 2.5rem;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
-        .product-card {
+        .products-header h2 {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: var(--planted-purple);
+            font-style: italic;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .products-header .all-products-btn {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--planted-green);
+            color: var(--planted-black);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.9rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .products-header .all-products-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 191, 89, 0.4);
+        }
+        
+        .products-carousel {
             position: relative;
-            aspect-ratio: 4/3;
+            padding: 0 1.5rem;
+        }
+        
+        .products-scroll {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 1rem;
+        }
+        
+        .products-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .product-card {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+            cursor: pointer;
+        }
+        
+        .product-card-inner {
+            position: relative;
+            aspect-ratio: 3/4;
             border-radius: 1.25rem;
             overflow: hidden;
-            cursor: pointer;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.4s ease;
+            margin-bottom: 1rem;
         }
         
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(97, 38, 158, 0.15);
+        /* Colored backgrounds for each card */
+        .product-card[data-color="terracotta"] .product-card-inner { background: #C4654A; }
+        .product-card[data-color="yellow"] .product-card-inner { background: #E8B84A; }
+        .product-card[data-color="purple"] .product-card-inner { background: var(--planted-purple); }
+        .product-card[data-color="olive"] .product-card-inner { background: #8B9A6B; }
+        .product-card[data-color="burgundy"] .product-card-inner { background: #7A4A5A; }
+        .product-card[data-color="teal"] .product-card-inner { background: #4A8B8B; }
+        
+        /* Purple wave decoration at bottom */
+        .product-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45%;
+            background: var(--planted-purple);
+            border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+            transform: translateY(15%);
         }
         
-        .product-card img {
+        /* Product packaging image */
+        .product-packaging {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            z-index: 2;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        .product-packaging img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+            transform: rotate(-8deg);
+            transition: transform 0.4s ease;
+        }
+        
+        /* Dish image (shown on hover) */
+        .product-dish {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .product-dish img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        .product-card:hover img {
-            transform: scale(1.08);
+        /* Hover state - show dish, hide packaging */
+        .product-card:hover .product-packaging {
+            opacity: 0;
+            transform: scale(0.9);
         }
         
-        .product-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to top,
-                rgba(97, 38, 158, 0.95) 0%,
-                rgba(97, 38, 158, 0.3) 50%,
-                transparent 100%
-            );
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1.25rem;
+        .product-card:hover .product-dish {
+            opacity: 1;
+        }
+        
+        .product-card:hover .product-wave {
+            opacity: 0.9;
+        }
+        
+        /* Product info below card */
+        .product-info {
+            text-align: center;
+            padding: 0 0.5rem;
         }
         
         .product-name {
             font-family: 'VC Henrietta', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: white;
-            margin-bottom: 0.2rem;
+            color: var(--planted-purple);
+            margin-bottom: 0.15rem;
         }
         
-        .product-tagline {
-            color: rgba(255,255,255,0.85);
-            font-size: 0.9rem;
+        .product-variant {
+            color: var(--planted-purple);
+            font-size: 1rem;
+            opacity: 0.8;
         }
         
-        .product-badge {
+        /* NEW badge */
+        .product-badge-new {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: var(--planted-green);
-            color: var(--planted-black);
+            background: #E85A4F;
+            color: white;
             font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.4rem 0.9rem;
+            font-size: 0.65rem;
+            padding: 0.35rem 0.7rem;
             border-radius: 100px;
+            text-transform: uppercase;
+            z-index: 5;
+        }
+        
+        /* Carousel pagination */
+        .carousel-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 0 1.5rem;
+        }
+        
+        .carousel-arrow {
+            background: none;
+            border: none;
+            color: var(--planted-purple);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        
+        .carousel-arrow:hover {
+            opacity: 1;
+        }
+        
+        .carousel-dots {
+            display: flex;
+            gap: 0.4rem;
+        }
+        
+        .carousel-dot {
+            width: 12px;
+            height: 4px;
+            background: var(--planted-purple);
+            border-radius: 2px;
+            opacity: 0.3;
+            transition: opacity 0.3s, width 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background: var(--planted-green);
+            opacity: 1;
+            width: 20px;
         }
         
         /* ============================================
-           IMPACT SECTION - Parallax counter effect
+           IMPACT SECTION - Planted Style
            ============================================ */
         .impact {
             background: var(--planted-green);
-            padding: 5rem 1.5rem;
+            padding: 6rem 1.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
         
         .impact h2 {
-            font-size: clamp(1.4rem, 5vw, 2.2rem);
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(1.6rem, 5vw, 2.8rem);
             color: var(--planted-black);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             text-transform: uppercase;
+            font-style: italic;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
         
         .impact-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            max-width: 650px;
+            gap: 2rem;
+            max-width: 800px;
             margin: 0 auto;
         }
         
         .stat {
-            padding: 0.75rem 0.5rem;
+            padding: 0.5rem;
         }
         
         .stat-value {
             font-family: 'VC Henrietta', serif;
-            font-size: clamp(2.5rem, 10vw, 4rem);
+            font-size: clamp(3rem, 12vw, 5.5rem);
             font-weight: 700;
             color: var(--planted-black);
             line-height: 1;
-            /* Counter animation will be applied via JS */
         }
         
         .stat-label {
             color: var(--planted-black);
-            opacity: 0.7;
-            font-size: 0.8rem;
-            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
         
         .impact-note {
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            opacity: 0.6;
+            margin-top: 3rem;
+            font-size: 1rem;
             color: var(--planted-black);
+            font-style: italic;
+            opacity: 0.9;
         }
         
         /* ============================================
@@ -990,47 +1128,18 @@
             height: 16px;
         }
         
-        /* ============================================
-           MOBILE STICKY CTA
-           ============================================ */
-        .mobile-cta {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem 1.5rem 1.25rem;
-            background: linear-gradient(to top, var(--planted-cream) 80%, transparent);
-            z-index: 100;
-            transition: opacity 0.4s, transform 0.4s;
-        }
-        
-        .mobile-cta a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            background: var(--planted-purple);
-            color: white;
-            font-weight: 700;
-            padding: 1rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-size: 0.95rem;
-            box-shadow: 0 8px 24px rgba(97, 38, 158, 0.35);
-        }
-        
-        .mobile-cta.hidden {
-            opacity: 0;
-            transform: translateY(100%);
-            pointer-events: none;
-        }
+
         
         /* ============================================
            RESPONSIVE
            ============================================ */
         @media (min-width: 640px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .products-scroll {
+                gap: 1.5rem;
+            }
+            
+            .product-card {
+                flex: 0 0 300px;
             }
             
             .footer-top {
@@ -1039,6 +1148,10 @@
             
             .hero-video-wrapper {
                 max-width: 700px;
+            }
+            
+            .products-header .all-products-btn {
+                display: inline-flex;
             }
         }
         
@@ -1058,7 +1171,7 @@
         
         @media (min-width: 1024px) {
             .nav {
-                padding: 1rem 3rem;
+                padding: 0 3rem;
             }
             
             .nav-toggle {
@@ -1070,19 +1183,23 @@
             }
             
             .hero {
-                padding: 6rem 3rem 4rem;
+                padding: 4.5rem 3rem 4rem;
             }
             
             .hero-video-wrapper {
                 max-width: 850px;
             }
             
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .products-header {
+                padding: 0 3rem 2.5rem;
+            }
+            
+            .products-carousel {
+                padding: 0 3rem;
             }
             
             .product-card {
-                aspect-ratio: 1;
+                flex: 0 0 320px;
             }
             
             .recipe-card {
@@ -1091,10 +1208,6 @@
             
             .footer-top {
                 grid-template-columns: 2fr 1fr 1fr 1fr;
-            }
-            
-            .mobile-cta {
-                display: none;
             }
             
             .business-inner {
@@ -1108,6 +1221,236 @@
                 grid-column: 2;
                 grid-row: 1 / 3;
                 max-width: none;
+            }
+        }
+        
+        /* Large desktop */
+        @media (min-width: 1440px) {
+            .nav {
+                padding: 0 5rem;
+            }
+            
+            .hero {
+                padding: 5rem 5rem 5rem;
+            }
+            
+            .hero-video-wrapper {
+                max-width: 950px;
+            }
+            
+            .hero h1 {
+                font-size: 5.5rem;
+            }
+            
+            .products {
+                padding: 6rem 0 5rem;
+            }
+            
+            .products-header {
+                padding: 0 5rem 3rem;
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+            
+            .products-carousel {
+                padding: 0 5rem;
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+            
+            .product-card {
+                flex: 0 0 340px;
+            }
+            
+            .carousel-pagination {
+                padding: 0 5rem;
+            }
+            
+            .statement {
+                padding: 8rem 5rem;
+            }
+            
+            .statement h2 {
+                font-size: 3.5rem;
+            }
+            
+            .impact {
+                padding: 8rem 5rem;
+            }
+            
+            .impact-stats {
+                max-width: 900px;
+            }
+            
+            .recipes {
+                padding: 8rem 0;
+            }
+            
+            .recipes-header {
+                padding: 0 5rem 2.5rem;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+            
+            .recipes-scroll {
+                padding: 0 5rem 2rem;
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+            
+            .recipe-card {
+                flex: 0 0 360px;
+            }
+            
+            .locator {
+                padding: 8rem 5rem;
+            }
+            
+            .business {
+                padding: 8rem 5rem;
+            }
+            
+            .business-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .footer {
+                padding: 5rem 5rem 2rem;
+            }
+            
+            .footer-inner {
+                max-width: 1200px;
+            }
+        }
+        
+        /* Ultra-wide screens */
+        @media (min-width: 1920px) {
+            .nav {
+                padding: 0 8rem;
+                max-width: 2200px;
+                margin: 0 auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .nav.hidden {
+                transform: translateX(-50%) translateY(-100%);
+            }
+            
+            .hero {
+                padding: 6rem 8rem 6rem;
+                max-width: 2200px;
+                margin: 0 auto;
+            }
+            
+            .hero-video-wrapper {
+                max-width: 1100px;
+            }
+            
+            .hero h1 {
+                font-size: 6rem;
+            }
+            
+            .hero-content {
+                max-width: 1000px;
+            }
+            
+            .statement-inner {
+                max-width: 1000px;
+            }
+            
+            .products-header {
+                padding: 0 8rem 3rem;
+                max-width: 2000px;
+            }
+            
+            .products-carousel {
+                padding: 0 8rem;
+                max-width: 2000px;
+            }
+            
+            .product-card {
+                flex: 0 0 380px;
+            }
+            
+            .impact-stats {
+                max-width: 1000px;
+                gap: 4rem;
+            }
+            
+            .stat-value {
+                font-size: 6rem;
+            }
+            
+            .recipes-header {
+                padding: 0 8rem 3rem;
+                max-width: 2000px;
+            }
+            
+            .recipes-scroll {
+                padding: 0 8rem 2rem;
+                max-width: 2000px;
+            }
+            
+            .recipe-card {
+                flex: 0 0 400px;
+            }
+            
+            .locator h2 {
+                font-size: 8rem;
+            }
+            
+            .locator-search {
+                max-width: 500px;
+            }
+            
+            .business-inner {
+                max-width: 1400px;
+                gap: 5rem;
+            }
+            
+            .footer-inner {
+                max-width: 1400px;
+            }
+        }
+        
+        /* Super ultra-wide (4K+) */
+        @media (min-width: 2560px) {
+            .nav {
+                padding: 0 12rem;
+                max-width: 2800px;
+            }
+            
+            .hero {
+                padding: 8rem 12rem;
+                max-width: 2800px;
+            }
+            
+            .hero-video-wrapper {
+                max-width: 1300px;
+            }
+            
+            .hero h1 {
+                font-size: 7rem;
+            }
+            
+            .products-header,
+            .products-carousel {
+                padding-left: 12rem;
+                padding-right: 12rem;
+                max-width: 2600px;
+            }
+            
+            .product-card {
+                flex: 0 0 420px;
+            }
+            
+            .recipes-header,
+            .recipes-scroll {
+                padding-left: 12rem;
+                padding-right: 12rem;
+                max-width: 2600px;
             }
         }
     </style>
@@ -1199,68 +1542,136 @@
     </section>
 
     <!-- ============================================
-         PRODUCTS SECTION
+         PRODUCTS SECTION - Planted Style
          ============================================ -->
     <section class="products" id="products">
-        <div class="section-header">
-            <h2 class="reveal">What we make</h2>
-            <p class="reveal reveal-delay-1">Six ways to eat better without missing out</p>
+        <div class="products-header">
+            <h2 class="reveal">Our highlights</h2>
+            <a href="#" class="all-products-btn reveal">
+                → All Products
+            </a>
         </div>
         
-        <div class="products-grid">
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="planted.steak">
-                <div class="product-overlay">
-                    <span class="product-name">planted.steak</span>
-                    <span class="product-tagline">The world's first fermented whole-cut</span>
+        <div class="products-carousel">
+            <div class="products-scroll" id="productsScroll">
+                <!-- Product 1 - Steak Paprika -->
+                <div class="product-card reveal-scale" data-color="terracotta">
+                    <div class="product-card-inner">
+                        <span class="product-badge-new">New</span>
+                        <div class="product-wave"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" alt="Steak dish">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&q=80" alt="planted.steak packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.steak</div>
+                        <div class="product-variant">Paprika</div>
+                    </div>
                 </div>
-                <span class="product-badge">24g protein</span>
-            </div>
-            
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=800&q=80" alt="planted.chicken">
-                <div class="product-overlay">
-                    <span class="product-name">planted.chicken</span>
-                    <span class="product-tagline">Crispy outside, tender inside</span>
+                
+                <!-- Product 2 - Chicken Lemon & Herb -->
+                <div class="product-card reveal-scale" data-color="yellow">
+                    <div class="product-card-inner">
+                        <div class="product-wave"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=800&q=80" alt="Chicken dish">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80" alt="planted.chicken packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.chicken</div>
+                        <div class="product-variant">Lemon & Herb</div>
+                    </div>
                 </div>
-                <span class="product-badge">22g protein</span>
-            </div>
-            
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=800&q=80" alt="planted.kebab">
-                <div class="product-overlay">
-                    <span class="product-name">planted.kebab</span>
-                    <span class="product-tagline">Late-night cravings, sorted</span>
+                
+                <!-- Product 3 - Steak Classic -->
+                <div class="product-card reveal-scale" data-color="purple">
+                    <div class="product-card-inner">
+                        <div class="product-wave" style="background: rgba(255,255,255,0.15);"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=80" alt="Steak plated">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1551028150-64b9f398f678?w=400&q=80" alt="planted.steak packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.steak</div>
+                        <div class="product-variant">Classic</div>
+                    </div>
                 </div>
-                <span class="product-badge">20g protein</span>
-            </div>
-            
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=800&q=80" alt="planted.pulled">
-                <div class="product-overlay">
-                    <span class="product-name">planted.pulled</span>
-                    <span class="product-tagline">Shreds like the real thing</span>
+                
+                <!-- Product 4 - Skewers Herbs -->
+                <div class="product-card reveal-scale" data-color="olive">
+                    <div class="product-card-inner">
+                        <div class="product-wave"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="Skewers dish">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80" alt="planted.skewers packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.skewers</div>
+                        <div class="product-variant">Herbs</div>
+                    </div>
                 </div>
-                <span class="product-badge">21g protein</span>
-            </div>
-            
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=800&q=80" alt="planted.schnitzel">
-                <div class="product-overlay">
-                    <span class="product-name">planted.schnitzel</span>
-                    <span class="product-tagline">Golden and crispy</span>
+                
+                <!-- Product 5 - Steak Bites -->
+                <div class="product-card reveal-scale" data-color="burgundy">
+                    <div class="product-card-inner">
+                        <span class="product-badge-new">New</span>
+                        <div class="product-wave"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Steak bites dish">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80" alt="planted.steak bites packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.steak Bites</div>
+                        <div class="product-variant">Classic</div>
+                    </div>
                 </div>
-                <span class="product-badge">19g protein</span>
-            </div>
-            
-            <div class="product-card reveal-scale">
-                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="planted.bratwurst">
-                <div class="product-overlay">
-                    <span class="product-name">planted.bratwurst</span>
-                    <span class="product-tagline">BBQ ready</span>
+                
+                <!-- Product 6 - Kebab -->
+                <div class="product-card reveal-scale" data-color="teal">
+                    <div class="product-card-inner">
+                        <div class="product-wave"></div>
+                        <div class="product-dish">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80" alt="Kebab dish">
+                        </div>
+                        <div class="product-packaging">
+                            <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400&q=80" alt="planted.kebab packaging">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">planted.kebab</div>
+                        <div class="product-variant">Original</div>
+                    </div>
                 </div>
-                <span class="product-badge">18g protein</span>
             </div>
+        </div>
+        
+        <!-- Carousel Pagination -->
+        <div class="carousel-pagination">
+            <button class="carousel-arrow" onclick="scrollProducts(-1)" aria-label="Previous">←</button>
+            <div class="carousel-dots">
+                <div class="carousel-dot active"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+            </div>
+            <button class="carousel-arrow" onclick="scrollProducts(1)" aria-label="Next">→</button>
         </div>
     </section>
 
@@ -1271,11 +1682,11 @@
         <h2 class="reveal">Every bite makes a difference</h2>
         <div class="impact-stats">
             <div class="stat reveal reveal-delay-1">
-                <div class="stat-value" data-count="77">0%</div>
+                <div class="stat-value" data-count="97">0%</div>
                 <div class="stat-label">Less CO₂</div>
             </div>
             <div class="stat reveal reveal-delay-2">
-                <div class="stat-value" data-count="85">0%</div>
+                <div class="stat-value" data-count="95">0%</div>
                 <div class="stat-label">Less Water</div>
             </div>
             <div class="stat reveal reveal-delay-3">
@@ -1283,7 +1694,7 @@
                 <div class="stat-label">Animals</div>
             </div>
         </div>
-        <p class="impact-note reveal">Compared to conventional chicken. Verified by independent LCA.</p>
+        <p class="impact-note reveal">Compared to conventional beef. Verified by independent LCA.</p>
     </section>
 
     <!-- ============================================
@@ -1472,12 +1883,6 @@
         </div>
     </footer>
 
-    <!-- Mobile CTA -->
-    <div class="mobile-cta" id="mobileCta">
-        <a href="#locator">
-            <span>📍</span> Find Planted Near You
-        </a>
-    </div>
 
     <script>
         // ============================================
@@ -1496,6 +1901,8 @@
         
         // Scroll-based video transform (Apple-style)
         let ticking = false;
+        let lastScrollY = 0;
+        let scrollThreshold = 50; // Minimum scroll before hiding nav
         
         function updateVideoTransform() {
             const scrollY = window.scrollY;
@@ -1523,6 +1930,21 @@
                 nav.classList.remove('scrolled');
             }
             
+            // Hide/show nav based on scroll direction
+            if (scrollY > scrollThreshold) {
+                if (scrollY > lastScrollY) {
+                    // Scrolling down - hide nav
+                    nav.classList.add('hidden');
+                } else {
+                    // Scrolling up - show nav
+                    nav.classList.remove('hidden');
+                }
+            } else {
+                // At top of page - always show nav
+                nav.classList.remove('hidden');
+            }
+            
+            lastScrollY = scrollY;
             ticking = false;
         }
         
@@ -1604,6 +2026,33 @@
         }
         
         // ============================================
+        // PRODUCTS CAROUSEL
+        // ============================================
+        const productsScroll = document.getElementById('productsScroll');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        
+        function scrollProducts(direction) {
+            const cardWidth = productsScroll.querySelector('.product-card').offsetWidth + 24; // card + gap
+            productsScroll.scrollBy({
+                left: direction * cardWidth,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Update dots on scroll
+        if (productsScroll) {
+            productsScroll.addEventListener('scroll', () => {
+                const scrollLeft = productsScroll.scrollLeft;
+                const cardWidth = productsScroll.querySelector('.product-card').offsetWidth + 24;
+                const activeIndex = Math.round(scrollLeft / cardWidth);
+                
+                carouselDots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            });
+        }
+        
+        // ============================================
         // MOBILE MENU
         // ============================================
         function toggleMenu() {
@@ -1628,20 +2077,6 @@
             });
         });
         
-        // ============================================
-        // MOBILE CTA VISIBILITY
-        // ============================================
-        const mobileCta = document.getElementById('mobileCta');
-        const footer = document.querySelector('.footer');
-        
-        window.addEventListener('scroll', () => {
-            const footerTop = footer.getBoundingClientRect().top;
-            if (footerTop < window.innerHeight + 100) {
-                mobileCta.classList.add('hidden');
-            } else {
-                mobileCta.classList.remove('hidden');
-            }
-        });
     </script>
 </body>
 </html>
