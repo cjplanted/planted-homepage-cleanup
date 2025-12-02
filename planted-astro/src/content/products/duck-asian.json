@@ -1,0 +1,16 @@
+{
+    "name": "planted.duck",
+    "variant": "Asian Style",
+    "slug": "duck-asian",
+    "category": "duck",
+    "description": "Combines sweet-savory Hoisin notes, subtle five-spice aromas, caramel roasting flavors, and juicy tenderness. Perfect for wok dishes, bao buns, or bowls.",
+    "price": "CHF 13.50",
+    "weight": "400g",
+    "color": "burgundy",
+    "isNew": true,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/duck-pdp.png?v=1743509753"
+    },
+    "order": 15
+}

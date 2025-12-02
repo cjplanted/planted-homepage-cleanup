@@ -1,0 +1,16 @@
+{
+    "name": "planted.chicken",
+    "variant": "Jerusalem Style",
+    "slug": "chicken-jerusalem",
+    "category": "chicken",
+    "description": "A spicy match: Our popular planted.chicken meets the original NENI spice blend - known from the legendary Jerusalem Plate, the signature dish of NENI.",
+    "price": "CHF 13.50",
+    "weight": "400g",
+    "color": "terracotta",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/neni-pdp.png?v=1743510040"
+    },
+    "order": 3
+}

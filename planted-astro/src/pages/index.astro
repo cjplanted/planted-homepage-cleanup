@@ -64,22 +64,19 @@ const settings = await getEntry('settings', 'global');
         <div class="products-carousel">
             <div class="products-scroll" id="productsScroll">
                 {featuredProducts.map((product) => (
-                    <div class="product-card reveal-scale" data-color={product.data.color}>
+                    <a href={`${base}/products/${product.data.slug}`} class="product-card reveal-scale" data-color={product.data.color}>
                         <div class="product-card-inner">
                             {product.data.isNew && <span class="product-badge-new">New</span>}
                             <div class="product-wave" style={product.data.color === 'purple' ? 'background: rgba(255,255,255,0.15);' : ''}></div>
-                            <div class="product-dish">
-                                <img src={product.data.images.dish} alt={product.data.name}>
-                            </div>
-                            <div class="product-packaging">
-                                <img src={product.data.images.packaging} alt={`${product.data.name} packaging`}>
+                            <div class="product-image">
+                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
                             </div>
                         </div>
                         <div class="product-info">
                             <div class="product-name">{product.data.name}</div>
                             <div class="product-variant">{product.data.variant}</div>
                         </div>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>

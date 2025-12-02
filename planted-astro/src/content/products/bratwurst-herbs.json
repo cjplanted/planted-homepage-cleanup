@@ -1,0 +1,16 @@
+{
+    "name": "planted.bratwurst",
+    "variant": "Herbs",
+    "slug": "bratwurst-herbs",
+    "category": "bratwurst",
+    "description": "Plant-based sausage with 36% more protein and 76% less saturated fat than meat. Made from peas, sunflower oil, and herb spices. Suitable for grilling, salads, vegetable dishes, or hearty winter meals.",
+    "price": "CHF 5.95",
+    "weight": "2 x 90g",
+    "color": "green",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-herbs-new.png?v=1747136126"
+    },
+    "order": 14
+}

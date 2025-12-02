@@ -1,13 +1,16 @@
 {
     "name": "planted.steak",
     "variant": "Paprika",
+    "slug": "steak-paprika",
     "category": "steak",
-    "protein": 24,
-    "color": "terracotta",
-    "isNew": true,
+    "description": "A refined steak variant featuring a spicy paprika marinade, sliced thinner than the standard version. Maintains the characteristic juicy and tender texture while providing protein, fiber, vitamin B12, and iron.",
+    "price": "CHF 7.95",
+    "weight": "140g",
+    "color": "red",
+    "isNew": false,
+    "inStock": false,
     "images": {
-        "dish": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
-        "packaging": "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&q=80"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/steak-paprika-new.png?v=1747135415"
     },
-    "order": 1
+    "order": 7
 }

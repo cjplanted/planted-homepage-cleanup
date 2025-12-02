@@ -1,0 +1,16 @@
+{
+    "name": "planted.skewers",
+    "variant": "Tandoori",
+    "slug": "skewers-tandoori",
+    "category": "skewers",
+    "description": "Spiced, smoky flavors inspired by Indian tandoori seasoning. Made from clean ingredients including peas and rapeseed oil, enriched with vitamin B12. Perfect plant-based grilling skewers for summer meals.",
+    "price": "CHF 6.95",
+    "weight": "2 x 100g",
+    "color": "orange",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tandoori-new.png?v=1747136243"
+    },
+    "order": 17
+}

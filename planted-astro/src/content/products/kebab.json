@@ -1,0 +1,16 @@
+{
+    "name": "planted.kebab",
+    "variant": "Original",
+    "slug": "kebab",
+    "category": "kebab",
+    "description": "Crispy, juicy, and made from peas and rapeseed oil with an honest spice blend. Perfect in wraps or as a salad topping.",
+    "price": "CHF 7.95",
+    "weight": "220g",
+    "color": "terracotta",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/kebab-new.png?v=1747135550"
+    },
+    "order": 8
+}

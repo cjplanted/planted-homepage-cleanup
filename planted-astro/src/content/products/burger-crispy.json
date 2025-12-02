@@ -1,0 +1,16 @@
+{
+    "name": "planted.burger",
+    "variant": "Crispy",
+    "slug": "burger-crispy",
+    "category": "burger",
+    "description": "The ultimate comfort food experience with a golden, extra-crispy coating and juicy, chicken-like texture. Delivers a satisfying bite with plant-based ingredients.",
+    "price": "CHF 7.95",
+    "weight": "3 pieces",
+    "color": "coral",
+    "isNew": true,
+    "inStock": true,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/crispy-burger-pack.png?v=1758792139"
+    },
+    "order": 20
+}

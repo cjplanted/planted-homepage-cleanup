@@ -1,0 +1,16 @@
+{
+    "name": "planted.pulled",
+    "variant": "Spicy Herbs",
+    "slug": "pulled-spicy-herbs",
+    "category": "pulled",
+    "description": "Our planted.pulled is packed with protein and sustainably made from sunflower protein and peas. In the Spicy Herbs variant, it's marinated with fresh herbs, a touch of chili, and smoky chipotle. Ideal for tacos, burgers, or simply with rice.",
+    "price": "CHF 7.95",
+    "weight": "220g",
+    "color": "green",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/pulled-spicyherbs-new.png?v=1747135888"
+    },
+    "order": 10
+}

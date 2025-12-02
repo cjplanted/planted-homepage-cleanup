@@ -1,0 +1,16 @@
+{
+    "name": "planted.schnitzel",
+    "variant": "Wiener Art",
+    "slug": "schnitzel-wiener",
+    "category": "schnitzel",
+    "description": "With its crispy golden-brown breading and tender, chicken-like texture inside, our planted.schnitzel brings back the beloved schnitzel experience.",
+    "price": "CHF 6.95",
+    "weight": "2 x 110g",
+    "color": "yellow",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel-new.png?v=1747136641"
+    },
+    "order": 11
+}

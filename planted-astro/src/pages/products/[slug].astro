@@ -1,0 +1,396 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const products = await getCollection('products');
+    return products.map((product) => ({
+        params: { slug: product.data.slug },
+        props: { product },
+    }));
+}
+
+const { product } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// Get related products (same category, excluding current)
+const allProducts = await getCollection('products');
+const relatedProducts = allProducts
+    .filter(p => p.data.category === product.data.category && p.data.slug !== product.data.slug)
+    .slice(0, 3);
+---
+
+<Layout title={`${product.data.name} ${product.data.variant} – Planted`} currentPage="products">
+    <div class="product-page">
+        <nav class="breadcrumb">
+            <a href={`${base}/products`}>Products</a>
+            <span>/</span>
+            <span>{product.data.name} {product.data.variant}</span>
+        </nav>
+
+        <div class="product-detail">
+            <div class="product-image-section" data-color={product.data.color}>
+                <div class="product-image-container">
+                    {product.data.isNew && <span class="product-badge-new">New</span>}
+                    {!product.data.inStock && <span class="product-badge-oos">Out of Stock</span>}
+                    <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} class="product-main-image">
+                </div>
+            </div>
+
+            <div class="product-info-section">
+                <div class="product-category">{product.data.category}</div>
+                <h1 class="product-title">{product.data.name}</h1>
+                <p class="product-variant-name">{product.data.variant}</p>
+
+                {product.data.description && (
+                    <p class="product-description">{product.data.description}</p>
+                )}
+
+                <div class="product-meta">
+                    {product.data.weight && (
+                        <div class="meta-item">
+                            <span class="meta-label">Weight</span>
+                            <span class="meta-value">{product.data.weight}</span>
+                        </div>
+                    )}
+                    {product.data.price && (
+                        <div class="meta-item">
+                            <span class="meta-label">Price</span>
+                            <span class="meta-value price">{product.data.price}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div class="product-actions">
+                    <a href={`${base}/#locator`} class="btn btn-primary">
+                        <span>📍</span> Find in Store
+                    </a>
+                </div>
+
+                <div class="product-features">
+                    <div class="feature">
+                        <span class="feature-icon">🌱</span>
+                        <span>100% Plant-Based</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">💪</span>
+                        <span>High Protein</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🇨🇭</span>
+                        <span>Made in Switzerland</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {relatedProducts.length > 0 && (
+            <section class="related-products">
+                <h2>More {product.data.category}</h2>
+                <div class="related-grid">
+                    {relatedProducts.map((related) => (
+                        <a href={`${base}/products/${related.data.slug}`} class="related-card" data-color={related.data.color}>
+                            <div class="related-image">
+                                <img src={related.data.images.main} alt={related.data.name}>
+                            </div>
+                            <div class="related-info">
+                                <div class="related-name">{related.data.name}</div>
+                                <div class="related-variant">{related.data.variant}</div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        )}
+
+        <section class="cta-section">
+            <h2>Ready to try?</h2>
+            <p>Find planted at your favourite store.</p>
+            <a href={`${base}/#locator`} class="btn btn-green">📍 Find Near You</a>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .product-page {
+        padding-top: 80px;
+    }
+
+    .breadcrumb {
+        padding: 1rem 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        font-size: 0.9rem;
+        color: var(--planted-black);
+        opacity: 0.6;
+    }
+
+    .breadcrumb a {
+        color: var(--planted-purple);
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb span {
+        margin: 0 0.5rem;
+    }
+
+    .product-detail {
+        display: grid;
+        gap: 2rem;
+        padding: 1rem 1.5rem 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+        .product-detail {
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 2rem 3rem 6rem;
+            align-items: start;
+        }
+    }
+
+    .product-image-section {
+        background: var(--planted-cream);
+        border-radius: 2rem;
+        padding: 2rem;
+        position: relative;
+    }
+
+    .product-image-section[data-color="yellow"] { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
+    .product-image-section[data-color="terracotta"] { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
+    .product-image-section[data-color="purple"] { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
+    .product-image-section[data-color="olive"] { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
+    .product-image-section[data-color="burgundy"] { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
+    .product-image-section[data-color="teal"] { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
+    .product-image-section[data-color="coral"] { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
+    .product-image-section[data-color="navy"] { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
+    .product-image-section[data-color="green"] { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
+    .product-image-section[data-color="orange"] { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
+    .product-image-section[data-color="red"] { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+
+    .product-image-container {
+        position: relative;
+    }
+
+    .product-badge-new {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.4rem 0.8rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .product-badge-oos {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.4rem 0.8rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .product-main-image {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .product-info-section {
+        padding: 1rem 0;
+    }
+
+    .product-category {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2rem, 5vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.25rem;
+        line-height: 1.1;
+    }
+
+    .product-variant-name {
+        font-size: 1.25rem;
+        color: var(--planted-black);
+        opacity: 0.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .product-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--planted-black);
+        margin-bottom: 2rem;
+    }
+
+    .product-meta {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--planted-cream);
+        border-radius: 1rem;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .meta-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--planted-black);
+        opacity: 0.6;
+    }
+
+    .meta-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--planted-black);
+    }
+
+    .meta-value.price {
+        color: var(--planted-purple);
+    }
+
+    .product-actions {
+        margin-bottom: 2rem;
+    }
+
+    .product-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .product-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(97, 38, 158, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .feature-icon {
+        font-size: 1rem;
+    }
+
+    /* Related Products */
+    .related-products {
+        padding: 4rem 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .related-products h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.5rem;
+        color: var(--planted-purple);
+        margin-bottom: 2rem;
+        text-transform: capitalize;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .related-card {
+        text-decoration: none;
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .related-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .related-image {
+        aspect-ratio: 1;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .related-card[data-color="yellow"] .related-image { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
+    .related-card[data-color="terracotta"] .related-image { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
+    .related-card[data-color="purple"] .related-image { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
+    .related-card[data-color="olive"] .related-image { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
+    .related-card[data-color="burgundy"] .related-image { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
+    .related-card[data-color="coral"] .related-image { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
+    .related-card[data-color="green"] .related-image { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
+    .related-card[data-color="orange"] .related-image { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
+    .related-card[data-color="red"] .related-image { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .related-info {
+        padding: 1rem 0.5rem;
+    }
+
+    .related-name {
+        font-weight: 700;
+        color: var(--planted-black);
+        font-size: 0.9rem;
+    }
+
+    .related-variant {
+        color: var(--planted-black);
+        opacity: 0.6;
+        font-size: 0.85rem;
+    }
+
+    @media (min-width: 768px) {
+        .related-products {
+            padding: 4rem 3rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .breadcrumb {
+            padding: 1rem 3rem;
+        }
+    }
+</style>

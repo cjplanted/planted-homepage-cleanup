@@ -1,0 +1,16 @@
+{
+    "name": "planted.bratwurst",
+    "variant": "Original",
+    "slug": "bratwurst-original",
+    "category": "bratwurst",
+    "description": "Full, juicy sausage flavor with 36% more protein and 76% less saturated fat compared to meat. Made from natural ingredients including peas, sunflower oil, and spices. Perfect for grilling or pan-frying, pairs well with bread, mustard, or side dishes.",
+    "price": "CHF 5.95",
+    "weight": "2 x 90g",
+    "color": "terracotta",
+    "isNew": false,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/sausage-original-new.png?v=1747136145"
+    },
+    "order": 13
+}

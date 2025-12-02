@@ -1,13 +1,16 @@
 {
     "name": "planted.skewers",
     "variant": "Herbs",
-    "category": "other",
-    "protein": 20,
+    "slug": "skewers-herbs",
+    "category": "skewers",
+    "description": "Perfect for grill or pan: Our planted.chicken skewers bring juicy, smoky flavor with a fresh twist. Marinated with herbs and lemon zest, made from just a few natural ingredients: peas, rapeseed oil, water, salt and vitamin B12.",
+    "price": "CHF 6.95",
+    "weight": "200g",
     "color": "olive",
     "isNew": false,
+    "inStock": false,
     "images": {
-        "dish": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
-        "packaging": "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80"
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png?v=1743510071"
     },
-    "order": 4
+    "order": 16
 }

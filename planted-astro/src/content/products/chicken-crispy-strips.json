@@ -1,0 +1,16 @@
+{
+    "name": "planted.chicken",
+    "variant": "Crispy Strips",
+    "slug": "chicken-crispy-strips",
+    "category": "chicken",
+    "description": "Juicy, fibrous, and extra crispy chicken-style strips made from natural ingredients including peas, rapeseed oil, and seasonings. Perfect as a topping for fresh salads.",
+    "price": "CHF 7.95",
+    "weight": "8 pieces",
+    "color": "coral",
+    "isNew": true,
+    "inStock": true,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/tenders-new.png?v=1747136517"
+    },
+    "order": 4
+}

@@ -4,6 +4,10 @@ import { getCollection } from 'astro:content';
 
 const products = await getCollection('products');
 const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
+const base = import.meta.env.BASE_URL;
+
+// Get unique categories for filter tabs
+const categories = ['all', ...new Set(sortedProducts.map(p => p.data.category))];
 ---
 
 <Layout title="Products – Planted" currentPage="products">
@@ -13,29 +17,30 @@ const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
     </header>
 
     <div class="filter-tabs">
-        <button class="filter-tab active">All</button>
-        <button class="filter-tab">Chicken</button>
-        <button class="filter-tab">Steak</button>
-        <button class="filter-tab">Pulled</button>
-        <button class="filter-tab">Kebab</button>
+        {categories.map((cat) => (
+            <button class:list={["filter-tab", { active: cat === 'all' }]} data-filter={cat}>
+                {cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+        ))}
     </div>
 
     <section class="products-section">
         <div class="products-grid">
             {sortedProducts.map((product) => (
-                <div class="product-card" data-color={product.data.color} data-category={product.data.category === 'other' ? '' : product.data.category}>
+                <a href={`${base}/products/${product.data.slug}`} class="product-card" data-color={product.data.color} data-category={product.data.category}>
                     <div class="product-card-inner">
                         {product.data.isNew && <span class="product-badge-new">New</span>}
-                        <div class="product-wave" style={product.data.color === 'purple' ? 'background: rgba(255,255,255,0.15);' : ''}></div>
-                        <div class="product-dish"><img src={product.data.images.dish} alt={product.data.name}></div>
-                        <div class="product-packaging"><img src={product.data.images.packaging} alt="Package"></div>
+                        {!product.data.inStock && <span class="product-badge-oos">Out of Stock</span>}
+                        <div class="product-image">
+                            <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
+                        </div>
                     </div>
                     <div class="product-info">
                         <div class="product-name">{product.data.name}</div>
                         <div class="product-variant">{product.data.variant}</div>
-                        <span class="product-protein">{product.data.protein}g protein</span>
+                        {product.data.price && <span class="product-price">{product.data.price}</span>}
                     </div>
-                </div>
+                </a>
             ))}
         </div>
     </section>
@@ -43,7 +48,7 @@ const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
     <section class="cta-section">
         <h2>Ready to try?</h2>
         <p>Find planted at your favourite store. We're basically everywhere now.</p>
-        <a href="/#locator" class="btn btn-green">📍 Find Near You</a>
+        <a href={`${base}/#locator`} class="btn btn-green">📍 Find Near You</a>
     </section>
 </Layout>
 
@@ -84,11 +89,149 @@ const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
     }
 
     .product-card {
+        text-decoration: none;
         transition: opacity 0.3s ease, transform 0.3s ease;
+        display: block;
+    }
+
+    .product-card:hover {
+        transform: translateY(-4px);
     }
 
     .product-card.hidden {
         display: none;
+    }
+
+    .product-card-inner {
+        position: relative;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .product-card[data-color="yellow"] .product-card-inner { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
+    .product-card[data-color="terracotta"] .product-card-inner { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
+    .product-card[data-color="purple"] .product-card-inner { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
+    .product-card[data-color="olive"] .product-card-inner { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
+    .product-card[data-color="burgundy"] .product-card-inner { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
+    .product-card[data-color="teal"] .product-card-inner { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
+    .product-card[data-color="coral"] .product-card-inner { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
+    .product-card[data-color="navy"] .product-card-inner { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
+    .product-card[data-color="green"] .product-card-inner { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
+    .product-card[data-color="orange"] .product-card-inner { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
+    .product-card[data-color="red"] .product-card-inner { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+
+    .product-badge-new {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.35rem 0.7rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .product-badge-oos {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.3rem 0.6rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .product-info {
+        padding: 1rem 0.5rem 0;
+    }
+
+    .product-name {
+        font-weight: 700;
+        color: var(--planted-black);
+        font-size: 1rem;
+    }
+
+    .product-variant {
+        color: var(--planted-black);
+        opacity: 0.6;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .product-price {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--planted-purple);
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tab {
+        background: transparent;
+        border: 2px solid var(--planted-purple);
+        color: var(--planted-purple);
+        padding: 0.6rem 1.25rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+        text-transform: capitalize;
+    }
+
+    .filter-tab:hover {
+        background: rgba(97, 38, 158, 0.1);
+    }
+
+    .filter-tab.active {
+        background: var(--planted-purple);
+        color: white;
+    }
+
+    @media (min-width: 1024px) {
+        .filter-tabs {
+            padding: 0 3rem;
+        }
     }
 </style>
 
@@ -100,7 +243,7 @@ const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
             tab.classList.add('active');
 
             // Get filter value
-            const filter = tab.textContent?.trim().toLowerCase() || 'all';
+            const filter = (tab as HTMLElement).dataset.filter || 'all';
 
             // Filter cards
             document.querySelectorAll('.product-card').forEach(card => {

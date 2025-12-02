@@ -1,0 +1,16 @@
+{
+    "name": "planted.filetwürfel",
+    "variant": "A La Mexicana",
+    "slug": "filetwuerfel-mexicana",
+    "category": "filetwuerfel",
+    "description": "Our delicious planted.filetwürfel from our steak muscle are now even more convenient and pre-marinated with an aromatic blend of herbs and spices. Simply pan-fry with fresh vegetables for fajitas or enhance your salad bowls.",
+    "price": "CHF 7.95",
+    "weight": "140g",
+    "color": "red",
+    "isNew": true,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwurfel-mexicana---pack.png?v=1760958539"
+    },
+    "order": 19
+}

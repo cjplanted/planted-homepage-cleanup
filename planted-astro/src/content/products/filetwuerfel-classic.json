@@ -1,0 +1,16 @@
+{
+    "name": "planted.filetwürfel",
+    "variant": "Classic",
+    "slug": "filetwuerfel-classic",
+    "category": "filetwuerfel",
+    "description": "Premium plant-based steak pieces featuring intense umami flavor, juicy texture, and tender bite. Versatile bits that work well stir-fried with vegetables and noodles or braised in hearty stews.",
+    "price": "CHF 7.95",
+    "weight": "140g",
+    "color": "burgundy",
+    "isNew": true,
+    "inStock": false,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwurfel-classic-pack.png?v=1761044986"
+    },
+    "order": 18
+}

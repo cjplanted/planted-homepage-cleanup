@@ -1,0 +1,16 @@
+{
+    "name": "planted.nuggets",
+    "variant": "Classic",
+    "slug": "nuggets",
+    "category": "nuggets",
+    "description": "Golden-brown and crispy on the outside, juicy and flavorful on the inside - our planted.nuggets in the perfect two-bite size are the better choice for your next snack.",
+    "price": "CHF 7.95",
+    "weight": "8 pieces",
+    "color": "yellow",
+    "isNew": true,
+    "inStock": true,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/nuggets-pack.png?v=1758813102"
+    },
+    "order": 21
+}

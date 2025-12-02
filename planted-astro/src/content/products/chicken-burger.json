@@ -1,0 +1,16 @@
+{
+    "name": "planted.chicken",
+    "variant": "Burger",
+    "slug": "chicken-burger",
+    "category": "burger",
+    "description": "Plant-based chicken burger patties perfect for your favorite burger recipes.",
+    "price": "CHF 7.95",
+    "weight": "3 pieces",
+    "color": "yellow",
+    "isNew": false,
+    "inStock": true,
+    "images": {
+        "main": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/burger-new.png?v=1747136419"
+    },
+    "order": 5
+}
