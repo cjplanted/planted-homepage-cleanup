@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const products = await getCollection('products');
+const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Products – Planted" currentPage="products">
+    <header class="page-header">
+        <h1>Our Products</h1>
+        <p>Plant-based meat that actually tastes like meat. No compromises.</p>
+    </header>
+
+    <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">Chicken</button>
+        <button class="filter-tab">Steak</button>
+        <button class="filter-tab">Pulled</button>
+        <button class="filter-tab">Kebab</button>
+    </div>
+
+    <section class="products-section">
+        <div class="products-grid">
+            {sortedProducts.map((product) => (
+                <div class="product-card" data-color={product.data.color} data-category={product.data.category === 'other' ? '' : product.data.category}>
+                    <div class="product-card-inner">
+                        {product.data.isNew && <span class="product-badge-new">New</span>}
+                        <div class="product-wave" style={product.data.color === 'purple' ? 'background: rgba(255,255,255,0.15);' : ''}></div>
+                        <div class="product-dish"><img src={product.data.images.dish} alt={product.data.name}></div>
+                        <div class="product-packaging"><img src={product.data.images.packaging} alt="Package"></div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">{product.data.name}</div>
+                        <div class="product-variant">{product.data.variant}</div>
+                        <span class="product-protein">{product.data.protein}g protein</span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to try?</h2>
+        <p>Find planted at your favourite store. We're basically everywhere now.</p>
+        <a href="/#locator" class="btn btn-green">📍 Find Near You</a>
+    </section>
+</Layout>
+
+<style>
+    .products-section {
+        padding: 2rem 1.5rem 6rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .products-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .products-section {
+            padding: 2rem 3rem 8rem;
+        }
+
+        .products-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .products-section {
+            padding: 2rem 5rem 8rem;
+            max-width: 1600px;
+        }
+    }
+
+    .product-card {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .product-card.hidden {
+        display: none;
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active state
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Get filter value
+            const filter = tab.textContent?.trim().toLowerCase() || 'all';
+
+            // Filter cards
+            document.querySelectorAll('.product-card').forEach(card => {
+                const category = (card as HTMLElement).dataset.category || '';
+
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else if (category === filter) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>

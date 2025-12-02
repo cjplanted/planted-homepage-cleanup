@@ -1,0 +1,24 @@
+{
+    "heroTitle": "Meat from plants. Approved by meat lovers.",
+    "heroSubtitle": "No animals. No weird stuff. Just really good food that happens to be plant-based.",
+    "statementTitle": "We believe meat doesn't have to come from animals.",
+    "statementHighlight": "It just has to taste incredible.",
+    "statementSubtitle": "Made in Switzerland. B Corp certified. And honestly? It's really, really good.",
+    "impactCO2": 97,
+    "impactWater": 95,
+    "impactAnimals": 0,
+    "locatorTitle": "Hungry?",
+    "locatorSubtitle": "Find planted at your favourite store. We're basically everywhere now.",
+    "retailers": ["Coop", "Migros", "EDEKA", "REWE", "SPAR", "Tesco"],
+    "businessBadge": "For Foodservice",
+    "businessTitle": "Join 8,000+ restaurants serving planted",
+    "businessSubtitle": "From Michelin stars to street food. We've got products, support, and free samples waiting.",
+    "businessStats": [
+        { "value": "8,000+", "label": "Restaurants" },
+        { "value": "6", "label": "Countries" },
+        { "value": "24/7", "label": "Support" },
+        { "value": "Free", "label": "Samples" }
+    ],
+    "footerTagline": "Meat from plants. Approved by meat lovers.",
+    "copyright": "Planted Foods AG"
+}

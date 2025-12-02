@@ -1,0 +1,11 @@
+{
+    "title": "Crispy Chicken Buddha Bowl",
+    "description": "A healthy and delicious bowl packed with crispy planted.chicken, fresh vegetables, and a tangy dressing.",
+    "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+    "cookTime": 15,
+    "difficulty": "Easy",
+    "categories": ["chicken", "quick"],
+    "tags": ["Chicken", "Quick"],
+    "isFeatured": false,
+    "order": 2
+}

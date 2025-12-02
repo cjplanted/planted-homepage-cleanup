@@ -1,0 +1,13 @@
+{
+    "name": "planted.bratwurst",
+    "variant": "Classic",
+    "category": "other",
+    "protein": 18,
+    "color": "olive",
+    "isNew": true,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80"
+    },
+    "order": 10
+}

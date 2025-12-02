@@ -1,0 +1,464 @@
+/* ============================================
+   CUSTOM FONTS - Brand Typography
+   ============================================ */
+@font-face {
+    font-family: 'VC Henrietta';
+    src: url('/fonts/VCHenriettaCondensed-Bold.woff2') format('woff2'),
+         url('/fonts/VCHenriettaCondensed-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'VC Henrietta';
+    src: url('/fonts/VCHenriettaCondensed-SemiBold.woff2') format('woff2'),
+         url('/fonts/VCHenriettaCondensed-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Galano Grotesque';
+    src: url('/fonts/GalanoGrotesque-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Galano Grotesque';
+    src: url('/fonts/GalanoGrotesque-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Galano Grotesque';
+    src: url('/fonts/GalanoGrotesque-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+    --planted-purple: #61269E;
+    --planted-purple-dark: #4A1D7A;
+    --planted-purple-light: #8B4FCF;
+    --planted-green: #6BBF59;
+    --planted-cream: #FDF8F3;
+    --planted-white: #FFFFFF;
+    --planted-black: #1A1A1A;
+}
+
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Galano Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--planted-cream);
+    color: var(--planted-black);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+    background: var(--planted-purple-light);
+    color: white;
+}
+
+h1, h2, h3, .display {
+    font-family: 'VC Henrietta', Georgia, serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Galano Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 1rem 1.75rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--planted-purple);
+    color: white;
+    box-shadow: 0 8px 24px rgba(97, 38, 158, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(97, 38, 158, 0.4);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--planted-purple);
+    border: 2px solid var(--planted-purple);
+}
+
+.btn-secondary:hover {
+    background: var(--planted-purple);
+    color: white;
+}
+
+.btn-green {
+    background: var(--planted-green);
+    color: var(--planted-black);
+}
+
+.btn-green:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(107, 191, 89, 0.4);
+}
+
+/* ============================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================ */
+.reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-scale.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ============================================
+   PRODUCT CARD STYLES (shared)
+   ============================================ */
+.product-card {
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+}
+
+.product-card-inner {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.product-card[data-color="terracotta"] .product-card-inner { background: #C4654A; }
+.product-card[data-color="yellow"] .product-card-inner { background: #E8B84A; }
+.product-card[data-color="purple"] .product-card-inner { background: var(--planted-purple); }
+.product-card[data-color="olive"] .product-card-inner { background: #8B9A6B; }
+.product-card[data-color="burgundy"] .product-card-inner { background: #7A4A5A; }
+.product-card[data-color="teal"] .product-card-inner { background: #4A8B8B; }
+.product-card[data-color="coral"] .product-card-inner { background: #E07A5F; }
+.product-card[data-color="navy"] .product-card-inner { background: #3D405B; }
+
+.product-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background: var(--planted-purple);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+    transform: translateY(15%);
+}
+
+.product-packaging {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 2;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.product-packaging img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+    transform: rotate(-8deg);
+    transition: transform 0.4s ease;
+}
+
+.product-dish {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.product-dish img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-card:hover .product-packaging {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.product-card:hover .product-dish {
+    opacity: 1;
+}
+
+.product-card:hover .product-wave {
+    opacity: 0.9;
+}
+
+.product-info {
+    text-align: center;
+    padding: 0 0.5rem;
+}
+
+.product-name {
+    font-family: 'VC Henrietta', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--planted-purple);
+    margin-bottom: 0.15rem;
+}
+
+.product-variant {
+    color: var(--planted-purple);
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.product-badge-new {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #E85A4F;
+    color: white;
+    font-weight: 700;
+    font-size: 0.65rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    z-index: 5;
+}
+
+.product-protein {
+    display: inline-block;
+    background: var(--planted-green);
+    color: var(--planted-black);
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+    margin-top: 0.5rem;
+}
+
+/* ============================================
+   RECIPE CARD STYLES (shared)
+   ============================================ */
+.recipe-card {
+    background: white;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s ease;
+    cursor: pointer;
+}
+
+.recipe-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+}
+
+.recipe-image {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.recipe-card:hover .recipe-image img {
+    transform: scale(1.08);
+}
+
+.recipe-info {
+    padding: 1.25rem;
+}
+
+.recipe-title {
+    font-family: 'VC Henrietta', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--planted-purple);
+    margin-bottom: 0.25rem;
+}
+
+.recipe-meta {
+    color: var(--planted-black);
+    opacity: 0.6;
+    font-size: 0.85rem;
+}
+
+.recipe-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.recipe-tag {
+    background: var(--planted-cream);
+    color: var(--planted-purple);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+}
+
+/* ============================================
+   PAGE HEADER (shared)
+   ============================================ */
+.page-header {
+    padding: 7rem 1.5rem 3rem;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: clamp(3rem, 12vw, 6rem);
+    color: var(--planted-purple);
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   FILTER TABS (shared)
+   ============================================ */
+.filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    background: white;
+    border: 2px solid var(--planted-purple);
+    color: var(--planted-purple);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-tab:hover, .filter-tab.active {
+    background: var(--planted-purple);
+    color: white;
+}
+
+/* ============================================
+   CTA SECTION (shared)
+   ============================================ */
+.cta-section {
+    background: var(--planted-purple);
+    padding: 5rem 1.5rem;
+    text-align: center;
+}
+
+.cta-section h2 {
+    font-size: clamp(2rem, 8vw, 4rem);
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.cta-section p {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+@media (min-width: 640px) {
+    .page-header {
+        padding: 8rem 2rem 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .page-header {
+        padding: 8rem 3rem 4rem;
+    }
+}
+
+@media (min-width: 1440px) {
+    .page-header {
+        padding: 9rem 5rem 4rem;
+    }
+}

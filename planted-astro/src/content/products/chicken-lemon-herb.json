@@ -1,0 +1,13 @@
+{
+    "name": "planted.chicken",
+    "variant": "Lemon & Herb",
+    "category": "chicken",
+    "protein": 22,
+    "color": "yellow",
+    "isNew": false,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80"
+    },
+    "order": 2
+}

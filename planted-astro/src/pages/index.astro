@@ -1,0 +1,1099 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const products = await getCollection('products');
+const featuredProducts = products
+    .sort((a, b) => a.data.order - b.data.order)
+    .slice(0, 6);
+
+const recipes = await getCollection('recipes');
+const featuredRecipes = recipes
+    .sort((a, b) => a.data.order - b.data.order)
+    .slice(0, 4);
+
+const settings = await getEntry('settings', 'global');
+---
+
+<Layout title="Planted – Approved by Meat Lovers">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-wrapper">
+            <div class="hero-video-container" id="heroVideo">
+                <video class="hero-video" autoplay muted loop playsinline>
+                    <source src="/video/hero.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="hero-content" id="heroContent">
+            <h1>{settings?.data.heroTitle}</h1>
+            <p class="hero-subtitle">{settings?.data.heroSubtitle}</p>
+            <div class="hero-buttons">
+                <a href="#locator" class="btn btn-primary">
+                    <span>📍</span> Find Near You
+                </a>
+                <a href="#products" class="btn btn-secondary">
+                    See Our Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statement Section -->
+    <section class="statement">
+        <div class="statement-inner">
+            <h2 class="reveal">
+                {settings?.data.statementTitle}
+                <span class="statement-highlight">{settings?.data.statementHighlight}</span>
+            </h2>
+            <p class="reveal reveal-delay-1">{settings?.data.statementSubtitle}</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="products-header">
+            <h2 class="reveal">Our highlights</h2>
+            <a href="/products" class="all-products-btn reveal">
+                → All Products
+            </a>
+        </div>
+
+        <div class="products-carousel">
+            <div class="products-scroll" id="productsScroll">
+                {featuredProducts.map((product) => (
+                    <div class="product-card reveal-scale" data-color={product.data.color}>
+                        <div class="product-card-inner">
+                            {product.data.isNew && <span class="product-badge-new">New</span>}
+                            <div class="product-wave" style={product.data.color === 'purple' ? 'background: rgba(255,255,255,0.15);' : ''}></div>
+                            <div class="product-dish">
+                                <img src={product.data.images.dish} alt={product.data.name}>
+                            </div>
+                            <div class="product-packaging">
+                                <img src={product.data.images.packaging} alt={`${product.data.name} packaging`}>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{product.data.name}</div>
+                            <div class="product-variant">{product.data.variant}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- Carousel Pagination -->
+        <div class="carousel-pagination">
+            <button class="carousel-arrow" id="carouselPrev" aria-label="Previous">←</button>
+            <div class="carousel-dots">
+                <div class="carousel-dot active"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+                <div class="carousel-dot"></div>
+            </div>
+            <button class="carousel-arrow" id="carouselNext" aria-label="Next">→</button>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact" id="impact">
+        <h2 class="reveal">Every bite makes a difference</h2>
+        <div class="impact-stats">
+            <div class="stat reveal reveal-delay-1">
+                <div class="stat-value" data-count={settings?.data.impactCO2}>0%</div>
+                <div class="stat-label">Less CO₂</div>
+            </div>
+            <div class="stat reveal reveal-delay-2">
+                <div class="stat-value" data-count={settings?.data.impactWater}>0%</div>
+                <div class="stat-label">Less Water</div>
+            </div>
+            <div class="stat reveal reveal-delay-3">
+                <div class="stat-value" data-count={settings?.data.impactAnimals}>0</div>
+                <div class="stat-label">Animals</div>
+            </div>
+        </div>
+        <p class="impact-note reveal">Compared to conventional beef. Verified by independent LCA.</p>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="recipes-section" id="recipes">
+        <div class="recipes-header">
+            <h2 class="reveal">Get cooking</h2>
+            <a href="/recipes" class="reveal">All 50+ recipes →</a>
+        </div>
+
+        <div class="recipes-scroll">
+            {featuredRecipes.map((recipe) => (
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <img src={recipe.data.image} alt={recipe.data.title}>
+                    </div>
+                    <div class="recipe-info">
+                        <div class="recipe-title">{recipe.data.title}</div>
+                        <div class="recipe-meta">{recipe.data.cookTime} min • {recipe.data.difficulty}</div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <!-- Store Locator -->
+    <section class="locator" id="locator">
+        <div class="locator-content">
+            <h2 class="reveal">{settings?.data.locatorTitle}</h2>
+            <p class="reveal reveal-delay-1">{settings?.data.locatorSubtitle}</p>
+
+            <div class="locator-search reveal reveal-delay-2">
+                <input type="text" placeholder="Enter city or postcode">
+                <button>Search</button>
+            </div>
+
+            <div class="retailers">
+                {settings?.data.retailers?.map((retailer) => (
+                    <span class="retailer reveal-scale">{retailer}</span>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Section -->
+    <section class="business" id="business">
+        <div class="business-inner">
+            <div>
+                <span class="business-badge reveal">{settings?.data.businessBadge}</span>
+                <h2 class="reveal">{settings?.data.businessTitle}</h2>
+                <p class="reveal reveal-delay-1">{settings?.data.businessSubtitle}</p>
+                <a href="#" class="business-cta reveal reveal-delay-2">
+                    Get Samples →
+                </a>
+            </div>
+
+            <div class="business-stats">
+                {settings?.data.businessStats?.map((stat) => (
+                    <div class="business-stat reveal-scale">
+                        <div class="business-stat-value">{stat.value}</div>
+                        <div class="business-stat-label">{stat.label}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    /* Hero Section */
+    .hero {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: var(--planted-cream);
+        padding: 4rem 1.5rem 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-video-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-video-container {
+        position: relative;
+        width: 100%;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 25px 80px rgba(97, 38, 158, 0.15);
+        transform: rotate(-3deg) scale(0.95);
+        transition: box-shadow 0.3s ease;
+        will-change: transform;
+    }
+
+    .hero-video-container::before {
+        content: '';
+        display: block;
+        padding-top: 70%;
+    }
+
+    .hero-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 3rem auto 0;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    .hero-content.animate-in {
+        animation: fadeSlideUp 0.8s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    @keyframes fadeSlideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 11vw, 5.5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+        line-height: 0.95;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        color: var(--planted-black);
+        opacity: 0.7;
+        max-width: 480px;
+        margin: 0 auto 2rem;
+        line-height: 1.5;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    /* Statement Section */
+    .statement {
+        background: var(--planted-purple);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .statement-inner {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .statement h2 {
+        font-size: clamp(1.8rem, 6vw, 3.2rem);
+        color: white;
+        margin-bottom: 1.25rem;
+        line-height: 1.1;
+    }
+
+    .statement-highlight {
+        color: var(--planted-green);
+    }
+
+    .statement p {
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+        color: rgba(255,255,255,0.8);
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .statement::before,
+    .statement::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.03);
+        pointer-events: none;
+    }
+
+    .statement::before {
+        width: 400px;
+        height: 400px;
+        top: -200px;
+        right: -100px;
+    }
+
+    .statement::after {
+        width: 300px;
+        height: 300px;
+        bottom: -150px;
+        left: -50px;
+    }
+
+    /* Products Section */
+    .products {
+        background: var(--planted-cream);
+        padding: 5rem 0 4rem;
+        overflow: hidden;
+    }
+
+    .products-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0 1.5rem 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .products-header h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        color: var(--planted-purple);
+        font-style: italic;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .products-header .all-products-btn {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 0.9rem 1.5rem;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .products-header .all-products-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(107, 191, 89, 0.4);
+    }
+
+    .products-carousel {
+        position: relative;
+        padding: 0 1.5rem;
+    }
+
+    .products-scroll {
+        display: flex;
+        gap: 1.25rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 1rem;
+    }
+
+    .products-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .products-scroll .product-card {
+        flex: 0 0 280px;
+        scroll-snap-align: start;
+    }
+
+    .carousel-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0 1.5rem;
+    }
+
+    .carousel-arrow {
+        background: none;
+        border: none;
+        color: var(--planted-purple);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        opacity: 0.6;
+        transition: opacity 0.3s;
+    }
+
+    .carousel-arrow:hover {
+        opacity: 1;
+    }
+
+    .carousel-dots {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .carousel-dot {
+        width: 12px;
+        height: 4px;
+        background: var(--planted-purple);
+        border-radius: 2px;
+        opacity: 0.3;
+        transition: opacity 0.3s, width 0.3s;
+    }
+
+    .carousel-dot.active {
+        background: var(--planted-green);
+        opacity: 1;
+        width: 20px;
+    }
+
+    /* Impact Section */
+    .impact {
+        background: var(--planted-green);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .impact h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.6rem, 5vw, 2.8rem);
+        color: var(--planted-black);
+        margin-bottom: 3rem;
+        text-transform: uppercase;
+        font-style: italic;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .impact-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .stat {
+        padding: 0.5rem;
+    }
+
+    .stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(3rem, 12vw, 5.5rem);
+        font-weight: 700;
+        color: var(--planted-black);
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: var(--planted-black);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 500;
+    }
+
+    .impact-note {
+        margin-top: 3rem;
+        font-size: 1rem;
+        color: var(--planted-black);
+        font-style: italic;
+        opacity: 0.9;
+    }
+
+    /* Recipes Section */
+    .recipes-section {
+        background: var(--planted-cream);
+        padding: 6rem 0;
+    }
+
+    .recipes-header {
+        padding: 0 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .recipes-header h2 {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+        color: var(--planted-purple);
+        text-transform: uppercase;
+    }
+
+    .recipes-header a {
+        color: var(--planted-purple);
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: opacity 0.3s;
+    }
+
+    .recipes-header a:hover {
+        opacity: 0.7;
+    }
+
+    .recipes-scroll {
+        display: flex;
+        gap: 1.25rem;
+        overflow-x: auto;
+        padding: 0 1.5rem 2rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .recipes-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .recipes-scroll .recipe-card {
+        flex: 0 0 280px;
+        scroll-snap-align: start;
+    }
+
+    /* Store Locator */
+    .locator {
+        background: var(--planted-purple);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .locator-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .locator h2 {
+        font-size: clamp(3rem, 15vw, 7rem);
+        color: white;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+    }
+
+    .locator-content > p {
+        font-size: 1.1rem;
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 2.5rem;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .locator-search {
+        display: flex;
+        max-width: 420px;
+        margin: 0 auto 2.5rem;
+        background: white;
+        border-radius: 100px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .locator-search:focus-within {
+        transform: scale(1.02);
+        box-shadow: 0 16px 50px rgba(0,0,0,0.25);
+    }
+
+    .locator-search input {
+        flex: 1;
+        border: none;
+        padding: 1.1rem 1.5rem;
+        font-size: 1rem;
+        font-family: inherit;
+        outline: none;
+        min-width: 0;
+    }
+
+    .locator-search button {
+        background: var(--planted-green);
+        color: var(--planted-black);
+        border: none;
+        padding: 1.1rem 1.75rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+        transition: background 0.3s;
+    }
+
+    .locator-search button:hover {
+        background: #5aa94d;
+    }
+
+    .retailers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .retailer {
+        background: rgba(255,255,255,0.15);
+        padding: 0.55rem 1.1rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    .retailer:hover {
+        background: rgba(255,255,255,0.25);
+        transform: scale(1.05);
+    }
+
+    /* Business Section */
+    .business {
+        background: var(--planted-black);
+        padding: 6rem 1.5rem;
+        color: white;
+        width: 100%;
+    }
+
+    .business-inner {
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .business-badge {
+        display: inline-block;
+        background: var(--planted-purple);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.25rem;
+    }
+
+    .business h2 {
+        font-size: clamp(1.6rem, 5vw, 2.5rem);
+        margin-bottom: 1rem;
+        max-width: 550px;
+    }
+
+    .business > .business-inner > p {
+        font-size: 1rem;
+        opacity: 0.7;
+        line-height: 1.6;
+        margin-bottom: 1.75rem;
+        max-width: 450px;
+    }
+
+    .business-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+        max-width: 360px;
+    }
+
+    .business-stat {
+        padding: 1.25rem;
+        background: rgba(255,255,255,0.05);
+        border-radius: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    .business-stat:hover {
+        background: rgba(255,255,255,0.08);
+        transform: translateY(-4px);
+    }
+
+    .business-stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--planted-green);
+    }
+
+    .business-stat-label {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        margin-top: 0.15rem;
+    }
+
+    .business-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-purple);
+        color: white;
+        font-weight: 700;
+        padding: 1rem 1.75rem;
+        border-radius: 100px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .business-cta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(97, 38, 158, 0.4);
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+        .products-scroll {
+            gap: 1.5rem;
+        }
+
+        .products-scroll .product-card {
+            flex: 0 0 300px;
+        }
+
+        .hero-video-wrapper {
+            max-width: 700px;
+        }
+
+        .products-header .all-products-btn {
+            display: inline-flex;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .hero-video-wrapper {
+            max-width: 780px;
+        }
+
+        .hero-video-container {
+            border-radius: 2rem;
+        }
+
+        .hero-video-container::before {
+            padding-top: 60%;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .hero {
+            padding: 4.5rem 3rem 4rem;
+        }
+
+        .hero-video-wrapper {
+            max-width: 850px;
+        }
+
+        .products-header {
+            padding: 0 3rem 2.5rem;
+        }
+
+        .products-carousel {
+            padding: 0 3rem;
+        }
+
+        .products-scroll .product-card {
+            flex: 0 0 320px;
+        }
+
+        .recipes-scroll .recipe-card {
+            flex: 0 0 320px;
+        }
+
+        .business-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .business-stats {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            max-width: none;
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .hero {
+            padding: 5rem 5rem 5rem;
+        }
+
+        .hero-video-wrapper {
+            max-width: 950px;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+        }
+
+        .products {
+            padding: 6rem 0 5rem;
+        }
+
+        .products-header {
+            padding: 0 5rem 3rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .products-carousel {
+            padding: 0 5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .products-scroll .product-card {
+            flex: 0 0 340px;
+        }
+
+        .statement {
+            padding: 8rem 5rem;
+        }
+
+        .statement h2 {
+            font-size: 3.5rem;
+        }
+
+        .impact {
+            padding: 8rem 5rem;
+        }
+
+        .impact-stats {
+            max-width: 900px;
+        }
+
+        .recipes-section {
+            padding: 8rem 0;
+        }
+
+        .recipes-header {
+            padding: 0 5rem 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .recipes-scroll {
+            padding: 0 5rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .recipes-scroll .recipe-card {
+            flex: 0 0 360px;
+        }
+
+        .locator {
+            padding: 8rem 5rem;
+        }
+
+        .business {
+            padding: 8rem 5rem;
+        }
+
+        .business-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    }
+
+    @media (min-width: 1920px) {
+        .hero {
+            padding: 6rem 8rem 6rem;
+            max-width: 2200px;
+            margin: 0 auto;
+        }
+
+        .hero-video-wrapper {
+            max-width: 1100px;
+        }
+
+        .hero h1 {
+            font-size: 6rem;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+        }
+
+        .statement-inner {
+            max-width: 1000px;
+        }
+
+        .products-header {
+            padding: 0 8rem 3rem;
+            max-width: 2000px;
+        }
+
+        .products-carousel {
+            padding: 0 8rem;
+            max-width: 2000px;
+        }
+
+        .products-scroll .product-card {
+            flex: 0 0 380px;
+        }
+
+        .impact-stats {
+            max-width: 1000px;
+            gap: 4rem;
+        }
+
+        .stat-value {
+            font-size: 6rem;
+        }
+
+        .recipes-header {
+            padding: 0 8rem 3rem;
+            max-width: 2000px;
+        }
+
+        .recipes-scroll {
+            padding: 0 8rem 2rem;
+            max-width: 2000px;
+        }
+
+        .recipes-scroll .recipe-card {
+            flex: 0 0 400px;
+        }
+
+        .locator h2 {
+            font-size: 8rem;
+        }
+
+        .locator-search {
+            max-width: 500px;
+        }
+
+        .business-inner {
+            max-width: 1400px;
+            gap: 5rem;
+        }
+    }
+</style>
+
+<script>
+    // Hero video scroll transform (Apple-style)
+    const heroVideo = document.getElementById('heroVideo');
+    const heroContent = document.getElementById('heroContent');
+
+    // Trigger hero content animation on load
+    heroContent?.classList.add('animate-in');
+
+    let ticking = false;
+
+    function updateVideoTransform() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+
+        // Calculate scroll progress (0 to 1 for first viewport)
+        const progress = Math.min(scrollY / (windowHeight * 0.6), 1);
+
+        // Video: rotate from -3deg to 0deg, scale from 0.95 to 1
+        const rotation = -3 + (progress * 3);
+        const scale = 0.95 + (progress * 0.05);
+        const translateY = progress * -20;
+
+        if (heroVideo) {
+            heroVideo.style.transform = `rotate(${rotation}deg) scale(${scale}) translateY(${translateY}px)`;
+
+            // Add shadow depth as it straightens
+            const shadowOpacity = 0.15 + (progress * 0.1);
+            const shadowBlur = 25 + (progress * 30);
+            heroVideo.style.boxShadow = `0 ${25 + progress * 15}px ${shadowBlur}px rgba(97, 38, 158, ${shadowOpacity})`;
+        }
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateVideoTransform);
+            ticking = true;
+        }
+    });
+
+    updateVideoTransform();
+
+    // Counter animation for stats
+    const statValues = document.querySelectorAll('.stat-value[data-count]');
+    let statsAnimated = false;
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !statsAnimated) {
+                statsAnimated = true;
+                animateCounters();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const impactSection = document.getElementById('impact');
+    if (impactSection) {
+        statsObserver.observe(impactSection);
+    }
+
+    function animateCounters() {
+        statValues.forEach(stat => {
+            const target = parseInt(stat.dataset.count || '0');
+            const duration = 1500;
+            const start = performance.now();
+
+            function updateCounter(currentTime: number) {
+                const elapsed = currentTime - start;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Easing function (ease-out)
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(easeOut * target);
+
+                if (target === 0) {
+                    stat.textContent = '0';
+                } else {
+                    stat.textContent = current + '%';
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        });
+    }
+
+    // Products carousel
+    const productsScroll = document.getElementById('productsScroll');
+    const carouselDots = document.querySelectorAll('.carousel-dot');
+
+    function scrollProducts(direction: number) {
+        const card = productsScroll?.querySelector('.product-card');
+        if (card && productsScroll) {
+            const cardWidth = (card as HTMLElement).offsetWidth + 24;
+            productsScroll.scrollBy({
+                left: direction * cardWidth,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    document.getElementById('carouselPrev')?.addEventListener('click', () => scrollProducts(-1));
+    document.getElementById('carouselNext')?.addEventListener('click', () => scrollProducts(1));
+
+    // Update dots on scroll
+    productsScroll?.addEventListener('scroll', () => {
+        const card = productsScroll.querySelector('.product-card');
+        if (card) {
+            const cardWidth = (card as HTMLElement).offsetWidth + 24;
+            const activeIndex = Math.round(productsScroll.scrollLeft / cardWidth);
+
+            carouselDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+        }
+    });
+</script>

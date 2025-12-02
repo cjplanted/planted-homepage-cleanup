@@ -1,0 +1,13 @@
+{
+    "name": "planted.kebab",
+    "variant": "Original",
+    "category": "kebab",
+    "protein": 20,
+    "color": "teal",
+    "isNew": false,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400&q=80"
+    },
+    "order": 6
+}

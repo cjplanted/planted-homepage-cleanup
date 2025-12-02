@@ -1,0 +1,11 @@
+{
+    "title": "Mediterranean Grilled Skewers",
+    "description": "Colorful skewers with planted meat, peppers, and zucchini, served with tzatziki and warm pita.",
+    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+    "cookTime": 25,
+    "difficulty": "Easy",
+    "categories": ["bbq"],
+    "tags": ["Skewers", "BBQ"],
+    "isFeatured": false,
+    "order": 5
+}

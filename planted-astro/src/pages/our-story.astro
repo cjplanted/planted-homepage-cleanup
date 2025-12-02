@@ -1,0 +1,420 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const team = await getCollection('team');
+const sortedTeam = team.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Our Story – Planted" currentPage="our-story">
+    <section class="hero">
+        <h1>We believe meat doesn't have to come from animals. <span>It just has to taste incredible.</span></h1>
+        <p>That's why we started Planted. To create plant-based meat so good, even the biggest meat lovers can't tell the difference.</p>
+    </section>
+
+    <section class="story-section">
+        <div class="story-content">
+            <div class="story-block reveal">
+                <h2>It started with a question</h2>
+                <p>What if you could enjoy the taste and texture of meat without the environmental impact? What if you could have your steak and eat it too?</p>
+                <p>In 2019, four friends in Zurich asked themselves this question. They were food scientists, engineers, and entrepreneurs who loved meat but couldn't ignore the facts: animal agriculture is one of the biggest contributors to climate change.</p>
+            </div>
+            <div class="story-block reveal">
+                <h2>So we built something better</h2>
+                <p>We didn't want to make another veggie burger that tastes like cardboard. We wanted to create something that would actually satisfy a meat craving. Something with the same fibrous texture, the same sizzle in the pan, the same satisfaction on the plate.</p>
+                <p>Using cutting-edge food science and good old Swiss engineering, we developed a proprietary process that transforms simple plant proteins into meat-like structures. The result? Plant-based meat that even butchers have trouble identifying.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="image-section">
+        <div class="image-grid">
+            <div class="image-card reveal-scale"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" alt="Production"></div>
+            <div class="image-card reveal-scale"><img src="https://images.unsplash.com/photo-1581349485608-9469926a8e5e?w=800&q=80" alt="Team"></div>
+            <div class="image-card reveal-scale"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Food"></div>
+        </div>
+    </section>
+
+    <section class="values-section">
+        <div class="values-header">
+            <h2 class="reveal">What we stand for</h2>
+            <p class="reveal">Every decision we make is guided by these principles.</p>
+        </div>
+        <div class="values-grid">
+            <div class="value-card reveal-scale">
+                <div class="value-icon">🌍</div>
+                <div class="value-title">Planet First</div>
+                <div class="value-description">We're here to make a real impact. Every product we make uses 97% less CO₂ than beef.</div>
+            </div>
+            <div class="value-card reveal-scale">
+                <div class="value-icon">😋</div>
+                <div class="value-title">Taste Over Everything</div>
+                <div class="value-description">We refuse to compromise on taste. If it doesn't blow your mind, it doesn't leave our kitchen.</div>
+            </div>
+            <div class="value-card reveal-scale">
+                <div class="value-icon">🔬</div>
+                <div class="value-title">Science-Driven</div>
+                <div class="value-description">We combine food science with Swiss precision engineering to push the boundaries of what's possible.</div>
+            </div>
+            <div class="value-card reveal-scale">
+                <div class="value-icon">💚</div>
+                <div class="value-title">No Weird Stuff</div>
+                <div class="value-description">Just plants. No GMOs, no artificial colors, no ingredients you can't pronounce.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <div class="timeline-header">
+            <h2 class="reveal">Our journey</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2019</div>
+                <div class="timeline-content">
+                    <h3>The Beginning</h3>
+                    <p>Four friends start experimenting in a small lab in Zurich.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-content">
+                    <h3>First Product Launch</h3>
+                    <p>planted.chicken hits Swiss shelves. Sells out in days.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2021</div>
+                <div class="timeline-content">
+                    <h3>B Corp Certified</h3>
+                    <p>We officially become a certified B Corporation.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2022</div>
+                <div class="timeline-content">
+                    <h3>European Expansion</h3>
+                    <p>Launched in Germany, Austria, and the UK.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-content">
+                    <h3>planted.steak</h3>
+                    <p>World's first fermented whole-cut plant-based steak.</p>
+                </div>
+            </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-year">2024</div>
+                <div class="timeline-content">
+                    <h3>8,000+ Restaurants</h3>
+                    <p>From Michelin stars to street food vendors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bcorp-section">
+        <div class="bcorp-badge reveal-scale">B CORP</div>
+        <h2 class="reveal">Certified B Corporation</h2>
+        <p class="reveal">We meet the highest standards of verified social and environmental performance, transparency, and accountability. Because doing good should be non-negotiable.</p>
+    </section>
+
+    <section class="team-section">
+        <div class="team-header">
+            <h2 class="reveal">Meet the founders</h2>
+            <p class="reveal">Four friends on a mission to change the world.</p>
+        </div>
+        <div class="team-grid">
+            {sortedTeam.map((member) => (
+                <div class="team-card reveal-scale">
+                    <div class="team-photo"><img src={member.data.photo} alt={member.data.name}></div>
+                    <div class="team-name">{member.data.name}</div>
+                    <div class="team-role">{member.data.role}</div>
+                </div>
+            ))}
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to try?</h2>
+        <p>Find planted at your favourite store. We're basically everywhere now.</p>
+        <a href="/#locator" class="btn btn-green">📍 Find Near You</a>
+    </section>
+</Layout>
+
+<style>
+    .hero {
+        padding: 8rem 1.5rem 4rem;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 10vw, 5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+        line-height: 1;
+    }
+
+    .hero h1 span {
+        color: var(--planted-green);
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        line-height: 1.7;
+        opacity: 0.8;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .story-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .story-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .story-block {
+        margin-bottom: 4rem;
+    }
+
+    .story-block h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+    }
+
+    .story-block p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        opacity: 0.8;
+        margin-bottom: 1rem;
+    }
+
+    .image-section {
+        padding: 2rem 1.5rem 4rem;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .image-card {
+        border-radius: 1.5rem;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+    }
+
+    .image-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .values-section {
+        background: var(--planted-purple);
+        padding: 5rem 1.5rem;
+        color: white;
+    }
+
+    .values-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .values-header h2 {
+        font-size: clamp(2rem, 8vw, 3.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .values-header p {
+        opacity: 0.8;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .value-card {
+        background: rgba(255,255,255,0.1);
+        padding: 2rem;
+        border-radius: 1.25rem;
+    }
+
+    .value-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .value-title {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .value-description {
+        opacity: 0.8;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .timeline-section {
+        padding: 5rem 1.5rem;
+    }
+
+    .timeline-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .timeline-header h2 {
+        font-size: clamp(2rem, 8vw, 3rem);
+        color: var(--planted-purple);
+    }
+
+    .timeline {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .timeline-item {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .timeline-year {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.5rem;
+        color: var(--planted-purple);
+        min-width: 80px;
+    }
+
+    .timeline-content h3 {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .timeline-content p {
+        opacity: 0.7;
+        line-height: 1.6;
+    }
+
+    .bcorp-section {
+        background: var(--planted-green);
+        padding: 5rem 1.5rem;
+        text-align: center;
+    }
+
+    .bcorp-badge {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 2rem;
+        background: var(--planted-black);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.8rem;
+    }
+
+    .bcorp-section h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        color: var(--planted-black);
+        margin-bottom: 1rem;
+    }
+
+    .bcorp-section p {
+        color: var(--planted-black);
+        opacity: 0.8;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    .team-section {
+        padding: 5rem 1.5rem;
+    }
+
+    .team-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .team-header h2 {
+        font-size: clamp(2rem, 8vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .team-header p {
+        opacity: 0.7;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .team-card {
+        text-align: center;
+    }
+
+    .team-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        overflow: hidden;
+        background: var(--planted-purple);
+    }
+
+    .team-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .team-name {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        font-size: 1.2rem;
+    }
+
+    .team-role {
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    @media (min-width: 1024px) {
+        .hero {
+            padding: 10rem 3rem 5rem;
+        }
+
+        .story-section {
+            padding: 5rem 3rem;
+        }
+    }
+</style>

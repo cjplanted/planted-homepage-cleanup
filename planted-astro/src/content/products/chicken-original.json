@@ -1,0 +1,13 @@
+{
+    "name": "planted.chicken",
+    "variant": "Original",
+    "category": "chicken",
+    "protein": 22,
+    "color": "yellow",
+    "isNew": false,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80"
+    },
+    "order": 9
+}

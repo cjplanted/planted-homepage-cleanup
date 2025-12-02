@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const recipes = await getCollection('recipes');
+const sortedRecipes = recipes.sort((a, b) => a.data.order - b.data.order);
+const featuredRecipe = sortedRecipes.find(r => r.data.isFeatured);
+const otherRecipes = sortedRecipes.filter(r => !r.data.isFeatured);
+---
+
+<Layout title="Recipes – Planted" currentPage="recipes">
+    <header class="page-header">
+        <h1>Get cooking</h1>
+        <p>50+ recipes to inspire your next meal. From quick weeknight dinners to impressive feasts.</p>
+    </header>
+
+    <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">Quick & Easy</button>
+        <button class="filter-tab">Chicken</button>
+        <button class="filter-tab">Steak</button>
+        <button class="filter-tab">BBQ</button>
+    </div>
+
+    <section class="recipes-section">
+        {featuredRecipe && (
+            <div class="featured-recipe">
+                <div class="featured-image">
+                    <img src={featuredRecipe.data.image} alt={featuredRecipe.data.title}>
+                </div>
+                <div class="featured-content">
+                    <span class="featured-label">Featured Recipe</span>
+                    <h2 class="featured-title">{featuredRecipe.data.title}</h2>
+                    <p class="featured-description">{featuredRecipe.data.description}</p>
+                    <a href="#" class="btn btn-white">View Recipe →</a>
+                </div>
+            </div>
+        )}
+
+        <div class="recipes-grid">
+            {otherRecipes.map((recipe) => (
+                <div class="recipe-card" data-category={recipe.data.categories.join(' ')}>
+                    <div class="recipe-image">
+                        <img src={recipe.data.image} alt={recipe.data.title}>
+                    </div>
+                    <div class="recipe-content">
+                        <div class="recipe-tags">
+                            {recipe.data.tags.map((tag) => (
+                                <span class="recipe-tag">{tag}</span>
+                            ))}
+                        </div>
+                        <h3 class="recipe-title">{recipe.data.title}</h3>
+                        <div class="recipe-meta">⏱ {recipe.data.cookTime} min • {recipe.data.difficulty}</div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .recipes-section {
+        padding: 2rem 1.5rem 6rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .featured-recipe {
+        background: var(--planted-purple);
+        border-radius: 2rem;
+        overflow: hidden;
+        margin-bottom: 3rem;
+        display: grid;
+    }
+
+    .featured-image {
+        aspect-ratio: 16/9;
+    }
+
+    .featured-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .featured-content {
+        padding: 2rem;
+        color: white;
+    }
+
+    .featured-label {
+        display: inline-block;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-weight: 700;
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+    .featured-title {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .featured-description {
+        opacity: 0.85;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .btn-white {
+        background: white;
+        color: var(--planted-purple);
+    }
+
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .recipe-content {
+        padding: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .featured-recipe {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .featured-image {
+            aspect-ratio: auto;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .recipes-section {
+            padding: 2rem 3rem 8rem;
+        }
+    }
+
+    .recipe-card {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .recipe-card.hidden {
+        display: none;
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active state
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Get filter value and normalize it
+            let filter = tab.textContent?.trim().toLowerCase() || 'all';
+
+            // Handle "Quick & Easy" -> "quick" mapping
+            if (filter === 'quick & easy') {
+                filter = 'quick';
+            }
+
+            // Filter cards
+            document.querySelectorAll('.recipe-card').forEach(card => {
+                const categories = (card as HTMLElement).dataset.category || '';
+
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else if (categories.includes(filter)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>

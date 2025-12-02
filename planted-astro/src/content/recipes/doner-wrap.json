@@ -1,0 +1,11 @@
+{
+    "title": "Late Night Döner Wrap",
+    "description": "The ultimate late night snack. Planted.kebab wrapped in warm flatbread with fresh salad and garlic sauce.",
+    "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
+    "cookTime": 10,
+    "difficulty": "Easy",
+    "categories": ["kebab", "quick"],
+    "tags": ["Kebab", "Quick"],
+    "isFeatured": false,
+    "order": 3
+}

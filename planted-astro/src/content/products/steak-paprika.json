@@ -1,0 +1,13 @@
+{
+    "name": "planted.steak",
+    "variant": "Paprika",
+    "category": "steak",
+    "protein": 24,
+    "color": "terracotta",
+    "isNew": true,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&q=80"
+    },
+    "order": 1
+}

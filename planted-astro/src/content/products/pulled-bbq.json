@@ -1,0 +1,13 @@
+{
+    "name": "planted.pulled",
+    "variant": "BBQ",
+    "category": "pulled",
+    "protein": 21,
+    "color": "coral",
+    "isNew": false,
+    "images": {
+        "dish": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80",
+        "packaging": "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=400&q=80"
+    },
+    "order": 7
+}

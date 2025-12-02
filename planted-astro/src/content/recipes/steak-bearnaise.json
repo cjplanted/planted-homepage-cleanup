@@ -1,0 +1,11 @@
+{
+    "title": "planted.steak with Béarnaise Sauce",
+    "description": "A classic French bistro dish, reimagined. Our planted.steak paired with rich béarnaise, crispy fries, and fresh watercress.",
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80",
+    "cookTime": 35,
+    "difficulty": "Medium",
+    "categories": ["steak", "date-night"],
+    "tags": ["Steak", "French"],
+    "isFeatured": true,
+    "order": 1
+}

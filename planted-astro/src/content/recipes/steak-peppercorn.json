@@ -1,0 +1,11 @@
+{
+    "title": "Steak with Peppercorn Sauce",
+    "description": "Classic planted.steak served with creamy peppercorn sauce and roasted vegetables.",
+    "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80",
+    "cookTime": 30,
+    "difficulty": "Medium",
+    "categories": ["steak"],
+    "tags": ["Steak", "Date Night"],
+    "isFeatured": false,
+    "order": 6
+}
