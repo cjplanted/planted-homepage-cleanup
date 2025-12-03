@@ -81,16 +81,11 @@ const categories = [...new Set(products.map(p => p.data.category))];
 </Layout>
 
 <style>
-    :root {
-        --purple: #61269E;
-        --green: #6BBF59;
-        --cream: #FDF8F3;
-        --black: #1A1A1A;
-    }
+    /* Uses global CSS variables: --planted-purple, --planted-green, --planted-cream, --planted-black */
 
     /* Hero */
     .hero {
-        background: var(--purple);
+        background: var(--planted-purple);
         padding: 8rem 1.5rem 5rem;
         text-align: center;
     }
@@ -116,7 +111,7 @@ const categories = [...new Set(products.map(p => p.data.category))];
 
     /* Products */
     .products {
-        background: var(--cream);
+        background: var(--planted-cream);
         padding: 5rem 1.5rem;
     }
 
@@ -151,25 +146,14 @@ const categories = [...new Set(products.map(p => p.data.category))];
         margin-bottom: 1rem;
     }
 
-    /* Color backgrounds */
-    .product-card[data-color="yellow"] .product-card-inner { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
-    .product-card[data-color="terracotta"] .product-card-inner { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
-    .product-card[data-color="purple"] .product-card-inner { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
-    .product-card[data-color="olive"] .product-card-inner { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
-    .product-card[data-color="burgundy"] .product-card-inner { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
-    .product-card[data-color="teal"] .product-card-inner { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
-    .product-card[data-color="coral"] .product-card-inner { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
-    .product-card[data-color="navy"] .product-card-inner { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
-    .product-card[data-color="green"] .product-card-inner { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
-    .product-card[data-color="orange"] .product-card-inner { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
-    .product-card[data-color="red"] .product-card-inner { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+    /* Product card color backgrounds are defined in global.css */
 
     .product-badge-new {
         position: absolute;
         top: 1rem;
         right: 1rem;
-        background: var(--green);
-        color: var(--black);
+        background: var(--planted-green);
+        color: var(--planted-black);
         font-size: 0.65rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -236,12 +220,12 @@ const categories = [...new Set(products.map(p => p.data.category))];
         font-family: 'VC Henrietta', serif;
         font-size: 1.25rem;
         font-weight: 700;
-        color: var(--purple);
+        color: var(--planted-purple);
         margin-bottom: 0.2rem;
     }
 
     .product-variant {
-        color: var(--purple);
+        color: var(--planted-purple);
         font-size: 0.9rem;
         opacity: 0.7;
         margin-bottom: 0.5rem;
@@ -250,12 +234,12 @@ const categories = [...new Set(products.map(p => p.data.category))];
     .product-protein {
         font-size: 0.8rem;
         font-weight: 600;
-        color: var(--green);
+        color: var(--planted-green);
     }
 
     /* CTA */
     .cta {
-        background: var(--green);
+        background: var(--planted-green);
         padding: 6rem 1.5rem;
         text-align: center;
     }
@@ -267,13 +251,13 @@ const categories = [...new Set(products.map(p => p.data.category))];
 
     .cta h2 {
         font-size: clamp(2rem, 6vw, 3.5rem);
-        color: var(--black);
+        color: var(--planted-black);
         margin-bottom: 1rem;
     }
 
     .cta p {
         font-size: 1.1rem;
-        color: var(--black);
+        color: var(--planted-black);
         opacity: 0.8;
         margin-bottom: 2rem;
     }
@@ -291,7 +275,7 @@ const categories = [...new Set(products.map(p => p.data.category))];
     }
 
     .btn-primary {
-        background: var(--purple);
+        background: var(--planted-purple);
         color: white;
         box-shadow: 0 6px 20px rgba(97,38,158,0.35);
     }

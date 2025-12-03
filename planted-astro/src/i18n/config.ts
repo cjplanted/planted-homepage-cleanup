@@ -36,138 +36,48 @@ export const countryLocales: Record<CountryCode, LocaleCode[]> = {
     'es': ['es'],
 };
 
-// Product name mappings by locale
-// In France: chicken → émincé, pulled → effiloché, schnitzel → escalope
-// In Italy: chicken → bocconcini, pulled → straccetti
-// In Spain: chicken → pollo, pulled → deshilachado
-export const productNamesByLocale: Record<LocaleCode, Record<string, string>> = {
-    'ch-de': {
-        'planted.chicken': 'planted.chicken',
-        'planted.pulled': 'planted.pulled',
-        'planted.schnitzel': 'planted.schnitzel',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.bratwurst',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.duck',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.skewers',
-        'planted.filetwürfel': 'planted.filetwürfel',
-    },
-    'ch-fr': {
-        'planted.chicken': 'planted.émincé',
-        'planted.pulled': 'planted.effiloché',
-        'planted.schnitzel': 'planted.escalope',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.saucisse',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.canard',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.brochettes',
-        'planted.filetwürfel': 'planted.filet',
-    },
-    'ch-it': {
-        'planted.chicken': 'planted.bocconcini',
-        'planted.pulled': 'planted.straccetti',
-        'planted.schnitzel': 'planted.scaloppina',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.salsiccia',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.anatra',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.spiedini',
-        'planted.filetwürfel': 'planted.filetto',
+// Product name translations by language (only stores differences from base name)
+// Base names (English/German): planted.chicken, planted.pulled, planted.schnitzel, etc.
+const productNameTranslations: Record<LanguageCode, Record<string, string>> = {
+    'en': {
+        'planted.bratwurst': 'planted.sausage',
+        'planted.filetwürfel': 'planted.fillet cubes',
     },
     'de': {
-        'planted.chicken': 'planted.chicken',
-        'planted.pulled': 'planted.pulled',
-        'planted.schnitzel': 'planted.schnitzel',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.bratwurst',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.duck',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.skewers',
-        'planted.filetwürfel': 'planted.filetwürfel',
-    },
-    'at': {
-        'planted.chicken': 'planted.chicken',
-        'planted.pulled': 'planted.pulled',
-        'planted.schnitzel': 'planted.schnitzel',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.bratwurst',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.duck',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.skewers',
-        'planted.filetwürfel': 'planted.filetwürfel',
-    },
-    'it': {
-        'planted.chicken': 'planted.bocconcini',
-        'planted.pulled': 'planted.straccetti',
-        'planted.schnitzel': 'planted.scaloppina',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.salsiccia',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.anatra',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.spiedini',
-        'planted.filetwürfel': 'planted.filetto',
+        // German uses the base names (no changes needed)
     },
     'fr': {
         'planted.chicken': 'planted.émincé',
         'planted.pulled': 'planted.effiloché',
         'planted.schnitzel': 'planted.escalope',
-        'planted.kebab': 'planted.kebab',
         'planted.bratwurst': 'planted.saucisse',
-        'planted.steak': 'planted.steak',
         'planted.duck': 'planted.canard',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
         'planted.skewers': 'planted.brochettes',
         'planted.filetwürfel': 'planted.filet',
     },
+    'it': {
+        'planted.chicken': 'planted.bocconcini',
+        'planted.pulled': 'planted.straccetti',
+        'planted.schnitzel': 'planted.scaloppina',
+        'planted.bratwurst': 'planted.salsiccia',
+        'planted.duck': 'planted.anatra',
+        'planted.skewers': 'planted.spiedini',
+        'planted.filetwürfel': 'planted.filetto',
+    },
     'nl': {
-        'planted.chicken': 'planted.chicken',
-        'planted.pulled': 'planted.pulled',
-        'planted.schnitzel': 'planted.schnitzel',
-        'planted.kebab': 'planted.kebab',
         'planted.bratwurst': 'planted.braadworst',
-        'planted.steak': 'planted.steak',
         'planted.duck': 'planted.eend',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
         'planted.skewers': 'planted.spiesjes',
         'planted.filetwürfel': 'planted.filetblokjes',
-    },
-    'uk': {
-        'planted.chicken': 'planted.chicken',
-        'planted.pulled': 'planted.pulled',
-        'planted.schnitzel': 'planted.schnitzel',
-        'planted.kebab': 'planted.kebab',
-        'planted.bratwurst': 'planted.sausage',
-        'planted.steak': 'planted.steak',
-        'planted.duck': 'planted.duck',
-        'planted.burger': 'planted.burger',
-        'planted.nuggets': 'planted.nuggets',
-        'planted.skewers': 'planted.skewers',
-        'planted.filetwürfel': 'planted.fillet cubes',
     },
     'es': {
         'planted.chicken': 'planted.pollo',
         'planted.pulled': 'planted.deshilachado',
         'planted.schnitzel': 'planted.escalope',
-        'planted.kebab': 'planted.kebab',
         'planted.bratwurst': 'planted.salchicha',
         'planted.steak': 'planted.filete',
         'planted.duck': 'planted.pato',
         'planted.burger': 'planted.hamburguesa',
-        'planted.nuggets': 'planted.nuggets',
         'planted.skewers': 'planted.brochetas',
         'planted.filetwürfel': 'planted.tacos de filete',
     },
@@ -175,8 +85,9 @@ export const productNamesByLocale: Record<LocaleCode, Record<string, string>> = 
 
 // Helper function to get localized product name
 export function getLocalizedProductName(baseName: string, locale: LocaleCode): string {
-    const mapping = productNamesByLocale[locale];
-    return mapping[baseName] || baseName;
+    const language = locales[locale].language as LanguageCode;
+    const translations = productNameTranslations[language];
+    return translations?.[baseName] || baseName;
 }
 
 // Retailers data per country with logos and URLs
