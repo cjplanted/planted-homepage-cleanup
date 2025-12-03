@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { allLocales, locales, type LocaleCode, getLocalizedProductName } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
 import { getProductTranslation } from '../../../i18n/products/index';
 
@@ -106,9 +106,12 @@ const features = productT?.features || [
     t.products.features.richIron,
     t.products.features.vitaminB12
 ];
+
+// Get localized product name for this locale
+const localizedName = getLocalizedProductName(product.data.name, locale);
 ---
 
-<Layout title={`${product.data.name} ${product.data.variant} – Planted`} currentPage="products" locale={locale}>
+<Layout title={`${localizedName} ${product.data.variant} – Planted`} currentPage="products" locale={locale}>
     <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero-sticky">
@@ -116,18 +119,18 @@ const features = productT?.features || [
 
             {product.data.images.dish || product.data.images.background ? (
                 <div class="hero-dish" id="heroDish">
-                    <img src={product.data.images.dish || product.data.images.background} alt={`${product.data.name} dish`} loading="eager">
+                    <img src={product.data.images.dish || product.data.images.background} alt={`${localizedName} dish`} loading="eager">
                 </div>
             ) : null}
 
             <div class="hero-pack" id="heroPack">
                 {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
-                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="eager">
+                <img src={product.data.images.main} alt={`${localizedName} ${product.data.variant}`} loading="eager">
             </div>
 
             <div class="hero-info" id="heroInfo">
                 <div class="hero-text">
-                    <h1>{product.data.name}</h1>
+                    <h1>{localizedName}</h1>
                     <p class="variant">{product.data.variant}{productT?.description && ` — ${productT.description.split('.')[0]}`}</p>
                 </div>
                 <div class="hero-protein">
@@ -216,7 +219,7 @@ const features = productT?.features || [
     <section class="nutrition">
         <div class="nutrition-layout">
             <div class="nutrition-image">
-                <img src={product.data.images.dish || product.data.images.background || product.data.images.main} alt={`${product.data.name}`} loading="lazy">
+                <img src={product.data.images.dish || product.data.images.background || product.data.images.main} alt={localizedName} loading="lazy">
             </div>
             <div class="nutrition-content">
                 <div class="nutrition-header">

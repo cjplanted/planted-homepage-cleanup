@@ -14,6 +14,7 @@ export const locales = {
     'es': { country: 'es', language: 'es', name: 'España', languageName: 'Español', flag: '🇪🇸' },
 } as const;
 
+// Type definitions (must come after locales const)
 export type LocaleCode = keyof typeof locales;
 export type LanguageCode = 'de' | 'fr' | 'it' | 'en' | 'nl' | 'es';
 export type CountryCode = 'ch' | 'de' | 'at' | 'it' | 'fr' | 'nl' | 'uk' | 'es';
@@ -35,44 +36,190 @@ export const countryLocales: Record<CountryCode, LocaleCode[]> = {
     'es': ['es'],
 };
 
-// Retailers data per country
+// Product name mappings by locale
+// In France: chicken → émincé, pulled → effiloché, schnitzel → escalope
+// In Italy: chicken → bocconcini, pulled → straccetti
+// In Spain: chicken → pollo, pulled → deshilachado
+export const productNamesByLocale: Record<LocaleCode, Record<string, string>> = {
+    'ch-de': {
+        'planted.chicken': 'planted.chicken',
+        'planted.pulled': 'planted.pulled',
+        'planted.schnitzel': 'planted.schnitzel',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.bratwurst',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.duck',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.skewers',
+        'planted.filetwürfel': 'planted.filetwürfel',
+    },
+    'ch-fr': {
+        'planted.chicken': 'planted.émincé',
+        'planted.pulled': 'planted.effiloché',
+        'planted.schnitzel': 'planted.escalope',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.saucisse',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.canard',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.brochettes',
+        'planted.filetwürfel': 'planted.filet',
+    },
+    'ch-it': {
+        'planted.chicken': 'planted.bocconcini',
+        'planted.pulled': 'planted.straccetti',
+        'planted.schnitzel': 'planted.scaloppina',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.salsiccia',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.anatra',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.spiedini',
+        'planted.filetwürfel': 'planted.filetto',
+    },
+    'de': {
+        'planted.chicken': 'planted.chicken',
+        'planted.pulled': 'planted.pulled',
+        'planted.schnitzel': 'planted.schnitzel',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.bratwurst',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.duck',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.skewers',
+        'planted.filetwürfel': 'planted.filetwürfel',
+    },
+    'at': {
+        'planted.chicken': 'planted.chicken',
+        'planted.pulled': 'planted.pulled',
+        'planted.schnitzel': 'planted.schnitzel',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.bratwurst',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.duck',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.skewers',
+        'planted.filetwürfel': 'planted.filetwürfel',
+    },
+    'it': {
+        'planted.chicken': 'planted.bocconcini',
+        'planted.pulled': 'planted.straccetti',
+        'planted.schnitzel': 'planted.scaloppina',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.salsiccia',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.anatra',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.spiedini',
+        'planted.filetwürfel': 'planted.filetto',
+    },
+    'fr': {
+        'planted.chicken': 'planted.émincé',
+        'planted.pulled': 'planted.effiloché',
+        'planted.schnitzel': 'planted.escalope',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.saucisse',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.canard',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.brochettes',
+        'planted.filetwürfel': 'planted.filet',
+    },
+    'nl': {
+        'planted.chicken': 'planted.chicken',
+        'planted.pulled': 'planted.pulled',
+        'planted.schnitzel': 'planted.schnitzel',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.braadworst',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.eend',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.spiesjes',
+        'planted.filetwürfel': 'planted.filetblokjes',
+    },
+    'uk': {
+        'planted.chicken': 'planted.chicken',
+        'planted.pulled': 'planted.pulled',
+        'planted.schnitzel': 'planted.schnitzel',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.sausage',
+        'planted.steak': 'planted.steak',
+        'planted.duck': 'planted.duck',
+        'planted.burger': 'planted.burger',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.skewers',
+        'planted.filetwürfel': 'planted.fillet cubes',
+    },
+    'es': {
+        'planted.chicken': 'planted.pollo',
+        'planted.pulled': 'planted.deshilachado',
+        'planted.schnitzel': 'planted.escalope',
+        'planted.kebab': 'planted.kebab',
+        'planted.bratwurst': 'planted.salchicha',
+        'planted.steak': 'planted.filete',
+        'planted.duck': 'planted.pato',
+        'planted.burger': 'planted.hamburguesa',
+        'planted.nuggets': 'planted.nuggets',
+        'planted.skewers': 'planted.brochetas',
+        'planted.filetwürfel': 'planted.tacos de filete',
+    },
+};
+
+// Helper function to get localized product name
+export function getLocalizedProductName(baseName: string, locale: LocaleCode): string {
+    const mapping = productNamesByLocale[locale];
+    return mapping[baseName] || baseName;
+}
+
+// Retailers data per country with logos and URLs
 export const retailers: Record<CountryCode, { name: string; logo: string; url: string; type: 'retail' | 'foodservice' }[]> = {
     'ch': [
-        { name: 'Coop', logo: '/images/retailers/coop.svg', url: 'https://www.coop.ch', type: 'retail' },
-        { name: 'Migros', logo: '/images/retailers/migros.svg', url: 'https://www.migros.ch', type: 'retail' },
-        { name: 'Hiltl', logo: '/images/retailers/hiltl.svg', url: 'https://hiltl.ch', type: 'foodservice' },
-        { name: 'NENI', logo: '/images/retailers/neni.svg', url: 'https://www.neni.at', type: 'foodservice' },
+        { name: 'Coop', logo: 'coop', url: 'https://www.coop.ch', type: 'retail' },
+        { name: 'Migros', logo: 'migros', url: 'https://www.migros.ch', type: 'retail' },
+        { name: 'Hiltl', logo: 'hiltl', url: 'https://hiltl.ch', type: 'foodservice' },
+        { name: 'NENI', logo: 'neni', url: 'https://www.neni.at', type: 'foodservice' },
     ],
     'de': [
-        { name: 'EDEKA', logo: '/images/retailers/edeka.svg', url: 'https://www.edeka.de', type: 'retail' },
-        { name: 'REWE', logo: '/images/retailers/rewe.svg', url: 'https://www.rewe.de', type: 'retail' },
+        { name: 'EDEKA', logo: 'edeka', url: 'https://www.edeka.de', type: 'retail' },
+        { name: 'REWE', logo: 'rewe', url: 'https://www.rewe.de', type: 'retail' },
     ],
     'at': [
-        { name: 'BILLA', logo: '/images/retailers/billa.svg', url: 'https://www.billa.at', type: 'retail' },
-        { name: 'BILLA PLUS', logo: '/images/retailers/billa-plus.svg', url: 'https://www.billa.at', type: 'retail' },
-        { name: 'Interspar', logo: '/images/retailers/interspar.svg', url: 'https://www.interspar.at', type: 'retail' },
-        { name: 'Eurospar', logo: '/images/retailers/eurospar.svg', url: 'https://www.eurospar.at', type: 'retail' },
-        { name: 'MPREIS', logo: '/images/retailers/mpreis.svg', url: 'https://www.mpreis.at', type: 'retail' },
+        { name: 'BILLA', logo: 'billa', url: 'https://www.billa.at', type: 'retail' },
+        { name: 'BILLA PLUS', logo: 'billa-plus', url: 'https://www.billa.at', type: 'retail' },
+        { name: 'Interspar', logo: 'interspar', url: 'https://www.interspar.at', type: 'retail' },
+        { name: 'Eurospar', logo: 'eurospar', url: 'https://www.eurospar.at', type: 'retail' },
+        { name: 'MPREIS', logo: 'mpreis', url: 'https://www.mpreis.at', type: 'retail' },
     ],
     'it': [
-        { name: 'Conad', logo: '/images/retailers/conad.svg', url: 'https://www.conad.it', type: 'retail' },
-        { name: 'Esselunga', logo: '/images/retailers/esselunga.svg', url: 'https://www.esselunga.it', type: 'retail' },
-        { name: 'Carrefour', logo: '/images/retailers/carrefour.svg', url: 'https://www.carrefour.it', type: 'retail' },
-        { name: 'Interspar', logo: '/images/retailers/interspar.svg', url: 'https://www.interspar.it', type: 'retail' },
+        { name: 'Conad', logo: 'conad', url: 'https://www.conad.it', type: 'retail' },
+        { name: 'Esselunga', logo: 'esselunga', url: 'https://www.esselunga.it', type: 'retail' },
+        { name: 'Carrefour', logo: 'carrefour', url: 'https://www.carrefour.it', type: 'retail' },
+        { name: 'Interspar', logo: 'interspar', url: 'https://www.interspar.it', type: 'retail' },
     ],
     'fr': [
-        { name: 'Carrefour', logo: '/images/retailers/carrefour.svg', url: 'https://www.carrefour.fr', type: 'retail' },
-        { name: 'Monoprix', logo: '/images/retailers/monoprix.svg', url: 'https://www.monoprix.fr', type: 'retail' },
-        { name: 'Casino', logo: '/images/retailers/casino.svg', url: 'https://www.casino.fr', type: 'retail' },
+        { name: 'Carrefour', logo: 'carrefour', url: 'https://www.carrefour.fr', type: 'retail' },
+        { name: 'Monoprix', logo: 'monoprix', url: 'https://www.monoprix.fr', type: 'retail' },
+        { name: 'Casino', logo: 'casino', url: 'https://www.casino.fr', type: 'retail' },
     ],
     'nl': [
-        { name: 'Albert Heijn', logo: '/images/retailers/albert-heijn.svg', url: 'https://www.ah.nl', type: 'retail' },
+        { name: 'Albert Heijn', logo: 'albert-heijn', url: 'https://www.ah.nl', type: 'retail' },
+        { name: 'Jumbo', logo: 'jumbo', url: 'https://www.jumbo.com', type: 'retail' },
     ],
     'uk': [
-        { name: 'Tesco', logo: '/images/retailers/tesco.svg', url: 'https://www.tesco.com', type: 'retail' },
+        { name: 'Tesco', logo: 'tesco', url: 'https://www.tesco.com', type: 'retail' },
+        { name: 'Sainsbury\'s', logo: 'sainsburys', url: 'https://www.sainsburys.co.uk', type: 'retail' },
     ],
     'es': [
-        { name: 'Carrefour', logo: '/images/retailers/carrefour.svg', url: 'https://www.carrefour.es', type: 'retail' },
+        { name: 'Carrefour', logo: 'carrefour', url: 'https://www.carrefour.es', type: 'retail' },
+        { name: 'El Corte Inglés', logo: 'elcorteingles', url: 'https://www.elcorteingles.es', type: 'retail' },
     ],
 };
 

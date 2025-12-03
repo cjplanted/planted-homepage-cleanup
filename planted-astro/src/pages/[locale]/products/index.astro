@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { allLocales, locales, type LocaleCode, getLocalizedProductName } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
 
 export async function getStaticPaths() {
@@ -58,7 +58,7 @@ const categories = [...new Set(products.map(p => p.data.category))];
                             )}
                         </div>
                         <div class="product-info">
-                            <div class="product-name">{product.data.name}</div>
+                            <div class="product-name">{getLocalizedProductName(product.data.name, locale)}</div>
                             <div class="product-variant">{product.data.variant}</div>
                             <div class="product-protein">{product.data.nutrition?.protein || 20}g {t.products.proteinPer100g}</div>
                         </div>

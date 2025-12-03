@@ -1,9 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { allLocales, locales, type LocaleCode, getLocalizedProductName, retailers } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
-import { retailers } from '../../i18n/config';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -91,7 +90,7 @@ const settings = await getEntry('settings', 'global');
                             )}
                         </div>
                         <div class="product-info">
-                            <div class="product-name">{product.data.name}</div>
+                            <div class="product-name">{getLocalizedProductName(product.data.name, locale)}</div>
                             <div class="product-variant">{product.data.variant}</div>
                         </div>
                     </a>
@@ -204,8 +203,10 @@ const settings = await getEntry('settings', 'global');
             </div>
 
             <div class="retailers">
-                {countryRetailers.map((retailer) => (
-                    <span class="retailer reveal-scale">{retailer.name}</span>
+                {countryRetailers.filter(r => r.type === 'retail').map((retailer) => (
+                    <a href={retailer.url} target="_blank" rel="noopener noreferrer" class="retailer-link reveal-scale" title={retailer.name}>
+                        <span class="retailer-name">{retailer.name}</span>
+                    </a>
                 ))}
             </div>
         </div>
@@ -571,9 +572,28 @@ const settings = await getEntry('settings', 'global');
     .locator-search button { background: var(--planted-green); color: var(--planted-black); border: none; padding: 1.1rem 1.75rem; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.3s; }
     .locator-search button:hover { background: #5aa94d; }
 
-    .retailers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
-    .retailer { background: rgba(255,255,255,0.15); padding: 0.55rem 1.1rem; border-radius: 100px; font-weight: 600; font-size: 0.85rem; color: white; transition: background 0.3s, transform 0.3s; }
-    .retailer:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+    .retailers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
+    .retailer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255,255,255,0.15);
+        padding: 0.65rem 1.25rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .retailer-link:hover {
+        background: rgba(255,255,255,0.25);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        border-color: rgba(255,255,255,0.4);
+    }
+    .retailer-link .retailer-name { font-weight: 700; }
 
     /* Responsive */
     @media (min-width: 640px) {
