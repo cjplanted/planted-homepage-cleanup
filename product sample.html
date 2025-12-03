@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>planted.chicken Nature | Planted</title>
+    
+    <style>
+        @font-face {
+            font-family: 'VC Henrietta';
+            src: url('../../VCHenriettaCondensed-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Galano Grotesque';
+            src: url('../../GalanoGrotesque-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Galano Grotesque';
+            src: url('../../GalanoGrotesque-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-display: swap;
+        }
+        
+        :root {
+            --purple: #61269E;
+            --purple-light: #8B5DC7;
+            --purple-dark: #4A1D7A;
+            --green: #6BBF59;
+            --cream: #FDF8F3;
+            --black: #1A1A1A;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Galano Grotesque', sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'VC Henrietta', serif;
+            font-weight: 700;
+            line-height: 0.95;
+        }
+        
+        /* ==================== NAV ==================== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .nav.scrolled {
+            background: rgba(253,248,243,0.95);
+            backdrop-filter: blur(20px);
+        }
+        
+        .logo svg { height: 44px; }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-links a:hover { opacity: 1; }
+        
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+        }
+        
+        /* ==================== HERO - Pack to Plate ==================== */
+        .hero {
+            min-height: 200vh; /* Extra height for scroll animation */
+            position: relative;
+        }
+        
+        .hero-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(165deg, #9B6BC7 0%, var(--purple) 40%, var(--purple-dark) 100%);
+            overflow: hidden;
+        }
+        
+        /* Dish image - starts hidden, fades in */
+        .hero-dish {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hero-dish img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+        }
+        
+        .hero-dish::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(97,38,158,0.3) 0%,
+                transparent 30%,
+                transparent 50%,
+                rgba(97,38,158,0.95) 100%
+            );
+        }
+        
+        .hero-dish.visible {
+            opacity: 1;
+        }
+        
+        /* Pack shot - animates on scroll */
+        .hero-pack {
+            position: relative;
+            z-index: 10;
+            width: clamp(200px, 40vw, 350px);
+            transition: transform 0.1s ease-out, opacity 0.3s ease;
+            filter: drop-shadow(0 30px 60px rgba(0,0,0,0.3));
+        }
+        
+        .hero-pack img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .hero-pack.shrink {
+            transform: scale(0.4) translateY(-60vh) rotate(15deg);
+            opacity: 0;
+        }
+        
+        /* Product info - bottom of hero */
+        .hero-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            z-index: 20;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .hero-info.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 9vw, 5rem);
+            color: white;
+            margin-bottom: 0.35rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-text p {
+            color: rgba(255,255,255,0.85);
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+        }
+        
+        /* The big protein stat */
+        .hero-protein {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        
+        .hero-protein-value {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(5rem, 20vw, 14rem);
+            line-height: 0.75;
+            display: block;
+            letter-spacing: -0.03em;
+        }
+        
+        .hero-protein-value .num {
+            color: white;
+        }
+        
+        .hero-protein-value .unit {
+            color: var(--green);
+        }
+        
+        .hero-protein-label {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(0.65rem, 1.5vw, 0.9rem);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .hero-info {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem;
+            }
+            .hero-protein { text-align: left; }
+        }
+        
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            color: white;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-hint.hidden { opacity: 0; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+        
+        /* ==================== STATS BAR ==================== */
+        .stats {
+            background: var(--purple);
+            padding: 1.5rem 1.5rem;
+        }
+        
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .stat {
+            text-align: center;
+            color: white;
+            min-width: 80px;
+        }
+        
+        .stat-value {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(1.5rem, 5vw, 2.25rem);
+            color: var(--green);
+            display: block;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+        
+        .stat.zero .stat-value {
+            color: white;
+        }
+        
+        /* ==================== TRUST BADGES ==================== */
+        .trust {
+            background: var(--cream);
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--purple);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .trust-badge svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* ==================== INGREDIENTS ==================== */
+        .ingredients {
+            padding: 4rem 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .ingredients h2 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--purple);
+            margin-bottom: 1.5rem;
+        }
+        
+        .ingredient-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .pill {
+            background: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            color: var(--purple);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        
+        .pill span {
+            opacity: 0.5;
+            font-weight: 400;
+            margin-left: 0.25rem;
+        }
+        
+        .ingredient-note {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: var(--green);
+            color: var(--black);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            transform: rotate(-1deg);
+        }
+        
+        /* ==================== NUTRITION TABLE ==================== */
+        .nutrition {
+            background: white;
+            padding: 0;
+        }
+        
+        .nutrition-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: 500px;
+        }
+        
+        @media (min-width: 768px) {
+            .nutrition-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .nutrition-image {
+            position: relative;
+            min-height: 300px;
+            overflow: hidden;
+        }
+        
+        .nutrition-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Vertical divider line */
+        .nutrition-image::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, rgba(97,38,158,0.2), transparent);
+        }
+        
+        .nutrition-content {
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        @media (min-width: 768px) {
+            .nutrition-content {
+                padding: 3rem;
+                max-width: 480px;
+            }
+        }
+        
+        .nutrition-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+        
+        .nutrition-header h2 {
+            font-size: clamp(1.3rem, 4vw, 1.6rem);
+            color: var(--purple);
+        }
+        
+        .nutrition-toggle {
+            width: 36px;
+            height: 36px;
+            background: var(--cream);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.2s;
+        }
+        
+        .nutrition-toggle:hover {
+            background: var(--purple);
+            color: white;
+        }
+        
+        .nutrition-toggle svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s;
+        }
+        
+        .nutrition-toggle.open svg {
+            transform: rotate(180deg);
+        }
+        
+        /* Key nutrients with icons */
+        .nutrition-highlights {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            padding: 1rem 0.75rem;
+            background: linear-gradient(135deg, rgba(107,191,89,0.08) 0%, rgba(97,38,158,0.05) 100%);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(97,38,158,0.08);
+        }
+        
+        .nutrient-highlight {
+            text-align: center;
+            padding: 0.35rem 0.15rem;
+        }
+        
+        .nutrient-highlight svg {
+            width: 20px;
+            height: 20px;
+            color: var(--purple);
+            margin-bottom: 0.25rem;
+            opacity: 0.6;
+        }
+        
+        .nutrient-highlight .value {
+            font-family: 'VC Henrietta', serif;
+            font-size: 1rem;
+            color: var(--green);
+            display: block;
+            line-height: 1.1;
+        }
+        
+        .nutrient-highlight .label {
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: var(--black);
+            opacity: 0.5;
+            line-height: 1.2;
+        }
+        
+        @media (max-width: 400px) {
+            .nutrition-highlights {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .nutrition-table {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease;
+        }
+        
+        .nutrition-table.open {
+            max-height: 600px;
+        }
+        
+        .nutrition-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        
+        .nutrition-table th {
+            text-align: left;
+            padding: 0.4rem 0;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--purple);
+            opacity: 0.6;
+            border-bottom: 2px solid var(--purple);
+        }
+        
+        .nutrition-table th:last-child {
+            text-align: right;
+        }
+        
+        .nutrition-table td {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            color: var(--black);
+        }
+        
+        .nutrition-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+            color: var(--purple);
+        }
+        
+        .nutrition-table tr.indent td:first-child {
+            padding-left: 0.75rem;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+        
+        .nutrition-table tr.highlight td {
+            background: rgba(107, 191, 89, 0.1);
+            font-weight: 600;
+        }
+        
+        .nutrition-table tr.highlight td:last-child {
+            color: var(--green);
+        }
+        
+        .nutrition-note {
+            margin-top: 0.6rem;
+            font-size: 0.6rem;
+            color: var(--black);
+            opacity: 0.4;
+        }
+        
+        /* ==================== COOKING ==================== */
+        .cooking {
+            background: var(--cream);
+            padding: 4rem 1.5rem;
+        }
+        
+        .cooking-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cooking h2 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--purple);
+            margin-bottom: 2rem;
+        }
+        
+        .cooking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .cook-step {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 1.25rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cook-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+        }
+        
+        .cook-step-num {
+            width: 44px;
+            height: 44px;
+            background: var(--purple);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VC Henrietta', serif;
+            font-size: 1.25rem;
+            margin: 0 auto 0.75rem;
+        }
+        
+        .cook-step h3 {
+            color: var(--purple);
+            font-size: 1.15rem;
+            margin-bottom: 0.35rem;
+        }
+        
+        .cook-step p {
+            color: var(--black);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .cook-meta {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .cook-meta-item {
+            text-align: center;
+        }
+        
+        .cook-meta-item strong {
+            display: block;
+            font-family: 'VC Henrietta', serif;
+            font-size: 1.5rem;
+            color: var(--purple);
+        }
+        
+        .cook-meta-item span {
+            font-size: 0.75rem;
+            color: var(--black);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* ==================== RECIPES ==================== */
+        .recipes {
+            padding: 4rem 0;
+            background: white;
+        }
+        
+        .recipes-header {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .recipes-header h2 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: var(--purple);
+        }
+        
+        .recipes-header a {
+            color: var(--purple);
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .recipes-scroll {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            padding: 0 1.5rem 1rem;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        
+        .recipes-scroll::-webkit-scrollbar { display: none; }
+        
+        .recipe-card {
+            flex: 0 0 280px;
+            scroll-snap-align: start;
+            background: var(--cream);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+        }
+        
+        .recipe-img {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+        
+        .recipe-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        
+        .recipe-card:hover .recipe-img img {
+            transform: scale(1.05);
+        }
+        
+        .recipe-info {
+            padding: 1rem 1.25rem;
+        }
+        
+        .recipe-info h3 {
+            font-size: 1.1rem;
+            color: var(--purple);
+            margin-bottom: 0.2rem;
+        }
+        
+        .recipe-info span {
+            font-size: 0.8rem;
+            color: var(--black);
+            opacity: 0.6;
+        }
+        
+        /* ==================== CTA ==================== */
+        .cta {
+            background: var(--green);
+            padding: 5rem 1.5rem;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: clamp(3rem, 12vw, 6rem);
+            color: var(--black);
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .btn-primary {
+            background: var(--purple);
+            color: white;
+            box-shadow: 0 8px 24px rgba(97,38,158,0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--purple);
+        }
+        
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background: var(--purple);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .footer small {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <a href="../../index.html" class="logo">
+            <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#61269e" d="m193.54,34.47l-2.66-34.47H0l3.78,46.08c1.65,22.09,20.09,20.09,20.09,20.09,0,0,126.37-9.87,148.05-11.64,23.55-2.11,21.62-20.06,21.62-20.06Z"/>
+                <path fill="#fff" d="m166.22,32.32h0c1.12-1.28,2.97-1.43,4.25-.34,1.31,1.09,1.46,2.93.34,4.21-1.09,1.28-2.93,1.42-4.25.34-1.28-1.09-1.42-2.93-.34-4.21Z"/>
+                <path fill="#fff" d="m147.2,36.47h0c2.18,1.76,4.68,2.38,7.53,2.15s5.24-1.39,7.12-3.47c1.96-2.18,2.59-5.22,2.29-9.04l-1.16-14.54-5.5.44.67,8.42c-1.59-1.26-3.77-1.42-5.21-1.3-2.84.23-4.97,1.29-6.85,3.34-1.88,2.08-2.69,4.49-2.47,7.26.22,2.77,1.4,5.02,3.58,6.74Zm3.05-10.76h0c.85-1,1.96-1.57,3.32-1.68s2.55.28,3.55,1.13c1,.85,1.57,1.99,1.68,3.36s-.28,2.55-1.13,3.55c-.85,1.03-1.95,1.61-3.32,1.71s-2.55-.28-3.55-1.17c-1-.85-1.57-1.96-1.68-3.32s.28-2.55,1.13-3.58Z"/>
+                <path fill="#fff" d="m51.71,20.33l5.5-.44,1.5,18.83c.13,1.66.82,2.35,2.33,2.23.52-.04.96-.11,1.32-.25l.39,4.87c-.61.23-1.49.38-2.6.47-4.25.34-6.52-1.67-6.87-6.03l-1.57-19.68Z"/>
+                <path fill="#fff" d="m65.32,28.91h0c1.62-2.03,3.76-3.12,6.39-3.33,2.81-.22,5.08.75,5.76,2.33l-.19-2.44,5.5-.44.96,12.07c.12,1.48.53,2.04,1.53,1.96.26-.02.59-.08.92-.15l.36,4.58c-.58.23-1.38.41-2.45.49-1.22.1-2.27-.04-3.08-.42-.89-.49-1.5-1.11-1.82-1.86-1.07,1.91-3.03,2.95-5.95,3.19-2.62.21-4.91-.54-6.83-2.24-1.88-1.75-2.95-3.96-3.17-6.7s.49-5.06,2.08-7.04Zm11.85,9.27h0c.89-1,1.28-2.14,1.18-3.44s-.67-2.36-1.7-3.17c-1-.85-2.18-1.2-3.54-1.09s-2.4.64-3.25,1.63c-.85.96-1.21,2.1-1.11,3.4s.64,2.36,1.63,3.21c.99.81,2.14,1.17,3.47,1.06s2.47-.64,3.33-1.6Z"/>
+                <path fill="#fff" d="m88.98,43.26l-1.48-18.61,5.5-.44.19,2.32c.65-1.69,2.63-2.96,5.14-3.16,4.47-.36,7.28,2.32,7.67,7.15l.37,4.69c.11,1.44.45,1.93,1.37,1.86l.37-.03.22-.06.37,4.65c-.43.22-1.23.36-2.38.45-3.29.26-5.05-1.38-5.34-4.93l-.44-5.54c-.17-2.18-1.42-3.42-3.6-3.24-2.07.16-3.46,1.8-3.29,3.98l.83,10.45-5.5.44Z"/>
+                <path fill="#fff" d="m110.79,27.81l-2.44.19-.4-4.98,2.44-.19-.57-7.13,5.35-.43.57,7.13,4.14-.33.4,4.98-4.14.33.53,6.65c.14,1.77.9,2.42,2.56,2.29.3-.02.77-.1,1.39-.26l.39,4.87c-.72.24-1.61.39-2.67.47-4.28.34-6.6-1.71-6.95-6.13l-.59-7.46Z"/>
+                <path fill="#fff" d="m122.2,31.22h0c-.23-2.92.54-5.35,2.28-7.28,1.74-1.96,4.1-3.04,7.02-3.27s5.21.52,7.12,2.18c1.92,1.67,2.98,3.81,3.19,6.51.05.63.06,1.22.07,1.78l-14.07,1.12c.29,2.21,2.32,3.49,5.24,3.26,1.73-.14,3.2-.85,4.4-2.17l3.46,2.81c-2,2.42-4.6,3.78-7.74,4.03s-5.57-.45-7.59-2.03c-2.02-1.62-3.13-3.87-3.36-6.79v-.15Zm13.94-3.23h0c-.14-1.74-2.06-2.96-4.27-2.78-2.4.19-4.25,1.71-4.26,3.46l8.53-.68Z"/>
+                <path fill="#fff" d="m47.07,30.13h0c-2.18-1.76-4.68-2.38-7.53-2.15s-5.24,1.39-7.12,3.47c-1.96,2.18-2.59,5.22-2.29,9.04l1.16,14.54,5.5-.44-.67-8.42c1.59,1.26,3.77,1.41,5.21,1.3,2.84-.23,4.97-1.29,6.85-3.34,1.88-2.08,2.69-4.49,2.47-7.26-.22-2.77-1.4-5.02-3.58-6.74Zm-3.05,10.76h0c-.85,1-1.96,1.57-3.32,1.68s-2.55-.28-3.55-1.13c-1-.85-1.57-1.99-1.68-3.36s.28-2.55,1.13-3.54c.85-1.03,1.95-1.61,3.32-1.71s2.55.28,3.55,1.17c1,.85,1.57,1.96,1.68,3.32s-.28,2.55-1.13,3.58Z"/>
+            </svg>
+        </a>
+        <div class="nav-links">
+            <a href="../../products.html">Products</a>
+            <a href="../../recipes.html">Recipes</a>
+            <a href="../../index.html#locator">Find Us</a>
+        </div>
+    </nav>
+
+    <!-- HERO - Pack to Plate Animation -->
+    <section class="hero" id="hero">
+        <div class="hero-sticky">
+            <!-- Dish (hidden initially) -->
+            <div class="hero-dish" id="heroDish">
+                <img src="images/hero-dish.png" alt="Delicious planted.chicken dish">
+            </div>
+            
+            <!-- Pack shot (visible initially) -->
+            <div class="hero-pack" id="heroPack">
+                <img src="https://www.eatplanted.com/cdn/shop/files/Packshot_planted.chicken_nature.png?v=1706013292&width=600" alt="planted.chicken Nature packaging">
+            </div>
+            
+            <!-- Product info (hidden initially) -->
+            <div class="hero-info" id="heroInfo">
+                <div class="hero-text">
+                    <h1>planted.chicken</h1>
+                    <p>Nature — The OG. Your blank canvas.</p>
+                </div>
+                
+                <div class="hero-protein">
+                    <span class="hero-protein-value">
+                        <span class="num">24</span><span class="unit">g</span>
+                    </span>
+                    <span class="hero-protein-label">Protein per 100g</span>
+                </div>
+            </div>
+            
+            <!-- Scroll hint -->
+            <div class="scroll-hint" id="scrollHint">
+                <span>Scroll</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK STATS BAR - Impact focused -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <span class="stat-value">17g</span>
+                <span class="stat-label">Protein</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">6</span>
+                <span class="stat-label">Ingredients</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">77%</span>
+                <span class="stat-label">Less CO₂</span>
+            </div>
+            <div class="stat zero">
+                <span class="stat-value">0</span>
+                <span class="stat-label">Animals</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BADGES -->
+    <section class="trust">
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.06 13.54L7.4 12l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41-5.64 5.66z"/></svg>
+            B Corp Certified
+        </div>
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Made in Switzerland
+        </div>
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
+            100% Plant-Based
+        </div>
+    </section>
+
+    <!-- INGREDIENTS -->
+    <section class="ingredients">
+        <h2>What's inside</h2>
+        
+        <div class="ingredient-pills">
+            <div class="pill">Water</div>
+            <div class="pill">Pea Protein <span>33%</span></div>
+            <div class="pill">Pea Fiber</div>
+            <div class="pill">Rapeseed Oil</div>
+            <div class="pill">Salt</div>
+            <div class="pill">Vitamin B12</div>
+        </div>
+        
+        <div class="ingredient-note">That's it. 6 ingredients. No weird stuff.</div>
+    </section>
+
+    <!-- NUTRITION TABLE -->
+    <section class="nutrition">
+        <div class="nutrition-layout">
+            <!-- Food image on left -->
+            <div class="nutrition-image">
+                <img src="images/hero-dish.png" alt="Delicious planted.chicken dish">
+            </div>
+            
+            <!-- Nutrition content on right -->
+            <div class="nutrition-content">
+                <div class="nutrition-header" onclick="toggleNutrition()">
+                    <h2>Nutritional values</h2>
+                    <button class="nutrition-toggle" id="nutritionToggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Key nutrients with icons -->
+                <div class="nutrition-highlights">
+                    <div class="nutrient-highlight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6.5 12c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6-2.5 6-5.5 6"/>
+                            <path d="M12 6V2M9 18l-1.5 4M15 18l1.5 4M7 10h10"/>
+                        </svg>
+                        <span class="value">17g</span>
+                        <span class="label">Protein</span>
+                    </div>
+                    <div class="nutrient-highlight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span class="value">5.7g</span>
+                        <span class="label">Fiber</span>
+                    </div>
+                    <div class="nutrient-highlight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        <span class="value">72%*</span>
+                        <span class="label">Vitamin B12</span>
+                    </div>
+                    <div class="nutrient-highlight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span class="value">27%*</span>
+                        <span class="label">Iron</span>
+                    </div>
+                </div>
+                
+                <div class="nutrition-table" id="nutritionTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Average values</th>
+                                <th>per 100g</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Energy</td>
+                                <td>718 kJ / 172 kcal</td>
+                            </tr>
+                            <tr>
+                                <td>Fat</td>
+                                <td>8.1 g</td>
+                            </tr>
+                            <tr class="indent">
+                                <td>of which saturates</td>
+                                <td>0.7 g</td>
+                            </tr>
+                            <tr>
+                                <td>Carbohydrates</td>
+                                <td>4.9 g</td>
+                            </tr>
+                            <tr class="indent">
+                                <td>of which sugars</td>
+                                <td>2.1 g</td>
+                            </tr>
+                            <tr>
+                                <td>Fiber</td>
+                                <td>5.7 g</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>Protein</td>
+                                <td>17 g</td>
+                            </tr>
+                            <tr>
+                                <td>Salt</td>
+                                <td>0.8 g</td>
+                            </tr>
+                            <tr>
+                                <td>Vitamin B12</td>
+                                <td>1.8 µg (72%*)</td>
+                            </tr>
+                            <tr>
+                                <td>Iron</td>
+                                <td>3.8 mg (27%*)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="nutrition-note">*Percent of the reference amount for daily intake.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COOKING -->
+    <section class="cooking">
+        <div class="cooking-inner">
+            <h2>Cook it your way</h2>
+            
+            <div class="cooking-grid">
+                <div class="cook-step">
+                    <div class="cook-step-num">1</div>
+                    <h3>Season</h3>
+                    <p>Your blank canvas. Go wild or keep it simple.</p>
+                </div>
+                
+                <div class="cook-step">
+                    <div class="cook-step-num">2</div>
+                    <h3>Heat</h3>
+                    <p>Oil in pan. Get it hot. Don't be shy.</p>
+                </div>
+                
+                <div class="cook-step">
+                    <div class="cook-step-num">3</div>
+                    <h3>Sear</h3>
+                    <p>High heat. Golden edges. Done.</p>
+                </div>
+            </div>
+            
+            <div class="cook-meta">
+                <div class="cook-meta-item">
+                    <strong>3-5 min</strong>
+                    <span>Cook time</span>
+                </div>
+                <div class="cook-meta-item">
+                    <strong>High heat</strong>
+                    <span>Temperature</span>
+                </div>
+                <div class="cook-meta-item">
+                    <strong>3-4</strong>
+                    <span>Servings</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECIPES -->
+    <section class="recipes">
+        <div class="recipes-header">
+            <h2>Make something</h2>
+            <a href="../../recipes.html">All recipes →</a>
+        </div>
+        
+        <div class="recipes-scroll">
+            <a href="../../recipes.html" class="recipe-card">
+                <div class="recipe-img">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80" alt="Crispy Chicken Bowl">
+                </div>
+                <div class="recipe-info">
+                    <h3>Crispy Chicken Bowl</h3>
+                    <span>15 min · Easy</span>
+                </div>
+            </a>
+            
+            <a href="../../recipes.html" class="recipe-card">
+                <div class="recipe-img">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" alt="Thai Basil Stir-Fry">
+                </div>
+                <div class="recipe-info">
+                    <h3>Thai Basil Stir-Fry</h3>
+                    <span>20 min · Medium</span>
+                </div>
+            </a>
+            
+            <a href="../../recipes.html" class="recipe-card">
+                <div class="recipe-img">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Loaded Tacos">
+                </div>
+                <div class="recipe-info">
+                    <h3>Loaded Tacos</h3>
+                    <span>25 min · Easy</span>
+                </div>
+            </a>
+            
+            <a href="../../recipes.html" class="recipe-card">
+                <div class="recipe-img">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80" alt="Summer Salad">
+                </div>
+                <div class="recipe-info">
+                    <h3>Summer Salad</h3>
+                    <span>10 min · Easy</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <h2>Try it.</h2>
+        <div class="cta-buttons">
+            <a href="../../index.html#locator" class="btn btn-primary">📍 Find a Store</a>
+            <a href="../../products.html" class="btn btn-secondary">See All Products</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="../../products.html">Products</a>
+            <a href="../../recipes.html">Recipes</a>
+            <a href="../../our-story.html">Our Story</a>
+        </div>
+        <small>Per 100g. *% of daily reference intake. © 2025 Planted Foods AG</small>
+    </footer>
+
+    <script>
+        // ==================== SCROLL ANIMATION ====================
+        const hero = document.getElementById('hero');
+        const heroPack = document.getElementById('heroPack');
+        const heroDish = document.getElementById('heroDish');
+        const heroInfo = document.getElementById('heroInfo');
+        const scrollHint = document.getElementById('scrollHint');
+        const nav = document.getElementById('nav');
+        
+        function updateHeroAnimation() {
+            const heroRect = hero.getBoundingClientRect();
+            const scrollProgress = Math.min(Math.max(-heroRect.top / (hero.offsetHeight - window.innerHeight), 0), 1);
+            
+            // Pack animation: rotate and scale out
+            const packScale = 1 - (scrollProgress * 0.6);
+            const packRotate = scrollProgress * 20;
+            const packY = scrollProgress * -50;
+            const packOpacity = 1 - (scrollProgress * 2);
+            
+            heroPack.style.transform = `scale(${packScale}) rotate(${packRotate}deg) translateY(${packY}vh)`;
+            heroPack.style.opacity = Math.max(packOpacity, 0);
+            
+            // Dish fade in
+            if (scrollProgress > 0.3) {
+                heroDish.classList.add('visible');
+            } else {
+                heroDish.classList.remove('visible');
+            }
+            
+            // Info slide up
+            if (scrollProgress > 0.5) {
+                heroInfo.classList.add('visible');
+            } else {
+                heroInfo.classList.remove('visible');
+            }
+            
+            // Hide scroll hint
+            if (scrollProgress > 0.1) {
+                scrollHint.classList.add('hidden');
+            } else {
+                scrollHint.classList.remove('hidden');
+            }
+            
+            // Nav background
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        }
+        
+        window.addEventListener('scroll', updateHeroAnimation);
+        updateHeroAnimation();
+        
+        // ==================== NUTRITION TOGGLE ====================
+        function toggleNutrition() {
+            const table = document.getElementById('nutritionTable');
+            const toggle = document.getElementById('nutritionToggle');
+            table.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+        
+        // Open nutrition by default
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleNutrition();
+        });
+    </script>
+</body>
+</html>
