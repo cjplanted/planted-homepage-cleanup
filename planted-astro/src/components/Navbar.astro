@@ -39,16 +39,16 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
             <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
         </div>
 
-        <!-- Country Selector -->
-        <div class="country-selector" id="countrySelector">
-            <button class="country-btn" id="countryBtn" aria-label={t.nav.selectCountry}>
+        <!-- Country Selector - Using native <details> for zero-JS dropdown -->
+        <details class="country-selector">
+            <summary class="country-btn">
                 <span class="country-flag">{currentLocaleData.flag}</span>
                 <span class="country-code">{locale.toUpperCase()}</span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-            </button>
-            <div class="country-dropdown" id="countryDropdown">
+            </summary>
+            <div class="country-dropdown">
                 {allLocales.map((loc) => {
                     const locData = locales[loc];
                     const isActive = loc === locale;
@@ -64,7 +64,7 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
                     );
                 })}
             </div>
-        </div>
+        </details>
 
         <button class="nav-toggle" id="navToggle" aria-label="Open menu">
             <span></span>
@@ -162,7 +162,7 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         opacity: 0.7;
     }
 
-    /* Country Selector */
+    /* Country Selector - Pure CSS using <details> */
     .country-selector {
         position: relative;
         display: none;
@@ -181,6 +181,17 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         font-weight: 600;
         color: var(--planted-purple);
         transition: all 0.3s ease;
+        list-style: none;
+    }
+
+    /* Hide default marker */
+    .country-btn::-webkit-details-marker {
+        display: none;
+    }
+
+    .country-btn::marker {
+        display: none;
+        content: '';
     }
 
     .country-btn:hover {
@@ -203,7 +214,8 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         transition: transform 0.3s ease;
     }
 
-    .country-selector.open .chevron {
+    /* Rotate chevron when open */
+    .country-selector[open] .chevron {
         transform: rotate(180deg);
     }
 
@@ -215,18 +227,20 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         min-width: 220px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.25s ease;
         overflow: hidden;
         z-index: 1002;
+        animation: dropdownFadeIn 0.2s ease;
     }
 
-    .country-selector.open .country-dropdown {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .country-option {
@@ -450,14 +464,11 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         const menu = document.getElementById('navMenu');
         const navToggle = document.getElementById('navToggle');
         const closeMenuBtn = document.getElementById('closeMenu');
-        const countrySelector = document.getElementById('countrySelector');
-        const countryBtn = document.getElementById('countryBtn');
 
         if (!nav) return;
 
         // Reset any stale state on page load
         menu?.classList.remove('open');
-        countrySelector?.classList.remove('open');
         document.body.style.overflow = '';
 
         // Mobile menu toggle
@@ -487,23 +498,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         // Close menu when clicking nav links
         menu?.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', closeMenu);
-        });
-
-        // Country selector toggle - clone to remove old listeners
-        const newCountryBtn = countryBtn?.cloneNode(true) as HTMLElement;
-        countryBtn?.parentNode?.replaceChild(newCountryBtn, countryBtn);
-        newCountryBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            countrySelector?.classList.toggle('open');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            const target = e.target as Element;
-            if (countrySelector && !countrySelector.contains(target)) {
-                countrySelector.classList.remove('open');
-            }
         });
 
         // Throttled scroll handler for nav hide/show
@@ -539,7 +533,7 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         updateNav();
     }
 
-    // Run immediately - script is in body so DOM elements exist
+    // Run immediately
     initNavbar();
 
     // Re-initialize after Astro page transitions
