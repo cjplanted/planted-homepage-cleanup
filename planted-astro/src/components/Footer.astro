@@ -1,13 +1,22 @@
 ---
-// Footer component with green logo for purple background
+import { defaultLocale, type LocaleCode } from '../i18n/config';
+import { getTranslations } from '../i18n/index';
+
+interface Props {
+    locale?: LocaleCode;
+}
+
+const { locale = defaultLocale } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localePath = locale === defaultLocale ? '' : `/${locale}`;
 ---
 
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-top">
             <div class="footer-brand">
-                <a href={base} class="logo">
+                <a href={`${base}${localePath}/`} class="logo">
                     <!-- Green logo for purple background -->
                     <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#6BBF59" d="m193.54,34.47l-2.66-34.47H0l3.78,46.08c1.65,22.09,20.09,20.09,20.09,20.09,0,0,126.37-9.87,148.05-11.64,23.55-2.11,21.62-20.06,21.62-20.06Z"/>
@@ -22,35 +31,35 @@ const base = import.meta.env.BASE_URL;
                         <path fill="#61269e" d="m47.07,30.13h0c-2.18-1.76-4.68-2.38-7.53-2.15s-5.24,1.39-7.12,3.47c-1.96,2.18-2.59,5.22-2.29,9.04l1.16,14.54,5.5-.44-.67-8.42c1.59,1.26,3.77,1.41,5.21,1.3,2.84-.23,4.97-1.29,6.85-3.34,1.88-2.08,2.69-4.49,2.47-7.26-.22-2.77-1.4-5.02-3.58-6.74Zm-3.05,10.76h0c-.85,1-1.96,1.57-3.32,1.68s-2.55-.28-3.55-1.13c-1-.85-1.57-1.99-1.68-3.36s.28-2.55,1.13-3.54c.85-1.03,1.95-1.61,3.32-1.71s2.55.28,3.55,1.17c1,.85,1.57,1.96,1.68,3.32s-.28,2.55-1.13,3.58Z"/>
                     </svg>
                 </a>
-                <p>Changing the world bite by bite. Made with love in Switzerland.</p>
+                <p>{t.footer.tagline}</p>
             </div>
 
             <div class="footer-links">
-                <h4>Products</h4>
-                <a href={`${base}/products`}>planted.steak</a>
-                <a href={`${base}/products`}>planted.chicken</a>
-                <a href={`${base}/products`}>planted.kebab</a>
-                <a href={`${base}/products`}>All Products</a>
+                <h4>{t.footer.products}</h4>
+                <a href={`${base}${localePath}/products`}>planted.steak</a>
+                <a href={`${base}${localePath}/products`}>planted.chicken</a>
+                <a href={`${base}${localePath}/products`}>planted.kebab</a>
+                <a href={`${base}${localePath}/products`}>{t.products.pageTitle}</a>
             </div>
 
             <div class="footer-links">
-                <h4>Company</h4>
-                <a href={`${base}/our-story`}>Our Story</a>
-                <a href={`${base}/our-story`}>Science</a>
-                <a href="#">Careers</a>
-                <a href="#">Press</a>
+                <h4>{t.footer.company}</h4>
+                <a href={`${base}${localePath}/our-story`}>{t.footer.about}</a>
+                <a href="#">{t.footer.careers}</a>
+                <a href="#">{t.footer.press}</a>
+                <a href="#">{t.footer.contact}</a>
             </div>
 
             <div class="footer-links">
-                <h4>Help</h4>
-                <a href="#">FAQ</a>
-                <a href="#">Contact</a>
-                <a href={`${base}/#locator`}>Store Locator</a>
+                <h4>{t.footer.legal}</h4>
+                <a href="#">{t.footer.privacy}</a>
+                <a href="#">{t.footer.terms}</a>
+                <a href="#">{t.footer.imprint}</a>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <span>&copy; 2025 Planted Foods AG. B Corp Certified.</span>
+            <span>{t.footer.copyright}</span>
             <div class="social-links">
                 <a href="#" class="social-link" aria-label="Instagram">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

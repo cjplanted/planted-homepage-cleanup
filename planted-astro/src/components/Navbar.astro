@@ -1,14 +1,23 @@
 ---
+import { locales, allLocales, defaultLocale, type LocaleCode } from '../i18n/config';
+import { getTranslations } from '../i18n/index';
+
 interface Props {
     currentPage?: string;
+    locale?: LocaleCode;
 }
 
-const { currentPage = '' } = Astro.props;
+const { currentPage = '', locale = defaultLocale } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const currentLocaleData = locales[locale];
+
+// Build locale-aware URLs
+const localePath = locale === defaultLocale ? '' : `/${locale}`;
 ---
 
 <nav class="nav" id="nav" transition:persist>
-    <a href={base} class="logo">
+    <a href={`${base}${localePath}/`} class="logo">
         <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
             <path fill="#61269e" d="m193.54,34.47l-2.66-34.47H0l3.78,46.08c1.65,22.09,20.09,20.09,20.09,20.09,0,0,126.37-9.87,148.05-11.64,23.55-2.11,21.62-20.06,21.62-20.06Z"/>
             <path fill="#fff" d="m166.22,32.32h0c1.12-1.28,2.97-1.43,4.25-.34,1.31,1.09,1.46,2.93.34,4.21-1.09,1.28-2.93,1.42-4.25.34-1.28-1.09-1.42-2.93-.34-4.21Z"/>
@@ -25,10 +34,36 @@ const base = import.meta.env.BASE_URL;
 
     <div class="nav-right">
         <div class="nav-links">
-            <a href={`${base}/products`} class:list={[{ active: currentPage === 'products' }]}>Products</a>
-            <a href={`${base}/recipes`} class:list={[{ active: currentPage === 'recipes' }]}>Recipes</a>
-            <a href={`${base}/#locator`}>Find Us</a>
-            <a href={`${base}/our-story`} class:list={[{ active: currentPage === 'our-story' }]}>Our Story</a>
+            <a href={`${base}${localePath}/products`} class:list={[{ active: currentPage === 'products' }]}>{t.nav.products}</a>
+            <a href={`${base}${localePath}/recipes`} class:list={[{ active: currentPage === 'recipes' }]}>{t.nav.recipes}</a>
+            <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
+        </div>
+
+        <!-- Country Selector -->
+        <div class="country-selector" id="countrySelector">
+            <button class="country-btn" id="countryBtn" aria-label={t.nav.selectCountry}>
+                <span class="country-flag">{currentLocaleData.flag}</span>
+                <span class="country-code">{locale.toUpperCase()}</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+            <div class="country-dropdown" id="countryDropdown">
+                {allLocales.map((loc) => {
+                    const locData = locales[loc];
+                    const isActive = loc === locale;
+                    return (
+                        <a
+                            href={`${base}/${loc}/`}
+                            class:list={['country-option', { active: isActive }]}
+                        >
+                            <span class="country-flag">{locData.flag}</span>
+                            <span class="country-name">{locData.name}</span>
+                            <span class="country-lang">{locData.languageName}</span>
+                        </a>
+                    );
+                })}
+            </div>
         </div>
 
         <button class="nav-toggle" id="navToggle" aria-label="Open menu">
@@ -42,10 +77,28 @@ const base = import.meta.env.BASE_URL;
 <!-- Mobile Menu -->
 <div class="nav-menu" id="navMenu">
     <button class="close-menu" id="closeMenu" aria-label="Close menu">&#10005;</button>
-    <a href={`${base}/products`}>Products</a>
-    <a href={`${base}/recipes`}>Recipes</a>
-    <a href={`${base}/#locator`}>Find Us</a>
-    <a href={`${base}/our-story`}>Our Story</a>
+    <a href={`${base}${localePath}/products`}>{t.nav.products}</a>
+    <a href={`${base}${localePath}/recipes`}>{t.nav.recipes}</a>
+    <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
+
+    <div class="mobile-country-selector">
+        <span class="mobile-country-label">{t.nav.selectCountry}</span>
+        <div class="mobile-country-grid">
+            {allLocales.map((loc) => {
+                const locData = locales[loc];
+                const isActive = loc === locale;
+                return (
+                    <a
+                        href={`${base}/${loc}/`}
+                        class:list={['mobile-country-option', { active: isActive }]}
+                    >
+                        <span class="country-flag">{locData.flag}</span>
+                        <span class="country-code">{loc.toUpperCase()}</span>
+                    </a>
+                );
+            })}
+        </div>
+    </div>
 </div>
 
 <style>
@@ -86,7 +139,7 @@ const base = import.meta.env.BASE_URL;
     .nav-right {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1rem;
         padding-top: 0.75rem;
     }
 
@@ -106,6 +159,107 @@ const base = import.meta.env.BASE_URL;
 
     .nav-links a:hover,
     .nav-links a.active {
+        opacity: 0.7;
+    }
+
+    /* Country Selector */
+    .country-selector {
+        position: relative;
+        display: none;
+    }
+
+    .country-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: rgba(97, 38, 158, 0.08);
+        border: 1px solid rgba(97, 38, 158, 0.15);
+        border-radius: 100px;
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--planted-purple);
+        transition: all 0.3s ease;
+    }
+
+    .country-btn:hover {
+        background: rgba(97, 38, 158, 0.12);
+        border-color: rgba(97, 38, 158, 0.25);
+    }
+
+    .country-flag {
+        font-size: 1rem;
+    }
+
+    .country-code {
+        font-size: 0.75rem;
+        letter-spacing: 0.02em;
+    }
+
+    .chevron {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.3s ease;
+    }
+
+    .country-selector.open .chevron {
+        transform: rotate(180deg);
+    }
+
+    .country-dropdown {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        min-width: 220px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.25s ease;
+        overflow: hidden;
+        z-index: 1002;
+    }
+
+    .country-selector.open .country-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .country-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: var(--planted-black);
+        transition: background 0.2s ease;
+    }
+
+    .country-option:hover {
+        background: rgba(97, 38, 158, 0.06);
+    }
+
+    .country-option.active {
+        background: rgba(97, 38, 158, 0.1);
+    }
+
+    .country-option .country-flag {
+        font-size: 1.25rem;
+    }
+
+    .country-option .country-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        flex: 1;
+    }
+
+    .country-option .country-lang {
+        font-size: 0.75rem;
+        color: var(--planted-purple);
         opacity: 0.7;
     }
 
@@ -151,7 +305,7 @@ const base = import.meta.env.BASE_URL;
         visibility: visible;
     }
 
-    .nav-menu a {
+    .nav-menu > a {
         font-family: 'VC Henrietta', serif;
         font-size: clamp(2rem, 8vw, 3.5rem);
         font-weight: 700;
@@ -162,18 +316,73 @@ const base = import.meta.env.BASE_URL;
         transition: opacity 0.4s ease, transform 0.4s ease, color 0.3s ease;
     }
 
-    .nav-menu.open a {
+    .nav-menu.open > a {
         opacity: 1;
         transform: translateY(0);
     }
 
-    .nav-menu a:nth-child(2) { transition-delay: 0.05s; }
-    .nav-menu a:nth-child(3) { transition-delay: 0.1s; }
-    .nav-menu a:nth-child(4) { transition-delay: 0.15s; }
-    .nav-menu a:nth-child(5) { transition-delay: 0.2s; }
+    .nav-menu > a:nth-child(2) { transition-delay: 0.05s; }
+    .nav-menu > a:nth-child(3) { transition-delay: 0.1s; }
+    .nav-menu > a:nth-child(4) { transition-delay: 0.15s; }
 
-    .nav-menu a:hover {
+    .nav-menu > a:hover {
         color: var(--planted-green);
+    }
+
+    .mobile-country-selector {
+        margin-top: 2rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transition-delay: 0.2s;
+        text-align: center;
+    }
+
+    .nav-menu.open .mobile-country-selector {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mobile-country-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .mobile-country-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        max-width: 300px;
+    }
+
+    .mobile-country-option {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        padding: 0.5rem 0.75rem;
+        color: white;
+        text-decoration: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-country-option:hover,
+    .mobile-country-option.active {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .mobile-country-option .country-flag {
+        font-size: 0.9rem;
     }
 
     .close-menu {
@@ -208,6 +417,10 @@ const base = import.meta.env.BASE_URL;
         .nav-links {
             display: flex;
         }
+
+        .country-selector {
+            display: block;
+        }
     }
 
     @media (min-width: 1440px) {
@@ -232,47 +445,71 @@ const base = import.meta.env.BASE_URL;
 </style>
 
 <script>
-    // Mobile menu toggle
-    function toggleMenu() {
+    function initNavbar() {
+        // Cache DOM elements
+        const nav = document.getElementById('nav');
         const menu = document.getElementById('navMenu');
-        menu?.classList.toggle('open');
-        document.body.style.overflow = menu?.classList.contains('open') ? 'hidden' : '';
-    }
+        const navToggle = document.getElementById('navToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const countrySelector = document.getElementById('countrySelector');
+        const countryBtn = document.getElementById('countryBtn');
+        const menuLinks = document.querySelectorAll('.nav-menu > a');
 
-    document.getElementById('navToggle')?.addEventListener('click', toggleMenu);
-    document.getElementById('closeMenu')?.addEventListener('click', toggleMenu);
-
-    // Close menu when clicking a link
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-        link.addEventListener('click', toggleMenu);
-    });
-
-    // Nav hide/show on scroll
-    const nav = document.getElementById('nav');
-    let lastScrollY = 0;
-    const scrollThreshold = 50;
-
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-
-        // Add scrolled class for background
-        if (scrollY > 50) {
-            nav?.classList.add('scrolled');
-        } else {
-            nav?.classList.remove('scrolled');
+        // Mobile menu toggle
+        function toggleMenu() {
+            menu?.classList.toggle('open');
+            document.body.style.overflow = menu?.classList.contains('open') ? 'hidden' : '';
         }
 
-        // Hide/show nav based on scroll direction
-        if (scrollY > scrollThreshold) {
-            if (scrollY > lastScrollY) {
-                nav?.classList.add('hidden');
+        navToggle?.addEventListener('click', toggleMenu);
+        closeMenu?.addEventListener('click', toggleMenu);
+        menuLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Country selector toggle
+        countryBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            countrySelector?.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!countrySelector?.contains(e.target as Node)) {
+                countrySelector?.classList.remove('open');
+            }
+        });
+
+        // Throttled scroll handler using requestAnimationFrame
+        let lastScrollY = 0;
+        let ticking = false;
+        const scrollThreshold = 50;
+
+        function updateNav() {
+            const scrollY = window.scrollY;
+
+            // Add scrolled class for background
+            nav?.classList.toggle('scrolled', scrollY > 50);
+
+            // Hide/show nav based on scroll direction
+            if (scrollY > scrollThreshold) {
+                nav?.classList.toggle('hidden', scrollY > lastScrollY);
             } else {
                 nav?.classList.remove('hidden');
             }
-        } else {
-            nav?.classList.remove('hidden');
+
+            lastScrollY = scrollY;
+            ticking = false;
         }
 
-        lastScrollY = scrollY;
-    });
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateNav);
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    // Initialize on page load
+    initNavbar();
+
+    // Re-initialize after Astro page transitions
+    document.addEventListener('astro:page-load', initNavbar);
 </script>

@@ -3,17 +3,21 @@ import { ViewTransitions } from 'astro:transitions';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { locales, defaultLocale, type LocaleCode } from '../i18n/config';
 
 interface Props {
     title: string;
     currentPage?: string;
+    locale?: LocaleCode;
 }
 
-const { title, currentPage = '' } = Astro.props;
+const { title, currentPage = '', locale = defaultLocale } = Astro.props;
+const localeData = locales[locale];
+const langCode = localeData?.language || 'en';
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={langCode}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -22,28 +26,37 @@ const { title, currentPage = '' } = Astro.props;
     <ViewTransitions />
 </head>
 <body>
-    <Navbar currentPage={currentPage} />
+    <Navbar currentPage={currentPage} locale={locale} />
     <slot />
-    <Footer />
+    <Footer locale={locale} />
 
     <script>
         function initAnimations() {
-            // Scroll reveal animations
-            const revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .stagger-item');
+            // Cache stagger items per parent for faster lookup
+            const staggerCache = new WeakMap();
 
+            // Scroll reveal animations using Intersection Observer
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // For stagger items, add delay based on index
-                        if (entry.target.classList.contains('stagger-item')) {
-                            const parent = entry.target.parentElement;
+                        const target = entry.target;
+
+                        // Optimized stagger delay calculation with caching
+                        if (target.classList.contains('stagger-item')) {
+                            const parent = target.parentElement;
                             if (parent) {
-                                const siblings = Array.from(parent.querySelectorAll('.stagger-item'));
-                                const index = siblings.indexOf(entry.target);
-                                entry.target.style.transitionDelay = `${index * 0.1}s`;
+                                let siblings = staggerCache.get(parent);
+                                if (!siblings) {
+                                    siblings = Array.from(parent.querySelectorAll('.stagger-item'));
+                                    staggerCache.set(parent, siblings);
+                                }
+                                const index = siblings.indexOf(target);
+                                target.style.transitionDelay = `${index * 0.1}s`;
                             }
                         }
-                        entry.target.classList.add('active');
+                        target.classList.add('active');
+                        // Unobserve after activation for performance
+                        revealObserver.unobserve(target);
                     }
                 });
             }, {
@@ -51,12 +64,16 @@ const { title, currentPage = '' } = Astro.props;
                 rootMargin: '0px 0px -30px 0px'
             });
 
-            revealElements.forEach(el => revealObserver.observe(el));
+            // Query once, observe all reveal elements
+            document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .stagger-item').forEach(el => {
+                revealObserver.observe(el);
+            });
 
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
+            // Smooth scroll for anchor links using event delegation
+            document.addEventListener('click', (e) => {
+                const anchor = e.target.closest('a[href^="#"]');
+                if (anchor) {
+                    const href = anchor.getAttribute('href');
                     if (href && href !== '#') {
                         e.preventDefault();
                         const target = document.querySelector(href);
@@ -64,7 +81,7 @@ const { title, currentPage = '' } = Astro.props;
                             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
                     }
-                });
+                }
             });
         }
 

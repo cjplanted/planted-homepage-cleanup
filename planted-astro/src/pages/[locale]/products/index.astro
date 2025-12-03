@@ -1,0 +1,356 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { getTranslations } from '../../../i18n/index';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+
+const products = await getCollection('products');
+const sortedProducts = products.sort((a, b) => a.data.order - b.data.order);
+
+// Group products by category
+const categories = [...new Set(products.map(p => p.data.category))];
+---
+
+<Layout title={`${t.products.pageTitle} – Planted`} currentPage="products" locale={locale}>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="reveal">{t.products.pageTitle}</h1>
+            <p class="reveal reveal-delay-1">{t.products.pageSubtitle}</p>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products">
+        <div class="products-inner">
+            <div class="products-grid">
+                {sortedProducts.map((product, index) => (
+                    <a href={`${base}/${locale}/products/${product.data.slug}`}
+                       class="product-card reveal-scale"
+                       data-color={product.data.color}
+                       style={`--delay: ${index * 0.05}s`}>
+                        <div class="product-card-inner">
+                            {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
+                            {product.data.images.background && (
+                                <div class="product-grid-overlay">
+                                    <img src={product.data.images.background} alt="" loading="lazy">
+                                </div>
+                            )}
+                            <div class="product-image product-image-pack">
+                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="lazy">
+                            </div>
+                            {product.data.images.dish && (
+                                <div class="product-image product-image-dish">
+                                    <img src={product.data.images.dish} alt={`${product.data.name} dish`} loading="lazy">
+                                </div>
+                            )}
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{product.data.name}</div>
+                            <div class="product-variant">{product.data.variant}</div>
+                            <div class="product-protein">{product.data.nutrition?.protein || 20}g {t.products.proteinPer100g}</div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2 class="reveal">{t.home.locator.title}</h2>
+            <p class="reveal reveal-delay-1">{t.home.locator.subtitle}</p>
+            <a href={`${base}/${locale}#locator`} class="btn btn-primary reveal reveal-delay-2">
+                {t.home.locator.button}
+            </a>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    :root {
+        --purple: #61269E;
+        --green: #6BBF59;
+        --cream: #FDF8F3;
+        --black: #1A1A1A;
+    }
+
+    /* Hero */
+    .hero {
+        background: var(--purple);
+        padding: 8rem 1.5rem 5rem;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 10vw, 5rem);
+        color: white;
+        margin-bottom: 1rem;
+        line-height: 1;
+    }
+
+    .hero p {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        color: rgba(255,255,255,0.8);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* Products */
+    .products {
+        background: var(--cream);
+        padding: 5rem 1.5rem;
+    }
+
+    .products-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2rem;
+    }
+
+    .product-card {
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .product-card-inner {
+        position: relative;
+        border-radius: 1.5rem;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    /* Color backgrounds */
+    .product-card[data-color="yellow"] .product-card-inner { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
+    .product-card[data-color="terracotta"] .product-card-inner { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
+    .product-card[data-color="purple"] .product-card-inner { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
+    .product-card[data-color="olive"] .product-card-inner { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
+    .product-card[data-color="burgundy"] .product-card-inner { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
+    .product-card[data-color="teal"] .product-card-inner { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
+    .product-card[data-color="coral"] .product-card-inner { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
+    .product-card[data-color="navy"] .product-card-inner { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
+    .product-card[data-color="green"] .product-card-inner { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
+    .product-card[data-color="orange"] .product-card-inner { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
+    .product-card[data-color="red"] .product-card-inner { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+
+    .product-badge-new {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--green);
+        color: var(--black);
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.35rem 0.7rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .product-grid-overlay {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 1;
+    }
+
+    .product-grid-overlay img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .product-card:hover .product-grid-overlay {
+        opacity: 1;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        inset: 0;
+        padding: 1.5rem;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        z-index: 2;
+    }
+
+    .product-image-pack { opacity: 1; }
+    .product-image-dish { opacity: 0; }
+
+    .product-card:hover .product-image-pack {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    .product-card:hover .product-image-dish {
+        opacity: 1;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .product-info {
+        text-align: center;
+        padding: 0 0.5rem;
+    }
+
+    .product-name {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--purple);
+        margin-bottom: 0.2rem;
+    }
+
+    .product-variant {
+        color: var(--purple);
+        font-size: 0.9rem;
+        opacity: 0.7;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-protein {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--green);
+    }
+
+    /* CTA */
+    .cta {
+        background: var(--green);
+        padding: 6rem 1.5rem;
+        text-align: center;
+    }
+
+    .cta-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .cta h2 {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        color: var(--black);
+        margin-bottom: 1rem;
+    }
+
+    .cta p {
+        font-size: 1.1rem;
+        color: var(--black);
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.1rem 2rem;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: var(--purple);
+        color: white;
+        box-shadow: 0 6px 20px rgba(97,38,158,0.35);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(97,38,158,0.4);
+    }
+
+    /* Animations */
+    .reveal, .reveal-scale {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition-delay: var(--delay, 0s);
+    }
+
+    .reveal-scale {
+        transform: translateY(30px) scale(0.95);
+    }
+
+    .reveal.active, .reveal-scale.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 900px) {
+        .products-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .products-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .hero {
+            padding: 10rem 5rem 6rem;
+        }
+
+        .products {
+            padding: 6rem 5rem;
+        }
+
+        .cta {
+            padding: 8rem 5rem;
+        }
+    }
+</style>

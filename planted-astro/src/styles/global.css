@@ -47,6 +47,7 @@
    CSS VARIABLES
    ============================================ */
 :root {
+    /* Brand Colors */
     --planted-purple: #61269E;
     --planted-purple-dark: #4A1D7A;
     --planted-purple-light: #8B4FCF;
@@ -54,6 +55,10 @@
     --planted-cream: #FDF8F3;
     --planted-white: #FFFFFF;
     --planted-black: #1A1A1A;
+
+    /* Animation Easing */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ============================================
@@ -102,7 +107,7 @@ h1, h2, h3, .display {
     padding: 1rem 1.75rem;
     border-radius: 100px;
     text-decoration: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: transform 0.3s var(--ease-out-expo),
                 box-shadow 0.3s ease,
                 background 0.3s ease,
                 color 0.3s ease;
@@ -154,8 +159,8 @@ h1, h2, h3, .display {
 .reveal {
     opacity: 0;
     transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s var(--ease-out-expo),
+                transform 0.8s var(--ease-out-expo);
 }
 
 .reveal.active {
@@ -171,8 +176,8 @@ h1, h2, h3, .display {
 .reveal-scale {
     opacity: 0;
     transform: scale(0.92);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.7s var(--ease-out-expo),
+                transform 0.7s var(--ease-out-expo);
 }
 
 .reveal-scale.active {
@@ -184,8 +189,8 @@ h1, h2, h3, .display {
 .reveal-left {
     opacity: 0;
     transform: translateX(-40px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s var(--ease-out-expo),
+                transform 0.8s var(--ease-out-expo);
 }
 
 .reveal-left.active {
@@ -196,8 +201,8 @@ h1, h2, h3, .display {
 .reveal-right {
     opacity: 0;
     transform: translateX(40px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s var(--ease-out-expo),
+                transform 0.8s var(--ease-out-expo);
 }
 
 .reveal-right.active {
@@ -209,8 +214,8 @@ h1, h2, h3, .display {
 .stagger-item {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.6s var(--ease-out-expo),
+                transform 0.6s var(--ease-out-expo);
 }
 
 .stagger-item.active {
@@ -405,7 +410,7 @@ img {
     border-radius: 1.25rem;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: transform 0.4s var(--ease-out-expo),
                 box-shadow 0.4s ease;
     cursor: pointer;
     text-decoration: none;
@@ -426,7 +431,7 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s var(--ease-out-expo);
 }
 
 .recipe-card:hover .recipe-image img {

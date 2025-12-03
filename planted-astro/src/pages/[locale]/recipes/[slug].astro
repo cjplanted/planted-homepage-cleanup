@@ -1,0 +1,609 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { getTranslations } from '../../../i18n/index';
+
+export async function getStaticPaths() {
+    const recipes = await getCollection('recipes');
+    const paths = [];
+
+    for (const locale of allLocales) {
+        for (const recipe of recipes) {
+            paths.push({
+                params: { locale, slug: recipe.data.slug },
+                props: { recipe, locale },
+            });
+        }
+    }
+
+    return paths;
+}
+
+const { recipe, locale } = Astro.props as { recipe: any; locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+const language = localeData.language;
+
+// Get related recipes
+const allRecipes = await getCollection('recipes');
+const relatedRecipes = allRecipes
+    .filter(r => r.data.slug !== recipe.data.slug)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+
+const ingredients = recipe.data.ingredients || [];
+const instructions = recipe.data.instructions || [];
+---
+
+<Layout title={`${recipe.data.title} – ${t.recipes.pageTitle}`} currentPage="recipes" locale={locale}>
+    <article class="recipe-page">
+        <!-- Hero Section -->
+        <header class="recipe-hero">
+            <div class="hero-content">
+                <a href={`${base}/${locale}/recipes`} class="back-link reveal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    {t.recipes.allRecipes}
+                </a>
+                <h1 class="reveal">{recipe.data.title}</h1>
+                <div class="recipe-meta reveal">
+                    <div class="meta-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span>{recipe.data.cookTime} {t.recipes.time}</span>
+                    </div>
+                    {recipe.data.servings && (
+                        <div class="meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span>{recipe.data.servings} {t.recipes.servings}</span>
+                        </div>
+                    )}
+                    <div class="meta-badge">
+                        {recipe.data.difficulty}
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image reveal-scale">
+                <img src={recipe.data.image} alt={recipe.data.title} />
+            </div>
+        </header>
+
+        <!-- Recipe Content -->
+        <div class="recipe-content">
+            <!-- Ingredients Section -->
+            <aside class="ingredients-section reveal">
+                <div class="ingredients-card">
+                    <h2>{t.recipes.ingredients}</h2>
+                    {recipe.data.servings && (
+                        <p class="servings-note">{t.recipes.forServings.replace('{count}', recipe.data.servings)}</p>
+                    )}
+                    <ul class="ingredients-list">
+                        {ingredients.map((ingredient: string) => (
+                            <li>
+                                <span class="checkbox"></span>
+                                <span>{ingredient}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- Eco Impact Card -->
+                <div class="eco-card">
+                    <div class="eco-icon">🌱</div>
+                    <h3>{t.recipes.eco.title}</h3>
+                    <p>{t.recipes.eco.description}</p>
+                    <div class="eco-stats">
+                        <div class="eco-stat">
+                            <span class="value">97%</span>
+                            <span class="label">{t.recipes.eco.lessCO2}</span>
+                        </div>
+                        <div class="eco-stat">
+                            <span class="value">99%</span>
+                            <span class="label">{t.recipes.eco.lessWater}</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Instructions Section -->
+            <main class="instructions-section">
+                <h2 class="reveal">{t.recipes.instructions}</h2>
+                <ol class="instructions-list">
+                    {instructions.map((step: string, index: number) => (
+                        <li class="instruction-step reveal">
+                            <div class="step-number">{index + 1}</div>
+                            <div class="step-content">
+                                <p>{step}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+
+                <!-- Tips Section -->
+                <div class="tips-section reveal">
+                    <h3>{t.recipes.tips.title}</h3>
+                    <div class="tips-grid">
+                        <div class="tip">
+                            <span class="tip-icon">🔥</span>
+                            <p>{t.recipes.tips.tip1}</p>
+                        </div>
+                        <div class="tip">
+                            <span class="tip-icon">🧂</span>
+                            <p>{t.recipes.tips.tip2}</p>
+                        </div>
+                        <div class="tip">
+                            <span class="tip-icon">❄️</span>
+                            <p>{t.recipes.tips.tip3}</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Related Recipes -->
+        {relatedRecipes.length > 0 && (
+            <section class="related-section">
+                <div class="related-header">
+                    <h2 class="reveal">{t.recipes.moreRecipes}</h2>
+                </div>
+                <div class="related-grid">
+                    {relatedRecipes.map((related) => (
+                        <a href={`${base}/${locale}/recipes/${related.data.slug}`} class="related-card reveal-scale">
+                            <div class="related-image">
+                                <img src={related.data.image} alt={related.data.title} loading="lazy" />
+                            </div>
+                            <div class="related-info">
+                                <h3>{related.data.title}</h3>
+                                <span class="related-meta">{related.data.cookTime} {t.recipes.time} • {related.data.difficulty}</span>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        )}
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="reveal">{t.recipes.cta.title}</h2>
+                <p class="reveal">{t.recipes.cta.subtitle}</p>
+                <a href={`${base}/${locale}#locator`} class="btn btn-green reveal">{t.home.locator.button}</a>
+            </div>
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .recipe-page {
+        background: var(--planted-cream);
+    }
+
+    /* Hero Section */
+    .recipe-hero {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 7rem 1.5rem 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .hero-content { order: 2; }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--planted-purple);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        transition: opacity 0.3s;
+    }
+
+    .back-link:hover { opacity: 0.7; }
+    .back-link svg { width: 18px; height: 18px; }
+
+    .recipe-hero h1 {
+        font-size: clamp(2.2rem, 8vw, 3.5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+        line-height: 1.05;
+    }
+
+    .recipe-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+        align-items: center;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--planted-black);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .meta-item svg { width: 20px; height: 20px; color: var(--planted-purple); }
+
+    .meta-badge {
+        background: var(--planted-green);
+        color: var(--planted-black);
+        padding: 0.4rem 0.9rem;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .hero-image {
+        order: 1;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        box-shadow: 0 20px 60px rgba(97, 38, 158, 0.15);
+    }
+
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Recipe Content */
+    .recipe-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1.5rem 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .ingredients-section { order: 1; }
+
+    .ingredients-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    .ingredients-card h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.5rem;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .servings-note {
+        font-size: 0.9rem;
+        color: var(--planted-black);
+        opacity: 0.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .ingredients-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ingredients-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .ingredients-list li:last-child { border-bottom: none; }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--planted-purple);
+        border-radius: 4px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+    }
+
+    .ingredients-list li.checked .checkbox {
+        background: var(--planted-green);
+        border-color: var(--planted-green);
+    }
+
+    .ingredients-list li.checked span:last-child {
+        text-decoration: line-through;
+        opacity: 0.5;
+    }
+
+    /* Eco Card */
+    .eco-card {
+        background: linear-gradient(135deg, var(--planted-green) 0%, #5aa94d 100%);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        text-align: center;
+        color: var(--planted-black);
+    }
+
+    .eco-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    .eco-card h3 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .eco-card > p {
+        font-size: 0.9rem;
+        opacity: 0.85;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .eco-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .eco-stat {
+        background: rgba(255,255,255,0.3);
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .eco-stat .value {
+        display: block;
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+
+    .eco-stat .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.8;
+    }
+
+    /* Instructions Section */
+    .instructions-section { order: 2; }
+
+    .instructions-section h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.75rem;
+        color: var(--planted-purple);
+        margin-bottom: 2rem;
+    }
+
+    .instructions-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 3rem 0;
+    }
+
+    .instruction-step {
+        display: flex;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: var(--planted-purple);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .step-content { flex: 1; padding-top: 0.5rem; }
+
+    .step-content p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--planted-black);
+    }
+
+    /* Tips Section */
+    .tips-section {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .tips-section h3 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.3rem;
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+    }
+
+    .tips-grid { display: grid; gap: 1rem; }
+
+    .tip {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        padding: 1rem;
+        background: var(--planted-cream);
+        border-radius: 1rem;
+    }
+
+    .tip-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+    .tip p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--planted-black);
+        opacity: 0.85;
+        margin: 0;
+    }
+
+    /* Related Section */
+    .related-section {
+        background: var(--planted-purple);
+        padding: 4rem 1.5rem;
+    }
+
+    .related-header { text-align: center; margin-bottom: 2.5rem; }
+
+    .related-header h2 {
+        color: white;
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .related-card {
+        background: white;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .related-card:hover { transform: translateY(-6px); }
+
+    .related-image { aspect-ratio: 4/3; overflow: hidden; }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .related-card:hover .related-image img { transform: scale(1.05); }
+
+    .related-info { padding: 1.25rem; }
+
+    .related-info h3 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.1rem;
+        color: var(--planted-purple);
+        margin-bottom: 0.35rem;
+        line-height: 1.2;
+    }
+
+    .related-meta {
+        font-size: 0.85rem;
+        color: var(--planted-black);
+        opacity: 0.6;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: var(--planted-green);
+        padding: 5rem 1.5rem;
+        text-align: center;
+    }
+
+    .cta-content { max-width: 500px; margin: 0 auto; }
+
+    .cta-section h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-black);
+        margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+        color: var(--planted-black);
+        opacity: 0.8;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .cta-section .btn-green {
+        display: inline-flex;
+        padding: 1.1rem 2rem;
+        background: var(--planted-black);
+        color: white;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .cta-section .btn-green:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+        .recipe-hero {
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-content { order: 1; }
+        .hero-image { order: 2; aspect-ratio: 1; }
+        .tips-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+        .recipe-hero { padding: 9rem 3rem 4rem; }
+
+        .recipe-content {
+            grid-template-columns: 350px 1fr;
+            gap: 3rem;
+            padding: 0 3rem 5rem;
+        }
+
+        .ingredients-section { order: 1; }
+
+        .ingredients-card { position: sticky; top: 6rem; }
+        .eco-card { position: relative; top: 0; }
+        .instructions-section { order: 2; }
+    }
+
+    @media (min-width: 1440px) {
+        .recipe-hero { padding: 10rem 5rem 5rem; }
+
+        .recipe-content {
+            grid-template-columns: 380px 1fr;
+            padding: 0 5rem 6rem;
+        }
+
+        .related-section { padding: 5rem; }
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.ingredients-list li').forEach(item => {
+        item.addEventListener('click', () => {
+            item.classList.toggle('checked');
+        });
+    });
+</script>

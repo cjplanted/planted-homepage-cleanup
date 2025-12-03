@@ -1,0 +1,715 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { getTranslations } from '../../i18n/index';
+import { retailers } from '../../i18n/config';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+const countryCode = localeData.country;
+const countryRetailers = retailers[countryCode] || [];
+
+const products = await getCollection('products');
+const featuredProducts = products.sort((a, b) => a.data.order - b.data.order);
+
+const recipes = await getCollection('recipes');
+const featuredRecipes = recipes.sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+
+const settings = await getEntry('settings', 'global');
+---
+
+<Layout title={`Planted – ${t.home.hero.subtitle}`} locale={locale}>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-wrapper">
+            <div class="hero-video-container" id="heroVideo">
+                <video class="hero-video" autoplay muted loop playsinline>
+                    <source src={`${base}/video/hero.mp4`} type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <div class="hero-content" id="heroContent">
+            <h1>{t.home.hero.title}</h1>
+            <p class="hero-subtitle">{t.home.hero.subtitle}</p>
+            <div class="hero-buttons">
+                <a href="#locator" class="btn btn-primary">
+                    {t.nav.findUs}
+                </a>
+                <a href="#products" class="btn btn-secondary">
+                    {t.home.products.viewAll}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statement Section -->
+    <section class="statement">
+        <div class="statement-inner">
+            <h2 class="reveal">{t.home.mission.title}</h2>
+            <p class="reveal reveal-delay-1">{t.home.mission.text}</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="products-header">
+            <h2 class="reveal">{t.home.products.title}</h2>
+            <a href={`${base}/${locale}/products`} class="all-products-btn reveal">
+                → {t.home.products.viewAll}
+            </a>
+        </div>
+
+        <div class="products-carousel">
+            <div class="products-scroll" id="productsScroll">
+                {featuredProducts.map((product) => (
+                    <a href={`${base}/${locale}/products/${product.data.slug}`} class="product-card reveal-scale" data-color={product.data.color}>
+                        <div class="product-card-inner">
+                            {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
+                            {product.data.images.background && (
+                                <div class="product-grid-overlay">
+                                    <img src={product.data.images.background} alt="" loading="lazy">
+                                </div>
+                            )}
+                            <div class="product-image product-image-pack">
+                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="lazy">
+                            </div>
+                            {product.data.images.dish && (
+                                <div class="product-image product-image-dish">
+                                    <img src={product.data.images.dish} alt={`${product.data.name} ${product.data.variant} dish`} loading="lazy">
+                                </div>
+                            )}
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">{product.data.name}</div>
+                            <div class="product-variant">{product.data.variant}</div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </div>
+
+        <div class="carousel-pagination">
+            <button class="carousel-arrow" id="carouselPrev" aria-label="Previous">←</button>
+            <div class="carousel-dots" id="carouselDots">
+                {featuredProducts.map((_, index) => (
+                    <div class={`carousel-dot ${index === 0 ? 'active' : ''}`} data-index={index}></div>
+                ))}
+            </div>
+            <button class="carousel-arrow" id="carouselNext" aria-label="Next">→</button>
+        </div>
+        <div class="carousel-count">
+            <span id="carouselCurrent">1</span> / <span>{featuredProducts.length}</span>
+        </div>
+    </section>
+
+    <!-- Where To Find Section -->
+    {countryRetailers.length > 0 && (
+        <section class="where-to-find" id="where-to-find">
+            <div class="where-to-find-inner">
+                <h2 class="reveal">{t.home.whereToFind.title}</h2>
+                <p class="reveal reveal-delay-1">{t.home.whereToFind.subtitle}</p>
+
+                <div class="retailer-sections">
+                    {countryRetailers.filter(r => r.type === 'retail').length > 0 && (
+                        <div class="retailer-section">
+                            <h3>{t.home.whereToFind.retailers}</h3>
+                            <div class="retailer-logos">
+                                {countryRetailers.filter(r => r.type === 'retail').map((retailer) => (
+                                    <a href={retailer.url} target="_blank" rel="noopener" class="retailer-logo reveal-scale">
+                                        <span class="retailer-name">{retailer.name}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {countryRetailers.filter(r => r.type === 'foodservice').length > 0 && (
+                        <div class="retailer-section">
+                            <h3>{t.home.whereToFind.foodservice}</h3>
+                            <div class="retailer-logos">
+                                {countryRetailers.filter(r => r.type === 'foodservice').map((retailer) => (
+                                    <a href={retailer.url} target="_blank" rel="noopener" class="retailer-logo reveal-scale">
+                                        <span class="retailer-name">{retailer.name}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- Impact Section -->
+    <section class="impact" id="impact">
+        <h2 class="reveal">{settings?.data.statementTitle}</h2>
+        <div class="impact-stats">
+            <div class="stat reveal reveal-delay-1">
+                <div class="stat-value" data-count={settings?.data.impactCO2}>0%</div>
+                <div class="stat-label">CO₂</div>
+            </div>
+            <div class="stat reveal reveal-delay-2">
+                <div class="stat-value" data-count={settings?.data.impactWater}>0%</div>
+                <div class="stat-label">{localeData.language === 'de' ? 'Wasser' : localeData.language === 'fr' ? 'Eau' : localeData.language === 'it' ? 'Acqua' : localeData.language === 'nl' ? 'Water' : localeData.language === 'es' ? 'Agua' : 'Water'}</div>
+            </div>
+            <div class="stat reveal reveal-delay-3">
+                <div class="stat-value" data-count={settings?.data.impactAnimals}>0</div>
+                <div class="stat-label">{localeData.language === 'de' ? 'Tiere' : localeData.language === 'fr' ? 'Animaux' : localeData.language === 'it' ? 'Animali' : localeData.language === 'nl' ? 'Dieren' : localeData.language === 'es' ? 'Animales' : 'Animals'}</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="recipes-section" id="recipes">
+        <div class="recipes-header">
+            <h2 class="reveal">{t.home.recipes.title}</h2>
+            <a href={`${base}/${locale}/recipes`} class="reveal">{t.home.recipes.viewAll} →</a>
+        </div>
+
+        <div class="recipes-scroll">
+            {featuredRecipes.map((recipe) => (
+                <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card">
+                    <div class="recipe-image">
+                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
+                    </div>
+                    <div class="recipe-info">
+                        <div class="recipe-title">{recipe.data.title}</div>
+                        <div class="recipe-meta">{recipe.data.cookTime} {t.recipes.time} • {recipe.data.difficulty}</div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <!-- Store Locator -->
+    <section class="locator" id="locator">
+        <div class="locator-content">
+            <h2 class="reveal">{t.home.locator.title}</h2>
+            <p class="reveal reveal-delay-1">{t.home.locator.subtitle}</p>
+
+            <div class="locator-search reveal reveal-delay-2">
+                <input type="text" placeholder={t.home.locator.placeholder}>
+                <button>{t.home.locator.button}</button>
+            </div>
+
+            <div class="retailers">
+                {countryRetailers.map((retailer) => (
+                    <span class="retailer reveal-scale">{retailer.name}</span>
+                ))}
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    /* Hero Section */
+    .hero {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: var(--planted-cream);
+        padding: 4rem 1.5rem 3rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-video-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-video-container {
+        position: relative;
+        width: 100%;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 25px 80px rgba(97, 38, 158, 0.15);
+        transform: rotate(-3deg) scale(0.95);
+        transition: box-shadow 0.3s ease;
+        will-change: transform;
+    }
+
+    .hero-video-container::before {
+        content: '';
+        display: block;
+        padding-top: 70%;
+    }
+
+    .hero-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 3rem auto 0;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    .hero-content.animate-in {
+        animation: fadeSlideUp 0.8s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    @keyframes fadeSlideUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 11vw, 5.5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+        line-height: 0.95;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        color: var(--planted-black);
+        opacity: 0.7;
+        max-width: 480px;
+        margin: 0 auto 2rem;
+        line-height: 1.5;
+    }
+
+    .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    /* Statement Section */
+    .statement {
+        background: var(--planted-purple);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .statement-inner {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .statement h2 {
+        font-size: clamp(1.8rem, 6vw, 3.2rem);
+        color: white;
+        margin-bottom: 1.25rem;
+        line-height: 1.1;
+    }
+
+    .statement p {
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+        color: rgba(255,255,255,0.8);
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* Products Section */
+    .products {
+        background: var(--planted-cream);
+        padding: 5rem 0 4rem;
+        overflow: hidden;
+    }
+
+    .products-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0 1.5rem 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .products-header h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        color: var(--planted-purple);
+        font-style: italic;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .products-header .all-products-btn {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 0.9rem 1.5rem;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .products-header .all-products-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(107, 191, 89, 0.4);
+    }
+
+    .products-carousel {
+        position: relative;
+        padding: 0 1.5rem;
+    }
+
+    .products-scroll {
+        display: flex;
+        gap: 1.25rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 1rem;
+    }
+
+    .products-scroll::-webkit-scrollbar { display: none; }
+
+    .products-scroll .product-card {
+        flex: 0 0 260px;
+        scroll-snap-align: start;
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .products-scroll .product-card:hover { transform: translateY(-6px); }
+
+    .products-scroll .product-card-inner {
+        position: relative;
+        border-radius: 1.25rem;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 0.75rem;
+    }
+
+    .products-scroll .product-card[data-color="yellow"] .product-card-inner { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
+    .products-scroll .product-card[data-color="terracotta"] .product-card-inner { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
+    .products-scroll .product-card[data-color="purple"] .product-card-inner { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
+    .products-scroll .product-card[data-color="olive"] .product-card-inner { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
+    .products-scroll .product-card[data-color="burgundy"] .product-card-inner { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
+    .products-scroll .product-card[data-color="teal"] .product-card-inner { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
+    .products-scroll .product-card[data-color="coral"] .product-card-inner { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
+    .products-scroll .product-card[data-color="navy"] .product-card-inner { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
+    .products-scroll .product-card[data-color="green"] .product-card-inner { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
+    .products-scroll .product-card[data-color="orange"] .product-card-inner { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
+    .products-scroll .product-card[data-color="red"] .product-card-inner { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
+
+    .products-scroll .product-badge-new {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 0.3rem 0.6rem;
+        border-radius: 100px;
+        z-index: 10;
+    }
+
+    .products-scroll .product-grid-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .products-scroll .product-grid-overlay img { width: 100%; height: 100%; object-fit: cover; }
+    .products-scroll .product-card:hover .product-grid-overlay { opacity: 1; }
+
+    .products-scroll .product-image {
+        width: 100%; height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0; left: 0;
+        padding: 1.25rem;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        z-index: 2;
+    }
+
+    .products-scroll .product-image-pack { opacity: 1; }
+    .products-scroll .product-image-dish { opacity: 0; }
+    .products-scroll .product-card:hover .product-image-pack { opacity: 0; transform: scale(0.95); }
+    .products-scroll .product-card:hover .product-image-dish { opacity: 1; }
+    .products-scroll .product-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    .products-scroll .product-info { text-align: center; padding: 0 0.25rem; }
+    .products-scroll .product-name { font-family: 'VC Henrietta', serif; font-size: 1.1rem; font-weight: 700; color: var(--planted-purple); margin-bottom: 0.1rem; }
+    .products-scroll .product-variant { color: var(--planted-purple); font-size: 0.85rem; opacity: 0.7; }
+
+    .carousel-pagination { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 2rem; padding: 0 1.5rem; }
+    .carousel-arrow { background: none; border: none; color: var(--planted-purple); font-size: 1.5rem; cursor: pointer; padding: 0.5rem; opacity: 0.6; transition: opacity 0.3s; }
+    .carousel-arrow:hover { opacity: 1; }
+    .carousel-dots { display: flex; gap: 0.4rem; }
+    .carousel-dot { width: 12px; height: 4px; background: var(--planted-purple); border-radius: 2px; opacity: 0.3; transition: opacity 0.3s, width 0.3s; }
+    .carousel-dot.active { background: var(--planted-green); opacity: 1; width: 20px; }
+    .carousel-count { text-align: center; margin-top: 0.75rem; font-size: 0.85rem; color: var(--planted-purple); opacity: 0.6; font-weight: 600; }
+
+    /* Where to Find Section */
+    .where-to-find {
+        background: var(--planted-cream);
+        padding: 5rem 1.5rem;
+        text-align: center;
+    }
+
+    .where-to-find-inner { max-width: 1000px; margin: 0 auto; }
+    .where-to-find h2 { font-size: clamp(2rem, 6vw, 3rem); color: var(--planted-purple); margin-bottom: 0.5rem; }
+    .where-to-find > .where-to-find-inner > p { color: var(--planted-black); opacity: 0.7; margin-bottom: 3rem; }
+
+    .retailer-sections { display: flex; flex-direction: column; gap: 3rem; }
+    .retailer-section h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--planted-purple); opacity: 0.6; margin-bottom: 1.5rem; }
+
+    .retailer-logos { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+
+    .retailer-logo {
+        background: white;
+        border: 2px solid rgba(97, 38, 158, 0.1);
+        border-radius: 1rem;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .retailer-logo:hover {
+        border-color: var(--planted-purple);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(97, 38, 158, 0.12);
+    }
+
+    .retailer-name { font-weight: 700; color: var(--planted-purple); font-size: 1rem; }
+
+    /* Impact Section */
+    .impact {
+        background: var(--planted-green);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .impact h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.6rem, 5vw, 2.8rem);
+        color: var(--planted-black);
+        margin-bottom: 3rem;
+        text-transform: uppercase;
+        font-style: italic;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .impact-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 800px; margin: 0 auto; }
+    .stat { padding: 0.5rem; }
+    .stat-value { font-family: 'VC Henrietta', serif; font-size: clamp(3rem, 12vw, 5.5rem); font-weight: 700; color: var(--planted-black); line-height: 1; }
+    .stat-label { color: var(--planted-black); font-size: 0.85rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+
+    /* Recipes Section */
+    .recipes-section { background: var(--planted-cream); padding: 6rem 0; }
+    .recipes-header { padding: 0 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+    .recipes-header h2 { font-size: clamp(1.8rem, 7vw, 3rem); color: var(--planted-purple); text-transform: uppercase; }
+    .recipes-header a { color: var(--planted-purple); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: opacity 0.3s; }
+    .recipes-header a:hover { opacity: 0.7; }
+
+    .recipes-scroll { display: flex; gap: 1.25rem; overflow-x: auto; padding: 0 1.5rem 2rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .recipes-scroll::-webkit-scrollbar { display: none; }
+    .recipes-scroll .recipe-card { flex: 0 0 280px; scroll-snap-align: start; }
+
+    /* Store Locator */
+    .locator { background: var(--planted-purple); padding: 6rem 1.5rem; text-align: center; position: relative; overflow: hidden; width: 100%; }
+    .locator-content { max-width: 1200px; margin: 0 auto; }
+    .locator h2 { font-size: clamp(2rem, 8vw, 4rem); color: white; margin-bottom: 0.5rem; }
+    .locator-content > p { font-size: 1.1rem; color: rgba(255,255,255,0.8); margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+    .locator-search { display: flex; max-width: 420px; margin: 0 auto 2.5rem; background: white; border-radius: 100px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .locator-search:focus-within { transform: scale(1.02); box-shadow: 0 16px 50px rgba(0,0,0,0.25); }
+    .locator-search input { flex: 1; border: none; padding: 1.1rem 1.5rem; font-size: 1rem; font-family: inherit; outline: none; min-width: 0; }
+    .locator-search button { background: var(--planted-green); color: var(--planted-black); border: none; padding: 1.1rem 1.75rem; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.3s; }
+    .locator-search button:hover { background: #5aa94d; }
+
+    .retailers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+    .retailer { background: rgba(255,255,255,0.15); padding: 0.55rem 1.1rem; border-radius: 100px; font-weight: 600; font-size: 0.85rem; color: white; transition: background 0.3s, transform 0.3s; }
+    .retailer:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+        .products-scroll { gap: 1.5rem; }
+        .products-scroll .product-card { flex: 0 0 280px; }
+        .hero-video-wrapper { max-width: 700px; }
+        .products-header .all-products-btn { display: inline-flex; }
+    }
+
+    @media (min-width: 768px) {
+        .hero-video-wrapper { max-width: 780px; }
+        .hero-video-container { border-radius: 2rem; }
+        .hero-video-container::before { padding-top: 60%; }
+    }
+
+    @media (min-width: 1024px) {
+        .hero { padding: 4.5rem 3rem 4rem; }
+        .hero-video-wrapper { max-width: 850px; }
+        .products-header { padding: 0 3rem 2.5rem; }
+        .products-carousel { padding: 0 3rem; }
+        .products-scroll .product-card { flex: 0 0 300px; }
+        .recipes-scroll .recipe-card { flex: 0 0 320px; }
+        .where-to-find { padding: 6rem 3rem; }
+    }
+
+    @media (min-width: 1440px) {
+        .hero { padding: 5rem 5rem 5rem; }
+        .hero-video-wrapper { max-width: 950px; }
+        .hero h1 { font-size: 5.5rem; }
+        .products { padding: 6rem 0 5rem; }
+        .products-header { padding: 0 5rem 3rem; max-width: 1600px; margin: 0 auto; }
+        .products-carousel { padding: 0 5rem; max-width: 1600px; margin: 0 auto; }
+        .statement { padding: 8rem 5rem; }
+        .impact { padding: 8rem 5rem; }
+        .recipes-section { padding: 8rem 0; }
+        .recipes-header { padding: 0 5rem 2.5rem; max-width: 1400px; margin: 0 auto; }
+        .recipes-scroll { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
+        .locator { padding: 8rem 5rem; }
+        .where-to-find { padding: 8rem 5rem; }
+    }
+</style>
+
+<script>
+    function initHomePage() {
+        const heroVideo = document.getElementById('heroVideo');
+        const heroContent = document.getElementById('heroContent');
+        heroContent?.classList.add('animate-in');
+
+        let ticking = false;
+
+        function updateVideoTransform() {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const progress = Math.min(scrollY / (windowHeight * 0.6), 1);
+            const rotation = -3 + (progress * 3);
+            const scale = 0.95 + (progress * 0.05);
+            const translateY = progress * -20;
+
+            if (heroVideo) {
+                heroVideo.style.transform = `rotate(${rotation}deg) scale(${scale}) translateY(${translateY}px)`;
+                const shadowOpacity = 0.15 + (progress * 0.1);
+                const shadowBlur = 25 + (progress * 30);
+                heroVideo.style.boxShadow = `0 ${25 + progress * 15}px ${shadowBlur}px rgba(97, 38, 158, ${shadowOpacity})`;
+            }
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateVideoTransform);
+                ticking = true;
+            }
+        });
+        updateVideoTransform();
+
+        // Counter animation
+        const statValues = document.querySelectorAll('.stat-value[data-count]');
+        let statsAnimated = false;
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsAnimated) {
+                    statsAnimated = true;
+                    animateCounters();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const impactSection = document.getElementById('impact');
+        if (impactSection) statsObserver.observe(impactSection);
+
+        function animateCounters() {
+            statValues.forEach(stat => {
+                const target = parseInt((stat as HTMLElement).dataset.count || '0');
+                const duration = 1500;
+                const start = performance.now();
+
+                function updateCounter(currentTime: number) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(easeOut * target);
+                    stat.textContent = target === 0 ? '0' : current + '%';
+                    if (progress < 1) requestAnimationFrame(updateCounter);
+                }
+                requestAnimationFrame(updateCounter);
+            });
+        }
+
+        // Carousel
+        const productsScroll = document.getElementById('productsScroll');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        const carouselCurrent = document.getElementById('carouselCurrent');
+
+        function scrollProducts(direction: number) {
+            const card = productsScroll?.querySelector('.product-card');
+            if (card && productsScroll) {
+                const cardWidth = (card as HTMLElement).offsetWidth + 24;
+                productsScroll.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            }
+        }
+
+        document.getElementById('carouselPrev')?.addEventListener('click', () => scrollProducts(-1));
+        document.getElementById('carouselNext')?.addEventListener('click', () => scrollProducts(1));
+
+        productsScroll?.addEventListener('scroll', () => {
+            const card = productsScroll.querySelector('.product-card');
+            if (card) {
+                const cardWidth = (card as HTMLElement).offsetWidth + 24;
+                const activeIndex = Math.round(productsScroll.scrollLeft / cardWidth);
+                carouselDots.forEach((dot, index) => dot.classList.toggle('active', index === activeIndex));
+                if (carouselCurrent) carouselCurrent.textContent = String(activeIndex + 1);
+            }
+        });
+    }
+
+    initHomePage();
+    document.addEventListener('astro:page-load', initHomePage);
+</script>

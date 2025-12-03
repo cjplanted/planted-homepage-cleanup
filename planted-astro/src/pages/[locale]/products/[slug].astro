@@ -1,0 +1,955 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { getTranslations } from '../../../i18n/index';
+import { getProductTranslation } from '../../../i18n/products/index';
+
+export async function getStaticPaths() {
+    const products = await getCollection('products');
+    const paths = [];
+
+    for (const locale of allLocales) {
+        for (const product of products) {
+            paths.push({
+                params: { locale, slug: product.data.slug },
+                props: { product, locale },
+            });
+        }
+    }
+
+    return paths;
+}
+
+const { product, locale } = Astro.props as { product: any; locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+const language = localeData.language;
+
+// Get translated product content
+const productT = getProductTranslation(product.data.slug, language);
+
+// Get recipes that might feature this product
+const recipes = await getCollection('recipes');
+const productRecipes = recipes
+    .filter(r => {
+        const titleLower = r.data.title.toLowerCase();
+        const categoryLower = product.data.category.toLowerCase();
+        return titleLower.includes(categoryLower) ||
+               titleLower.includes(product.data.name.toLowerCase().replace('planted.', ''));
+    })
+    .slice(0, 4);
+
+const featuredRecipes = productRecipes.length > 0 ? productRecipes : recipes.slice(0, 4);
+
+// Parse ingredients - use translated if available
+const ingredientsSource = productT?.ingredients || product.data.ingredients;
+const ingredientsList = ingredientsSource
+    ? ingredientsSource.split(',').map((i: string) => i.trim())
+    : ['Pea Protein', 'Water', 'Rapeseed Oil', 'Pea Fiber', 'Salt', 'Vitamin B12'];
+
+// Color mappings
+const colorGradients: Record<string, { main: string; light: string; dark: string; gradient: string }> = {
+    yellow: { main: '#C9A227', light: '#E8D494', dark: '#8B7419', gradient: 'linear-gradient(135deg, #D4B82A 0%, #C9A227 30%, #8B7419 70%, #5C4D10 100%)' },
+    terracotta: { main: '#A85E42', light: '#D4A894', dark: '#6D3A2A', gradient: 'linear-gradient(135deg, #C07050 0%, #A85E42 30%, #6D3A2A 70%, #4A2518 100%)' },
+    purple: { main: '#61269E', light: '#9B6BC7', dark: '#4A1D7A', gradient: 'linear-gradient(135deg, #7B3AAF 0%, #61269E 30%, #4A1D7A 70%, #3D1866 100%)' },
+    olive: { main: '#6B7B3A', light: '#94A870', dark: '#445026', gradient: 'linear-gradient(135deg, #7D8F45 0%, #6B7B3A 30%, #445026 70%, #2D351A 100%)' },
+    burgundy: { main: '#7B3A5A', light: '#A87088', dark: '#50243A', gradient: 'linear-gradient(135deg, #8F4568 0%, #7B3A5A 30%, #50243A 70%, #3D1A2D 100%)' },
+    teal: { main: '#3A7B7B', light: '#70A8A8', dark: '#245050', gradient: 'linear-gradient(135deg, #4A8F8F 0%, #3A7B7B 30%, #245050 70%, #1A3D3D 100%)' },
+    coral: { main: '#C87B6B', light: '#E8B8A4', dark: '#885145', gradient: 'linear-gradient(135deg, #D89080 0%, #C87B6B 30%, #885145 70%, #5C3830 100%)' },
+    navy: { main: '#3A4B7B', light: '#7088A8', dark: '#243150', gradient: 'linear-gradient(135deg, #4A5F8F 0%, #3A4B7B 30%, #243150 70%, #1A253D 100%)' },
+    green: { main: '#5A8B4A', light: '#94D494', dark: '#3A5B32', gradient: 'linear-gradient(135deg, #6A9F58 0%, #5A8B4A 30%, #3A5B32 70%, #2A4325 100%)' },
+    orange: { main: '#C89B6B', light: '#E8C494', dark: '#886F45', gradient: 'linear-gradient(135deg, #D8AF80 0%, #C89B6B 30%, #886F45 70%, #5C4D30 100%)' },
+    red: { main: '#A84242', light: '#D48080', dark: '#6D2A2A', gradient: 'linear-gradient(135deg, #BF5050 0%, #A84242 30%, #6D2A2A 70%, #4A1818 100%)' },
+};
+
+const colors = colorGradients[product.data.color] || colorGradients.purple;
+
+// Nutrition data with fallbacks
+const nutrition = product.data.nutrition || {
+    energy: '700 kJ / 167 kcal',
+    fat: '8.0 g',
+    saturates: '0.7 g',
+    carbs: '4.5 g',
+    sugars: '1.8 g',
+    fiber: '5.5 g',
+    protein: 20,
+    salt: '0.9 g',
+    vitaminB12: '1.5 µg',
+    vitaminB12Pct: 60,
+    iron: '3.0 mg',
+    ironPct: 21
+};
+
+// Cooking steps - use translated if available
+const cookingSteps = productT?.cookingSteps || product.data.cooking?.steps || [
+    { title: t.products.cooking.step1Title, description: t.products.cooking.step1Desc },
+    { title: t.products.cooking.step2Title, description: t.products.cooking.step2Desc },
+    { title: t.products.cooking.step3Title, description: t.products.cooking.step3Desc }
+];
+
+const cooking = product.data.cooking || {
+    time: '4-6 min',
+    heat: language === 'de' ? 'Mittel-Hoch' : language === 'fr' ? 'Moyen-Élevé' : language === 'it' ? 'Medio-Alto' : language === 'nl' ? 'Middelhoog' : language === 'es' ? 'Medio-Alto' : 'Medium-High',
+    servings: '2-3'
+};
+
+const fiberValue = typeof nutrition.fiber === 'string'
+    ? nutrition.fiber.replace(' g', '').replace('g', '')
+    : nutrition.fiber;
+
+// Translated features
+const features = productT?.features || [
+    t.products.features.plantBased,
+    t.products.features.highProtein,
+    t.products.features.richIron,
+    t.products.features.vitaminB12
+];
+---
+
+<Layout title={`${product.data.name} ${product.data.variant} – Planted`} currentPage="products" locale={locale}>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-sticky">
+            <div class="hero-bg" style={`background: ${colors.gradient}; background-size: 200% 200%;`}></div>
+
+            {product.data.images.dish || product.data.images.background ? (
+                <div class="hero-dish" id="heroDish">
+                    <img src={product.data.images.dish || product.data.images.background} alt={`${product.data.name} dish`} loading="eager">
+                </div>
+            ) : null}
+
+            <div class="hero-pack" id="heroPack">
+                {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
+                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="eager">
+            </div>
+
+            <div class="hero-info" id="heroInfo">
+                <div class="hero-text">
+                    <h1>{product.data.name}</h1>
+                    <p class="variant">{product.data.variant}{productT?.description && ` — ${productT.description.split('.')[0]}`}</p>
+                </div>
+                <div class="hero-protein">
+                    <div class="protein-number">
+                        <span class="value">{nutrition.protein}</span><span class="unit">g</span>
+                    </div>
+                    <div class="protein-label">{t.products.proteinPer100g}</div>
+                </div>
+            </div>
+
+            <div class="scroll-hint" id="scrollHint">
+                <span>{t.common.scroll}</span>
+                <div class="arrow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-value">{fiberValue}g</div>
+                <div class="stat-label">{t.products.nutrition.fiber}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{nutrition.vitaminB12Pct}%</div>
+                <div class="stat-label">{t.products.nutrition.vitaminB12}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{nutrition.ironPct}%</div>
+                <div class="stat-label">{t.products.nutrition.iron}</div>
+            </div>
+            <div class="stat highlight">
+                <div class="stat-value">0</div>
+                <div class="stat-label">{t.products.nutrition.animals}</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="trust">
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+            </svg>
+            {t.products.badges.bCorp}
+        </div>
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            {t.products.badges.swissMade}
+        </div>
+        <div class="trust-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+            {t.products.badges.plantBased}
+        </div>
+    </section>
+
+    <!-- Ingredients -->
+    <section class="ingredients reveal">
+        <h2>{t.products.whatsInside}</h2>
+        <div class="pills">
+            {ingredientsList.map((ingredient: string, i: number) => {
+                const match = ingredient.match(/(.+?)\s*\((\d+%?)\)/);
+                if (match) {
+                    return (
+                        <div class="pill" style={`--delay: ${i * 0.05}s`}>
+                            {match[1].trim()} <span class="pct">({match[2]})</span>
+                        </div>
+                    );
+                }
+                return <div class="pill" style={`--delay: ${i * 0.05}s`}>{ingredient}</div>;
+            })}
+        </div>
+        <div class="ingredient-note">{t.products.thatsIt.replace('{count}', ingredientsList.length.toString())}</div>
+    </section>
+
+    <!-- Nutrition -->
+    <section class="nutrition">
+        <div class="nutrition-layout">
+            <div class="nutrition-image">
+                <img src={product.data.images.dish || product.data.images.background || product.data.images.main} alt={`${product.data.name}`} loading="lazy">
+            </div>
+            <div class="nutrition-content">
+                <div class="nutrition-header">
+                    <h2>{t.products.nutritionTitle}</h2>
+                    <button class="nutrition-toggle" id="nutritionToggle" aria-label="Toggle nutrition table">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="nutrition-table" id="nutritionTable">
+                    <div class="nutrition-table-inner">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{t.products.nutrition.per100g}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>{t.products.nutrition.energy}</td><td>{nutrition.energy}</td></tr>
+                                <tr><td>{t.products.nutrition.fat}</td><td>{nutrition.fat}</td></tr>
+                                <tr class="sub"><td>{t.products.nutrition.saturates}</td><td>{nutrition.saturates}</td></tr>
+                                <tr><td>{t.products.nutrition.carbs}</td><td>{nutrition.carbs}</td></tr>
+                                <tr class="sub"><td>{t.products.nutrition.sugars}</td><td>{nutrition.sugars}</td></tr>
+                                <tr><td>{t.products.nutrition.fiber}</td><td>{nutrition.fiber}</td></tr>
+                                <tr class="protein-row"><td>{t.products.nutrition.protein}</td><td>{nutrition.protein} g</td></tr>
+                                <tr><td>{t.products.nutrition.salt}</td><td>{nutrition.salt}</td></tr>
+                                <tr><td>{t.products.nutrition.vitaminB12}</td><td>{nutrition.vitaminB12} ({nutrition.vitaminB12Pct}%*)</td></tr>
+                                <tr><td>{t.products.nutrition.iron}</td><td>{nutrition.iron} ({nutrition.ironPct}%*)</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="nutrition-note">*{t.products.nutrition.dailyIntake}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cooking -->
+    <section class="cooking">
+        <div class="cooking-inner">
+            <h2 class="reveal">{t.products.cookingTitle}</h2>
+            <div class="cooking-steps">
+                {cookingSteps.map((step: { title: string; description: string }, index: number) => (
+                    <div class="step reveal" style={`--delay: ${(index + 1) * 0.1}s`}>
+                        <div class="step-num">{index + 1}</div>
+                        <h3>{step.title}</h3>
+                        <p>{step.description}</p>
+                    </div>
+                ))}
+            </div>
+            <div class="cooking-meta reveal">
+                <div class="meta-item">
+                    <strong>{cooking.time}</strong>
+                    <span>{t.products.cooking.cookTime}</span>
+                </div>
+                <div class="meta-item">
+                    <strong>{cooking.heat}</strong>
+                    <span>{t.products.cooking.heat}</span>
+                </div>
+                <div class="meta-item">
+                    <strong>{cooking.servings}</strong>
+                    <span>{t.products.cooking.servings}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes -->
+    <section class="recipes">
+        <div class="recipes-header">
+            <h2 class="reveal">{t.products.makeTitle}</h2>
+            <a href={`${base}/${locale}/recipes`} class="reveal">{t.home.recipes.viewAll} →</a>
+        </div>
+        <div class="recipes-scroll">
+            {featuredRecipes.map((recipe) => (
+                <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card">
+                    <div class="recipe-img">
+                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>{recipe.data.title}</h3>
+                        <span>{recipe.data.cookTime} {t.recipes.time} · {recipe.data.difficulty}</span>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>{t.products.tryIt}</h2>
+        <div class="cta-buttons">
+            <a href={`${base}/${locale}#locator`} class="btn btn-primary">{t.home.locator.button}</a>
+            <a href={`${base}/${locale}/products`} class="btn btn-secondary">{t.home.products.viewAll}</a>
+        </div>
+    </section>
+</Layout>
+
+<style define:vars={{ mainColor: colors.main, lightColor: colors.light, darkColor: colors.dark }}>
+    :root {
+        --purple: #61269E;
+        --purple-dark: #4A1D7A;
+        --green: #6BBF59;
+        --cream: #FDF8F3;
+        --black: #1A1A1A;
+    }
+
+    /* HERO */
+    .hero {
+        min-height: 250vh;
+        position: relative;
+    }
+
+    .hero-sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        background-size: 200% 200%;
+        animation: gradientMove 12s ease infinite;
+    }
+
+    @keyframes gradientMove {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .hero-bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    .hero-dish {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transform: scale(1.05);
+        transition: opacity 0.8s ease, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+    }
+
+    .hero-dish.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .hero-dish img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 40%;
+    }
+
+    .hero-dish::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--mainColor) 40%, transparent) 0%,
+            transparent 25%,
+            transparent 55%,
+            color-mix(in srgb, var(--mainColor) 95%, transparent) 100%
+        );
+    }
+
+    .hero-pack {
+        position: relative;
+        z-index: 10;
+        width: clamp(220px, 35vw, 380px);
+        transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform, opacity, filter;
+        filter: drop-shadow(0 30px 50px rgba(0,0,0,0.3));
+    }
+
+    .hero-pack img {
+        width: 100%;
+        height: auto;
+        transform: rotate(-5deg);
+        transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hero-pack:hover img {
+        transform: rotate(-2deg) scale(1.02);
+    }
+
+    .product-badge-new {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--green);
+        color: var(--black);
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.4rem 0.8rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        z-index: 5;
+    }
+
+    .hero-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 2rem;
+        z-index: 20;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: 0.2s;
+    }
+
+    .hero-info.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .hero-text h1 {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        color: white;
+        margin-bottom: 0.3rem;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-text .variant {
+        font-size: clamp(1rem, 2.5vw, 1.35rem);
+        color: rgba(255,255,255,0.8);
+        font-weight: 400;
+        max-width: 400px;
+    }
+
+    .hero-protein {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .protein-number {
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: clamp(6rem, 22vw, 16rem);
+        line-height: 0.75;
+        letter-spacing: -0.04em;
+        display: flex;
+        align-items: baseline;
+    }
+
+    .protein-number .value {
+        color: white;
+        text-shadow: 0 4px 0 rgba(0,0,0,0.08), 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .protein-number .unit {
+        color: var(--green);
+        font-size: 0.6em;
+        margin-left: -0.05em;
+        text-shadow: 0 0 60px rgba(107, 191, 89, 0.5);
+    }
+
+    .protein-label {
+        color: rgba(255,255,255,0.7);
+        font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    .scroll-hint {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        transition: opacity 0.4s ease;
+    }
+
+    .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+
+    .scroll-hint .arrow {
+        width: 20px;
+        height: 20px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg);
+        animation: scrollBounce 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollBounce {
+        0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 1; }
+        50% { transform: rotate(45deg) translate(3px, 3px); opacity: 0.5; }
+    }
+
+    @media (max-width: 700px) {
+        .hero-info { flex-direction: column; align-items: flex-start; padding: 2rem; gap: 1rem; }
+        .hero-protein { text-align: left; }
+    }
+
+    /* STATS */
+    .stats {
+        background: var(--purple);
+        padding: 2rem 1.5rem;
+    }
+
+    .stats-grid {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        flex-wrap: wrap;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .stat { text-align: center; min-width: 80px; }
+    .stat-value { font-family: 'VC Henrietta', Georgia, serif; font-size: clamp(1.75rem, 5vw, 2.5rem); color: var(--green); line-height: 1; }
+    .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); margin-top: 0.4rem; }
+    .stat.highlight .stat-value { color: white; }
+
+    /* TRUST */
+    .trust {
+        background: var(--cream);
+        padding: 1.75rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        flex-wrap: wrap;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .trust-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--purple);
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0.7;
+    }
+
+    .trust-badge svg { width: 20px; height: 20px; opacity: 0.8; }
+
+    /* INGREDIENTS */
+    .ingredients {
+        padding: 5rem 1.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .ingredients h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--purple);
+        margin-bottom: 2rem;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+    .pill {
+        background: white;
+        padding: 0.9rem 1.5rem;
+        border-radius: 100px;
+        font-weight: 600;
+        color: var(--purple);
+        border: 1px solid rgba(97,38,158,0.08);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        transition: all 0.25s ease;
+        transition-delay: var(--delay, 0s);
+    }
+
+    .pill:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(97,38,158,0.12);
+        border-color: rgba(97,38,158,0.15);
+    }
+
+    .pill .pct { opacity: 0.4; font-weight: 400; margin-left: 0.25rem; }
+
+    .ingredient-note {
+        display: inline-block;
+        background: var(--green);
+        color: var(--black);
+        padding: 0.9rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        transform: rotate(-1.5deg);
+        box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .ingredient-note:hover { transform: rotate(0.5deg) scale(1.02); }
+
+    /* NUTRITION */
+    .nutrition { background: white; }
+
+    .nutrition-layout { display: grid; grid-template-columns: 1fr; }
+
+    @media (min-width: 800px) {
+        .nutrition-layout { grid-template-columns: 1fr 1fr; }
+    }
+
+    .nutrition-image { position: relative; min-height: 350px; overflow: hidden; }
+
+    .nutrition-image img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 6s ease-out;
+    }
+
+    .nutrition-image:hover img { transform: scale(1.03); }
+
+    .nutrition-image::after {
+        content: '';
+        position: absolute;
+        right: -1px;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        background: white;
+        clip-path: ellipse(70% 50% at 100% 50%);
+    }
+
+    @media (max-width: 799px) { .nutrition-image::after { display: none; } }
+
+    .nutrition-content { padding: 3rem 2.5rem; }
+
+    .nutrition-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .nutrition-header h2 { font-size: clamp(1.4rem, 4vw, 1.8rem); color: var(--purple); }
+
+    .nutrition-toggle {
+        width: 40px;
+        height: 40px;
+        background: var(--cream);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .nutrition-toggle:hover { background: var(--purple); }
+    .nutrition-toggle:hover svg { stroke: white; }
+    .nutrition-toggle svg { width: 18px; height: 18px; stroke: var(--purple); transition: transform 0.3s ease, stroke 0.3s ease; }
+    .nutrition-toggle.open svg { transform: rotate(180deg); }
+
+    .nutrition-table { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease; }
+    .nutrition-table.open { grid-template-rows: 1fr; }
+    .nutrition-table-inner { overflow: hidden; }
+    .nutrition-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+    .nutrition-table th {
+        text-align: left;
+        padding: 0.5rem 0;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--purple);
+        opacity: 0.5;
+        border-bottom: 2px solid var(--purple);
+    }
+
+    .nutrition-table th:last-child { text-align: right; }
+
+    .nutrition-table td { padding: 0.6rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.2s ease; }
+    .nutrition-table td:last-child { text-align: right; font-weight: 600; color: var(--purple); }
+    .nutrition-table tr:hover td { background: rgba(97,38,158,0.02); }
+    .nutrition-table tr.sub td:first-child { padding-left: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    .nutrition-table tr.protein-row td { background: rgba(107,191,89,0.08); font-weight: 600; }
+    .nutrition-table tr.protein-row td:last-child { color: var(--green); }
+    .nutrition-note { font-size: 0.65rem; color: var(--black); opacity: 0.4; margin-top: 1rem; }
+
+    /* COOKING */
+    .cooking { background: var(--cream); padding: 5rem 1.5rem; }
+    .cooking-inner { max-width: 850px; margin: 0 auto; }
+    .cooking h2 { font-size: clamp(2rem, 6vw, 3rem); color: var(--purple); margin-bottom: 2.5rem; text-align: center; }
+    .cooking-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+
+    .step {
+        background: white;
+        padding: 2rem 1.5rem;
+        border-radius: 1.25rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition-delay: var(--delay, 0s);
+    }
+
+    .step:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+
+    .step-num {
+        width: 48px;
+        height: 48px;
+        background: var(--purple);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: 1.25rem;
+        margin: 0 auto 1rem;
+    }
+
+    .step h3 { color: var(--purple); font-size: 1.15rem; margin-bottom: 0.4rem; }
+    .step p { color: var(--black); opacity: 0.65; font-size: 0.9rem; line-height: 1.5; }
+
+    .cooking-meta { display: flex; justify-content: center; gap: 3rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .meta-item { text-align: center; }
+    .meta-item strong { display: block; font-family: 'VC Henrietta', Georgia, serif; font-size: 1.5rem; color: var(--purple); }
+    .meta-item span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--black); opacity: 0.5; }
+
+    /* RECIPES */
+    .recipes { padding: 5rem 0; background: white; }
+
+    .recipes-header {
+        padding: 0 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .recipes-header h2 { font-size: clamp(2rem, 6vw, 3rem); color: var(--purple); }
+    .recipes-header a { color: var(--purple); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: opacity 0.2s; }
+    .recipes-header a:hover { opacity: 0.7; }
+
+    .recipes-scroll {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding: 0 1.5rem 1rem;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
+        -webkit-mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
+    }
+
+    .recipes-scroll::-webkit-scrollbar { display: none; }
+
+    .recipe-card {
+        flex: 0 0 300px;
+        scroll-snap-align: start;
+        background: var(--cream);
+        border-radius: 1.25rem;
+        overflow: hidden;
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+
+    .recipe-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+
+    .recipe-img { aspect-ratio: 4/3; overflow: hidden; }
+    .recipe-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .recipe-card:hover .recipe-img img { transform: scale(1.08); }
+
+    .recipe-info { padding: 1.25rem; }
+    .recipe-info h3 { font-size: 1.1rem; color: var(--purple); margin-bottom: 0.2rem; }
+    .recipe-info span { font-size: 0.8rem; color: var(--black); opacity: 0.5; }
+
+    /* CTA */
+    .cta {
+        background: var(--green);
+        padding: 6rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta::before {
+        content: '';
+        position: absolute;
+        inset: -50%;
+        background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.12) 0%, transparent 50%);
+        animation: ctaGlow 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes ctaGlow {
+        0% { transform: translate(-10%, -10%) scale(1); }
+        100% { transform: translate(10%, 10%) scale(1.2); }
+    }
+
+    .cta h2 { font-size: clamp(3.5rem, 14vw, 7rem); color: var(--black); margin-bottom: 2rem; position: relative; }
+
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.15rem 2rem;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary { background: var(--purple); color: white; box-shadow: 0 6px 20px rgba(97,38,158,0.35); }
+    .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(97,38,158,0.4); }
+    .btn-secondary { background: white; color: var(--purple); }
+    .btn-secondary:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+
+    /* ANIMATIONS */
+    .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: var(--delay, 0s);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+
+<script>
+    function initProductPage() {
+        const hero = document.getElementById('hero');
+        const heroPack = document.getElementById('heroPack');
+        const heroDish = document.getElementById('heroDish');
+        const heroInfo = document.getElementById('heroInfo');
+        const scrollHint = document.getElementById('scrollHint');
+
+        if (!hero || !heroPack) return;
+
+        let ticking = false;
+
+        function updateHero() {
+            const rect = hero.getBoundingClientRect();
+            const scrollDistance = hero.offsetHeight - window.innerHeight;
+            const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
+
+            if (progress < 0.5) {
+                const packProgress = progress * 2;
+                const scale = 1 - (packProgress * 0.5);
+                const rotate = packProgress * 25;
+                const translateY = packProgress * -35;
+                const opacity = 1 - (packProgress * 1.5);
+                const blur = packProgress * 6;
+
+                heroPack.style.transform = `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}vh)`;
+                heroPack.style.opacity = String(Math.max(opacity, 0));
+                heroPack.style.filter = `drop-shadow(0 30px 50px rgba(0,0,0,0.3)) blur(${blur}px)`;
+            } else {
+                heroPack.style.opacity = '0';
+            }
+
+            if (heroDish) {
+                if (progress > 0.25) { heroDish.classList.add('visible'); }
+                else { heroDish.classList.remove('visible'); }
+            }
+
+            if (heroInfo) {
+                if (progress > 0.45) { heroInfo.classList.add('visible'); }
+                else { heroInfo.classList.remove('visible'); }
+            }
+
+            if (scrollHint) {
+                if (progress > 0.05) { scrollHint.classList.add('hidden'); }
+                else { scrollHint.classList.remove('hidden'); }
+            }
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateHero);
+                ticking = true;
+            }
+        });
+
+        updateHero();
+
+        const nutritionToggle = document.getElementById('nutritionToggle');
+        const nutritionTable = document.getElementById('nutritionTable');
+
+        if (nutritionToggle && nutritionTable) {
+            nutritionTable.classList.add('open');
+            nutritionToggle.classList.add('open');
+
+            nutritionToggle.addEventListener('click', () => {
+                nutritionTable.classList.toggle('open');
+                nutritionToggle.classList.toggle('open');
+            });
+        }
+
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    }
+
+    initProductPage();
+    document.addEventListener('astro:page-load', initProductPage);
+</script>
