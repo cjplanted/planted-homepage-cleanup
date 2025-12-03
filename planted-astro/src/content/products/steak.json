@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/steak-cookbowl.png"
     },
     "features": ["100% Plant-Based", "High in Protein", "Rich in Iron", "Source of Vitamin B12"],
-    "ingredients": "Water, soy protein, rapeseed oil, natural flavoring, salt, iron, vitamin B12",
+    "ingredients": "Water, soy protein (33%), rapeseed oil, natural flavoring, salt, iron, vitamin B12",
     "preparation": "Sear in a hot pan with a little oil for 2-3 minutes on each side for medium-rare. Let rest for 2 minutes before serving. Season with salt and pepper to taste.",
-    "order": 6
+    "order": 6,
+    "nutrition": {
+        "energy": "718 kJ / 172 kcal",
+        "fat": "8.1 g",
+        "saturates": "0.7 g",
+        "carbs": "4.9 g",
+        "sugars": "2.1 g",
+        "fiber": "5.7 g",
+        "protein": 24,
+        "salt": "0.8 g",
+        "vitaminB12": "1.8 µg",
+        "vitaminB12Pct": 72,
+        "iron": "3.8 mg",
+        "ironPct": 27
+    },
+    "cooking": {
+        "time": "3-5 min",
+        "heat": "High",
+        "servings": "2-3",
+        "steps": [
+            { "title": "Season", "description": "Your blank canvas. Go wild or keep it simple with salt & pepper." },
+            { "title": "Heat", "description": "Oil in pan. Get it hot. Don't be shy — high heat is your friend." },
+            { "title": "Sear", "description": "Golden edges. Crispy outside. 2-3 minutes each side. Done." }
+        ]
+    }
 }

@@ -22,6 +22,31 @@ const products = defineCollection({
         ingredients: z.string().optional(),
         preparation: z.string().optional(),
         order: z.number().default(0),
+        // Nutrition data per 100g
+        nutrition: z.object({
+            energy: z.string(), // e.g., "718 kJ / 172 kcal"
+            fat: z.string(), // e.g., "8.1 g"
+            saturates: z.string(), // e.g., "0.7 g"
+            carbs: z.string(), // e.g., "4.9 g"
+            sugars: z.string(), // e.g., "2.1 g"
+            fiber: z.string(), // e.g., "5.7 g"
+            protein: z.number(), // e.g., 24 (grams per 100g)
+            salt: z.string(), // e.g., "0.8 g"
+            vitaminB12: z.string(), // e.g., "1.8 µg"
+            vitaminB12Pct: z.number(), // e.g., 72
+            iron: z.string(), // e.g., "3.8 mg"
+            ironPct: z.number(), // e.g., 27
+        }).optional(),
+        // Cooking instructions
+        cooking: z.object({
+            time: z.string(), // e.g., "3-5 min"
+            heat: z.string(), // e.g., "High"
+            servings: z.string(), // e.g., "3-4"
+            steps: z.array(z.object({
+                title: z.string(),
+                description: z.string(),
+            })).optional(),
+        }).optional(),
     }),
 });
 

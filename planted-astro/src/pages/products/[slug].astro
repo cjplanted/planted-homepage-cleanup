@@ -27,27 +27,60 @@ const productRecipes = recipes
 // Fallback to featured recipes if no product-specific ones
 const featuredRecipes = productRecipes.length > 0 ? productRecipes : recipes.slice(0, 4);
 
-// Parse ingredients from string to array
+// Parse ingredients from string to array, preserving percentages
 const ingredientsList = product.data.ingredients
-    ? product.data.ingredients.split(',').map(i => i.trim())
+    ? product.data.ingredients.split(',').map((i: string) => i.trim())
     : ['Pea Protein', 'Water', 'Rapeseed Oil', 'Pea Fiber', 'Salt', 'Vitamin B12'];
 
-// Color mappings for gradients
-const colorGradients: Record<string, { main: string; light: string; dark: string }> = {
-    yellow: { main: '#E8D494', light: '#F5E6B8', dark: '#D4C074' },
-    terracotta: { main: '#D4A894', light: '#E8C4B8', dark: '#C08870' },
-    purple: { main: '#61269E', light: '#9B6BC7', dark: '#4A1D7A' },
-    olive: { main: '#B4C494', light: '#C8D4B8', dark: '#94A870' },
-    burgundy: { main: '#C494A8', light: '#D4B8C4', dark: '#A87088' },
-    teal: { main: '#94C4C4', light: '#B8D4D4', dark: '#70A8A8' },
-    coral: { main: '#E8B8A4', light: '#F5D4C8', dark: '#D49880' },
-    navy: { main: '#94A8C4', light: '#B8C4D4', dark: '#7088A8' },
-    green: { main: '#6BBF59', light: '#94D494', dark: '#4A9F40' },
-    orange: { main: '#E8B894', light: '#F5D4B8', dark: '#D49870' },
-    red: { main: '#E8A4A4', light: '#F5C4C4', dark: '#D48080' },
+// Color mappings for gradients (deeper, richer tones matching reference)
+const colorGradients: Record<string, { main: string; light: string; dark: string; gradient: string }> = {
+    yellow: { main: '#C9A227', light: '#E8D494', dark: '#8B7419', gradient: 'linear-gradient(135deg, #D4B82A 0%, #C9A227 30%, #8B7419 70%, #5C4D10 100%)' },
+    terracotta: { main: '#A85E42', light: '#D4A894', dark: '#6D3A2A', gradient: 'linear-gradient(135deg, #C07050 0%, #A85E42 30%, #6D3A2A 70%, #4A2518 100%)' },
+    purple: { main: '#61269E', light: '#9B6BC7', dark: '#4A1D7A', gradient: 'linear-gradient(135deg, #7B3AAF 0%, #61269E 30%, #4A1D7A 70%, #3D1866 100%)' },
+    olive: { main: '#6B7B3A', light: '#94A870', dark: '#445026', gradient: 'linear-gradient(135deg, #7D8F45 0%, #6B7B3A 30%, #445026 70%, #2D351A 100%)' },
+    burgundy: { main: '#7B3A5A', light: '#A87088', dark: '#50243A', gradient: 'linear-gradient(135deg, #8F4568 0%, #7B3A5A 30%, #50243A 70%, #3D1A2D 100%)' },
+    teal: { main: '#3A7B7B', light: '#70A8A8', dark: '#245050', gradient: 'linear-gradient(135deg, #4A8F8F 0%, #3A7B7B 30%, #245050 70%, #1A3D3D 100%)' },
+    coral: { main: '#C87B6B', light: '#E8B8A4', dark: '#885145', gradient: 'linear-gradient(135deg, #D89080 0%, #C87B6B 30%, #885145 70%, #5C3830 100%)' },
+    navy: { main: '#3A4B7B', light: '#7088A8', dark: '#243150', gradient: 'linear-gradient(135deg, #4A5F8F 0%, #3A4B7B 30%, #243150 70%, #1A253D 100%)' },
+    green: { main: '#5A8B4A', light: '#94D494', dark: '#3A5B32', gradient: 'linear-gradient(135deg, #6A9F58 0%, #5A8B4A 30%, #3A5B32 70%, #2A4325 100%)' },
+    orange: { main: '#C89B6B', light: '#E8C494', dark: '#886F45', gradient: 'linear-gradient(135deg, #D8AF80 0%, #C89B6B 30%, #886F45 70%, #5C4D30 100%)' },
+    red: { main: '#A84242', light: '#D48080', dark: '#6D2A2A', gradient: 'linear-gradient(135deg, #BF5050 0%, #A84242 30%, #6D2A2A 70%, #4A1818 100%)' },
 };
 
 const colors = colorGradients[product.data.color] || colorGradients.purple;
+
+// Get nutrition data with fallbacks
+const nutrition = product.data.nutrition || {
+    energy: '700 kJ / 167 kcal',
+    fat: '8.0 g',
+    saturates: '0.7 g',
+    carbs: '4.5 g',
+    sugars: '1.8 g',
+    fiber: '5.5 g',
+    protein: 20,
+    salt: '0.9 g',
+    vitaminB12: '1.5 µg',
+    vitaminB12Pct: 60,
+    iron: '3.0 mg',
+    ironPct: 21
+};
+
+// Get cooking data with fallbacks
+const cooking = product.data.cooking || {
+    time: '4-6 min',
+    heat: 'Medium-High',
+    servings: '2-3',
+    steps: [
+        { title: 'Season', description: 'Your blank canvas. Go wild or keep it simple with salt & pepper.' },
+        { title: 'Heat', description: 'Oil in pan. Get it hot. High heat is your friend.' },
+        { title: 'Cook', description: 'Golden on all sides. A few minutes each side. Done.' }
+    ]
+};
+
+// Parse fiber value for stats display
+const fiberValue = typeof nutrition.fiber === 'string'
+    ? nutrition.fiber.replace(' g', '').replace('g', '')
+    : nutrition.fiber;
 ---
 
 <Layout title={`${product.data.name} ${product.data.variant} – Planted`} currentPage="products">
@@ -55,14 +88,14 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <section class="hero" id="hero">
         <div class="hero-sticky">
             <!-- Animated gradient background -->
-            <div class="hero-bg"></div>
+            <div class="hero-bg" style={`background: ${colors.gradient}; background-size: 200% 200%;`}></div>
 
             <!-- Dish photo (hidden initially, fades in on scroll) -->
-            {product.data.images.dish && (
+            {product.data.images.dish || product.data.images.background ? (
                 <div class="hero-dish" id="heroDish">
-                    <img src={product.data.images.dish} alt={`Delicious ${product.data.name} dish`} loading="eager">
+                    <img src={product.data.images.dish || product.data.images.background} alt={`Delicious ${product.data.name} dish`} loading="eager">
                 </div>
-            )}
+            ) : null}
 
             <!-- Pack shot (visible initially, animates out on scroll) -->
             <div class="hero-pack" id="heroPack">
@@ -74,11 +107,11 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
             <div class="hero-info" id="heroInfo">
                 <div class="hero-text">
                     <h1>{product.data.name}</h1>
-                    <p class="variant">{product.data.variant} — {product.data.description}</p>
+                    <p class="variant">{product.data.variant}{product.data.description && ` — ${product.data.description.split('.')[0]}`}</p>
                 </div>
                 <div class="hero-protein">
                     <div class="protein-number">
-                        <span class="value">17</span><span class="unit">g</span>
+                        <span class="value">{nutrition.protein}</span><span class="unit">g</span>
                     </div>
                     <div class="protein-label">Protein per 100g</div>
                 </div>
@@ -92,19 +125,19 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         </div>
     </section>
 
-    <!-- Stats Bar - Fiber, B12, Iron, Animals ONLY -->
+    <!-- Stats Bar - Dynamic values from nutrition data -->
     <section class="stats">
         <div class="stats-grid">
             <div class="stat">
-                <div class="stat-value">5.7g</div>
+                <div class="stat-value">{fiberValue}g</div>
                 <div class="stat-label">Fiber</div>
             </div>
             <div class="stat">
-                <div class="stat-value">72%</div>
+                <div class="stat-value">{nutrition.vitaminB12Pct}%</div>
                 <div class="stat-label">Vitamin B12</div>
             </div>
             <div class="stat">
-                <div class="stat-value">27%</div>
+                <div class="stat-value">{nutrition.ironPct}%</div>
                 <div class="stat-label">Iron</div>
             </div>
             <div class="stat highlight">
@@ -144,9 +177,18 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <section class="ingredients reveal">
         <h2>What's inside</h2>
         <div class="pills">
-            {ingredientsList.map((ingredient, i) => (
-                <div class="pill" style={`--delay: ${i * 0.05}s`}>{ingredient}</div>
-            ))}
+            {ingredientsList.map((ingredient: string, i: number) => {
+                // Check if ingredient has percentage in parentheses
+                const match = ingredient.match(/(.+?)\s*\((\d+%?)\)/);
+                if (match) {
+                    return (
+                        <div class="pill" style={`--delay: ${i * 0.05}s`}>
+                            {match[1].trim()} <span class="pct">({match[2]})</span>
+                        </div>
+                    );
+                }
+                return <div class="pill" style={`--delay: ${i * 0.05}s`}>{ingredient}</div>;
+            })}
         </div>
         <div class="ingredient-note">That's it. {ingredientsList.length} ingredients.</div>
     </section>
@@ -155,7 +197,7 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <section class="nutrition">
         <div class="nutrition-layout">
             <div class="nutrition-image">
-                <img src={product.data.images.dish || product.data.images.main} alt={`${product.data.name} close-up`} loading="lazy">
+                <img src={product.data.images.dish || product.data.images.background || product.data.images.main} alt={`${product.data.name} close-up`} loading="lazy">
             </div>
             <div class="nutrition-content">
                 <div class="nutrition-header">
@@ -177,16 +219,16 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>Energy</td><td>718 kJ / 172 kcal</td></tr>
-                                <tr><td>Fat</td><td>8.1 g</td></tr>
-                                <tr class="sub"><td>of which saturates</td><td>0.7 g</td></tr>
-                                <tr><td>Carbohydrates</td><td>4.9 g</td></tr>
-                                <tr class="sub"><td>of which sugars</td><td>2.1 g</td></tr>
-                                <tr><td>Fiber</td><td>5.7 g</td></tr>
-                                <tr class="protein-row"><td>Protein</td><td>17 g</td></tr>
-                                <tr><td>Salt</td><td>0.8 g</td></tr>
-                                <tr><td>Vitamin B12</td><td>1.8 µg (72%*)</td></tr>
-                                <tr><td>Iron</td><td>3.8 mg (27%*)</td></tr>
+                                <tr><td>Energy</td><td>{nutrition.energy}</td></tr>
+                                <tr><td>Fat</td><td>{nutrition.fat}</td></tr>
+                                <tr class="sub"><td>of which saturates</td><td>{nutrition.saturates}</td></tr>
+                                <tr><td>Carbohydrates</td><td>{nutrition.carbs}</td></tr>
+                                <tr class="sub"><td>of which sugars</td><td>{nutrition.sugars}</td></tr>
+                                <tr><td>Fiber</td><td>{nutrition.fiber}</td></tr>
+                                <tr class="protein-row"><td>Protein</td><td>{nutrition.protein} g</td></tr>
+                                <tr><td>Salt</td><td>{nutrition.salt}</td></tr>
+                                <tr><td>Vitamin B12</td><td>{nutrition.vitaminB12} ({nutrition.vitaminB12Pct}%*)</td></tr>
+                                <tr><td>Iron</td><td>{nutrition.iron} ({nutrition.ironPct}%*)</td></tr>
                             </tbody>
                         </table>
                         <p class="nutrition-note">*of daily reference intake</p>
@@ -196,38 +238,30 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         </div>
     </section>
 
-    <!-- Cooking -->
+    <!-- Cooking - Dynamic steps from product data -->
     <section class="cooking">
         <div class="cooking-inner">
             <h2 class="reveal">Cook it your way</h2>
             <div class="cooking-steps">
-                <div class="step reveal" style="--delay: 0.1s">
-                    <div class="step-num">1</div>
-                    <h3>Season</h3>
-                    <p>Your blank canvas. Go wild or keep it simple with salt & pepper.</p>
-                </div>
-                <div class="step reveal" style="--delay: 0.2s">
-                    <div class="step-num">2</div>
-                    <h3>Heat</h3>
-                    <p>Oil in pan. Get it hot. Don't be shy — high heat is your friend.</p>
-                </div>
-                <div class="step reveal" style="--delay: 0.3s">
-                    <div class="step-num">3</div>
-                    <h3>Sear</h3>
-                    <p>Golden edges. Crispy outside. 3-5 minutes. Done.</p>
-                </div>
+                {cooking.steps?.map((step: { title: string; description: string }, index: number) => (
+                    <div class="step reveal" style={`--delay: ${(index + 1) * 0.1}s`}>
+                        <div class="step-num">{index + 1}</div>
+                        <h3>{step.title}</h3>
+                        <p>{step.description}</p>
+                    </div>
+                ))}
             </div>
             <div class="cooking-meta reveal">
                 <div class="meta-item">
-                    <strong>3-5 min</strong>
+                    <strong>{cooking.time}</strong>
                     <span>Cook time</span>
                 </div>
                 <div class="meta-item">
-                    <strong>High</strong>
+                    <strong>{cooking.heat}</strong>
                     <span>Heat</span>
                 </div>
                 <div class="meta-item">
-                    <strong>3-4</strong>
+                    <strong>{cooking.servings}</strong>
                     <span>Servings</span>
                 </div>
             </div>
@@ -238,11 +272,11 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <section class="recipes">
         <div class="recipes-header">
             <h2 class="reveal">Make something</h2>
-            <a href={`${base}recipes`} class="reveal">All recipes →</a>
+            <a href={`${base}/recipes`} class="reveal">All recipes →</a>
         </div>
         <div class="recipes-scroll">
             {featuredRecipes.map((recipe) => (
-                <a href={`${base}recipes/${recipe.data.slug}`} class="recipe-card">
+                <a href={`${base}/recipes/${recipe.data.slug}`} class="recipe-card">
                     <div class="recipe-img">
                         <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
                     </div>
@@ -259,8 +293,8 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <section class="cta">
         <h2>Try it.</h2>
         <div class="cta-buttons">
-            <a href={`${base}#locator`} class="btn btn-primary">Find planted near you</a>
-            <a href={`${base}products`} class="btn btn-secondary">See all products</a>
+            <a href={`${base}/#locator`} class="btn btn-primary">Find planted near you</a>
+            <a href={`${base}/products`} class="btn btn-secondary">See all products</a>
         </div>
     </section>
 </Layout>
@@ -296,13 +330,6 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     .hero-bg {
         position: absolute;
         inset: 0;
-        background: linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--mainColor) 100%, white 20%) 0%,
-            var(--mainColor) 30%,
-            var(--darkColor) 70%,
-            color-mix(in srgb, var(--darkColor) 100%, black 20%) 100%
-        );
         background-size: 200% 200%;
         animation: gradientMove 12s ease infinite;
     }
@@ -617,6 +644,12 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(97,38,158,0.12);
         border-color: rgba(97,38,158,0.15);
+    }
+
+    .pill .pct {
+        opacity: 0.4;
+        font-weight: 400;
+        margin-left: 0.25rem;
     }
 
     .ingredient-note {
@@ -1076,105 +1109,113 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
 </style>
 
 <script>
-    // ==================== HERO SCROLL ANIMATION ====================
-    const hero = document.getElementById('hero');
-    const heroPack = document.getElementById('heroPack');
-    const heroDish = document.getElementById('heroDish');
-    const heroInfo = document.getElementById('heroInfo');
-    const scrollHint = document.getElementById('scrollHint');
+    function initProductPage() {
+        // ==================== HERO SCROLL ANIMATION ====================
+        const hero = document.getElementById('hero');
+        const heroPack = document.getElementById('heroPack');
+        const heroDish = document.getElementById('heroDish');
+        const heroInfo = document.getElementById('heroInfo');
+        const scrollHint = document.getElementById('scrollHint');
 
-    let ticking = false;
-
-    function updateHero() {
         if (!hero || !heroPack) return;
 
-        const rect = hero.getBoundingClientRect();
-        const scrollDistance = hero.offsetHeight - window.innerHeight;
-        const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
+        let ticking = false;
 
-        // Pack: scale down, rotate, move up, fade out, blur
-        if (progress < 0.5) {
-            const packProgress = progress * 2; // 0 to 1 over first half of scroll
-            const scale = 1 - (packProgress * 0.5);
-            const rotate = packProgress * 25;
-            const translateY = packProgress * -35;
-            const opacity = 1 - (packProgress * 1.5);
-            const blur = packProgress * 6;
+        function updateHero() {
+            const rect = hero.getBoundingClientRect();
+            const scrollDistance = hero.offsetHeight - window.innerHeight;
+            const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
 
-            heroPack.style.transform = `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}vh)`;
-            heroPack.style.opacity = String(Math.max(opacity, 0));
-            heroPack.style.filter = `drop-shadow(0 30px 50px rgba(0,0,0,0.3)) blur(${blur}px)`;
-        } else {
-            heroPack.style.opacity = '0';
-        }
+            // Pack: scale down, rotate, move up, fade out, blur
+            if (progress < 0.5) {
+                const packProgress = progress * 2; // 0 to 1 over first half of scroll
+                const scale = 1 - (packProgress * 0.5);
+                const rotate = packProgress * 25;
+                const translateY = packProgress * -35;
+                const opacity = 1 - (packProgress * 1.5);
+                const blur = packProgress * 6;
 
-        // Dish: fade in and slight scale
-        if (heroDish) {
-            if (progress > 0.25) {
-                heroDish.classList.add('visible');
+                heroPack.style.transform = `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}vh)`;
+                heroPack.style.opacity = String(Math.max(opacity, 0));
+                heroPack.style.filter = `drop-shadow(0 30px 50px rgba(0,0,0,0.3)) blur(${blur}px)`;
             } else {
-                heroDish.classList.remove('visible');
+                heroPack.style.opacity = '0';
             }
-        }
 
-        // Info: slide up
-        if (heroInfo) {
-            if (progress > 0.45) {
-                heroInfo.classList.add('visible');
-            } else {
-                heroInfo.classList.remove('visible');
+            // Dish: fade in and slight scale
+            if (heroDish) {
+                if (progress > 0.25) {
+                    heroDish.classList.add('visible');
+                } else {
+                    heroDish.classList.remove('visible');
+                }
             }
-        }
 
-        // Scroll hint
-        if (scrollHint) {
-            if (progress > 0.05) {
-                scrollHint.classList.add('hidden');
-            } else {
-                scrollHint.classList.remove('hidden');
+            // Info: slide up
+            if (heroInfo) {
+                if (progress > 0.45) {
+                    heroInfo.classList.add('visible');
+                } else {
+                    heroInfo.classList.remove('visible');
+                }
             }
+
+            // Scroll hint
+            if (scrollHint) {
+                if (progress > 0.05) {
+                    scrollHint.classList.add('hidden');
+                } else {
+                    scrollHint.classList.remove('hidden');
+                }
+            }
+
+            ticking = false;
         }
 
-        ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(updateHero);
-            ticking = true;
-        }
-    });
-
-    updateHero();
-
-    // ==================== NUTRITION TOGGLE ====================
-    const nutritionToggle = document.getElementById('nutritionToggle');
-    const nutritionTable = document.getElementById('nutritionTable');
-
-    if (nutritionToggle && nutritionTable) {
-        // Start open
-        nutritionTable.classList.add('open');
-        nutritionToggle.classList.add('open');
-
-        nutritionToggle.addEventListener('click', () => {
-            nutritionTable.classList.toggle('open');
-            nutritionToggle.classList.toggle('open');
-        });
-    }
-
-    // ==================== SCROLL REVEAL ====================
-    const revealElements = document.querySelectorAll('.reveal');
-
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateHero);
+                ticking = true;
             }
         });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -60px 0px'
-    });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+        updateHero();
+
+        // ==================== NUTRITION TOGGLE ====================
+        const nutritionToggle = document.getElementById('nutritionToggle');
+        const nutritionTable = document.getElementById('nutritionTable');
+
+        if (nutritionToggle && nutritionTable) {
+            // Start open
+            nutritionTable.classList.add('open');
+            nutritionToggle.classList.add('open');
+
+            nutritionToggle.addEventListener('click', () => {
+                nutritionTable.classList.toggle('open');
+                nutritionToggle.classList.toggle('open');
+            });
+        }
+
+        // ==================== SCROLL REVEAL ====================
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    }
+
+    // Initialize on page load
+    initProductPage();
+
+    // Re-initialize after View Transitions navigation
+    document.addEventListener('astro:page-load', initProductPage);
 </script>

@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/burger.png"
     },
     "features": ["100% Plant-Based", "High in Protein", "Perfect for Grilling", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, pea fiber, natural flavoring, spices, salt, vitamin B12",
+    "ingredients": "Water, pea protein (27%), rapeseed oil, pea fiber, natural flavoring, spices, salt, vitamin B12",
     "preparation": "Pan-fry or grill for 3-4 minutes on each side. Serve in a bun with your favorite toppings.",
-    "order": 5
+    "order": 5,
+    "nutrition": {
+        "energy": "725 kJ / 173 kcal",
+        "fat": "8.4 g",
+        "saturates": "0.7 g",
+        "carbs": "4.2 g",
+        "sugars": "1.5 g",
+        "fiber": "5.6 g",
+        "protein": 21,
+        "salt": "0.9 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.0 mg",
+        "ironPct": 21
+    },
+    "cooking": {
+        "time": "6-8 min",
+        "heat": "Medium-High",
+        "servings": "3",
+        "steps": [
+            { "title": "Heat", "description": "Pan or grill, get it hot. A little oil helps." },
+            { "title": "Cook", "description": "3-4 minutes each side. Don't press—keep juices in." },
+            { "title": "Build", "description": "Toast the bun. Stack it high. Make it yours." }
+        ]
+    }
 }

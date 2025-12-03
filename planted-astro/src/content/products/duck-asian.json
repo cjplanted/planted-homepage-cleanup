@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/duck-pdp.png"
     },
     "features": ["100% Plant-Based", "Asian-Inspired", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, Hoisin sauce, five-spice blend, soy sauce, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (24%), rapeseed oil, Hoisin sauce, five-spice blend, soy sauce, natural flavoring, salt, vitamin B12",
     "preparation": "Stir-fry in a hot wok for 4-5 minutes. Serve in bao buns, over noodles, or in an Asian-style bowl with fresh vegetables.",
-    "order": 15
+    "order": 15,
+    "nutrition": {
+        "energy": "668 kJ / 160 kcal",
+        "fat": "7.2 g",
+        "saturates": "0.6 g",
+        "carbs": "5.5 g",
+        "sugars": "3.2 g",
+        "fiber": "5.0 g",
+        "protein": 18,
+        "salt": "1.3 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "2.8 mg",
+        "ironPct": 20
+    },
+    "cooking": {
+        "time": "4-5 min",
+        "heat": "High",
+        "servings": "4-5",
+        "steps": [
+            { "title": "Heat", "description": "Wok on high. Get it smoking hot." },
+            { "title": "Stir-fry", "description": "4-5 minutes. Quick and hot." },
+            { "title": "Serve", "description": "Bao buns, noodles, rice bowls. Go Asian." }
+        ]
+    }
 }

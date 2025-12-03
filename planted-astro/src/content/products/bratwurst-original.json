@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "36% More Protein", "76% Less Saturated Fat", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, sunflower oil, pea fiber, spices, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (24%), sunflower oil, pea fiber, spices, natural flavoring, salt, vitamin B12",
     "preparation": "Grill or pan-fry for 6-8 minutes, turning occasionally until golden brown. Serve with bread, mustard, and your favorite sides.",
-    "order": 13
+    "order": 13,
+    "nutrition": {
+        "energy": "752 kJ / 180 kcal",
+        "fat": "9.8 g",
+        "saturates": "0.9 g",
+        "carbs": "3.5 g",
+        "sugars": "0.8 g",
+        "fiber": "5.2 g",
+        "protein": 20,
+        "salt": "1.4 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.2 mg",
+        "ironPct": 23
+    },
+    "cooking": {
+        "time": "6-8 min",
+        "heat": "Medium",
+        "servings": "2",
+        "steps": [
+            { "title": "Heat", "description": "Grill or pan. Medium heat works best." },
+            { "title": "Cook", "description": "6-8 minutes, turning for even browning." },
+            { "title": "Serve", "description": "Bread, mustard, sauerkraut. Classic." }
+        ]
+    }
 }

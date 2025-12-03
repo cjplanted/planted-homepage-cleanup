@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png"
     },
     "features": ["100% Plant-Based", "Tandoori Spiced", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, tandoori spice blend (cumin, coriander, paprika, garam masala), pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (25%), rapeseed oil, tandoori spice blend (cumin, coriander, paprika, garam masala), pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Grill or pan-fry for 8-10 minutes, turning occasionally. Serve with raita, naan bread, and fresh vegetables.",
-    "order": 17
+    "order": 17,
+    "nutrition": {
+        "energy": "692 kJ / 165 kcal",
+        "fat": "7.8 g",
+        "saturates": "0.6 g",
+        "carbs": "4.5 g",
+        "sugars": "1.8 g",
+        "fiber": "5.2 g",
+        "protein": 19,
+        "salt": "1.1 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.0 mg",
+        "ironPct": 21
+    },
+    "cooking": {
+        "time": "8-10 min",
+        "heat": "Medium",
+        "servings": "2",
+        "steps": [
+            { "title": "Heat", "description": "Grill or pan. Medium heat, don't rush." },
+            { "title": "Cook", "description": "8-10 minutes, turning for even color." },
+            { "title": "Serve", "description": "Raita, naan, fresh salad. Indian feast." }
+        ]
+    }
 }

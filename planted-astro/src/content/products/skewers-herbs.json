@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/skewers-pdp.png"
     },
     "features": ["100% Plant-Based", "Perfect for Grilling", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, lemon zest, herbs, pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (25%), rapeseed oil, lemon zest (2%), herbs (rosemary, thyme, oregano), pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Grill or pan-fry for 8-10 minutes, turning occasionally. Serve with tzatziki, fresh salad, and warm pita bread.",
-    "order": 16
+    "order": 16,
+    "nutrition": {
+        "energy": "688 kJ / 164 kcal",
+        "fat": "7.6 g",
+        "saturates": "0.6 g",
+        "carbs": "4.2 g",
+        "sugars": "1.5 g",
+        "fiber": "5.4 g",
+        "protein": 19,
+        "salt": "1.0 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.0 mg",
+        "ironPct": 21
+    },
+    "cooking": {
+        "time": "8-10 min",
+        "heat": "Medium",
+        "servings": "2-3",
+        "steps": [
+            { "title": "Heat", "description": "Grill or pan. Medium heat works best." },
+            { "title": "Cook", "description": "8-10 minutes, turning for char marks." },
+            { "title": "Serve", "description": "Tzatziki, pita, salad. Mediterranean vibes." }
+        ]
+    }
 }

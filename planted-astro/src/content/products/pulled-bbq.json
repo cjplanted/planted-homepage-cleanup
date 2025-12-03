@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-pulled.jpg"
     },
     "features": ["100% Plant-Based", "Smoky BBQ Flavor", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, sunflower protein, pea protein, rapeseed oil, BBQ sauce (tomatoes, smoked paprika, molasses), natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, sunflower protein (20%), pea protein, rapeseed oil, BBQ sauce (tomatoes, smoked paprika, molasses), natural flavoring, salt, vitamin B12",
     "preparation": "Heat in a pan for 3-4 minutes until warmed through. Perfect for tacos, burgers, sandwiches, or served over rice.",
-    "order": 9
+    "order": 9,
+    "nutrition": {
+        "energy": "598 kJ / 143 kcal",
+        "fat": "5.8 g",
+        "saturates": "0.5 g",
+        "carbs": "6.2 g",
+        "sugars": "4.1 g",
+        "fiber": "4.8 g",
+        "protein": 17,
+        "salt": "1.2 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "2.8 mg",
+        "ironPct": 20
+    },
+    "cooking": {
+        "time": "3-4 min",
+        "heat": "Medium",
+        "servings": "3-4",
+        "steps": [
+            { "title": "Heat", "description": "Pan on medium. Already sauced and ready." },
+            { "title": "Warm", "description": "3-4 minutes, stirring occasionally." },
+            { "title": "Serve", "description": "Tacos, burgers, bowls—anywhere you want BBQ." }
+        ]
+    }
 }

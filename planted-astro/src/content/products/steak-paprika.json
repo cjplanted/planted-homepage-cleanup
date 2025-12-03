@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/paprika-test-2.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "Quick to Cook", "Source of Vitamin B12"],
-    "ingredients": "Water, soy protein, rapeseed oil, paprika, natural flavoring, spices, salt, vitamin B12",
+    "ingredients": "Water, soy protein (31%), rapeseed oil, paprika (2%), natural flavoring, spices, salt, vitamin B12",
     "preparation": "Pan-fry for 2 minutes on each side until heated through. The thinner cut means faster cooking - perfect for busy weeknights.",
-    "order": 7
+    "order": 7,
+    "nutrition": {
+        "energy": "735 kJ / 176 kcal",
+        "fat": "8.5 g",
+        "saturates": "0.8 g",
+        "carbs": "5.2 g",
+        "sugars": "2.3 g",
+        "fiber": "5.4 g",
+        "protein": 23,
+        "salt": "1.1 g",
+        "vitaminB12": "1.8 µg",
+        "vitaminB12Pct": 72,
+        "iron": "3.6 mg",
+        "ironPct": 26
+    },
+    "cooking": {
+        "time": "4-5 min",
+        "heat": "High",
+        "servings": "2-3",
+        "steps": [
+            { "title": "Unwrap", "description": "Pre-marinated with paprika. Ready for the pan." },
+            { "title": "Heat", "description": "Hot pan, little oil. High heat works best." },
+            { "title": "Sear", "description": "2 minutes each side. Watch the spices caramelize." }
+        ]
+    }
 }

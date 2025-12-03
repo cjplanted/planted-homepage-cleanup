@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-classic.png"
     },
     "features": ["100% Plant-Based", "Intense Umami", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, soy protein, rapeseed oil, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, soy protein (32%), rapeseed oil, natural flavoring, salt, vitamin B12",
     "preparation": "Stir-fry for 3-4 minutes or add to stews and let simmer. Perfect for Asian-style dishes, stroganoff, or grain bowls.",
-    "order": 18
+    "order": 18,
+    "nutrition": {
+        "energy": "728 kJ / 174 kcal",
+        "fat": "8.3 g",
+        "saturates": "0.7 g",
+        "carbs": "4.5 g",
+        "sugars": "1.9 g",
+        "fiber": "5.5 g",
+        "protein": 23,
+        "salt": "0.9 g",
+        "vitaminB12": "1.8 µg",
+        "vitaminB12Pct": 72,
+        "iron": "3.6 mg",
+        "ironPct": 26
+    },
+    "cooking": {
+        "time": "3-4 min",
+        "heat": "High",
+        "servings": "2-3",
+        "steps": [
+            { "title": "Heat", "description": "Hot pan or wok. High heat for the sear." },
+            { "title": "Cook", "description": "3-4 minutes. Golden on all sides." },
+            { "title": "Serve", "description": "Stir-fry, stew, bowl. Endless possibilities." }
+        ]
+    }
 }

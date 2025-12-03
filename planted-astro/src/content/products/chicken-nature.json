@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "High in Protein", "Source of Fiber", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (28%), rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Pan-fry in a little oil for 3-4 minutes on each side until golden brown. Perfect with vegetables, in salads, or as the star of your favorite dish.",
-    "order": 1
+    "order": 1,
+    "nutrition": {
+        "energy": "695 kJ / 166 kcal",
+        "fat": "7.8 g",
+        "saturates": "0.6 g",
+        "carbs": "3.8 g",
+        "sugars": "1.2 g",
+        "fiber": "6.2 g",
+        "protein": 21,
+        "salt": "0.9 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.2 mg",
+        "ironPct": 23
+    },
+    "cooking": {
+        "time": "6-8 min",
+        "heat": "Medium-High",
+        "servings": "3-4",
+        "steps": [
+            { "title": "Season", "description": "Your blank canvas. Go wild or keep it simple with salt & pepper." },
+            { "title": "Heat", "description": "Oil in pan. Get it hot. Don't be shy — high heat is your friend." },
+            { "title": "Cook", "description": "Golden brown on all sides. 3-4 minutes per side. Done." }
+        ]
+    }
 }

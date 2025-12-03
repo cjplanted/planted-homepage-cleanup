@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/schnitzel.png"
     },
     "features": ["100% Plant-Based", "Crispy Coating", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, wheat flour, breadcrumbs, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (20%), wheat flour, breadcrumbs, rapeseed oil, pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Pan-fry in oil for 3-4 minutes on each side until golden and crispy. Serve with lemon wedges, potato salad, and lingonberry jam.",
-    "order": 11
+    "order": 11,
+    "nutrition": {
+        "energy": "820 kJ / 196 kcal",
+        "fat": "10.5 g",
+        "saturates": "1.0 g",
+        "carbs": "12.8 g",
+        "sugars": "1.5 g",
+        "fiber": "3.8 g",
+        "protein": 14,
+        "salt": "1.0 g",
+        "vitaminB12": "1.2 µg",
+        "vitaminB12Pct": 48,
+        "iron": "2.2 mg",
+        "ironPct": 16
+    },
+    "cooking": {
+        "time": "6-8 min",
+        "heat": "Medium-High",
+        "servings": "2",
+        "steps": [
+            { "title": "Heat", "description": "Generous oil in pan. Get it properly hot." },
+            { "title": "Fry", "description": "3-4 minutes each side. Golden perfection." },
+            { "title": "Serve", "description": "Classic style: lemon, potato salad, lingonberries." }
+        ]
+    }
 }

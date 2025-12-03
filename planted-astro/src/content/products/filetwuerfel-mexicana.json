@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/filetwuerfel-mexicana.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "Mexican-Inspired", "Made in Switzerland"],
-    "ingredients": "Water, soy protein, rapeseed oil, Mexican spice blend (cumin, chili, oregano, garlic), natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, soy protein (30%), rapeseed oil, Mexican spice blend (cumin, chili, oregano, garlic), natural flavoring, salt, vitamin B12",
     "preparation": "Pan-fry for 3-4 minutes with sliced peppers and onions. Serve in warm tortillas with salsa, guacamole, and sour cream.",
-    "order": 19
+    "order": 19,
+    "nutrition": {
+        "energy": "715 kJ / 171 kcal",
+        "fat": "8.0 g",
+        "saturates": "0.7 g",
+        "carbs": "5.0 g",
+        "sugars": "2.2 g",
+        "fiber": "5.3 g",
+        "protein": 22,
+        "salt": "1.1 g",
+        "vitaminB12": "1.8 µg",
+        "vitaminB12Pct": 72,
+        "iron": "3.5 mg",
+        "ironPct": 25
+    },
+    "cooking": {
+        "time": "3-4 min",
+        "heat": "High",
+        "servings": "2-3",
+        "steps": [
+            { "title": "Prep", "description": "Slice peppers and onions. Get the tortillas ready." },
+            { "title": "Fry", "description": "Hot pan, 3-4 min with veggies. Quick and hot." },
+            { "title": "Serve", "description": "Warm tortillas, salsa, guac. Fajita night." }
+        ]
+    }
 }

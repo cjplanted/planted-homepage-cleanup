@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "Crispy Texture", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, spices (cumin, coriander, paprika), pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (25%), rapeseed oil, spices (cumin, coriander, paprika), pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Pan-fry for 4-5 minutes until crispy and heated through. Serve in wraps, pitas, or over salad with your favorite sauces.",
-    "order": 8
+    "order": 8,
+    "nutrition": {
+        "energy": "685 kJ / 164 kcal",
+        "fat": "7.5 g",
+        "saturates": "0.6 g",
+        "carbs": "4.8 g",
+        "sugars": "1.6 g",
+        "fiber": "5.4 g",
+        "protein": 19,
+        "salt": "1.0 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.0 mg",
+        "ironPct": 21
+    },
+    "cooking": {
+        "time": "4-5 min",
+        "heat": "Medium-High",
+        "servings": "3-4",
+        "steps": [
+            { "title": "Heat", "description": "Hot pan with a splash of oil." },
+            { "title": "Fry", "description": "4-5 minutes until crispy edges form." },
+            { "title": "Load", "description": "Pita, wrap, or bowl. All the toppings. All the sauce." }
+        ]
+    }
 }

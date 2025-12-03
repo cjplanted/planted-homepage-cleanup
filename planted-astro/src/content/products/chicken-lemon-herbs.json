@@ -14,7 +14,31 @@
         "dish": "https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-chicken.png"
     },
     "features": ["100% Plant-Based", "Pre-Marinated", "High in Protein", "Made in Switzerland"],
-    "ingredients": "Water, pea protein, rapeseed oil, lemon zest, herbs (parsley, thyme, rosemary), pea fiber, natural flavoring, salt, vitamin B12",
+    "ingredients": "Water, pea protein (26%), rapeseed oil, lemon zest (2%), herbs (parsley, thyme, rosemary), pea fiber, natural flavoring, salt, vitamin B12",
     "preparation": "Pan-fry for 3-4 minutes on each side. Serve with pasta, in salads, or alongside roasted vegetables.",
-    "order": 2
+    "order": 2,
+    "nutrition": {
+        "energy": "702 kJ / 168 kcal",
+        "fat": "8.0 g",
+        "saturates": "0.6 g",
+        "carbs": "4.1 g",
+        "sugars": "1.4 g",
+        "fiber": "5.9 g",
+        "protein": 20,
+        "salt": "1.0 g",
+        "vitaminB12": "1.5 µg",
+        "vitaminB12Pct": 60,
+        "iron": "3.0 mg",
+        "ironPct": 21
+    },
+    "cooking": {
+        "time": "6-8 min",
+        "heat": "Medium-High",
+        "servings": "3-4",
+        "steps": [
+            { "title": "Unwrap", "description": "Pre-marinated with lemon & herbs. No prep needed." },
+            { "title": "Heat", "description": "Hot pan with a splash of oil. Medium-high heat." },
+            { "title": "Cook", "description": "3-4 minutes each side. Squeeze fresh lemon on top." }
+        ]
+    }
 }
