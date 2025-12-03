@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Section | Planted</title>
+    
+    <style>
+        @font-face {
+            font-family: 'VC Henrietta';
+            src: url('VCHenriettaCondensed-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Galano Grotesque';
+            src: url('GalanoGrotesque-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Galano Grotesque';
+            src: url('GalanoGrotesque-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-display: swap;
+        }
+        
+        :root {
+            --purple: #61269E;
+            --purple-dark: #4A1D7A;
+            --green: #6BBF59;
+            --cream: #FDF8F3;
+            --black: #1A1A1A;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Galano Grotesque', -apple-system, sans-serif;
+            background: var(--cream);
+            color: var(--black);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'VC Henrietta', Georgia, serif;
+            font-weight: 700;
+            line-height: 0.95;
+        }
+
+        /* ============================================
+           IMPACT SECTION - Immersive Full-Width
+           ============================================ */
+        
+        .impact {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        /* Background image */
+        .impact-bg {
+            position: absolute;
+            inset: 0;
+        }
+        
+        .impact-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Subtle zoom animation */
+            animation: slowZoom 30s ease-in-out infinite alternate;
+        }
+        
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+        
+        /* Purple gradient overlay */
+        .impact-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(97, 38, 158, 0.65) 0%,
+                rgba(74, 29, 122, 0.8) 50%,
+                rgba(61, 24, 102, 0.9) 100%
+            );
+        }
+        
+        /* Content container */
+        .impact-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        /* Top headline */
+        .impact-headline {
+            font-size: clamp(1.25rem, 3.5vw, 2rem);
+            color: rgba(255,255,255,0.75);
+            font-weight: 400;
+            font-family: 'Galano Grotesque', sans-serif;
+            margin-bottom: 3.5rem;
+            letter-spacing: 0.02em;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 0.8s ease forwards;
+            animation-delay: 0.2s;
+        }
+        
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats row */
+        .impact-stats {
+            display: flex;
+            justify-content: center;
+            gap: clamp(2.5rem, 8vw, 6rem);
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .impact-stat {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .impact-stat:nth-child(1) { animation-delay: 0.4s; }
+        .impact-stat:nth-child(2) { animation-delay: 0.55s; }
+        .impact-stat:nth-child(3) { animation-delay: 0.7s; }
+        
+        /* The big numbers */
+        .impact-stat-value {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(5rem, 18vw, 12rem);
+            color: white;
+            line-height: 0.8;
+            letter-spacing: -0.03em;
+            text-shadow: 
+                0 4px 0 rgba(0,0,0,0.05),
+                0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        /* Green percent sign */
+        .impact-stat-value span {
+            color: var(--green);
+            text-shadow: 
+                0 0 40px rgba(107, 191, 89, 0.4),
+                0 4px 0 rgba(0,0,0,0.05);
+        }
+        
+        /* Labels below numbers */
+        .impact-stat-label {
+            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Tagline */
+        .impact-tagline {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
+            color: white;
+            margin-bottom: 0.75rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 0.8s ease forwards;
+            animation-delay: 0.9s;
+        }
+        
+        /* Source text */
+        .impact-source {
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            color: rgba(255,255,255,0.4);
+            font-style: italic;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease forwards;
+            animation-delay: 1s;
+        }
+        
+        /* CTA Button */
+        .impact-cta {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 0.8s ease forwards;
+            animation-delay: 1.1s;
+        }
+        
+        .impact-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--green);
+            color: var(--black);
+            padding: 1.15rem 2.5rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(107, 191, 89, 0.3);
+        }
+        
+        .impact-cta a:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(107, 191, 89, 0.4);
+        }
+        
+        .impact-cta a svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+        
+        .impact-cta a:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        
+        @media (max-width: 600px) {
+            .impact-stats {
+                gap: 2rem;
+            }
+            
+            .impact-stat-value {
+                font-size: clamp(4rem, 22vw, 6rem);
+            }
+            
+            .impact-content {
+                padding: 4rem 1.5rem;
+            }
+        }
+        
+        /* For very small screens, stack stats vertically */
+        @media (max-width: 400px) {
+            .impact-stats {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         IMPACT SECTION - Immersive Full-Width
+         
+         Image: Swiss Alps / Mountain landscape
+         This creates an emotional connection to 
+         Switzerland (where Planted is made) and 
+         represents the clean, natural environment
+         their products help protect.
+         ============================================ -->
+    
+    <section class="impact">
+        <!-- Background: Mountain landscape at sunrise -->
+        <div class="impact-bg">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80" alt="Mountain landscape with morning mist">
+            
+            <!-- 
+            ALTERNATIVE IMAGES TO CONSIDER:
+            
+            Swiss Alps with lake:
+            https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1800&q=80
+            
+            Golden pea field:
+            https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1800&q=80
+            
+            Forest with light rays:
+            https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1800&q=80
+            
+            Aerial farmland:
+            https://images.unsplash.com/photo-1500076656116-558758c991c1?w=1800&q=80
+            -->
+        </div>
+        
+        <div class="impact-content">
+            <!-- Top headline -->
+            <h2 class="impact-headline">Every bite makes a difference</h2>
+            
+            <!-- The big stats -->
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-stat-value">97<span>%</span></div>
+                    <div class="impact-stat-label">Less CO₂</div>
+                </div>
+                
+                <div class="impact-stat">
+                    <div class="impact-stat-value">95<span>%</span></div>
+                    <div class="impact-stat-label">Less Water</div>
+                </div>
+                
+                <div class="impact-stat">
+                    <div class="impact-stat-value">0</div>
+                    <div class="impact-stat-label">Animals</div>
+                </div>
+            </div>
+            
+            <!-- Brand tagline -->
+            <p class="impact-tagline">Same experience. Better meat.</p>
+            
+            <!-- Source citation -->
+            <p class="impact-source">Compared to conventional beef. Verified by independent LCA.</p>
+            
+            <!-- Call to action -->
+            <div class="impact-cta">
+                <a href="/pages/sustainability">
+                    Explore our impact
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

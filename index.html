@@ -702,62 +702,206 @@
         }
         
         /* ============================================
-           IMPACT SECTION - Planted Style
+           IMPACT SECTION - Immersive Full-Width
            ============================================ */
+
         .impact {
-            background: var(--planted-green);
-            padding: 6rem 1.5rem;
-            text-align: center;
             position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
-        
-        .impact h2 {
-            font-family: 'VC Henrietta', serif;
-            font-size: clamp(1.6rem, 5vw, 2.8rem);
-            color: var(--planted-black);
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-            font-style: italic;
-            font-weight: 700;
+
+        /* Background image */
+        .impact-bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .impact-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Subtle zoom animation */
+            animation: slowZoom 30s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* Purple gradient overlay */
+        .impact-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(97, 38, 158, 0.65) 0%,
+                rgba(74, 29, 122, 0.8) 50%,
+                rgba(61, 24, 102, 0.9) 100%
+            );
+        }
+
+        /* Content container */
+        .impact-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Top headline */
+        .impact-headline {
+            font-size: clamp(1.25rem, 3.5vw, 2rem);
+            color: rgba(255,255,255,0.75);
+            font-weight: 400;
+            font-family: 'Galano Grotesque', sans-serif;
+            margin-bottom: 3.5rem;
             letter-spacing: 0.02em;
+            opacity: 0;
+            transform: translateY(20px);
         }
-        
+
+        .impact-headline.active {
+            animation: impactFadeSlideUp 0.8s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes impactFadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats row */
         .impact-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: clamp(2.5rem, 8vw, 6rem);
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
         }
-        
-        .stat {
-            padding: 0.5rem;
+
+        .impact-stat {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
         }
-        
-        .stat-value {
+
+        .impact-stat.active {
+            animation: impactFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .impact-stat.active:nth-child(1) { animation-delay: 0.4s; }
+        .impact-stat.active:nth-child(2) { animation-delay: 0.55s; }
+        .impact-stat.active:nth-child(3) { animation-delay: 0.7s; }
+
+        /* The big numbers */
+        .impact-stat-value {
             font-family: 'VC Henrietta', serif;
-            font-size: clamp(3rem, 12vw, 5.5rem);
-            font-weight: 700;
-            color: var(--planted-black);
-            line-height: 1;
+            font-size: clamp(5rem, 18vw, 12rem);
+            color: white;
+            line-height: 0.8;
+            letter-spacing: -0.03em;
+            text-shadow:
+                0 4px 0 rgba(0,0,0,0.05),
+                0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
         }
-        
-        .stat-label {
-            color: var(--planted-black);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
+
+        /* Green percent sign */
+        .impact-stat-value span {
+            color: var(--planted-green);
+            text-shadow:
+                0 0 40px rgba(107, 191, 89, 0.4),
+                0 4px 0 rgba(0,0,0,0.05);
+        }
+
+        /* Labels below numbers */
+        .impact-stat-label {
+            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.75rem;
+            font-weight: 600;
         }
-        
-        .impact-note {
-            margin-top: 3rem;
-            font-size: 1rem;
-            color: var(--planted-black);
+
+        /* Tagline */
+        .impact-tagline {
+            font-family: 'VC Henrietta', serif;
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
+            color: white;
+            margin-bottom: 0.75rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .impact-tagline.active {
+            animation: impactFadeSlideUp 0.8s ease forwards;
+            animation-delay: 0.9s;
+        }
+
+        /* Source text */
+        .impact-source {
+            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            color: rgba(255,255,255,0.4);
             font-style: italic;
-            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+        }
+
+        .impact-source.active {
+            animation: impactFadeSlideUp 0.8s ease forwards;
+            animation-delay: 1s;
+        }
+
+        /* CTA Button */
+        .impact-cta {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .impact-cta.active {
+            animation: impactFadeSlideUp 0.8s ease forwards;
+            animation-delay: 1.1s;
+        }
+
+        .impact-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--planted-green);
+            color: var(--planted-black);
+            padding: 1.15rem 2.5rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(107, 191, 89, 0.3);
+        }
+
+        .impact-cta a:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(107, 191, 89, 0.4);
+        }
+
+        .impact-cta a svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .impact-cta a:hover svg {
+            transform: translateX(4px);
         }
         
         /* ============================================
@@ -1156,6 +1300,30 @@
         /* ============================================
            RESPONSIVE
            ============================================ */
+
+        /* Impact section mobile responsive */
+        @media (max-width: 600px) {
+            .impact-stats {
+                gap: 2rem;
+            }
+
+            .impact-stat-value {
+                font-size: clamp(4rem, 22vw, 6rem);
+            }
+
+            .impact-content {
+                padding: 4rem 1.5rem;
+            }
+        }
+
+        /* For very small screens, stack stats vertically */
+        @media (max-width: 400px) {
+            .impact-stats {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+        }
+
         @media (min-width: 640px) {
             .products-scroll {
                 gap: 1.5rem;
@@ -1297,13 +1465,7 @@
                 font-size: 3.5rem;
             }
             
-            .impact {
-                padding: 8rem 5rem;
-            }
-            
-            .impact-stats {
-                max-width: 900px;
-            }
+            /* Impact section is full-width immersive - no padding changes needed */
             
             .recipes {
                 padding: 8rem 0;
@@ -1397,13 +1559,9 @@
                 flex: 0 0 380px;
             }
             
-            .impact-stats {
-                max-width: 1000px;
-                gap: 4rem;
-            }
-            
-            .stat-value {
-                font-size: 6rem;
+            /* Impact section ultra-wide adjustments */
+            .impact-stat-value {
+                font-size: clamp(8rem, 15vw, 14rem);
             }
             
             .recipes-header {
@@ -1699,25 +1857,59 @@
     </section>
 
     <!-- ============================================
-         IMPACT SECTION
+         IMPACT SECTION - Immersive Full-Width
+
+         Image: Swiss Alps / Mountain landscape
+         This creates an emotional connection to
+         Switzerland (where Planted is made) and
+         represents the clean, natural environment
+         their products help protect.
          ============================================ -->
+
     <section class="impact" id="impact">
-        <h2 class="reveal">Every bite makes a difference</h2>
-        <div class="impact-stats">
-            <div class="stat reveal reveal-delay-1">
-                <div class="stat-value" data-count="97">0%</div>
-                <div class="stat-label">Less CO₂</div>
+        <!-- Background: Mountain landscape at sunrise -->
+        <div class="impact-bg">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80" alt="Mountain landscape with morning mist">
+        </div>
+
+        <div class="impact-content">
+            <!-- Top headline -->
+            <h2 class="impact-headline">Every bite makes a difference</h2>
+
+            <!-- The big stats -->
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-stat-value" data-count="97">0<span>%</span></div>
+                    <div class="impact-stat-label">Less CO₂</div>
+                </div>
+
+                <div class="impact-stat">
+                    <div class="impact-stat-value" data-count="95">0<span>%</span></div>
+                    <div class="impact-stat-label">Less Water</div>
+                </div>
+
+                <div class="impact-stat">
+                    <div class="impact-stat-value" data-count="0">0</div>
+                    <div class="impact-stat-label">Animals</div>
+                </div>
             </div>
-            <div class="stat reveal reveal-delay-2">
-                <div class="stat-value" data-count="95">0%</div>
-                <div class="stat-label">Less Water</div>
-            </div>
-            <div class="stat reveal reveal-delay-3">
-                <div class="stat-value" data-count="0">0</div>
-                <div class="stat-label">Animals</div>
+
+            <!-- Brand tagline -->
+            <p class="impact-tagline">Same experience. Better meat.</p>
+
+            <!-- Source citation -->
+            <p class="impact-source">Compared to conventional beef. Verified by independent LCA.</p>
+
+            <!-- Call to action -->
+            <div class="impact-cta">
+                <a href="our-story.html">
+                    Explore our impact
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
-        <p class="impact-note reveal">Compared to conventional beef. Verified by independent LCA.</p>
     </section>
 
     <!-- ============================================
@@ -2002,50 +2194,57 @@
         revealElements.forEach(el => revealObserver.observe(el));
         
         // ============================================
-        // COUNTER ANIMATION FOR STATS
+        // IMPACT SECTION ANIMATIONS
         // ============================================
-        const statValues = document.querySelectorAll('.stat-value[data-count]');
-        let statsAnimated = false;
-        
-        const statsObserver = new IntersectionObserver((entries) => {
+        const impactSection = document.getElementById('impact');
+        const impactElements = document.querySelectorAll('.impact-headline, .impact-stat, .impact-tagline, .impact-source, .impact-cta');
+        const statValues = document.querySelectorAll('.impact-stat-value[data-count]');
+        let impactAnimated = false;
+
+        const impactObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !statsAnimated) {
-                    statsAnimated = true;
+                if (entry.isIntersecting && !impactAnimated) {
+                    impactAnimated = true;
+                    // Trigger all impact animations
+                    impactElements.forEach(el => el.classList.add('active'));
+                    // Animate counters
                     animateCounters();
                 }
             });
-        }, { threshold: 0.5 });
-        
-        const impactSection = document.getElementById('impact');
+        }, { threshold: 0.3 });
+
         if (impactSection) {
-            statsObserver.observe(impactSection);
+            impactObserver.observe(impactSection);
         }
-        
+
         function animateCounters() {
             statValues.forEach(stat => {
                 const target = parseInt(stat.dataset.count);
                 const duration = 1500;
                 const start = performance.now();
-                
+                const hasPercent = stat.querySelector('span') !== null;
+
                 function updateCounter(currentTime) {
                     const elapsed = currentTime - start;
                     const progress = Math.min(elapsed / duration, 1);
-                    
+
                     // Easing function (ease-out)
                     const easeOut = 1 - Math.pow(1 - progress, 3);
                     const current = Math.round(easeOut * target);
-                    
+
                     if (target === 0) {
                         stat.textContent = '0';
+                    } else if (hasPercent) {
+                        stat.innerHTML = current + '<span>%</span>';
                     } else {
                         stat.textContent = current + '%';
                     }
-                    
+
                     if (progress < 1) {
                         requestAnimationFrame(updateCounter);
                     }
                 }
-                
+
                 requestAnimationFrame(updateCounter);
             });
         }
