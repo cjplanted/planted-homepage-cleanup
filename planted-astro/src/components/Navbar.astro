@@ -445,66 +445,110 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
 </style>
 
 <script>
+    // Use a flag to prevent duplicate initialization
+    let navbarInitialized = false;
+
     function initNavbar() {
-        // Cache DOM elements
+        // Get fresh DOM references every time
         const nav = document.getElementById('nav');
         const menu = document.getElementById('navMenu');
         const navToggle = document.getElementById('navToggle');
         const closeMenu = document.getElementById('closeMenu');
         const countrySelector = document.getElementById('countrySelector');
         const countryBtn = document.getElementById('countryBtn');
-        const menuLinks = document.querySelectorAll('.nav-menu > a');
+        const countryDropdown = document.getElementById('countryDropdown');
+
+        if (!nav) return;
 
         // Mobile menu toggle
         function toggleMenu() {
-            menu?.classList.toggle('open');
-            document.body.style.overflow = menu?.classList.contains('open') ? 'hidden' : '';
+            if (menu) {
+                menu.classList.toggle('open');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+            }
         }
 
-        navToggle?.addEventListener('click', toggleMenu);
-        closeMenu?.addEventListener('click', toggleMenu);
-        menuLinks.forEach(link => link.addEventListener('click', toggleMenu));
-
-        // Country selector toggle
-        countryBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            countrySelector?.classList.toggle('open');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!countrySelector?.contains(e.target as Node)) {
-                countrySelector?.classList.remove('open');
-            }
-        });
-
-        // Throttled scroll handler using requestAnimationFrame
-        let lastScrollY = 0;
-        let ticking = false;
-        const scrollThreshold = 50;
-
-        function updateNav() {
-            const scrollY = window.scrollY;
-
-            // Add scrolled class for background
-            nav?.classList.toggle('scrolled', scrollY > 50);
-
-            // Hide/show nav based on scroll direction
-            if (scrollY > scrollThreshold) {
-                nav?.classList.toggle('hidden', scrollY > lastScrollY);
-            } else {
-                nav?.classList.remove('hidden');
-            }
-
-            lastScrollY = scrollY;
-            ticking = false;
+        function closeCountryDropdown() {
+            countrySelector?.classList.remove('open');
         }
 
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateNav);
-                ticking = true;
+        // Remove old listeners by cloning (clean slate approach for elements that persist)
+        if (navToggle) {
+            const newNavToggle = navToggle.cloneNode(true);
+            navToggle.parentNode?.replaceChild(newNavToggle, navToggle);
+            newNavToggle.addEventListener('click', toggleMenu);
+        }
+
+        if (closeMenu) {
+            const newCloseMenu = closeMenu.cloneNode(true);
+            closeMenu.parentNode?.replaceChild(newCloseMenu, closeMenu);
+            newCloseMenu.addEventListener('click', toggleMenu);
+        }
+
+        // Country selector - clone to remove old listeners
+        if (countryBtn) {
+            const newCountryBtn = countryBtn.cloneNode(true) as HTMLElement;
+            countryBtn.parentNode?.replaceChild(newCountryBtn, countryBtn);
+
+            newCountryBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                countrySelector?.classList.toggle('open');
+            });
+        }
+
+        // Close menu links
+        document.querySelectorAll('.nav-menu > a').forEach(link => {
+            link.addEventListener('click', toggleMenu, { once: true });
+        });
+
+        // Only add document click listener once
+        if (!navbarInitialized) {
+            document.addEventListener('click', (e) => {
+                const target = e.target as Element;
+                const selector = document.getElementById('countrySelector');
+                if (selector && !selector.contains(target)) {
+                    selector.classList.remove('open');
+                }
+            });
+
+            // Throttled scroll handler
+            let lastScrollY = 0;
+            let ticking = false;
+            const scrollThreshold = 50;
+
+            function updateNav() {
+                const currentNav = document.getElementById('nav');
+                if (!currentNav) {
+                    ticking = false;
+                    return;
+                }
+
+                const scrollY = window.scrollY;
+
+                // Add scrolled class for background
+                currentNav.classList.toggle('scrolled', scrollY > 50);
+
+                // Hide/show nav based on scroll direction
+                if (scrollY > scrollThreshold) {
+                    currentNav.classList.toggle('hidden', scrollY > lastScrollY);
+                } else {
+                    currentNav.classList.remove('hidden');
+                }
+
+                lastScrollY = scrollY;
+                ticking = false;
             }
-        }, { passive: true });
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateNav);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            navbarInitialized = true;
+        }
     }
 
     // Initialize on page load
