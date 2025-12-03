@@ -13,12 +13,6 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
-// Get related products (same category, excluding current)
-const allProducts = await getCollection('products');
-const relatedProducts = allProducts
-    .filter(p => p.data.category === product.data.category && p.data.slug !== product.data.slug)
-    .slice(0, 3);
-
 // Get recipes that might feature this product
 const recipes = await getCollection('recipes');
 const productRecipes = recipes
@@ -57,27 +51,16 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
 ---
 
 <Layout title={`${product.data.name} ${product.data.variant} – Planted`} currentPage="products">
-    <!-- Hero Section - Pack to Plate Animation -->
+    <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero-sticky">
             <!-- Animated gradient background -->
-            <div class="hero-bg" id="heroBg"></div>
+            <div class="hero-bg"></div>
 
-            <!-- Floating particles -->
-            <div class="hero-particles" id="heroParticles">
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-                <span class="particle"></span>
-            </div>
-
-            <!-- Dish image (hidden initially, fades in on scroll) -->
+            <!-- Dish photo (hidden initially, fades in on scroll) -->
             {product.data.images.dish && (
                 <div class="hero-dish" id="heroDish">
                     <img src={product.data.images.dish} alt={`Delicious ${product.data.name} dish`} loading="eager">
-                    <div class="dish-steam"></div>
                 </div>
             )}
 
@@ -87,57 +70,46 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
                 <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant} packaging`} loading="eager">
             </div>
 
-            <!-- The BIG protein stat - THIS SHOULD SLAP -->
-            <div class="hero-protein" id="heroProtein">
-                <span class="hero-protein-value">
-                    <span class="num" data-count="17">0</span><span class="unit">g</span>
-                </span>
-                <span class="hero-protein-label">Protein per 100g</span>
-            </div>
-
-            <!-- Product info (appears after scroll) -->
+            <!-- Product info (hidden initially, slides up on scroll) -->
             <div class="hero-info" id="heroInfo">
                 <div class="hero-text">
-                    <h1 class="product-title">{product.data.name}</h1>
-                    <p class="product-variant">{product.data.variant}</p>
+                    <h1>{product.data.name}</h1>
+                    <p class="variant">{product.data.variant} — {product.data.description}</p>
+                </div>
+                <div class="hero-protein">
+                    <div class="protein-number">
+                        <span class="value">17</span><span class="unit">g</span>
+                    </div>
+                    <div class="protein-label">Protein per 100g</div>
                 </div>
             </div>
 
-            <!-- Scroll hint -->
+            <!-- Scroll indicator -->
             <div class="scroll-hint" id="scrollHint">
-                <div class="scroll-line"></div>
-                <span>Scroll to discover</span>
+                <span>Scroll</span>
+                <div class="arrow"></div>
             </div>
         </div>
     </section>
 
-    <!-- Quick Stats Bar -->
-    <section class="stats" id="statsSection">
+    <!-- Stats Bar - Fiber, B12, Iron, Animals ONLY -->
+    <section class="stats">
         <div class="stats-grid">
-            <div class="stat reveal-stat" style="--delay: 0">
-                <span class="stat-icon">💪</span>
-                <span class="stat-value" data-count="17">0</span>
-                <span class="stat-unit">g</span>
-                <span class="stat-label">Protein</span>
+            <div class="stat">
+                <div class="stat-value">5.7g</div>
+                <div class="stat-label">Fiber</div>
             </div>
-            <div class="stat reveal-stat" style="--delay: 1">
-                <span class="stat-icon">🌿</span>
-                <span class="stat-value">{ingredientsList.length}</span>
-                <span class="stat-unit"></span>
-                <span class="stat-label">Ingredients</span>
+            <div class="stat">
+                <div class="stat-value">72%</div>
+                <div class="stat-label">Vitamin B12</div>
             </div>
-            <div class="stat reveal-stat" style="--delay: 2">
-                <span class="stat-icon">🌍</span>
-                <span class="stat-value" data-count="77">0</span>
-                <span class="stat-unit">%</span>
-                <span class="stat-label">Less CO₂</span>
+            <div class="stat">
+                <div class="stat-value">27%</div>
+                <div class="stat-label">Iron</div>
             </div>
-            <div class="stat zero reveal-stat" style="--delay: 3">
-                <span class="stat-icon">🌱</span>
-                <span class="stat-value">0</span>
-                <span class="stat-unit"></span>
-                <span class="stat-label">Animals</span>
-                <span class="stat-celebration">🎉</span>
+            <div class="stat highlight">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Animals</div>
             </div>
         </div>
     </section>
@@ -145,98 +117,58 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     <!-- Trust Badges -->
     <section class="trust">
         <div class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.06 13.54L7.4 12l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41-5.64 5.66z"/></svg>
-            <span>B Corp Certified</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+            </svg>
+            B Corp Certified
         </div>
         <div class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            <span>Made in Switzerland</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            Made in Switzerland
         </div>
         <div class="trust-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
-            <span>100% Plant-Based</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+            100% Plant-Based
         </div>
     </section>
 
-    <!-- Ingredients Section -->
-    <section class="ingredients">
-        <div class="ingredients-inner">
-            <h2 class="section-title reveal-up">What's inside</h2>
-
-            <div class="ingredient-pills">
-                {ingredientsList.map((ingredient, index) => (
-                    <div class="pill reveal-up" style={`--delay: ${index * 0.05}s`}>
-                        <span class="pill-text">{ingredient}</span>
-                        {index === 0 && <span class="pill-percent">33%</span>}
-                    </div>
-                ))}
-            </div>
-
-            <div class="ingredient-sticker reveal-up">
-                <span>That's it.</span>
-                <strong>{ingredientsList.length} ingredients.</strong>
-                <span>No weird stuff.</span>
-            </div>
+    <!-- Ingredients -->
+    <section class="ingredients reveal">
+        <h2>What's inside</h2>
+        <div class="pills">
+            {ingredientsList.map((ingredient, i) => (
+                <div class="pill" style={`--delay: ${i * 0.05}s`}>{ingredient}</div>
+            ))}
         </div>
+        <div class="ingredient-note">That's it. {ingredientsList.length} ingredients.</div>
     </section>
 
-    <!-- Nutrition Section -->
+    <!-- Nutrition -->
     <section class="nutrition">
         <div class="nutrition-layout">
-            <!-- Food image on left with parallax -->
-            <div class="nutrition-image" id="nutritionImage">
-                <img src={product.data.images.dish || product.data.images.main} alt={`${product.data.name} prepared dish`}>
-                <div class="nutrition-image-overlay"></div>
+            <div class="nutrition-image">
+                <img src={product.data.images.dish || product.data.images.main} alt={`${product.data.name} close-up`} loading="lazy">
             </div>
-
-            <!-- Nutrition content on right -->
             <div class="nutrition-content">
-                <h2 class="section-title reveal-up">Nutritional values</h2>
-
-                <!-- Key nutrients with custom icons -->
-                <div class="nutrition-highlights reveal-up">
-                    <div class="nutrient-card">
-                        <div class="nutrient-icon protein-icon">
-                            <svg viewBox="0 0 32 32" fill="none"><path d="M16 4c-2 0-4 2-4 4v8c0 2 2 4 4 4s4-2 4-4V8c0-2-2-4-4-4z" stroke="currentColor" stroke-width="2"/><path d="M8 14c0 4.4 3.6 8 8 8s8-3.6 8-8" stroke="currentColor" stroke-width="2"/><path d="M16 26v4M12 28h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </div>
-                        <span class="nutrient-value">17g</span>
-                        <span class="nutrient-label">Protein</span>
-                        <div class="nutrient-bar"><div class="nutrient-bar-fill" style="--width: 85%"></div></div>
-                    </div>
-                    <div class="nutrient-card">
-                        <div class="nutrient-icon fiber-icon">
-                            <svg viewBox="0 0 32 32" fill="none"><path d="M16 28V16M16 16c-4-2-6-6-6-10 0 6 6 10 6 10zM16 16c4-2 6-6 6-10 0 6-6 10-6 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </div>
-                        <span class="nutrient-value">5.7g</span>
-                        <span class="nutrient-label">Fiber</span>
-                        <div class="nutrient-bar"><div class="nutrient-bar-fill" style="--width: 57%"></div></div>
-                    </div>
-                    <div class="nutrient-card">
-                        <div class="nutrient-icon b12-icon">
-                            <svg viewBox="0 0 32 32" fill="none"><polygon points="16,4 20,12 28,14 22,20 24,28 16,24 8,28 10,20 4,14 12,12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-                        </div>
-                        <span class="nutrient-value">72%</span>
-                        <span class="nutrient-label">Vitamin B12*</span>
-                        <div class="nutrient-bar"><div class="nutrient-bar-fill" style="--width: 72%"></div></div>
-                    </div>
-                    <div class="nutrient-card">
-                        <div class="nutrient-icon iron-icon">
-                            <svg viewBox="0 0 32 32" fill="none"><path d="M16 4v8M12 8h8M16 12l-6 14h12l-6-14z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <span class="nutrient-value">27%</span>
-                        <span class="nutrient-label">Iron*</span>
-                        <div class="nutrient-bar"><div class="nutrient-bar-fill" style="--width: 27%"></div></div>
-                    </div>
+                <div class="nutrition-header">
+                    <h2>Nutritional values</h2>
+                    <button class="nutrition-toggle" id="nutritionToggle" aria-label="Toggle nutrition table">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
                 </div>
 
-                <!-- Expandable table -->
-                <div class="nutrition-table-wrapper reveal-up">
-                    <button class="nutrition-toggle" id="nutritionToggle">
-                        <span>Full nutrition info</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                    </button>
-
-                    <div class="nutrition-table" id="nutritionTable">
+                <div class="nutrition-table" id="nutritionTable">
+                    <div class="nutrition-table-inner">
                         <table>
                             <thead>
                                 <tr>
@@ -247,11 +179,11 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
                             <tbody>
                                 <tr><td>Energy</td><td>718 kJ / 172 kcal</td></tr>
                                 <tr><td>Fat</td><td>8.1 g</td></tr>
-                                <tr class="indent"><td>of which saturates</td><td>0.7 g</td></tr>
+                                <tr class="sub"><td>of which saturates</td><td>0.7 g</td></tr>
                                 <tr><td>Carbohydrates</td><td>4.9 g</td></tr>
-                                <tr class="indent"><td>of which sugars</td><td>2.1 g</td></tr>
+                                <tr class="sub"><td>of which sugars</td><td>2.1 g</td></tr>
                                 <tr><td>Fiber</td><td>5.7 g</td></tr>
-                                <tr class="highlight"><td>Protein</td><td>17 g</td></tr>
+                                <tr class="protein-row"><td>Protein</td><td>17 g</td></tr>
                                 <tr><td>Salt</td><td>0.8 g</td></tr>
                                 <tr><td>Vitamin B12</td><td>1.8 µg (72%*)</td></tr>
                                 <tr><td>Iron</td><td>3.8 mg (27%*)</td></tr>
@@ -264,164 +196,85 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         </div>
     </section>
 
-    <!-- Cooking Section -->
+    <!-- Cooking -->
     <section class="cooking">
         <div class="cooking-inner">
-            <h2 class="section-title reveal-up">Cook it your way</h2>
-
-            <div class="cooking-grid">
-                <div class="cook-step reveal-up" style="--delay: 0s">
-                    <div class="cook-step-icon">
-                        <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/><path d="M24 14v10l6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="cook-step-num">1</div>
+            <h2 class="reveal">Cook it your way</h2>
+            <div class="cooking-steps">
+                <div class="step reveal" style="--delay: 0.1s">
+                    <div class="step-num">1</div>
                     <h3>Season</h3>
                     <p>Your blank canvas. Go wild or keep it simple with salt & pepper.</p>
                 </div>
-
-                <div class="cook-step reveal-up" style="--delay: 0.1s">
-                    <div class="cook-step-icon">
-                        <svg viewBox="0 0 48 48" fill="none"><path d="M24 8c-8 0-14 6-14 14 0 10 14 18 14 18s14-8 14-18c0-8-6-14-14-14z" stroke="currentColor" stroke-width="2"/><path d="M20 20c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="2"/></svg>
-                    </div>
-                    <div class="cook-step-num">2</div>
+                <div class="step reveal" style="--delay: 0.2s">
+                    <div class="step-num">2</div>
                     <h3>Heat</h3>
                     <p>Oil in pan. Get it hot. Don't be shy — high heat is your friend.</p>
                 </div>
-
-                <div class="cook-step reveal-up" style="--delay: 0.2s">
-                    <div class="cook-step-icon">
-                        <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="20" width="32" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M14 20v-6a2 2 0 012-2h16a2 2 0 012 2v6" stroke="currentColor" stroke-width="2"/><path d="M18 28h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    </div>
-                    <div class="cook-step-num">3</div>
+                <div class="step reveal" style="--delay: 0.3s">
+                    <div class="step-num">3</div>
                     <h3>Sear</h3>
                     <p>Golden edges. Crispy outside. 3-5 minutes. Done.</p>
                 </div>
             </div>
-
-            <!-- Pro Tip -->
-            <div class="pro-tip reveal-up">
-                <span class="pro-tip-icon">💡</span>
-                <div class="pro-tip-content">
-                    <strong>Pro tip:</strong> Don't move it! Let it sear undisturbed for maximum crispiness.
-                </div>
-            </div>
-
-            <div class="cook-meta reveal-up">
-                <div class="cook-meta-item">
-                    <div class="cook-timer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </div>
+            <div class="cooking-meta reveal">
+                <div class="meta-item">
                     <strong>3-5 min</strong>
                     <span>Cook time</span>
                 </div>
-                <div class="cook-meta-item">
-                    <div class="cook-timer">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                    </div>
+                <div class="meta-item">
                     <strong>High</strong>
                     <span>Heat</span>
                 </div>
-                {product.data.weight && (
-                    <div class="cook-meta-item">
-                        <div class="cook-timer">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                        </div>
-                        <strong>{product.data.weight}</strong>
-                        <span>Pack size</span>
-                    </div>
-                )}
+                <div class="meta-item">
+                    <strong>3-4</strong>
+                    <span>Servings</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Related Recipes Section -->
+    <!-- Recipes -->
     <section class="recipes">
-        <div class="recipes-inner">
-            <div class="recipes-header">
-                <h2 class="section-title reveal-up">Make something amazing</h2>
-                <a href={`${base}/recipes`} class="recipes-link reveal-up">All recipes →</a>
-            </div>
-
-            <div class="recipes-carousel">
-                <div class="recipes-fade recipes-fade-left"></div>
-                <div class="recipes-scroll" id="recipesScroll">
-                    {featuredRecipes.map((recipe, index) => (
-                        <a href={`${base}/recipes/${recipe.data.slug}`} class="recipe-card reveal-up" style={`--delay: ${index * 0.1}s`}>
-                            <div class="recipe-img">
-                                <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
-                                <div class="recipe-overlay">
-                                    <span class="recipe-cta">View Recipe →</span>
-                                </div>
-                            </div>
-                            <div class="recipe-info">
-                                <h3>{recipe.data.title}</h3>
-                                <div class="recipe-meta">
-                                    <span class="recipe-time">⏱ {recipe.data.cookTime} min</span>
-                                    <span class="recipe-difficulty">{recipe.data.difficulty}</span>
-                                </div>
-                            </div>
-                        </a>
-                    ))}
-                </div>
-                <div class="recipes-fade recipes-fade-right"></div>
-            </div>
+        <div class="recipes-header">
+            <h2 class="reveal">Make something</h2>
+            <a href={`${base}recipes`} class="reveal">All recipes →</a>
+        </div>
+        <div class="recipes-scroll">
+            {featuredRecipes.map((recipe) => (
+                <a href={`${base}recipes/${recipe.data.slug}`} class="recipe-card">
+                    <div class="recipe-img">
+                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>{recipe.data.title}</h3>
+                        <span>{recipe.data.cookTime} min · {recipe.data.difficulty}</span>
+                    </div>
+                </a>
+            ))}
         </div>
     </section>
 
-    <!-- More Products Section -->
-    {relatedProducts.length > 0 && (
-        <section class="more-products">
-            <div class="more-inner">
-                <div class="more-header">
-                    <h2 class="section-title reveal-up">More {product.data.category}</h2>
-                    <a href={`${base}/products`} class="more-link reveal-up">All products →</a>
-                </div>
-                <div class="more-grid">
-                    {relatedProducts.map((related, index) => (
-                        <a href={`${base}/products/${related.data.slug}`} class="more-card reveal-up" data-color={related.data.color} style={`--delay: ${index * 0.1}s`}>
-                            <div class="more-image">
-                                <img src={related.data.images.main} alt={`${related.data.name} ${related.data.variant}`}>
-                            </div>
-                            <div class="more-info">
-                                <div class="more-name">{related.data.name}</div>
-                                <div class="more-variant">{related.data.variant}</div>
-                            </div>
-                        </a>
-                    ))}
-                </div>
-            </div>
-        </section>
-    )}
-
-    <!-- CTA Section -->
+    <!-- CTA -->
     <section class="cta">
-        <div class="cta-content">
-            <h2 class="cta-title">Try it.</h2>
-            <p class="cta-subtitle">Find planted near you</p>
-            <div class="cta-buttons">
-                <a href={`${base}/#locator`} class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                    Find a Store
-                </a>
-                <a href={`${base}/products`} class="btn btn-secondary">See All Products</a>
-            </div>
+        <h2>Try it.</h2>
+        <div class="cta-buttons">
+            <a href={`${base}#locator`} class="btn btn-primary">Find planted near you</a>
+            <a href={`${base}products`} class="btn btn-secondary">See all products</a>
         </div>
     </section>
 </Layout>
 
-<style define:vars={{ colorMain: colors.main, colorLight: colors.light, colorDark: colors.dark }}>
-    /* ==================== CSS VARIABLES ==================== */
+<style define:vars={{ mainColor: colors.main, lightColor: colors.light, darkColor: colors.dark }}>
     :root {
-        --transition-fast: 0.15s ease;
-        --transition-medium: 0.3s ease;
-        --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        --transition-enter: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        --purple: #61269E;
+        --purple-dark: #4A1D7A;
+        --green: #6BBF59;
+        --cream: #FDF8F3;
+        --black: #1A1A1A;
     }
 
-    /* ==================== HERO SECTION ==================== */
+    /* ==================== HERO ==================== */
     .hero {
         min-height: 250vh;
         position: relative;
@@ -431,6 +284,7 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         position: sticky;
         top: 0;
         height: 100vh;
+        height: 100dvh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -444,232 +298,117 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         inset: 0;
         background: linear-gradient(
             135deg,
-            var(--colorLight) 0%,
-            var(--colorMain) 35%,
-            var(--colorDark) 70%,
-            var(--colorMain) 100%
+            color-mix(in srgb, var(--mainColor) 100%, white 20%) 0%,
+            var(--mainColor) 30%,
+            var(--darkColor) 70%,
+            color-mix(in srgb, var(--darkColor) 100%, black 20%) 100%
         );
-        background-size: 400% 400%;
-        animation: gradientShift 20s ease infinite;
+        background-size: 200% 200%;
+        animation: gradientMove 12s ease infinite;
     }
 
-    @keyframes gradientShift {
+    @keyframes gradientMove {
         0%, 100% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
     }
 
-    /* Floating particles */
-    .hero-particles {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-    }
-
-    .particle {
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        background: rgba(255,255,255,0.3);
-        border-radius: 50%;
-        animation: particleFloat 15s infinite ease-in-out;
-    }
-
-    .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 12s; }
-    .particle:nth-child(2) { left: 30%; top: 60%; animation-delay: 2s; animation-duration: 18s; }
-    .particle:nth-child(3) { left: 50%; top: 30%; animation-delay: 4s; animation-duration: 14s; }
-    .particle:nth-child(4) { left: 70%; top: 70%; animation-delay: 1s; animation-duration: 16s; }
-    .particle:nth-child(5) { left: 85%; top: 40%; animation-delay: 3s; animation-duration: 20s; }
-    .particle:nth-child(6) { left: 20%; top: 80%; animation-delay: 5s; animation-duration: 13s; }
-
-    @keyframes particleFloat {
-        0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
-        25% { transform: translateY(-30px) translateX(10px) scale(1.2); opacity: 0.5; }
-        50% { transform: translateY(-60px) translateX(-10px) scale(0.8); opacity: 0.4; }
-        75% { transform: translateY(-30px) translateX(20px) scale(1.1); opacity: 0.6; }
-    }
-
-    /* Dish image - circular, smaller, with steam */
-    .hero-dish {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.8);
-        width: clamp(280px, 45vw, 480px);
-        height: clamp(280px, 45vw, 480px);
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.8s ease, transform 1s var(--transition-slow);
-        overflow: hidden;
-        box-shadow:
-            0 30px 60px rgba(0,0,0,0.3),
-            0 0 0 1px rgba(255,255,255,0.1) inset;
-        z-index: 5;
-    }
-
-    .hero-dish img {
-        width: 120%;
-        height: 120%;
-        margin: -10%;
-        object-fit: cover;
-        object-position: center;
-        filter: contrast(1.02) saturate(1.05);
-        transition: transform 0.8s ease;
-    }
-
-    .hero-dish:hover img {
-        transform: scale(1.05);
-    }
-
-    .hero-dish::after {
+    /* Subtle grain texture */
+    .hero-bg::after {
         content: '';
         position: absolute;
         inset: 0;
-        border-radius: 50%;
-        background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.2) 100%);
-        pointer-events: none;
+        opacity: 0.03;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     }
 
-    /* Steam effect */
-    .dish-steam {
+    /* Dish image layer */
+    .hero-dish {
         position: absolute;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60%;
-        height: 60px;
-        background: linear-gradient(to top, rgba(255,255,255,0.15), transparent);
-        filter: blur(10px);
+        inset: 0;
         opacity: 0;
-        animation: steam 3s ease-in-out infinite;
-    }
-
-    @keyframes steam {
-        0%, 100% { opacity: 0; transform: translateX(-50%) translateY(0) scaleY(1); }
-        50% { opacity: 0.6; transform: translateX(-50%) translateY(-20px) scaleY(1.2); }
+        transform: scale(1.05);
+        transition: opacity 0.8s ease, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
     }
 
     .hero-dish.visible {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
+        transform: scale(1);
     }
 
-    .hero-dish.visible .dish-steam {
-        opacity: 1;
+    .hero-dish img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 40%;
     }
 
-    /* Pack shot - bouncy entry, 3D perspective */
+    /* Gradient overlay on dish */
+    .hero-dish::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--mainColor) 40%, transparent) 0%,
+            transparent 25%,
+            transparent 55%,
+            color-mix(in srgb, var(--mainColor) 95%, transparent) 100%
+        );
+    }
+
+    /* Pack shot */
     .hero-pack {
         position: relative;
         z-index: 10;
-        width: clamp(280px, 50vw, 480px);
-        perspective: 1000px;
-        animation: packEntry 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        filter: drop-shadow(0 40px 60px rgba(0,0,0,0.3));
-        will-change: transform, opacity;
-    }
-
-    @keyframes packEntry {
-        0% {
-            opacity: 0;
-            transform: translateY(-50px) scale(0.8) rotateX(15deg);
-        }
-        60% {
-            transform: translateY(10px) scale(1.02) rotateX(-5deg);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1) rotateX(0deg);
-        }
+        width: clamp(220px, 35vw, 380px);
+        transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform, opacity, filter;
+        filter: drop-shadow(0 30px 50px rgba(0,0,0,0.3));
     }
 
     .hero-pack img {
         width: 100%;
         height: auto;
-        animation: packFloat 4s ease-in-out infinite;
-        transform-style: preserve-3d;
+        transform: rotate(-5deg);
+        transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes packFloat {
-        0%, 100% { transform: translateY(0) rotateY(0deg); }
-        50% { transform: translateY(-15px) rotateY(2deg); }
+    .hero-pack:hover img {
+        transform: rotate(-2deg) scale(1.02);
     }
 
     .product-badge-new {
         position: absolute;
         top: -10px;
         right: -10px;
-        background: var(--planted-green);
-        color: var(--planted-black);
+        background: var(--green);
+        color: var(--black);
         font-size: 0.7rem;
         font-weight: 700;
-        text-transform: uppercase;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.8rem;
         border-radius: 100px;
-        z-index: 20;
-        box-shadow: 0 4px 12px rgba(107,191,89,0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        z-index: 5;
     }
 
-    /* THE BIG PROTEIN STAT - THIS SHOULD SLAP */
-    .hero-protein {
+    /* Product info at bottom */
+    .hero-info {
         position: absolute;
-        bottom: 15%;
-        right: 5%;
-        text-align: right;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 2rem;
         z-index: 20;
         opacity: 0;
         transform: translateY(40px);
-        transition: opacity 0.6s ease, transform 0.6s var(--transition-slow);
-    }
-
-    .hero-protein.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .hero-protein-value {
-        display: block;
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(7rem, 22vw, 16rem);
-        font-weight: 900;
-        line-height: 0.8;
-        letter-spacing: -0.03em;
-    }
-
-    .hero-protein-value .num {
-        background: linear-gradient(180deg, #FFFFFF 0%, #E0E0E0 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: none;
-        filter: drop-shadow(0 4px 0 rgba(0,0,0,0.1)) drop-shadow(0 15px 30px rgba(0,0,0,0.2));
-    }
-
-    .hero-protein-value .unit {
-        color: var(--planted-green);
-        text-shadow: 0 0 40px rgba(107,191,89,0.6);
-        -webkit-text-fill-color: var(--planted-green);
-    }
-
-    .hero-protein-label {
-        display: block;
-        color: rgba(255,255,255,0.9);
-        font-size: clamp(0.7rem, 1.5vw, 1rem);
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        font-weight: 600;
-        margin-top: 0.5rem;
-    }
-
-    /* Product info - bottom left */
-    .hero-info {
-        position: absolute;
-        bottom: 8%;
-        left: 5%;
-        z-index: 20;
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease 0.1s, transform 0.6s var(--transition-slow) 0.1s;
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        transition-delay: 0.2s;
     }
 
     .hero-info.visible {
@@ -677,49 +416,74 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         transform: translateY(0);
     }
 
-    .product-title {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(2rem, 6vw, 4rem);
+    .hero-text h1 {
+        font-size: clamp(2.5rem, 8vw, 5rem);
         color: white;
-        line-height: 0.95;
+        margin-bottom: 0.3rem;
         letter-spacing: -0.02em;
-        margin-bottom: 0.25rem;
     }
 
-    .product-variant {
-        font-size: clamp(1rem, 2vw, 1.4rem);
+    .hero-text .variant {
+        font-size: clamp(1rem, 2.5vw, 1.35rem);
         color: rgba(255,255,255,0.8);
-        font-style: italic;
+        font-weight: 400;
+        max-width: 400px;
     }
 
-    /* Scroll hint */
+    /* The big protein number */
+    .hero-protein {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+    .protein-number {
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: clamp(6rem, 22vw, 16rem);
+        line-height: 0.75;
+        letter-spacing: -0.04em;
+        display: flex;
+        align-items: baseline;
+    }
+
+    .protein-number .value {
+        color: white;
+        text-shadow:
+            0 4px 0 rgba(0,0,0,0.08),
+            0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .protein-number .unit {
+        color: var(--green);
+        font-size: 0.6em;
+        margin-left: -0.05em;
+        text-shadow: 0 0 60px rgba(107, 191, 89, 0.5);
+    }
+
+    .protein-label {
+        color: rgba(255,255,255,0.7);
+        font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    /* Scroll indicator */
     .scroll-hint {
         position: absolute;
         bottom: 2rem;
         left: 50%;
         transform: translateX(-50%);
         z-index: 30;
-        color: rgba(255,255,255,0.7);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
         transition: opacity 0.4s ease;
-    }
-
-    .scroll-line {
-        width: 1px;
-        height: 40px;
-        background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
-        animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-        0%, 100% { transform: scaleY(1); opacity: 0.6; }
-        50% { transform: scaleY(1.3); opacity: 1; }
     }
 
     .scroll-hint.hidden {
@@ -727,246 +491,162 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         pointer-events: none;
     }
 
+    .scroll-hint .arrow {
+        width: 20px;
+        height: 20px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg);
+        animation: scrollBounce 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollBounce {
+        0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 1; }
+        50% { transform: rotate(45deg) translate(3px, 3px); opacity: 0.5; }
+    }
+
+    @media (max-width: 700px) {
+        .hero-info {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 2rem;
+            gap: 1rem;
+        }
+        .hero-protein { text-align: left; }
+    }
+
     /* ==================== STATS BAR ==================== */
     .stats {
-        background: var(--planted-purple);
+        background: var(--purple);
         padding: 2rem 1.5rem;
         position: relative;
-        overflow: hidden;
-    }
-
-    .stats::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-        animation: statsShimmer 3s ease infinite;
-    }
-
-    @keyframes statsShimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
     }
 
     .stats-grid {
         display: flex;
         justify-content: center;
-        gap: 2.5rem;
+        gap: 3rem;
         flex-wrap: wrap;
         max-width: 700px;
         margin: 0 auto;
-        position: relative;
     }
 
     .stat {
         text-align: center;
-        color: white;
         min-width: 80px;
-        padding: 1rem;
-        border-radius: 1rem;
-        transition: transform 0.3s ease, background 0.3s ease;
-        cursor: default;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    .stat.animated {
-        opacity: 1;
-        transform: translateY(0);
-        transition: opacity 0.6s ease, transform 0.6s var(--transition-slow);
-        transition-delay: calc(var(--delay) * 0.1s);
-    }
-
-    .stat:hover {
-        background: rgba(255,255,255,0.1);
-        transform: translateY(-4px);
-    }
-
-    .stat-icon {
-        display: block;
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-        filter: grayscale(0.2);
     }
 
     .stat-value {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(2rem, 6vw, 2.75rem);
-        color: var(--planted-green);
-        display: inline;
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        color: var(--green);
         line-height: 1;
-        font-variant-numeric: tabular-nums;
-        letter-spacing: -0.03em;
-    }
-
-    .stat-unit {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(1rem, 3vw, 1.25rem);
-        color: var(--planted-green);
     }
 
     .stat-label {
-        display: block;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        opacity: 0.7;
-        margin-top: 0.35rem;
+        color: rgba(255,255,255,0.6);
+        margin-top: 0.4rem;
     }
 
-    .stat.zero .stat-value {
+    .stat.highlight .stat-value {
         color: white;
-    }
-
-    .stat-celebration {
-        position: absolute;
-        top: -0.5rem;
-        right: -0.5rem;
-        font-size: 0.8rem;
-        animation: celebrateBounce 1s ease infinite;
-    }
-
-    @keyframes celebrateBounce {
-        0%, 100% { transform: scale(1) rotate(0deg); }
-        50% { transform: scale(1.2) rotate(10deg); }
     }
 
     /* ==================== TRUST BADGES ==================== */
     .trust {
-        background: var(--planted-cream);
-        padding: 1.5rem;
+        background: var(--cream);
+        padding: 1.75rem 1.5rem;
         display: flex;
         justify-content: center;
-        gap: 2rem;
+        gap: 2.5rem;
         flex-wrap: wrap;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
     }
 
     .trust-badge {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: var(--planted-purple);
-        font-size: 0.85rem;
+        color: var(--purple);
+        font-size: 0.8rem;
         font-weight: 600;
-        padding: 0.5rem 1rem;
-        border-radius: 100px;
-        background: white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .trust-badge:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(97,38,158,0.1);
+        opacity: 0.7;
     }
 
     .trust-badge svg {
         width: 20px;
         height: 20px;
-        color: var(--planted-green);
-    }
-
-    /* ==================== SECTION TITLES ==================== */
-    .section-title {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(2rem, 5vw, 3rem);
-        color: var(--planted-purple);
-        letter-spacing: -0.02em;
-        line-height: 0.95;
-        margin-bottom: 1.5rem;
+        opacity: 0.8;
     }
 
     /* ==================== INGREDIENTS ==================== */
     .ingredients {
         padding: 5rem 1.5rem;
-        background: white;
-    }
-
-    .ingredients-inner {
         max-width: 800px;
         margin: 0 auto;
     }
 
-    .ingredient-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
+    .ingredients h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--purple);
         margin-bottom: 2rem;
     }
 
+    .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
     .pill {
-        background: linear-gradient(180deg, #FFFFFF 0%, #F8F5F2 100%);
+        background: white;
         padding: 0.9rem 1.5rem;
         border-radius: 100px;
         font-weight: 600;
-        color: var(--planted-purple);
-        box-shadow:
-            0 1px 2px rgba(0,0,0,0.04),
-            0 4px 12px rgba(0,0,0,0.04);
-        border: 1px solid rgba(0,0,0,0.04);
+        color: var(--purple);
+        border: 1px solid rgba(97,38,158,0.08);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         transition: all 0.25s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        transition-delay: var(--delay, 0s);
     }
 
     .pill:hover {
-        transform: translateY(-4px);
-        box-shadow:
-            0 4px 8px rgba(0,0,0,0.06),
-            0 12px 24px rgba(97,38,158,0.12);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(97,38,158,0.12);
         border-color: rgba(97,38,158,0.15);
     }
 
-    .pill-percent {
-        font-size: 0.75rem;
-        color: var(--planted-green);
-        font-weight: 700;
-        opacity: 0.8;
-    }
-
-    .ingredient-sticker {
+    .ingredient-note {
         display: inline-block;
-        background: linear-gradient(135deg, #6BBF59 0%, #5BAF49 100%);
-        color: var(--planted-black);
-        padding: 1rem 1.5rem;
+        background: var(--green);
+        color: var(--black);
+        padding: 0.9rem 1.5rem;
         border-radius: 0.75rem;
-        font-weight: 600;
-        transform: rotate(-2deg);
-        box-shadow:
-            0 4px 12px rgba(107,191,89,0.3),
-            0 1px 0 rgba(255,255,255,0.2) inset;
-        position: relative;
+        font-weight: 700;
+        margin-top: 2rem;
+        transform: rotate(-1.5deg);
+        box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
     }
 
-    .ingredient-sticker::before {
-        content: '';
-        position: absolute;
-        top: 4px;
-        right: 8px;
-        width: 12px;
-        height: 12px;
-        background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.1) 50%);
-        transform: rotate(45deg);
-    }
-
-    .ingredient-sticker strong {
-        color: white;
+    .ingredient-note:hover {
+        transform: rotate(0.5deg) scale(1.02);
     }
 
     /* ==================== NUTRITION ==================== */
     .nutrition {
-        background: var(--planted-cream);
-        overflow: hidden;
+        background: white;
     }
 
     .nutrition-layout {
         display: grid;
         grid-template-columns: 1fr;
-        min-height: 500px;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 800px) {
         .nutrition-layout {
             grid-template-columns: 1fr 1fr;
         }
@@ -980,393 +660,249 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
 
     .nutrition-image img {
         position: absolute;
-        inset: -10%;
-        width: 120%;
-        height: 120%;
+        inset: 0;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        filter: contrast(1.02) saturate(1.05);
-        transition: transform 0.8s ease;
+        transition: transform 6s ease-out;
     }
 
     .nutrition-image:hover img {
         transform: scale(1.03);
     }
 
-    .nutrition-image-overlay {
+    /* Wavy divider */
+    .nutrition-image::after {
+        content: '';
         position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, transparent 60%, var(--planted-cream) 100%);
+        right: -1px;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        background: white;
+        clip-path: ellipse(70% 50% at 100% 50%);
     }
 
-    @media (max-width: 767px) {
-        .nutrition-image-overlay {
-            background: linear-gradient(180deg, transparent 60%, var(--planted-cream) 100%);
-        }
+    @media (max-width: 799px) {
+        .nutrition-image::after { display: none; }
     }
 
     .nutrition-content {
-        padding: 3rem 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        padding: 3rem 2.5rem;
     }
 
-    @media (min-width: 768px) {
-        .nutrition-content {
-            padding: 4rem 3rem;
-            max-width: 500px;
-        }
-    }
-
-    .nutrition-highlights {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    @media (min-width: 480px) {
-        .nutrition-highlights {
-            grid-template-columns: repeat(4, 1fr);
-        }
-    }
-
-    .nutrient-card {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.25rem 1rem;
-        text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        border: 1px solid transparent;
-        transition: all 0.3s ease;
-    }
-
-    .nutrient-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-        border-color: rgba(107,191,89,0.2);
-    }
-
-    .nutrient-icon {
-        width: 32px;
-        height: 32px;
-        margin: 0 auto 0.5rem;
-        color: var(--planted-purple);
-    }
-
-    .nutrient-icon svg {
-        width: 100%;
-        height: 100%;
-    }
-
-    .nutrient-value {
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.25rem;
-        color: var(--planted-green);
-        display: block;
-        font-weight: 700;
-    }
-
-    .nutrient-label {
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--planted-black);
-        opacity: 0.6;
-    }
-
-    .nutrient-bar {
-        height: 3px;
-        background: rgba(0,0,0,0.08);
-        border-radius: 2px;
-        margin-top: 0.75rem;
-        overflow: hidden;
-    }
-
-    .nutrient-bar-fill {
-        height: 100%;
-        width: 0;
-        background: var(--planted-green);
-        border-radius: 2px;
-        transition: width 1s ease;
-    }
-
-    .nutrient-bar-fill.animated {
-        width: var(--width);
-    }
-
-    .nutrition-table-wrapper {
-        background: white;
-        border-radius: 1rem;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    }
-
-    .nutrition-toggle {
-        width: 100%;
-        padding: 1rem 1.25rem;
+    .nutrition-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: none;
+        margin-bottom: 1.5rem;
+    }
+
+    .nutrition-header h2 {
+        font-size: clamp(1.4rem, 4vw, 1.8rem);
+        color: var(--purple);
+    }
+
+    .nutrition-toggle {
+        width: 40px;
+        height: 40px;
+        background: var(--cream);
         border: none;
+        border-radius: 50%;
         cursor: pointer;
-        font-weight: 600;
-        color: var(--planted-purple);
-        font-size: 0.9rem;
-        transition: background 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
     }
 
     .nutrition-toggle:hover {
-        background: rgba(0,0,0,0.02);
+        background: var(--purple);
+    }
+
+    .nutrition-toggle:hover svg {
+        stroke: white;
     }
 
     .nutrition-toggle svg {
-        width: 20px;
-        height: 20px;
-        transition: transform 0.3s ease;
+        width: 18px;
+        height: 18px;
+        stroke: var(--purple);
+        transition: transform 0.3s ease, stroke 0.3s ease;
     }
 
     .nutrition-toggle.open svg {
         transform: rotate(180deg);
     }
 
+    /* Collapsible table - THE FIX */
     .nutrition-table {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s ease;
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s ease;
     }
 
     .nutrition-table.open {
-        max-height: 500px;
+        grid-template-rows: 1fr;
+    }
+
+    .nutrition-table-inner {
+        overflow: hidden;
     }
 
     .nutrition-table table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.85rem;
-        padding: 0 1.25rem;
     }
 
     .nutrition-table th {
         text-align: left;
-        padding: 0.5rem 1.25rem;
-        font-size: 0.7rem;
+        padding: 0.5rem 0;
+        font-size: 0.6rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: var(--planted-purple);
+        color: var(--purple);
         opacity: 0.5;
+        border-bottom: 2px solid var(--purple);
     }
 
+    .nutrition-table th:last-child { text-align: right; }
+
     .nutrition-table td {
-        padding: 0.6rem 1.25rem;
-        border-bottom: 1px solid rgba(0,0,0,0.04);
-        transition: background 0.2s ease;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
+    }
+
+    .nutrition-table td:last-child {
+        text-align: right;
+        font-weight: 600;
+        color: var(--purple);
     }
 
     .nutrition-table tr:hover td {
         background: rgba(97,38,158,0.02);
     }
 
-    .nutrition-table td:last-child {
-        text-align: right;
-        font-weight: 600;
-        color: var(--planted-purple);
-    }
-
-    .nutrition-table tr.indent td:first-child {
-        padding-left: 2rem;
+    .nutrition-table tr.sub td:first-child {
+        padding-left: 1rem;
         font-size: 0.8rem;
         opacity: 0.6;
     }
 
-    .nutrition-table tr.highlight {
-        position: relative;
-    }
-
-    .nutrition-table tr.highlight td {
+    .nutrition-table tr.protein-row td {
         background: rgba(107,191,89,0.08);
         font-weight: 600;
     }
 
-    .nutrition-table tr.highlight td:first-child::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 60%;
-        background: var(--planted-green);
-        border-radius: 0 2px 2px 0;
-    }
-
-    .nutrition-table tr.highlight td:last-child {
-        color: var(--planted-green);
+    .nutrition-table tr.protein-row td:last-child {
+        color: var(--green);
     }
 
     .nutrition-note {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.7rem;
-        color: var(--planted-black);
+        font-size: 0.65rem;
+        color: var(--black);
         opacity: 0.4;
+        margin-top: 1rem;
     }
 
     /* ==================== COOKING ==================== */
     .cooking {
-        background: white;
+        background: var(--cream);
         padding: 5rem 1.5rem;
     }
 
     .cooking-inner {
-        max-width: 900px;
+        max-width: 850px;
         margin: 0 auto;
     }
 
-    .cooking-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .cook-step {
-        background: var(--planted-cream);
-        padding: 2rem 1.5rem;
-        border-radius: 1.5rem;
+    .cooking h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--purple);
+        margin-bottom: 2.5rem;
         text-align: center;
-        position: relative;
-        transition: transform 0.4s var(--transition-slow), box-shadow 0.4s ease;
     }
 
-    .cook-step:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    .cooking-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
     }
 
-    .cook-step-icon {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 1rem;
-        color: var(--planted-purple);
-        opacity: 0.3;
+    .step {
+        background: white;
+        padding: 2rem 1.5rem;
+        border-radius: 1.25rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition-delay: var(--delay, 0s);
     }
 
-    .cook-step-icon svg {
-        width: 100%;
-        height: 100%;
+    .step:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.08);
     }
 
-    .cook-step-num {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        width: 28px;
-        height: 28px;
-        background: var(--planted-purple);
+    .step-num {
+        width: 48px;
+        height: 48px;
+        background: var(--purple);
         color: white;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'VC Henrietta', serif;
-        font-size: 0.9rem;
-        font-weight: 700;
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: 1.25rem;
+        margin: 0 auto 1rem;
     }
 
-    .cook-step h3 {
-        font-family: 'VC Henrietta', serif;
-        color: var(--planted-purple);
-        font-size: 1.35rem;
-        margin-bottom: 0.5rem;
+    .step h3 {
+        color: var(--purple);
+        font-size: 1.15rem;
+        margin-bottom: 0.4rem;
     }
 
-    .cook-step p {
-        color: var(--planted-black);
-        opacity: 0.7;
+    .step p {
+        color: var(--black);
+        opacity: 0.65;
         font-size: 0.9rem;
         line-height: 1.5;
     }
 
-    .pro-tip {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        background: linear-gradient(135deg, rgba(107,191,89,0.1) 0%, rgba(97,38,158,0.05) 100%);
-        padding: 1.25rem 1.5rem;
-        border-radius: 1rem;
-        margin-bottom: 2rem;
-        border-left: 4px solid var(--planted-green);
-    }
-
-    .pro-tip-icon {
-        font-size: 1.5rem;
-        line-height: 1;
-    }
-
-    .pro-tip-content {
-        font-size: 0.9rem;
-        color: var(--planted-black);
-        line-height: 1.5;
-    }
-
-    .pro-tip-content strong {
-        color: var(--planted-purple);
-    }
-
-    .cook-meta {
+    .cooking-meta {
         display: flex;
         justify-content: center;
         gap: 3rem;
+        margin-top: 2.5rem;
         flex-wrap: wrap;
     }
 
-    .cook-meta-item {
+    .meta-item {
         text-align: center;
     }
 
-    .cook-timer {
-        width: 48px;
-        height: 48px;
-        margin: 0 auto 0.5rem;
-        background: var(--planted-cream);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--planted-purple);
-    }
-
-    .cook-timer svg {
-        width: 24px;
-        height: 24px;
-    }
-
-    .cook-meta-item strong {
+    .meta-item strong {
         display: block;
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.25rem;
-        color: var(--planted-purple);
+        font-family: 'VC Henrietta', Georgia, serif;
+        font-size: 1.5rem;
+        color: var(--purple);
     }
 
-    .cook-meta-item span {
-        font-size: 0.75rem;
-        color: var(--planted-black);
-        opacity: 0.6;
+    .meta-item span {
+        font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        color: var(--black);
+        opacity: 0.5;
     }
 
     /* ==================== RECIPES ==================== */
     .recipes {
         padding: 5rem 0;
-        background: var(--planted-cream);
-        overflow: hidden;
-    }
-
-    .recipes-inner {
-        max-width: 1400px;
-        margin: 0 auto;
+        background: white;
     }
 
     .recipes-header {
@@ -1374,50 +910,35 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
     }
 
-    .recipes-link {
-        color: var(--planted-purple);
+    .recipes-header h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--purple);
+    }
+
+    .recipes-header a {
+        color: var(--purple);
         font-weight: 700;
         text-decoration: none;
         font-size: 0.9rem;
         transition: opacity 0.2s;
     }
 
-    .recipes-link:hover {
-        opacity: 0.7;
-    }
-
-    .recipes-carousel {
-        position: relative;
-    }
-
-    .recipes-fade {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 60px;
-        pointer-events: none;
-        z-index: 10;
-    }
-
-    .recipes-fade-left {
-        left: 0;
-        background: linear-gradient(90deg, var(--planted-cream), transparent);
-    }
-
-    .recipes-fade-right {
-        right: 0;
-        background: linear-gradient(-90deg, var(--planted-cream), transparent);
-    }
+    .recipes-header a:hover { opacity: 0.7; }
 
     .recipes-scroll {
         display: flex;
         gap: 1.5rem;
         overflow-x: auto;
-        padding: 0 1.5rem 1.5rem;
+        padding: 0 1.5rem 1rem;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
+        /* Fade edges */
+        mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
+        -webkit-mask-image: linear-gradient(90deg, transparent, black 3%, black 97%, transparent);
     }
 
     .recipes-scroll::-webkit-scrollbar { display: none; }
@@ -1425,62 +946,32 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     .recipe-card {
         flex: 0 0 300px;
         scroll-snap-align: start;
-        background: white;
+        background: var(--cream);
         border-radius: 1.25rem;
         overflow: hidden;
         text-decoration: none;
-        transition: transform 0.4s var(--transition-slow), box-shadow 0.4s ease;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
     }
 
     .recipe-card:hover {
-        transform: translateY(-8px) scale(1.02);
+        transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(0,0,0,0.12);
     }
 
     .recipe-img {
         aspect-ratio: 4/3;
         overflow: hidden;
-        position: relative;
     }
 
     .recipe-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease, filter 0.3s ease;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .recipe-card:hover .recipe-img img {
         transform: scale(1.08);
-        filter: brightness(1.05);
-    }
-
-    .recipe-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgba(97,38,158,0.9), transparent 60%);
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        padding-bottom: 1.5rem;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .recipe-card:hover .recipe-overlay {
-        opacity: 1;
-    }
-
-    .recipe-cta {
-        color: white;
-        font-weight: 700;
-        font-size: 0.9rem;
-        transform: translateY(10px);
-        transition: transform 0.3s ease;
-    }
-
-    .recipe-card:hover .recipe-cta {
-        transform: translateY(0);
     }
 
     .recipe-info {
@@ -1488,119 +979,20 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     }
 
     .recipe-info h3 {
-        font-family: 'VC Henrietta', serif;
         font-size: 1.1rem;
-        color: var(--planted-purple);
-        margin-bottom: 0.5rem;
-        line-height: 1.2;
+        color: var(--purple);
+        margin-bottom: 0.2rem;
     }
 
-    .recipe-meta {
-        display: flex;
-        gap: 1rem;
+    .recipe-info span {
         font-size: 0.8rem;
-        color: var(--planted-black);
-        opacity: 0.6;
-    }
-
-    /* ==================== MORE PRODUCTS ==================== */
-    .more-products {
-        padding: 5rem 1.5rem;
-        background: white;
-    }
-
-    .more-inner {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    .more-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .more-header .section-title {
-        text-transform: capitalize;
-        margin-bottom: 0;
-    }
-
-    .more-link {
-        color: var(--planted-purple);
-        font-weight: 700;
-        text-decoration: none;
-        font-size: 0.9rem;
-    }
-
-    .more-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .more-card {
-        text-decoration: none;
-        transition: transform 0.4s var(--transition-slow);
-    }
-
-    .more-card:hover {
-        transform: translateY(-8px);
-    }
-
-    .more-image {
-        aspect-ratio: 1;
-        padding: 1.5rem;
-        border-radius: 1.25rem;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .more-card:hover .more-image {
-        box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-    }
-
-    .more-card[data-color="yellow"] .more-image { background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%); }
-    .more-card[data-color="terracotta"] .more-image { background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%); }
-    .more-card[data-color="purple"] .more-image { background: linear-gradient(135deg, #C4B8E8 0%, #A894D4 100%); }
-    .more-card[data-color="olive"] .more-image { background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%); }
-    .more-card[data-color="burgundy"] .more-image { background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%); }
-    .more-card[data-color="coral"] .more-image { background: linear-gradient(135deg, #F5D4C8 0%, #E8B8A4 100%); }
-    .more-card[data-color="green"] .more-image { background: linear-gradient(135deg, #C4E8C4 0%, #94D494 100%); }
-    .more-card[data-color="orange"] .more-image { background: linear-gradient(135deg, #F5D4B8 0%, #E8B894 100%); }
-    .more-card[data-color="red"] .more-image { background: linear-gradient(135deg, #F5C4C4 0%, #E8A4A4 100%); }
-    .more-card[data-color="teal"] .more-image { background: linear-gradient(135deg, #B8D4D4 0%, #94C4C4 100%); }
-    .more-card[data-color="navy"] .more-image { background: linear-gradient(135deg, #B8C4D4 0%, #94A8C4 100%); }
-
-    .more-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        transition: transform 0.4s ease;
-    }
-
-    .more-card:hover .more-image img {
-        transform: scale(1.05) rotate(2deg);
-    }
-
-    .more-info {
-        padding: 1rem 0.5rem;
-    }
-
-    .more-name {
-        font-weight: 700;
-        color: var(--planted-black);
-        font-size: 0.95rem;
-    }
-
-    .more-variant {
-        color: var(--planted-black);
-        opacity: 0.6;
-        font-size: 0.85rem;
+        color: var(--black);
+        opacity: 0.5;
     }
 
     /* ==================== CTA ==================== */
     .cta {
-        background: var(--planted-green);
+        background: var(--green);
         padding: 6rem 1.5rem;
         text-align: center;
         position: relative;
@@ -1610,36 +1002,21 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
     .cta::before {
         content: '';
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-        animation: ctaPulse 4s ease infinite;
+        inset: -50%;
+        background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.12) 0%, transparent 50%);
+        animation: ctaGlow 10s ease-in-out infinite alternate;
     }
 
-    @keyframes ctaPulse {
-        0%, 100% { transform: scale(1); opacity: 0.5; }
-        50% { transform: scale(1.1); opacity: 0.8; }
+    @keyframes ctaGlow {
+        0% { transform: translate(-10%, -10%) scale(1); }
+        100% { transform: translate(10%, 10%) scale(1.2); }
     }
 
-    .cta-content {
-        position: relative;
-    }
-
-    .cta-title {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(4rem, 15vw, 8rem);
-        color: var(--planted-black);
-        line-height: 0.85;
-        margin-bottom: 0.5rem;
-    }
-
-    .cta-subtitle {
-        font-size: 1.1rem;
-        color: var(--planted-black);
-        opacity: 0.7;
+    .cta h2 {
+        font-size: clamp(3.5rem, 14vw, 7rem);
+        color: var(--black);
         margin-bottom: 2rem;
+        position: relative;
     }
 
     .cta-buttons {
@@ -1647,293 +1024,157 @@ const colors = colorGradients[product.data.color] || colorGradients.purple;
         gap: 1rem;
         justify-content: center;
         flex-wrap: wrap;
+        position: relative;
     }
 
     .btn {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 1.1rem 2.25rem;
+        padding: 1.15rem 2rem;
         border-radius: 100px;
         font-weight: 700;
-        text-decoration: none;
         font-size: 1rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .btn:hover {
-        transform: translateY(-4px);
+        text-decoration: none;
+        transition: all 0.3s ease;
     }
 
     .btn-primary {
-        background: var(--planted-purple);
+        background: var(--purple);
         color: white;
-        box-shadow: 0 8px 24px rgba(97,38,158,0.35);
+        box-shadow: 0 6px 20px rgba(97,38,158,0.35);
     }
 
     .btn-primary:hover {
-        box-shadow: 0 12px 32px rgba(97,38,158,0.45);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(97,38,158,0.4);
     }
 
     .btn-secondary {
         background: white;
-        color: var(--planted-purple);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        color: var(--purple);
     }
 
-    /* ==================== REVEAL ANIMATIONS ==================== */
-    .reveal-up {
+    .btn-secondary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    .reveal {
         opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease, transform 0.6s var(--transition-slow);
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         transition-delay: var(--delay, 0s);
     }
 
-    .reveal-up.active {
+    .reveal.visible {
         opacity: 1;
         transform: translateY(0);
-    }
-
-    /* ==================== MOBILE STYLES ==================== */
-    @media (max-width: 640px) {
-        .hero-protein {
-            bottom: auto;
-            top: 50%;
-            right: auto;
-            left: 50%;
-            transform: translate(-50%, 100%);
-            text-align: center;
-        }
-
-        .hero-protein.visible {
-            transform: translate(-50%, 50%);
-        }
-
-        .hero-info {
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 90%;
-        }
-
-        .hero-info.visible {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .hero-pack {
-            width: clamp(220px, 70vw, 320px);
-        }
-
-        .hero-dish {
-            width: clamp(200px, 55vw, 300px);
-            height: clamp(200px, 55vw, 300px);
-        }
-
-        .stats-grid {
-            gap: 1rem;
-        }
-
-        .stat {
-            min-width: 70px;
-            padding: 0.75rem;
-        }
-
-        .cooking-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .recipe-card {
-            flex: 0 0 260px;
-        }
     }
 </style>
 
 <script>
-    function initProductPage() {
-        // ==================== HERO SCROLL ANIMATION ====================
-        const hero = document.getElementById('hero');
-        const heroPack = document.getElementById('heroPack');
-        const heroDish = document.getElementById('heroDish');
-        const heroProtein = document.getElementById('heroProtein');
-        const heroInfo = document.getElementById('heroInfo');
-        const scrollHint = document.getElementById('scrollHint');
+    // ==================== HERO SCROLL ANIMATION ====================
+    const hero = document.getElementById('hero');
+    const heroPack = document.getElementById('heroPack');
+    const heroDish = document.getElementById('heroDish');
+    const heroInfo = document.getElementById('heroInfo');
+    const scrollHint = document.getElementById('scrollHint');
 
-        function updateHeroAnimation() {
-            if (!hero || !heroPack) return;
+    let ticking = false;
 
-            const heroRect = hero.getBoundingClientRect();
-            const scrollProgress = Math.min(Math.max(-heroRect.top / (hero.offsetHeight - window.innerHeight), 0), 1);
+    function updateHero() {
+        if (!hero || !heroPack) return;
 
-            // Pack animation: spin, scale, motion blur effect, fly away
-            const packScale = 1 - (scrollProgress * 0.8);
-            const packRotate = scrollProgress * 540; // 1.5 rotations
-            const packY = scrollProgress * -100;
-            const packOpacity = 1 - (scrollProgress * 2.5);
-            const packBlur = scrollProgress * 8;
+        const rect = hero.getBoundingClientRect();
+        const scrollDistance = hero.offsetHeight - window.innerHeight;
+        const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
 
-            heroPack.style.transform = `translateY(${packY}vh) rotate(${packRotate}deg) scale(${packScale})`;
-            heroPack.style.opacity = String(Math.max(packOpacity, 0));
-            heroPack.style.filter = `drop-shadow(0 40px 60px rgba(0,0,0,0.3)) blur(${packBlur}px)`;
+        // Pack: scale down, rotate, move up, fade out, blur
+        if (progress < 0.5) {
+            const packProgress = progress * 2; // 0 to 1 over first half of scroll
+            const scale = 1 - (packProgress * 0.5);
+            const rotate = packProgress * 25;
+            const translateY = packProgress * -35;
+            const opacity = 1 - (packProgress * 1.5);
+            const blur = packProgress * 6;
 
-            // Dish fade in with parallax (slower movement)
-            if (heroDish) {
-                const dishProgress = Math.max((scrollProgress - 0.2) / 0.5, 0);
-                const dishParallax = scrollProgress * -30;
+            heroPack.style.transform = `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}vh)`;
+            heroPack.style.opacity = String(Math.max(opacity, 0));
+            heroPack.style.filter = `drop-shadow(0 30px 50px rgba(0,0,0,0.3)) blur(${blur}px)`;
+        } else {
+            heroPack.style.opacity = '0';
+        }
 
-                if (scrollProgress > 0.2) {
-                    heroDish.classList.add('visible');
-                    heroDish.style.transform = `translate(-50%, calc(-50% + ${dishParallax}px)) scale(1)`;
-                } else {
-                    heroDish.classList.remove('visible');
-                }
-            }
-
-            // Protein stat appears
-            if (heroProtein) {
-                if (scrollProgress > 0.4) {
-                    heroProtein.classList.add('visible');
-                    // Animate the number
-                    const numEl = heroProtein.querySelector('.num');
-                    if (numEl && !numEl.classList.contains('counted')) {
-                        numEl.classList.add('counted');
-                        animateNumber(numEl, 0, 17, 800);
-                    }
-                } else {
-                    heroProtein.classList.remove('visible');
-                }
-            }
-
-            // Info slide up
-            if (heroInfo) {
-                if (scrollProgress > 0.5) {
-                    heroInfo.classList.add('visible');
-                } else {
-                    heroInfo.classList.remove('visible');
-                }
-            }
-
-            // Hide scroll hint
-            if (scrollHint) {
-                if (scrollProgress > 0.05) {
-                    scrollHint.classList.add('hidden');
-                } else {
-                    scrollHint.classList.remove('hidden');
-                }
+        // Dish: fade in and slight scale
+        if (heroDish) {
+            if (progress > 0.25) {
+                heroDish.classList.add('visible');
+            } else {
+                heroDish.classList.remove('visible');
             }
         }
 
-        window.addEventListener('scroll', updateHeroAnimation, { passive: true });
-        updateHeroAnimation();
-
-        // ==================== NUMBER ANIMATION ====================
-        function animateNumber(el: Element, start: number, end: number, duration: number) {
-            const startTime = performance.now();
-
-            function update(currentTime: number) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const current = Math.round(start + (end - start) * easeOut);
-
-                el.textContent = String(current);
-
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
+        // Info: slide up
+        if (heroInfo) {
+            if (progress > 0.45) {
+                heroInfo.classList.add('visible');
+            } else {
+                heroInfo.classList.remove('visible');
             }
-
-            requestAnimationFrame(update);
         }
 
-        // ==================== STATS ANIMATION ====================
-        const statsSection = document.getElementById('statsSection');
-        let statsAnimated = false;
-
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !statsAnimated) {
-                    statsAnimated = true;
-
-                    // Animate each stat with stagger
-                    document.querySelectorAll('.stat').forEach((stat, index) => {
-                        setTimeout(() => {
-                            stat.classList.add('animated');
-
-                            // Animate number if it has data-count
-                            const valueEl = stat.querySelector('.stat-value[data-count]');
-                            if (valueEl) {
-                                const target = parseInt(valueEl.getAttribute('data-count') || '0');
-                                animateNumber(valueEl, 0, target, 1200);
-                            }
-                        }, index * 150);
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-
-        if (statsSection) statsObserver.observe(statsSection);
-
-        // ==================== NUTRITION TOGGLE ====================
-        const nutritionToggle = document.getElementById('nutritionToggle');
-        const nutritionTable = document.getElementById('nutritionTable');
-
-        nutritionToggle?.addEventListener('click', () => {
-            nutritionTable?.classList.toggle('open');
-            nutritionToggle?.classList.toggle('open');
-        });
-
-        // ==================== NUTRIENT BARS ANIMATION ====================
-        const nutritionHighlights = document.querySelector('.nutrition-highlights');
-
-        const nutritionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    document.querySelectorAll('.nutrient-bar-fill').forEach((bar, index) => {
-                        setTimeout(() => {
-                            bar.classList.add('animated');
-                        }, index * 150);
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-
-        if (nutritionHighlights) nutritionObserver.observe(nutritionHighlights);
-
-        // ==================== REVEAL ON SCROLL ====================
-        const revealElements = document.querySelectorAll('.reveal-up');
-
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // ==================== NUTRITION IMAGE PARALLAX ====================
-        const nutritionImage = document.getElementById('nutritionImage');
-
-        if (nutritionImage) {
-            window.addEventListener('scroll', () => {
-                const rect = nutritionImage.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-
-                if (rect.top < viewportHeight && rect.bottom > 0) {
-                    const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
-                    const parallax = (progress - 0.5) * 30;
-                    const img = nutritionImage.querySelector('img');
-                    if (img) {
-                        (img as HTMLElement).style.transform = `translateY(${parallax}px)`;
-                    }
-                }
-            }, { passive: true });
+        // Scroll hint
+        if (scrollHint) {
+            if (progress > 0.05) {
+                scrollHint.classList.add('hidden');
+            } else {
+                scrollHint.classList.remove('hidden');
+            }
         }
+
+        ticking = false;
     }
 
-    // Initialize
-    initProductPage();
-    document.addEventListener('astro:page-load', initProductPage);
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateHero);
+            ticking = true;
+        }
+    });
+
+    updateHero();
+
+    // ==================== NUTRITION TOGGLE ====================
+    const nutritionToggle = document.getElementById('nutritionToggle');
+    const nutritionTable = document.getElementById('nutritionTable');
+
+    if (nutritionToggle && nutritionTable) {
+        // Start open
+        nutritionTable.classList.add('open');
+        nutritionToggle.classList.add('open');
+
+        nutritionToggle.addEventListener('click', () => {
+            nutritionTable.classList.toggle('open');
+            nutritionToggle.classList.toggle('open');
+        });
+    }
+
+    // ==================== SCROLL REVEAL ====================
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -60px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
 </script>
