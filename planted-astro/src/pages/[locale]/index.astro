@@ -204,8 +204,8 @@ const settings = await getEntry('settings', 'global');
 
             <div class="retailers">
                 {countryRetailers.filter(r => r.type === 'retail').map((retailer) => (
-                    <a href={retailer.url} target="_blank" rel="noopener noreferrer" class="retailer-link reveal-scale" title={retailer.name}>
-                        <span class="retailer-name">{retailer.name}</span>
+                    <a href={retailer.url} target="_blank" rel="noopener noreferrer" class="retailer-logo reveal-scale" title={retailer.name}>
+                        <img src={`${base}images/retailers/${retailer.logo}.svg`} alt={retailer.name} loading="lazy">
                     </a>
                 ))}
             </div>
@@ -572,28 +572,40 @@ const settings = await getEntry('settings', 'global');
     .locator-search button { background: var(--planted-green); color: var(--planted-black); border: none; padding: 1.1rem 1.75rem; font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.3s; }
     .locator-search button:hover { background: #5aa94d; }
 
-    .retailers { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
-    .retailer-link {
-        display: inline-flex;
+    .retailers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    .retailer-logo {
+        display: flex;
         align-items: center;
-        gap: 0.5rem;
-        background: rgba(255,255,255,0.15);
-        padding: 0.65rem 1.25rem;
-        border-radius: 100px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: white;
+        justify-content: center;
+        background: white;
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
         text-decoration: none;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .retailer-link:hover {
-        background: rgba(255,255,255,0.25);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        border-color: rgba(255,255,255,0.4);
+    .retailer-logo:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
-    .retailer-link .retailer-name { font-weight: 700; }
+    .retailer-logo img {
+        height: 32px;
+        width: auto;
+        max-width: 100px;
+        object-fit: contain;
+    }
+    @media (min-width: 640px) {
+        .retailer-logo img {
+            height: 36px;
+            max-width: 120px;
+        }
+    }
 
     /* Responsive */
     @media (min-width: 640px) {
