@@ -68,15 +68,15 @@ const settings = await getEntry('settings', 'global');
                             {product.data.isNew && <span class="product-badge-new">New</span>}
                             {product.data.images.background && (
                                 <div class="product-grid-overlay">
-                                    <img src={product.data.images.background} alt="">
+                                    <img src={product.data.images.background} alt="" loading="lazy">
                                 </div>
                             )}
                             <div class="product-image product-image-pack">
-                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`}>
+                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="lazy">
                             </div>
                             {product.data.images.dish && (
                                 <div class="product-image product-image-dish">
-                                    <img src={product.data.images.dish} alt={`${product.data.name} ${product.data.variant} dish`}>
+                                    <img src={product.data.images.dish} alt={`${product.data.name} ${product.data.variant} dish`} loading="lazy">
                                 </div>
                             )}
                         </div>
@@ -135,7 +135,7 @@ const settings = await getEntry('settings', 'global');
             {featuredRecipes.map((recipe) => (
                 <a href={`${base}/recipes/${recipe.data.slug}`} class="recipe-card">
                     <div class="recipe-image">
-                        <img src={recipe.data.image} alt={recipe.data.title}>
+                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
                     </div>
                     <div class="recipe-info">
                         <div class="recipe-title">{recipe.data.title}</div>
