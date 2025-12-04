@@ -35,10 +35,10 @@ const settings = await getEntry('settings', 'global');
                 <video class="hero-video" autoplay muted loop playsinline>
                     <source src={`${base}/video/hero.mp4`} type="video/mp4">
                 </video>
-                <!-- Approved by Meat Lovers claim - playful floating badge -->
-                <div class="hero-approved-claim">
-                    <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" class="approved-svg" />
-                </div>
+            </div>
+            <!-- Approved by Meat Lovers claim - bridges video and content -->
+            <div class="hero-approved-claim">
+                <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" class="approved-svg" />
             </div>
         </div>
 
@@ -362,21 +362,23 @@ const settings = await getEntry('settings', 'global');
         object-fit: cover;
     }
 
-    /* Approved by Meat Lovers claim - playful floating badge */
+    /* Approved by Meat Lovers claim - bridges video and content */
     .hero-approved-claim {
         position: absolute;
-        bottom: -1.5rem;
-        right: -1rem;
-        width: clamp(120px, 20vw, 180px);
-        transform: rotate(6deg);
-        z-index: 10;
+        bottom: -3rem;
+        right: 5%;
+        width: clamp(140px, 22vw, 200px);
+        transform: rotate(8deg);
+        z-index: 20;
         animation: approvedFloat 4s ease-in-out infinite;
-        filter: drop-shadow(0 8px 16px rgba(97, 38, 158, 0.25));
+        filter: drop-shadow(0 12px 24px rgba(97, 38, 158, 0.3));
         transition: transform 0.3s ease;
+        cursor: default;
     }
 
     .hero-approved-claim:hover {
-        transform: rotate(6deg) scale(1.05);
+        transform: rotate(8deg) scale(1.08);
+        animation-play-state: paused;
     }
 
     .approved-svg {
@@ -387,10 +389,10 @@ const settings = await getEntry('settings', 'global');
 
     @keyframes approvedFloat {
         0%, 100% { 
-            transform: rotate(6deg) translateY(0); 
+            transform: rotate(8deg) translateY(0); 
         }
         50% { 
-            transform: rotate(6deg) translateY(-8px); 
+            transform: rotate(8deg) translateY(-10px); 
         }
     }
 
@@ -488,9 +490,9 @@ const settings = await getEntry('settings', 'global');
 
     @media (max-width: 640px) {
         .hero-approved-claim {
-            bottom: -1rem;
-            right: 0;
-            width: clamp(100px, 28vw, 140px);
+            bottom: -2rem;
+            right: 2%;
+            width: clamp(110px, 30vw, 150px);
         }
 
         .hero-trust {
