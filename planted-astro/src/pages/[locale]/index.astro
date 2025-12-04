@@ -150,23 +150,60 @@ const settings = await getEntry('settings', 'global');
         </section>
     )}
 
-    <!-- Impact Section -->
+    <!-- Impact Section - Immersive Full-Width -->
     <section class="impact" id="impact">
-        <h2 class="reveal">{t.home.impact.badge}</h2>
-        <div class="impact-stats">
-            <div class="stat reveal reveal-delay-1">
-                <div class="stat-value" data-count={settings?.data.impactCO2}>0%</div>
-                <div class="stat-label">{t.home.impact.lessCO2}</div>
+        <!-- Abstract gradient background -->
+        <div class="impact-bg">
+            <div class="impact-gradient"></div>
+            <div class="impact-pattern"></div>
+        </div>
+
+        <div class="impact-content">
+            <!-- Playful intro badge -->
+            <span class="impact-badge">{t.home.impact.badge}</span>
+
+            <!-- The big stats -->
+            <div class="impact-stats">
+                <div class="impact-stat">
+                    <div class="impact-stat-value" data-count={settings?.data.impactCO2}>0<span class="percent">%</span></div>
+                    <div class="impact-stat-label">{t.home.impact.lessCO2}</div>
+                    <div class="impact-stat-compare">{t.home.impact.vsCow}</div>
+                </div>
+
+                <div class="impact-stat">
+                    <div class="impact-stat-value" data-count={settings?.data.impactWater}>0<span class="percent">%</span></div>
+                    <div class="impact-stat-label">{t.home.impact.lessWater}</div>
+                    <div class="impact-stat-compare">{t.home.impact.vsCow}</div>
+                </div>
+
+                <div class="impact-stat special">
+                    <div class="impact-stat-value" data-count={settings?.data.impactAnimals}>0</div>
+                    <div class="impact-stat-label">{t.home.impact.animalsHarmed}</div>
+                    <div class="impact-stat-compare">{t.home.impact.ever}</div>
+                </div>
             </div>
-            <div class="stat reveal reveal-delay-2">
-                <div class="stat-value" data-count={settings?.data.impactWater}>0%</div>
-                <div class="stat-label">{t.home.impact.lessWater}</div>
-            </div>
-            <div class="stat reveal reveal-delay-3">
-                <div class="stat-value" data-count={settings?.data.impactAnimals}>0</div>
-                <div class="stat-label">{t.products.nutrition.animals}</div>
+
+            <!-- Brand tagline -->
+            <h2 class="impact-tagline">{t.home.impact.tagline}</h2>
+
+            <!-- Source citation -->
+            <p class="impact-source">{t.home.impact.source}</p>
+
+            <!-- Call to action -->
+            <div class="impact-cta">
+                <a href={`${base}/${locale}/our-story`} class="impact-btn">
+                    {t.home.impact.seeHow}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
         </div>
+
+        <!-- Decorative floating elements -->
+        <div class="impact-float float-1"></div>
+        <div class="impact-float float-2"></div>
+        <div class="impact-float float-3"></div>
     </section>
 
     <!-- Recipes Section -->
@@ -513,31 +550,263 @@ const settings = await getEntry('settings', 'global');
 
     .retailer-name { font-weight: 700; color: var(--planted-purple); font-size: 1rem; }
 
-    /* Impact Section */
+    /* ============================================
+       IMPACT SECTION - Brand-Focused Design
+       ============================================ */
     .impact {
-        background: var(--planted-green);
-        padding: 6rem 1.5rem;
-        text-align: center;
         position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
         width: 100%;
     }
 
-    .impact h2 {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(1.6rem, 5vw, 2.8rem);
-        color: var(--planted-black);
-        margin-bottom: 3rem;
-        text-transform: uppercase;
-        font-style: italic;
-        font-weight: 700;
-        letter-spacing: 0.02em;
+    /* Abstract gradient background */
+    .impact-bg {
+        position: absolute;
+        inset: 0;
     }
 
-    .impact-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 800px; margin: 0 auto; }
-    .stat { padding: 0.5rem; }
-    .stat-value { font-family: 'VC Henrietta', serif; font-size: clamp(3rem, 12vw, 5.5rem); font-weight: 700; color: var(--planted-black); line-height: 1; }
-    .stat-label { color: var(--planted-black); font-size: 0.85rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+    .impact-gradient {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            135deg,
+            #4A1D7A 0%,
+            #61269E 25%,
+            #7B3DB8 50%,
+            #61269E 75%,
+            #4A1D7A 100%
+        );
+        animation: gradientShift 20s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .impact-pattern {
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        background-image:
+            radial-gradient(circle at 20% 30%, rgba(107, 191, 89, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(107, 191, 89, 0.2) 0%, transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+    }
+
+    /* Floating decorative elements */
+    .impact-float {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(107, 191, 89, 0.1);
+        pointer-events: none;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .float-1 { width: 300px; height: 300px; top: 10%; left: -5%; animation-delay: 0s; }
+    .float-2 { width: 200px; height: 200px; bottom: 15%; right: 5%; animation-delay: -7s; background: rgba(255, 255, 255, 0.05); }
+    .float-3 { width: 150px; height: 150px; top: 60%; left: 10%; animation-delay: -14s; }
+
+    @keyframes float {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(20px, -20px) rotate(5deg); }
+        50% { transform: translate(-10px, 10px) rotate(-3deg); }
+        75% { transform: translate(15px, 15px) rotate(3deg); }
+    }
+
+    /* Content container */
+    .impact-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 6rem 2rem;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    /* Badge intro */
+    .impact-badge {
+        display: inline-block;
+        background: rgba(107, 191, 89, 0.2);
+        border: 1px solid rgba(107, 191, 89, 0.3);
+        color: var(--planted-green);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.6rem 1.25rem;
+        border-radius: 100px;
+        margin-bottom: 3rem;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .impact-badge.active {
+        animation: impactFadeSlideUp 0.8s ease forwards;
+        animation-delay: 0.2s;
+    }
+
+    @keyframes impactFadeSlideUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stats row */
+    .impact-stats {
+        display: flex;
+        justify-content: center;
+        gap: clamp(2rem, 6vw, 5rem);
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .impact-stat {
+        text-align: center;
+        opacity: 0;
+        transform: translateY(30px);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        min-width: 180px;
+    }
+
+    .impact-stat.special {
+        background: rgba(107, 191, 89, 0.1);
+        border: 1px solid rgba(107, 191, 89, 0.2);
+    }
+
+    .impact-stat.active {
+        animation: impactFadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .impact-stat.active:nth-child(1) { animation-delay: 0.4s; }
+    .impact-stat.active:nth-child(2) { animation-delay: 0.55s; }
+    .impact-stat.active:nth-child(3) { animation-delay: 0.7s; }
+
+    /* The big numbers */
+    .impact-stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(4rem, 12vw, 7rem);
+        color: white;
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        position: relative;
+    }
+
+    /* Green percent sign */
+    .impact-stat-value .percent {
+        color: var(--planted-green);
+        font-size: 0.5em;
+        vertical-align: super;
+        margin-left: -0.1em;
+    }
+
+    .impact-stat.special .impact-stat-value {
+        color: var(--planted-green);
+    }
+
+    /* Labels below numbers */
+    .impact-stat-label {
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: white;
+        margin-top: 0.5rem;
+        font-weight: 600;
+    }
+
+    .impact-stat-compare {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 0.25rem;
+    }
+
+    /* Tagline */
+    .impact-tagline {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.5rem, 4vw, 2.75rem);
+        color: white;
+        margin-bottom: 0.75rem;
+        opacity: 0;
+        transform: translateY(20px);
+        line-height: 1.1;
+    }
+
+    .impact-tagline.active {
+        animation: impactFadeSlideUp 0.8s ease forwards;
+        animation-delay: 0.9s;
+    }
+
+    /* Source text */
+    .impact-source {
+        font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 2rem;
+        opacity: 0;
+    }
+
+    .impact-source.active {
+        animation: impactFadeSlideUp 0.8s ease forwards;
+        animation-delay: 1s;
+    }
+
+    /* CTA Button */
+    .impact-cta {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .impact-cta.active {
+        animation: impactFadeSlideUp 0.8s ease forwards;
+        animation-delay: 1.1s;
+    }
+
+    .impact-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        padding: 1.15rem 2.5rem;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 20px rgba(107, 191, 89, 0.3);
+    }
+
+    .impact-btn:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 16px 40px rgba(107, 191, 89, 0.4);
+    }
+
+    .impact-btn svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    .impact-btn:hover svg {
+        transform: translateX(4px);
+    }
+
+    /* Impact section mobile responsive */
+    @media (max-width: 600px) {
+        .impact-stats { gap: 1rem; }
+        .impact-stat { min-width: 140px; padding: 1rem; }
+        .impact-stat-value { font-size: clamp(3rem, 15vw, 4.5rem); }
+        .impact-content { padding: 4rem 1.5rem; }
+    }
+
+    @media (max-width: 400px) {
+        .impact-stats { flex-direction: column; gap: 1rem; }
+        .impact-stat { width: 100%; }
+    }
 
     /* Recipes Section */
     .recipes-section { background: var(--planted-cream); padding: 6rem 0; }
@@ -671,34 +940,47 @@ const settings = await getEntry('settings', 'global');
         });
         updateVideoTransform();
 
-        // Counter animation
-        const statValues = document.querySelectorAll('.stat-value[data-count]');
-        let statsAnimated = false;
+        // Impact Section Animations
+        const impactSection = document.getElementById('impact');
+        const impactElements = document.querySelectorAll('.impact-badge, .impact-stat, .impact-tagline, .impact-source, .impact-cta');
+        const statValues = document.querySelectorAll('.impact-stat-value[data-count]');
+        let impactAnimated = false;
 
-        const statsObserver = new IntersectionObserver((entries) => {
+        const impactObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting && !statsAnimated) {
-                    statsAnimated = true;
+                if (entry.isIntersecting && !impactAnimated) {
+                    impactAnimated = true;
+                    // Trigger all impact animations
+                    impactElements.forEach(el => el.classList.add('active'));
+                    // Animate counters
                     animateCounters();
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
 
-        const impactSection = document.getElementById('impact');
-        if (impactSection) statsObserver.observe(impactSection);
+        if (impactSection) impactObserver.observe(impactSection);
 
         function animateCounters() {
             statValues.forEach(stat => {
                 const target = parseInt((stat as HTMLElement).dataset.count || '0');
                 const duration = 1500;
                 const start = performance.now();
+                const hasPercent = stat.querySelector('.percent') !== null;
 
                 function updateCounter(currentTime: number) {
                     const elapsed = currentTime - start;
                     const progress = Math.min(elapsed / duration, 1);
                     const easeOut = 1 - Math.pow(1 - progress, 3);
                     const current = Math.round(easeOut * target);
-                    stat.textContent = target === 0 ? '0' : current + '%';
+
+                    if (target === 0) {
+                        stat.textContent = '0';
+                    } else if (hasPercent) {
+                        stat.innerHTML = current + '<span class="percent">%</span>';
+                    } else {
+                        stat.textContent = String(current);
+                    }
+
                     if (progress < 1) requestAnimationFrame(updateCounter);
                 }
                 requestAnimationFrame(updateCounter);
