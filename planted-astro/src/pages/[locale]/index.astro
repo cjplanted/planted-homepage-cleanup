@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { allLocales, locales, type LocaleCode, getLocalizedProductName, retailers } from '../../i18n/config';
+import { allLocales, locales, type LocaleCode, getLocalizedProductName } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
 import StoreLocator from '../../components/StoreLocator.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
@@ -17,8 +17,6 @@ const { locale } = Astro.props as { locale: LocaleCode };
 const base = import.meta.env.BASE_URL;
 const t = getTranslations(locale);
 const localeData = locales[locale];
-const countryCode = localeData.country;
-const countryRetailers = retailers[countryCode] || [];
 
 const products = await getCollection('products');
 const featuredProducts = products.sort((a, b) => a.data.order - b.data.order);
@@ -180,44 +178,6 @@ const settings = await getEntry('settings', 'global');
             </span>
         </div>
     </section>
-
-    <!-- Where To Find Section -->
-    {countryRetailers.length > 0 && (
-        <section class="where-to-find" id="where-to-find">
-            <div class="where-to-find-inner">
-                <h2 class="reveal">{t.home.whereToFind.title}</h2>
-                <p class="reveal reveal-delay-1">{t.home.whereToFind.subtitle}</p>
-
-                <div class="retailer-sections">
-                    {countryRetailers.filter(r => r.type === 'retail').length > 0 && (
-                        <div class="retailer-section">
-                            <h3>{t.home.whereToFind.retailers}</h3>
-                            <div class="retailer-logos">
-                                {countryRetailers.filter(r => r.type === 'retail').map((retailer) => (
-                                    <a href={retailer.url} target="_blank" rel="noopener" class="retailer-logo reveal-scale">
-                                        <span class="retailer-name">{retailer.name}</span>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {countryRetailers.filter(r => r.type === 'foodservice').length > 0 && (
-                        <div class="retailer-section">
-                            <h3>{t.home.whereToFind.foodservice}</h3>
-                            <div class="retailer-logos">
-                                {countryRetailers.filter(r => r.type === 'foodservice').map((retailer) => (
-                                    <a href={retailer.url} target="_blank" rel="noopener" class="retailer-logo reveal-scale">
-                                        <span class="retailer-name">{retailer.name}</span>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </section>
-    )}
 
     <!-- Impact Section - Immersive Full-Width -->
     <section class="impact" id="impact">
@@ -767,39 +727,6 @@ const settings = await getEntry('settings', 'global');
         .nav-hint { display: none; }
     }
 
-    /* Where to Find Section */
-    .where-to-find {
-        background: var(--planted-cream);
-        padding: 5rem 1.5rem;
-        text-align: center;
-    }
-
-    .where-to-find-inner { max-width: 1000px; margin: 0 auto; }
-    .where-to-find h2 { font-size: clamp(2rem, 6vw, 3rem); color: var(--planted-purple); margin-bottom: 0.5rem; }
-    .where-to-find > .where-to-find-inner > p { color: var(--planted-black); opacity: 0.7; margin-bottom: 3rem; }
-
-    .retailer-sections { display: flex; flex-direction: column; gap: 3rem; }
-    .retailer-section h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--planted-purple); opacity: 0.6; margin-bottom: 1.5rem; }
-
-    .retailer-logos { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-
-    .retailer-logo {
-        background: white;
-        border: 2px solid rgba(97, 38, 158, 0.1);
-        border-radius: 1rem;
-        padding: 1rem 2rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-
-    .retailer-logo:hover {
-        border-color: var(--planted-purple);
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(97, 38, 158, 0.12);
-    }
-
-    .retailer-name { font-weight: 700; color: var(--planted-purple); font-size: 1rem; }
-
     /* ============================================
        IMPACT SECTION - Brand-Focused Design
        ============================================ */
@@ -1137,7 +1064,6 @@ const settings = await getEntry('settings', 'global');
         .products-carousel { padding: 0 3rem; }
         .products-scroll .product-card { flex: 0 0 300px; }
         .recipes-scroll .recipe-card { flex: 0 0 320px; }
-        .where-to-find { padding: 6rem 3rem; }
     }
 
     @media (min-width: 1440px) {
@@ -1153,7 +1079,6 @@ const settings = await getEntry('settings', 'global');
         .recipes-header { padding: 0 5rem 2.5rem; max-width: 1400px; margin: 0 auto; }
         .recipes-scroll { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
         .locator { padding: 8rem 5rem; }
-        .where-to-find { padding: 8rem 5rem; }
         .business-inner { max-width: 1200px; gap: 5rem; }
     }
 
