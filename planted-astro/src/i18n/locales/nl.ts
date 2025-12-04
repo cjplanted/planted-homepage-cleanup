@@ -7,6 +7,10 @@ export default {
         about: 'Over ons',
         findUs: 'Waar te vinden',
         selectCountry: 'Selecteer land',
+        sustainability: 'Duurzaamheid',
+        gastronomy: 'Horeca',
+        news: 'Nieuws',
+        ourStory: 'Ons verhaal',
     },
 
     // Home page
@@ -15,6 +19,16 @@ export default {
             title: 'De Toekomst van Vlees',
             subtitle: 'Plantaardig. Swiss-made. Ongelofelijk lekker.',
             cta: 'Ontdek producten',
+            badge: 'B Corp gecertificeerd',
+        },
+        sticker: {
+            text: '100%',
+            label: 'plantaardig',
+        },
+        trust: {
+            swissMade: 'Made in Switzerland',
+            restaurants: '8.000+ restaurants',
+            countries: '6 landen',
         },
         mission: {
             title: 'Onze Missie',
@@ -24,11 +38,15 @@ export default {
             title: 'Onze Producten',
             subtitle: 'Van kip tot pulled pork, we hebben het allemaal.',
             viewAll: 'Bekijk alle producten',
+            highlights: 'Onze favorieten',
+            allProducts: 'Alle producten',
         },
         recipes: {
             title: 'Laat je inspireren',
             subtitle: 'Ontdek heerlijke recepten met planted.',
             viewAll: 'Bekijk alle recepten',
+            getCooking: 'Aan de slag',
+            allRecipes: 'Alle 150+ recepten',
         },
         whereToFind: {
             title: 'Waar te vinden',
@@ -41,6 +59,21 @@ export default {
             subtitle: 'Voer je locatie in om de dichtstbijzijnde winkel te vinden.',
             placeholder: 'Voer je postcode of stad in',
             button: 'Zoeken',
+        },
+        impact: {
+            badge: 'De cijfers liegen niet',
+            lessCO2: 'Minder CO₂',
+            lessWater: 'Minder water',
+            animalsHarmed: 'Dieren geschaad',
+            vsCow: 'vs. rundvlees',
+            ever: 'ooit',
+            tagline: 'Dezelfde smaak. Beter voor de planeet.',
+            source: 'Levenscyclusanalyse geverifieerd door onafhankelijke onderzoekers',
+            seeHow: 'Ontdek hoe',
+        },
+        business: {
+            badge: 'Voor bedrijven',
+            getSamples: 'Monsters aanvragen',
         },
     },
 
@@ -196,5 +229,175 @@ export default {
         learnMore: 'Meer info',
         seeAll: 'Bekijk alles',
         scroll: 'Scroll',
+        readMore: 'Lees meer',
+        viewAll: 'Bekijk alles',
+    },
+
+    // Sustainability page
+    sustainability: {
+        pageTitle: 'Duurzaamheid',
+        hero: {
+            title: 'Beter eten. Echt waar.',
+            subtitle: 'De cijfers liegen niet',
+        },
+        comparison: 'Vergeleken met conventioneel dierlijk vlees per 100g eiwit.',
+        cta: {
+            explore: 'Ontdek producten',
+            find: 'Vind bij jou in de buurt',
+        },
+    },
+
+    // Gastronomy page
+    gastronomy: {
+        pageTitle: 'Horeca',
+        badge: 'Voor bedrijven',
+        hero: {
+            title: 'Plantaardig vlees voor professionele keukens',
+            subtitle: 'Verrijk je menu met planted',
+        },
+        stats: {
+            restaurants: '8.000+',
+            restaurantsLabel: 'Partner restaurants',
+            countries: '6',
+            countriesLabel: 'Landen',
+        },
+        trusted: 'Vertrouwd door de besten',
+        builtFor: 'Gemaakt voor keukens',
+        cta: {
+            samples: 'Monsters aanvragen',
+            contact: 'Neem contact op',
+        },
+    },
+
+    // News page
+    news: {
+        pageTitle: 'Nieuws',
+        hero: {
+            title: 'Laatste updates',
+            whatsGrowing: 'Wat groeit er',
+            subtitle: 'Nieuws, lanceringen en verhalen uit de wereld van planted.',
+        },
+        filters: {
+            all: 'Alles',
+            products: 'Producten',
+            partnerships: 'Partnerschappen',
+            sustainability: 'Duurzaamheid',
+            company: 'Bedrijf',
+        },
+        allNews: 'Al het nieuws',
+    },
+
+    // Our Story page
+    ourStory: {
+        pageTitle: 'Ons verhaal',
+        hero: {
+            title: 'Wij geloven dat vlees niet van dieren hoeft te komen',
+            subtitle: 'Geboren in Zwitserland. Wereldwijd groeiend.',
+        },
+        values: {
+            title: 'Waar we voor staan',
+            planetFirst: 'De planeet eerst',
+            planetFirstDesc: 'Elke beslissing begint met onze planeet.',
+            tasteOverEverything: 'Smaak boven alles',
+            tasteOverEverythingDesc: 'We doen nooit concessies aan smaak.',
+            scienceDriven: 'Wetenschap gedreven',
+            scienceDrivenDesc: 'Onderzoek en innovatie leiden ons.',
+            noWeirdStuff: 'Niets geks',
+            noWeirdStuffDesc: 'Alleen eenvoudige, schone ingrediënten.',
+        },
+        timeline: {
+            title: 'Onze reis',
+        },
+        cta: {
+            ready: 'Klaar om te proberen?',
+            find: 'Vind bij jou in de buurt',
+        },
+    },
+
+    // 404 page
+    notFound: {
+        title: 'Pagina niet gevonden',
+        message: 'Deze pagina is plantaardig geworden en verdwenen.',
+        cta: 'Terug naar home',
+    },
+
+    // Store Locator component
+    storeLocator: {
+        title: 'Vind ons',
+        subtitle: 'Ontdek waar je je planted fix kunt krijgen.',
+        detecting: 'Je locatie zoeken...',
+        showingResults: 'Resultaten voor',
+        change: 'Wijzigen',
+        tabs: {
+            stores: 'Winkels',
+            restaurants: 'Restaurants',
+        },
+        noResults: {
+            retail: 'Geen retail partners gevonden in jouw gebied.',
+            foodservice: 'Nog geen restaurant partners. Blijf kijken!',
+        },
+        foodserviceIntro: 'We zijn er trots op om samen te werken met restaurants en horecapartners die onze passie voor heerlijk, duurzaam eten delen.',
+        availableProducts: 'Beschikbare producten:',
+        online: {
+            badge: 'Geen winkel gevonden?',
+            text: 'Bestel direct via onze online shop en krijg planted thuisbezorgd.',
+            button: 'Online bestellen',
+        },
+    },
+
+    // Cookie Consent component
+    cookieConsent: {
+        title: 'We gebruiken cookies',
+        description: 'We gebruiken cookies om je ervaring te verbeteren en siteverkeer te analyseren. Door op "Alles accepteren" te klikken, stem je in met ons cookiegebruik.',
+        acceptAll: 'Alles accepteren',
+        necessaryOnly: 'Alleen noodzakelijk',
+        settings: 'Instellingen',
+        categories: {
+            necessary: 'Noodzakelijk',
+            necessaryDesc: 'Essentiële cookies die nodig zijn voor het correct functioneren van de website.',
+            analytics: 'Analytisch',
+            analyticsDesc: 'Helpen ons te begrijpen hoe bezoekers met onze website omgaan.',
+            marketing: 'Marketing',
+            marketingDesc: 'Gebruikt om gepersonaliseerde advertenties te leveren.',
+        },
+    },
+
+    // Newsletter Signup component
+    newsletter: {
+        title: 'Blijf op de hoogte',
+        subtitle: 'Honger naar meer?',
+        description: 'Ontvang recepten, productnieuws en exclusieve aanbiedingen. We beloven lekker te zijn, niet spammy.',
+        placeholder: 'Je e-mailadres',
+        button: 'Aanmelden',
+        consent: 'Ik ga akkoord met het ontvangen van marketing e-mails.',
+        success: 'Bedankt voor je aanmelding!',
+    },
+
+    // Countries (for dropdowns and localization)
+    countries: {
+        switzerland: 'Zwitserland',
+        germany: 'Duitsland',
+        austria: 'Oostenrijk',
+        italy: 'Italië',
+        france: 'Frankrijk',
+        netherlands: 'Nederland',
+        unitedKingdom: 'Verenigd Koninkrijk',
+        spain: 'Spanje',
+    },
+
+    // Filters
+    filters: {
+        all: 'Alle',
+        quickEasy: 'Snel & Makkelijk',
+        chicken: 'Kip',
+        steak: 'Steak',
+        bbq: 'BBQ',
+        pulled: 'Pulled',
+    },
+
+    // Meta / SEO
+    meta: {
+        defaultDescription: 'Plantaardig vlees dat echt naar vlees smaakt. Made in Switzerland. B Corp gecertificeerd.',
+        titleSuffix: ' | planted',
     },
 } as const;

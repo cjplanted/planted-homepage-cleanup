@@ -36,7 +36,7 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         <div class="nav-links">
             <a href={`${base}${localePath}/products`} class:list={[{ active: currentPage === 'products' }]}>{t.nav.products}</a>
             <a href={`${base}${localePath}/recipes`} class:list={[{ active: currentPage === 'recipes' }]}>{t.nav.recipes}</a>
-            <a href={`${base}${localePath}/our-story`} class:list={[{ active: currentPage === 'our-story' }]}>{t.nav.ourStory || 'Our Story'}</a>
+            <a href={`${base}${localePath}/our-story`} class:list={[{ active: currentPage === 'our-story' }]}>{t.nav.ourStory}</a>
             <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
         </div>
 
@@ -80,7 +80,7 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
     <button class="close-menu" id="closeMenu" aria-label="Close menu">&#10005;</button>
     <a href={`${base}${localePath}/products`}>{t.nav.products}</a>
     <a href={`${base}${localePath}/recipes`}>{t.nav.recipes}</a>
-    <a href={`${base}${localePath}/our-story`}>{t.nav.ourStory || 'Our Story'}</a>
+    <a href={`${base}${localePath}/our-story`}>{t.nav.ourStory}</a>
     <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
 
     <div class="mobile-country-selector">

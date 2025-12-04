@@ -7,6 +7,10 @@ export default {
         about: 'Über uns',
         findUs: 'Finde uns',
         selectCountry: 'Land wählen',
+        sustainability: 'Nachhaltigkeit',
+        gastronomy: 'Gastronomie',
+        news: 'News',
+        ourStory: 'Unsere Geschichte',
     },
 
     // Home page
@@ -15,6 +19,16 @@ export default {
             title: 'Die Zukunft des Fleisches',
             subtitle: 'Pflanzenbasiert. Swiss-made. Unglaublich lecker.',
             cta: 'Produkte entdecken',
+            badge: 'B Corp zertifiziert',
+        },
+        sticker: {
+            text: '100%',
+            label: 'pflanzenbasiert',
+        },
+        trust: {
+            swissMade: 'Made in Switzerland',
+            restaurants: '8.000+ Restaurants',
+            countries: '6 Länder',
         },
         mission: {
             title: 'Unsere Mission',
@@ -24,11 +38,15 @@ export default {
             title: 'Unsere Produkte',
             subtitle: 'Von Chicken bis Pulled Pork – wir haben alles.',
             viewAll: 'Alle Produkte ansehen',
+            highlights: 'Unsere Highlights',
+            allProducts: 'Alle Produkte',
         },
         recipes: {
             title: 'Lass dich inspirieren',
             subtitle: 'Entdecke köstliche Rezepte mit planted.',
             viewAll: 'Alle Rezepte ansehen',
+            getCooking: 'Ab in die Küche',
+            allRecipes: 'Alle 150+ Rezepte',
         },
         whereToFind: {
             title: 'Wo du uns findest',
@@ -41,6 +59,21 @@ export default {
             subtitle: 'Gib deinen Standort ein, um den nächsten Laden zu finden.',
             placeholder: 'Postleitzahl oder Stadt eingeben',
             button: 'Suchen',
+        },
+        impact: {
+            badge: 'Die Zahlen sprechen für sich',
+            lessCO2: 'Weniger CO₂',
+            lessWater: 'Weniger Wasser',
+            animalsHarmed: 'Tiere getötet',
+            vsCow: 'vs. Rindfleisch',
+            ever: 'nie',
+            tagline: 'Gleicher Geschmack. Besser für den Planeten.',
+            source: 'Ökobilanz durch unabhängige Forscher verifiziert',
+            seeHow: 'Erfahre mehr',
+        },
+        business: {
+            badge: 'Für Unternehmen',
+            getSamples: 'Muster anfordern',
         },
     },
 
@@ -196,5 +229,175 @@ export default {
         learnMore: 'Mehr erfahren',
         seeAll: 'Alle ansehen',
         scroll: 'Scrollen',
+        readMore: 'Weiterlesen',
+        viewAll: 'Alle ansehen',
+    },
+
+    // Sustainability page
+    sustainability: {
+        pageTitle: 'Nachhaltigkeit',
+        hero: {
+            title: 'Besser essen. Wirklich.',
+            subtitle: 'Die Zahlen lügen nicht',
+        },
+        comparison: 'Im Vergleich zu konventionellem Tierfleisch pro 100g Protein.',
+        cta: {
+            explore: 'Produkte entdecken',
+            find: 'In deiner Nähe finden',
+        },
+    },
+
+    // Gastronomy page
+    gastronomy: {
+        pageTitle: 'Gastronomie',
+        badge: 'Für Unternehmen',
+        hero: {
+            title: 'Pflanzenbasiertes Fleisch für Profiküchen',
+            subtitle: 'Bereichere dein Menü mit planted',
+        },
+        stats: {
+            restaurants: '8.000+',
+            restaurantsLabel: 'Partner-Restaurants',
+            countries: '6',
+            countriesLabel: 'Länder',
+        },
+        trusted: 'Vertraut von den Besten',
+        builtFor: 'Gemacht für Küchen',
+        cta: {
+            samples: 'Muster anfordern',
+            contact: 'Kontaktiere uns',
+        },
+    },
+
+    // News page
+    news: {
+        pageTitle: 'News',
+        hero: {
+            title: 'Neueste Updates',
+            whatsGrowing: 'Was wächst',
+            subtitle: 'Nachrichten, Launches und Geschichten aus der Welt von planted.',
+        },
+        filters: {
+            all: 'Alle',
+            products: 'Produkte',
+            partnerships: 'Partnerschaften',
+            sustainability: 'Nachhaltigkeit',
+            company: 'Unternehmen',
+        },
+        allNews: 'Alle News',
+    },
+
+    // Our Story page
+    ourStory: {
+        pageTitle: 'Unsere Geschichte',
+        hero: {
+            title: 'Wir glauben, dass Fleisch nicht von Tieren kommen muss',
+            subtitle: 'Geboren in der Schweiz. Wächst weltweit.',
+        },
+        values: {
+            title: 'Wofür wir stehen',
+            planetFirst: 'Planet First',
+            planetFirstDesc: 'Jede Entscheidung beginnt mit unserem Planeten.',
+            tasteOverEverything: 'Geschmack über alles',
+            tasteOverEverythingDesc: 'Wir machen nie Kompromisse beim Geschmack.',
+            scienceDriven: 'Wissenschaftsbasiert',
+            scienceDrivenDesc: 'Forschung und Innovation leiten uns.',
+            noWeirdStuff: 'Nichts Seltsames',
+            noWeirdStuffDesc: 'Nur einfache, saubere Zutaten.',
+        },
+        timeline: {
+            title: 'Unsere Reise',
+        },
+        cta: {
+            ready: 'Bereit zum Probieren?',
+            find: 'In deiner Nähe finden',
+        },
+    },
+
+    // 404 page
+    notFound: {
+        title: 'Seite nicht gefunden',
+        message: 'Diese Seite ist pflanzenbasiert geworden und verschwunden.',
+        cta: 'Zurück zur Startseite',
+    },
+
+    // Store Locator component
+    storeLocator: {
+        title: 'Finde uns',
+        subtitle: 'Entdecke, wo du planted bekommst.',
+        detecting: 'Standort wird ermittelt...',
+        showingResults: 'Ergebnisse für',
+        change: 'Ändern',
+        tabs: {
+            stores: 'Geschäfte',
+            restaurants: 'Restaurants',
+        },
+        noResults: {
+            retail: 'Keine Einzelhandelspartner in deiner Nähe gefunden.',
+            foodservice: 'Noch keine Restaurant-Partner. Bleib dran!',
+        },
+        foodserviceIntro: 'Wir sind stolz darauf, mit Restaurants und Gastronomiepartnern zusammenzuarbeiten, die unsere Leidenschaft für leckeres, nachhaltiges Essen teilen.',
+        availableProducts: 'Verfügbare Produkte:',
+        online: {
+            badge: 'Keinen Laden gefunden?',
+            text: 'Bestelle direkt in unserem Online-Shop und lass dir planted nach Hause liefern.',
+            button: 'Online kaufen',
+        },
+    },
+
+    // Cookie Consent component
+    cookieConsent: {
+        title: 'Wir verwenden Cookies',
+        description: 'Wir verwenden Cookies, um dein Erlebnis zu verbessern und den Website-Traffic zu analysieren. Durch Klicken auf "Alle akzeptieren" stimmst du unserer Cookie-Nutzung zu.',
+        acceptAll: 'Alle akzeptieren',
+        necessaryOnly: 'Nur notwendige',
+        settings: 'Einstellungen',
+        categories: {
+            necessary: 'Notwendig',
+            necessaryDesc: 'Wesentliche Cookies, die für das Funktionieren der Website erforderlich sind.',
+            analytics: 'Analyse',
+            analyticsDesc: 'Helfen uns zu verstehen, wie Besucher mit unserer Website interagieren.',
+            marketing: 'Marketing',
+            marketingDesc: 'Werden verwendet, um personalisierte Werbung zu liefern.',
+        },
+    },
+
+    // Newsletter Signup component
+    newsletter: {
+        title: 'Bleib auf dem Laufenden',
+        subtitle: 'Hungrig nach mehr?',
+        description: 'Erhalte Rezepte, Produktneuheiten und exklusive Angebote. Wir versprechen, es lecker zu halten, nicht spammig.',
+        placeholder: 'Deine E-Mail-Adresse',
+        button: 'Abonnieren',
+        consent: 'Ich stimme zu, Marketing-E-Mails zu erhalten.',
+        success: 'Danke fürs Abonnieren!',
+    },
+
+    // Countries (for dropdowns and localization)
+    countries: {
+        switzerland: 'Schweiz',
+        germany: 'Deutschland',
+        austria: 'Österreich',
+        italy: 'Italien',
+        france: 'Frankreich',
+        netherlands: 'Niederlande',
+        unitedKingdom: 'Vereinigtes Königreich',
+        spain: 'Spanien',
+    },
+
+    // Filters
+    filters: {
+        all: 'Alle',
+        quickEasy: 'Schnell & Einfach',
+        chicken: 'Chicken',
+        steak: 'Steak',
+        bbq: 'BBQ',
+        pulled: 'Pulled',
+    },
+
+    // Meta / SEO
+    meta: {
+        defaultDescription: 'Pflanzenbasiertes Fleisch, das wirklich wie Fleisch schmeckt. Made in Switzerland. B Corp zertifiziert.',
+        titleSuffix: ' | planted',
     },
 } as const;

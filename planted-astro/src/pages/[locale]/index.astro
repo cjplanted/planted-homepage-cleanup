@@ -152,19 +152,19 @@ const settings = await getEntry('settings', 'global');
 
     <!-- Impact Section -->
     <section class="impact" id="impact">
-        <h2 class="reveal">{settings?.data.statementTitle}</h2>
+        <h2 class="reveal">{t.home.impact.badge}</h2>
         <div class="impact-stats">
             <div class="stat reveal reveal-delay-1">
                 <div class="stat-value" data-count={settings?.data.impactCO2}>0%</div>
-                <div class="stat-label">CO₂</div>
+                <div class="stat-label">{t.home.impact.lessCO2}</div>
             </div>
             <div class="stat reveal reveal-delay-2">
                 <div class="stat-value" data-count={settings?.data.impactWater}>0%</div>
-                <div class="stat-label">{localeData.language === 'de' ? 'Wasser' : localeData.language === 'fr' ? 'Eau' : localeData.language === 'it' ? 'Acqua' : localeData.language === 'nl' ? 'Water' : localeData.language === 'es' ? 'Agua' : 'Water'}</div>
+                <div class="stat-label">{t.home.impact.lessWater}</div>
             </div>
             <div class="stat reveal reveal-delay-3">
                 <div class="stat-value" data-count={settings?.data.impactAnimals}>0</div>
-                <div class="stat-label">{localeData.language === 'de' ? 'Tiere' : localeData.language === 'fr' ? 'Animaux' : localeData.language === 'it' ? 'Animali' : localeData.language === 'nl' ? 'Dieren' : localeData.language === 'es' ? 'Animales' : 'Animals'}</div>
+                <div class="stat-label">{t.products.nutrition.animals}</div>
             </div>
         </div>
     </section>
