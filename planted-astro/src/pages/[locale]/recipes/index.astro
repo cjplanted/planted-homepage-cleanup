@@ -168,7 +168,7 @@ const productFilters = productFilterIds
 
     /* Hero */
     .hero {
-        background: var(--purple);
+        background: var(--cream);
         padding: 8rem 1.5rem 3rem;
         text-align: center;
     }
@@ -180,22 +180,23 @@ const productFilters = productFilterIds
 
     .hero h1 {
         font-size: clamp(2.5rem, 10vw, 5rem);
-        color: white;
+        color: var(--purple);
         margin-bottom: 1rem;
         line-height: 1;
     }
 
     .hero p {
         font-size: clamp(1rem, 2.5vw, 1.25rem);
-        color: rgba(255,255,255,0.8);
+        color: var(--black);
+        opacity: 0.7;
         max-width: 600px;
         margin: 0 auto;
         line-height: 1.5;
     }
 
-    /* Filter Bar - Matches eatplanted.com style */
+    /* Filter Bar */
     .filter-bar {
-        background: var(--purple);
+        background: var(--cream);
         padding: 0 0.75rem 2rem;
         overflow: hidden;
     }
@@ -228,22 +229,22 @@ const productFilters = productFilterIds
         font-weight: 700;
         padding: 0.6rem 1.25rem;
         border-radius: 100px;
-        border: 3px solid var(--purple);
-        background: transparent;
-        color: white;
+        border: 2px solid rgba(97, 38, 158, 0.2);
+        background: white;
+        color: var(--purple);
         cursor: pointer;
         white-space: nowrap;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .filter-btn:hover {
-        background: rgba(255,255,255,0.1);
+        border-color: var(--purple);
         transform: translateY(-1px);
     }
 
     .filter-btn.active {
-        background: var(--healthy);
-        border-color: var(--healthy);
+        background: var(--purple);
+        border-color: var(--purple);
         color: white;
     }
 
