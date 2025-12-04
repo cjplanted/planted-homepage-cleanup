@@ -110,18 +110,64 @@ const settings = await getEntry('settings', 'global');
             </div>
         </div>
 
-        <!-- Carousel Pagination -->
-        <div class="carousel-pagination">
-            <button class="carousel-arrow" id="carouselPrev" aria-label="Previous">←</button>
-            <div class="carousel-dots" id="carouselDots">
-                {featuredProducts.map((_, index) => (
-                    <div class={`carousel-dot ${index === 0 ? 'active' : ''}`} data-index={index}></div>
-                ))}
+        <!-- Growing Carousel Navigation - Playful & On-Brand -->
+        <div class="growing-nav">
+            <!-- Left hand beckoning -->
+            <button class="nav-hand nav-hand-left" id="carouselPrev" aria-label="Previous">
+                <svg viewBox="0 0 60 60" class="hand-icon">
+                    <path class="hand-palm" d="M35 45c-8 0-14-3-17-8-2-3-3-7-2-12l3-15c1-3 4-5 7-4s5 4 4 7l-2 8" fill="#FDF8F3" stroke="#61269E" stroke-width="2.5"/>
+                    <path class="hand-finger f1" d="M28 19l2-10c1-2 3-4 5-3s3 3 2 5l-3 10" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f2" d="M33 17l1-12c0-2 2-4 4-4s4 2 4 4l-2 13" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f3" d="M40 18l2-11c0-2 2-3 4-3s3 2 3 4l-3 11" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f4" d="M46 22l2-8c0-2 2-3 3-2s2 2 2 4l-3 8" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                </svg>
+                <span class="nav-hint">← psst!</span>
+            </button>
+
+            <!-- The Growing Stem with Leaves -->
+            <div class="stem-container" id="stemContainer">
+                <svg class="stem-svg" viewBox="0 0 300 50" preserveAspectRatio="none">
+                    <!-- Animated growing stem -->
+                    <path class="stem-path" d="M10 40 Q75 15, 150 25 T290 20" fill="none" stroke="#6BBF59" stroke-width="3" stroke-linecap="round"/>
+                    <path class="stem-path-glow" d="M10 40 Q75 15, 150 25 T290 20" fill="none" stroke="#6BBF59" stroke-width="6" stroke-linecap="round" opacity="0.2"/>
+                </svg>
+                
+                <!-- Leaf markers for each product -->
+                <div class="leaves-track" id="carouselDots">
+                    {featuredProducts.map((_, index) => (
+                        <button 
+                            class={`leaf-marker ${index === 0 ? 'active sprouting' : ''}`} 
+                            data-index={index}
+                            aria-label={`Go to product ${index + 1}`}
+                        >
+                            <svg viewBox="0 0 24 24" class="leaf-icon">
+                                <path d="M12 2C6.5 2 2 6.5 2 12c0 4 2.5 7.5 6 9 .5-2 1.5-4 3-5.5 1.5-1.5 3-2.5 5-3-1.5-3.5-5-6-8.5-6-.5 0-1 0-1.5.1C7.5 4.5 9.5 3 12 3c5.5 0 10 4.5 10 9 0 2.5-1 4.5-2.5 6-1-1.5-2.5-2.5-4-3-1.5-.5-3-.5-4.5 0" fill="currentColor"/>
+                            </svg>
+                            <span class="leaf-sprout">🌱</span>
+                        </button>
+                    ))}
+                </div>
             </div>
-            <button class="carousel-arrow" id="carouselNext" aria-label="Next">→</button>
+
+            <!-- Right hand beckoning -->
+            <button class="nav-hand nav-hand-right" id="carouselNext" aria-label="Next">
+                <svg viewBox="0 0 60 60" class="hand-icon">
+                    <path class="hand-palm" d="M25 45c8 0 14-3 17-8 2-3 3-7 2-12l-3-15c-1-3-4-5-7-4s-5 4-4 7l2 8" fill="#FDF8F3" stroke="#61269E" stroke-width="2.5"/>
+                    <path class="hand-finger f1" d="M32 19l-2-10c-1-2-3-4-5-3s-3 3-2 5l3 10" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f2" d="M27 17l-1-12c0-2-2-4-4-4s-4 2-4 4l2 13" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f3" d="M20 18l-2-11c0-2-2-3-4-3s-3 2-3 4l3 11" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                    <path class="hand-finger f4" d="M14 22l-2-8c0-2-2-3-3-2s-2 2-2 4l3 8" fill="#FDF8F3" stroke="#61269E" stroke-width="2"/>
+                </svg>
+                <span class="nav-hint">more! →</span>
+            </button>
         </div>
-        <div class="carousel-count">
-            <span id="carouselCurrent">1</span> / <span>{featuredProducts.length}</span>
+
+        <!-- Playful Progress Message -->
+        <div class="growing-progress">
+            <span class="progress-emoji">🌱</span>
+            <span class="progress-text">
+                Growing... <strong id="carouselCurrent">1</strong> of <strong>{featuredProducts.length}</strong> planted
+            </span>
         </div>
     </section>
 
@@ -507,7 +553,6 @@ const settings = await getEntry('settings', 'global');
         font-family: 'VC Henrietta', serif;
         font-size: clamp(2.5rem, 8vw, 4.5rem);
         color: var(--planted-purple);
-        font-style: italic;
         font-weight: 700;
         line-height: 1;
     }
@@ -674,71 +719,271 @@ const settings = await getEntry('settings', 'global');
         transform: translateY(-6px);
     }
 
-    .carousel-pagination {
+    /* ============================================
+       GROWING CAROUSEL - Playful Plant Navigation
+       ============================================ */
+    
+    .growing-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding: 0 1rem;
+    }
+
+    /* Beckoning Hand Buttons */
+    .nav-hand {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-hand:hover {
+        transform: scale(1.1);
+    }
+
+    .nav-hand:active {
+        transform: scale(0.95);
+    }
+
+    .hand-icon {
+        width: 48px;
+        height: 48px;
+        filter: drop-shadow(0 2px 4px rgba(97, 38, 158, 0.2));
+    }
+
+    /* Beckoning animation - fingers curl inward */
+    .nav-hand-left .hand-finger {
+        transform-origin: bottom right;
+        animation: beckonLeft 1.5s ease-in-out infinite;
+    }
+    .nav-hand-right .hand-finger {
+        transform-origin: bottom left;
+        animation: beckonRight 1.5s ease-in-out infinite;
+    }
+
+    .nav-hand .f1 { animation-delay: 0s; }
+    .nav-hand .f2 { animation-delay: 0.1s; }
+    .nav-hand .f3 { animation-delay: 0.2s; }
+    .nav-hand .f4 { animation-delay: 0.3s; }
+
+    @keyframes beckonLeft {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(15deg); }
+    }
+    @keyframes beckonRight {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(-15deg); }
+    }
+
+    .nav-hint {
+        font-size: 0.7rem;
+        color: var(--planted-purple);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+    }
+
+    .nav-hand:hover .nav-hint {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Growing Stem Container */
+    .stem-container {
+        position: relative;
+        width: 300px;
+        height: 50px;
+        flex-shrink: 0;
+    }
+
+    .stem-svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .stem-path {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: growStem 2s ease-out forwards;
+    }
+
+    .stem-path-glow {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: growStem 2s ease-out 0.2s forwards;
+    }
+
+    @keyframes growStem {
+        to { stroke-dashoffset: 0; }
+    }
+
+    /* Leaves Track */
+    .leaves-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5px;
+    }
+
+    /* Individual Leaf Markers */
+    .leaf-marker {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 1;
+    }
+
+    .leaf-icon {
+        width: 16px;
+        height: 16px;
+        color: var(--planted-purple);
+        opacity: 0.4;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: scale(0.8);
+    }
+
+    .leaf-marker:hover .leaf-icon {
+        opacity: 0.7;
+        transform: scale(1) rotate(-10deg);
+        animation: leafWiggle 0.5s ease-in-out;
+    }
+
+    @keyframes leafWiggle {
+        0%, 100% { transform: scale(1) rotate(-10deg); }
+        25% { transform: scale(1.1) rotate(-15deg); }
+        75% { transform: scale(1.1) rotate(-5deg); }
+    }
+
+    .leaf-marker.active .leaf-icon {
+        color: var(--planted-green);
+        opacity: 1;
+        transform: scale(1.4);
+        filter: drop-shadow(0 0 8px rgba(107, 191, 89, 0.5));
+    }
+
+    /* Sprout emoji that pops on activation */
+    .leaf-sprout {
+        position: absolute;
+        top: -15px;
+        font-size: 1rem;
+        opacity: 0;
+        transform: scale(0) translateY(10px);
+        pointer-events: none;
+    }
+
+    .leaf-marker.sprouting .leaf-sprout {
+        animation: sproutPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes sproutPop {
+        0% {
+            opacity: 0;
+            transform: scale(0) translateY(10px);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.3) translateY(-5px);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1) translateY(-20px);
+        }
+    }
+
+    /* Playful Progress Message */
+    .growing-progress {
+        text-align: center;
+        margin-top: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        margin-top: 2rem;
-        padding: 0 1.5rem;
     }
 
-    .carousel-arrow {
-        background: none;
-        border: none;
+    .progress-emoji {
+        font-size: 1.2rem;
+        animation: gentleBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes gentleBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
+
+    .progress-text {
+        font-size: 0.9rem;
         color: var(--planted-purple);
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        opacity: 0.6;
-        transition: opacity 0.3s;
+        font-weight: 500;
     }
 
-    .carousel-arrow:hover {
-        opacity: 1;
+    .progress-text strong {
+        color: var(--planted-green);
+        font-weight: 700;
     }
 
-    .carousel-dots {
-        display: flex;
-        gap: 0.4rem;
-    }
-
-    .carousel-dot {
-        width: 12px;
-        height: 4px;
-        background: var(--planted-purple);
-        border-radius: 2px;
-        opacity: 0.3;
-        transition: opacity 0.3s, width 0.3s;
-    }
-
-    .carousel-dot.active {
-        background: var(--planted-green);
-        opacity: 1;
-        width: 20px;
-    }
-
-    .carousel-count {
-        text-align: center;
-        margin-top: 0.75rem;
-        font-size: 0.85rem;
-        color: var(--planted-purple);
-        opacity: 0.6;
-        font-weight: 600;
-    }
-
-    /* Hide dots on mobile when many products, show count instead */
+    /* Mobile Responsive */
     @media (max-width: 640px) {
-        .carousel-dots {
-            max-width: 200px;
+        .stem-container {
+            width: 180px;
+        }
+
+        .hand-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .leaf-icon {
+            width: 10px;
+            height: 10px;
+        }
+
+        .leaf-marker.active .leaf-icon {
+            transform: scale(1.2);
+        }
+
+        /* Show only nearby leaves on mobile */
+        .leaves-track {
             overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 20%, black 80%, transparent);
         }
-        .carousel-dot {
-            width: 8px;
-            height: 3px;
+    }
+
+    @media (max-width: 400px) {
+        .growing-nav {
+            gap: 0.5rem;
         }
-        .carousel-dot.active {
-            width: 16px;
+        
+        .stem-container {
+            width: 140px;
+        }
+
+        .nav-hint {
+            display: none;
         }
     }
 
@@ -1605,9 +1850,10 @@ const settings = await getEntry('settings', 'global');
             });
         }
 
-        // Products carousel
+        // Products carousel - Growing Navigation
         const productsScroll = document.getElementById('productsScroll');
-        const carouselDots = document.querySelectorAll('.carousel-dot');
+        const leafMarkers = document.querySelectorAll('.leaf-marker');
+        let lastActiveIndex = 0;
 
         function scrollProducts(direction: number) {
             const card = productsScroll?.querySelector('.product-card');
@@ -1620,10 +1866,24 @@ const settings = await getEntry('settings', 'global');
             }
         }
 
+        // Navigate by clicking on leaves
+        leafMarkers.forEach((leaf, index) => {
+            leaf.addEventListener('click', () => {
+                const card = productsScroll?.querySelector('.product-card');
+                if (card && productsScroll) {
+                    const cardWidth = (card as HTMLElement).offsetWidth + 24;
+                    productsScroll.scrollTo({
+                        left: index * cardWidth,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
         document.getElementById('carouselPrev')?.addEventListener('click', () => scrollProducts(-1));
         document.getElementById('carouselNext')?.addEventListener('click', () => scrollProducts(1));
 
-        // Update dots and counter on scroll
+        // Update leaves and counter on scroll
         const carouselCurrent = document.getElementById('carouselCurrent');
 
         productsScroll?.addEventListener('scroll', () => {
@@ -1632,9 +1892,25 @@ const settings = await getEntry('settings', 'global');
                 const cardWidth = (card as HTMLElement).offsetWidth + 24;
                 const activeIndex = Math.round(productsScroll.scrollLeft / cardWidth);
 
-                carouselDots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === activeIndex);
-                });
+                // Only trigger animation if index changed
+                if (activeIndex !== lastActiveIndex) {
+                    leafMarkers.forEach((leaf, index) => {
+                        const isActive = index === activeIndex;
+                        const wasActive = index === lastActiveIndex;
+                        
+                        leaf.classList.toggle('active', isActive);
+                        
+                        // Trigger sprouting animation on newly active leaf
+                        if (isActive && !wasActive) {
+                            leaf.classList.remove('sprouting');
+                            // Force reflow to restart animation
+                            void (leaf as HTMLElement).offsetWidth;
+                            leaf.classList.add('sprouting');
+                        }
+                    });
+                    
+                    lastActiveIndex = activeIndex;
+                }
 
                 // Update counter
                 if (carouselCurrent) {

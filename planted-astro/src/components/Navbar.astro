@@ -1,7 +1,6 @@
 ---
-import { locales, allLocales, countries, countryLocales, defaultLocale, type LocaleCode } from '../i18n/config';
+import { locales, defaultLocale, type LocaleCode } from '../i18n/config';
 import { getTranslations } from '../i18n/index';
-import CountrySelector from './CountrySelector.astro';
 
 interface Props {
     currentPage?: string;
@@ -41,11 +40,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
             <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
         </div>
 
-        <!-- Country Selector Modal -->
-        <div class="country-selector-wrapper">
-            <CountrySelector currentLocale={locale} />
-        </div>
-
         <button class="nav-toggle" id="navToggle" aria-label="Open menu">
             <span></span>
             <span></span>
@@ -61,15 +55,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
     <a href={`${base}${localePath}/recipes`}>{t.nav.recipes}</a>
     <a href={`${base}${localePath}/our-story`}>{t.nav.ourStory}</a>
     <a href={`${base}${localePath}/#locator`}>{t.nav.findUs}</a>
-
-    <div class="mobile-country-selector">
-        <span class="mobile-country-label">{t.nav.selectCountry}</span>
-        <button class="mobile-country-btn" id="mobileCountryBtn">
-            <span class="country-flag">{currentLocaleData.flag}</span>
-            <span class="country-name">{currentLocaleData.name}</span>
-            <span class="country-lang">({currentLocaleData.languageName})</span>
-        </button>
-    </div>
 </div>
 
 <style>
@@ -131,11 +116,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
     .nav-links a:hover,
     .nav-links a.active {
         opacity: 0.7;
-    }
-
-    /* Country Selector Wrapper */
-    .country-selector-wrapper {
-        display: none;
     }
 
     .nav-toggle {
@@ -204,59 +184,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         color: var(--planted-green);
     }
 
-    .mobile-country-selector {
-        margin-top: 2rem;
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-        transition-delay: 0.2s;
-        text-align: center;
-    }
-
-    .nav-menu.open .mobile-country-selector {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .mobile-country-label {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 1rem;
-        display: block;
-    }
-
-    .mobile-country-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 100px;
-        padding: 0.75rem 1.25rem;
-        color: white;
-        font-family: inherit;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .mobile-country-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .mobile-country-btn .country-flag {
-        font-size: 1.1rem;
-    }
-
-    .mobile-country-btn .country-lang {
-        opacity: 0.7;
-        font-weight: 400;
-    }
-
     .close-menu {
         position: absolute;
         top: 0.75rem;
@@ -289,10 +216,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         .nav-links {
             display: flex;
         }
-
-        .country-selector-wrapper {
-            display: block;
-        }
     }
 
     @media (min-width: 1440px) {
@@ -322,8 +245,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         const menu = document.getElementById('navMenu');
         const navToggle = document.getElementById('navToggle');
         const closeMenuBtn = document.getElementById('closeMenu');
-        const mobileCountryBtn = document.getElementById('mobileCountryBtn');
-        const countryModal = document.getElementById('countryModal');
 
         if (!nav) return;
 
@@ -358,18 +279,6 @@ const localePath = locale === defaultLocale ? '' : `/${locale}`;
         // Close menu when clicking nav links
         menu?.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', closeMenu);
-        });
-
-        // Mobile country button opens the country modal
-        const newMobileCountryBtn = mobileCountryBtn?.cloneNode(true) as HTMLElement;
-        mobileCountryBtn?.parentNode?.replaceChild(newMobileCountryBtn, mobileCountryBtn);
-        newMobileCountryBtn?.addEventListener('click', () => {
-            closeMenu();
-            if (countryModal) {
-                countryModal.classList.add('open');
-                countryModal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-            }
         });
 
         // Throttled scroll handler for nav hide/show

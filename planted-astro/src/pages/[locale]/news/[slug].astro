@@ -1,0 +1,242 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
+import { getTranslations } from '../../../i18n/index';
+
+export async function getStaticPaths() {
+    const news = await getCollection('news');
+    const paths = [];
+
+    for (const locale of allLocales) {
+        for (const article of news) {
+            paths.push({
+                params: { locale, slug: article.data.slug },
+                props: { locale, article },
+            });
+        }
+    }
+
+    return paths;
+}
+
+const { locale, article } = Astro.props as { locale: LocaleCode; article: any };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+
+// Category colors
+const categoryColors: Record<string, string> = {
+    partnership: 'purple',
+    product: 'green',
+    company: 'orange',
+    sustainability: 'teal',
+    campaign: 'pink'
+};
+
+// Get related articles
+const allNews = await getCollection('news');
+const relatedArticles = allNews
+    .filter(a => a.data.slug !== article.data.slug && a.data.category === article.data.category)
+    .slice(0, 3);
+---
+
+<Layout title={`${article.data.title} – Planted`} description={article.data.excerpt} locale={locale}>
+    <article class="article">
+        <header class="article-header">
+            <a href={`${base}/${locale}/news`} class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                {t.news.allNews}
+            </a>
+            <div class="article-meta">
+                <span class={`category ${categoryColors[article.data.category] || 'purple'}`}>
+                    {article.data.category}
+                </span>
+                <time datetime={article.data.date}>
+                    {new Date(article.data.date).toLocaleDateString(localeData.language, { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+            </div>
+            <h1>{article.data.title}</h1>
+            <p class="article-excerpt">{article.data.excerpt}</p>
+        </header>
+
+        <div class="article-image">
+            <img src={article.data.image} alt={article.data.title} />
+        </div>
+
+        <div class="article-content">
+            <p>{article.data.content || article.data.excerpt}</p>
+        </div>
+    </article>
+
+    {relatedArticles.length > 0 && (
+        <section class="related-section">
+            <h2>{t.common.readMore}</h2>
+            <div class="related-grid">
+                {relatedArticles.map((related) => (
+                    <a href={`${base}/${locale}/news/${related.data.slug}`} class="related-card">
+                        <div class="related-image">
+                            <img src={related.data.image} alt={related.data.title} loading="lazy" />
+                        </div>
+                        <div class="related-content">
+                            <h3>{related.data.title}</h3>
+                            <time datetime={related.data.date}>
+                                {new Date(related.data.date).toLocaleDateString(localeData.language, { year: 'numeric', month: 'short', day: 'numeric' })}
+                            </time>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </section>
+    )}
+</Layout>
+
+<style>
+    .article {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 8rem 1.5rem 4rem;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--planted-purple);
+        text-decoration: none;
+        font-weight: 500;
+        margin-bottom: 2rem;
+        transition: opacity 0.2s ease;
+    }
+
+    .back-link:hover {
+        opacity: 0.7;
+    }
+
+    .back-link svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .category {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+    }
+
+    .category.purple { background: rgba(97, 38, 158, 0.1); color: var(--planted-purple); }
+    .category.green { background: rgba(107, 191, 89, 0.2); color: #3a7d2a; }
+    .category.orange { background: rgba(245, 166, 35, 0.2); color: #b37a1a; }
+    .category.teal { background: rgba(42, 161, 152, 0.2); color: #1e7971; }
+    .category.pink { background: rgba(233, 30, 140, 0.2); color: #b5156b; }
+
+    .article-meta time {
+        font-size: 0.9rem;
+        opacity: 0.6;
+    }
+
+    .article-header h1 {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        color: var(--planted-purple);
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    .article-excerpt {
+        font-size: 1.25rem;
+        opacity: 0.8;
+        line-height: 1.6;
+    }
+
+    .article-image {
+        margin: 3rem 0;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .article-image img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+    }
+
+    .article-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .article-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .related-section {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .related-section h2 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: var(--planted-purple);
+        margin-bottom: 2rem;
+    }
+
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .related-card {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .related-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .related-image {
+        aspect-ratio: 16/10;
+    }
+
+    .related-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .related-content {
+        padding: 1.25rem;
+    }
+
+    .related-content h3 {
+        font-size: 1rem;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+
+    .related-content time {
+        font-size: 0.8rem;
+        opacity: 0.6;
+    }
+</style>

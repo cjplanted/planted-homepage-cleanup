@@ -1,0 +1,555 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { getTranslations } from '../../i18n/index';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+---
+
+<Layout title={`${t.sustainability.pageTitle} – Planted`} description={t.sustainability.hero.subtitle} currentPage="sustainability" locale={locale}>
+    <section class="hero">
+        <h1>{t.sustainability.hero.title.split('.')[0]}. <span>{t.sustainability.hero.title.split('.')[1] || 'For real.'}</span></h1>
+        <p>{t.sustainability.hero.subtitle}</p>
+    </section>
+
+    <section class="impact-overview">
+        <div class="impact-intro reveal">
+            <p class="lead">{t.sustainability.comparison}</p>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="section-header">
+            <h2 class="reveal">{t.sustainability.hero.subtitle}</h2>
+            <p class="reveal">{t.sustainability.comparison}</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-card reveal-scale">
+                <div class="product-name">planted.steak</div>
+                <div class="comparison-stats">
+                    <div class="stat">
+                        <div class="stat-value">97%</div>
+                        <div class="stat-label">{t.home.impact.lessCO2}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">81%</div>
+                        <div class="stat-label">{t.home.impact.lessWater}</div>
+                    </div>
+                </div>
+                <div class="comparison-note">{t.home.impact.vsCow}</div>
+            </div>
+
+            <div class="comparison-card reveal-scale">
+                <div class="product-name">planted.schnitzel</div>
+                <div class="comparison-stats">
+                    <div class="stat">
+                        <div class="stat-value">87%</div>
+                        <div class="stat-label">{t.home.impact.lessCO2}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">90%</div>
+                        <div class="stat-label">{t.home.impact.lessWater}</div>
+                    </div>
+                </div>
+                <div class="comparison-note">vs. pork schnitzel</div>
+            </div>
+
+            <div class="comparison-card reveal-scale">
+                <div class="product-name">planted.chicken</div>
+                <div class="comparison-stats">
+                    <div class="stat">
+                        <div class="stat-value">77%</div>
+                        <div class="stat-label">{t.home.impact.lessCO2}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">{t.home.impact.lessWater}</div>
+                    </div>
+                </div>
+                <div class="comparison-note">vs. chicken breast</div>
+            </div>
+
+            <div class="comparison-card reveal-scale">
+                <div class="product-name">planted.kebab</div>
+                <div class="comparison-stats">
+                    <div class="stat">
+                        <div class="stat-value">87%</div>
+                        <div class="stat-label">{t.home.impact.lessCO2}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">{t.home.impact.lessWater}</div>
+                    </div>
+                </div>
+                <div class="comparison-note">vs. lamb kebab</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="methodology-section">
+        <div class="methodology-content">
+            <div class="methodology-text reveal">
+                <h2>How we measure impact</h2>
+                <p>We partner with <strong>Eaternity</strong>, an independent Swiss organization specializing in life cycle assessments (LCA) for food products. They analyze the complete environmental footprint — from ingredient sourcing to production to packaging.</p>
+                <p>Their methodology is peer-reviewed and aligned with international standards. No greenwashing, no cherry-picking data. Just honest numbers.</p>
+            </div>
+            <div class="methodology-visual reveal-scale">
+                <div class="lca-badge">
+                    <div class="lca-icon">🔬</div>
+                    <div class="lca-text">
+                        <strong>LCA Certified</strong>
+                        <span>by Eaternity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="factors-section">
+        <div class="section-header">
+            <h2 class="reveal">What we measure</h2>
+        </div>
+        <div class="factors-grid">
+            <div class="factor-card reveal">
+                <div class="factor-icon">🌡️</div>
+                <h3>Carbon Footprint</h3>
+                <p>Total greenhouse gas emissions from farm to fork, measured in CO₂ equivalents.</p>
+            </div>
+            <div class="factor-card reveal">
+                <div class="factor-icon">💧</div>
+                <h3>Water Use</h3>
+                <p>Freshwater consumption throughout the production chain, including irrigation and processing.</p>
+            </div>
+            <div class="factor-card reveal">
+                <div class="factor-icon">🌳</div>
+                <h3>Land Use</h3>
+                <p>Agricultural land required for ingredient production, including feed crops.</p>
+            </div>
+            <div class="factor-card reveal">
+                <div class="factor-icon">🐄</div>
+                <h3>Animal Welfare</h3>
+                <p>Simple: our products require zero animals. No factory farms, no suffering.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bcorp-section">
+        <div class="bcorp-content reveal">
+            <div class="bcorp-badge">B</div>
+            <div class="bcorp-text">
+                <h2>{t.products.badges.bCorp}</h2>
+                <p>{t.about.values.sustainabilityText}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="sourcing-section">
+        <div class="section-header">
+            <h2 class="reveal">Where it comes from</h2>
+            <p class="reveal">Simple ingredients, responsibly sourced.</p>
+        </div>
+        <div class="ingredients-grid">
+            <div class="ingredient-card reveal-scale">
+                <div class="ingredient-emoji">🌾</div>
+                <h3>Pea Protein</h3>
+                <p>European yellow peas — high in protein, low environmental impact.</p>
+            </div>
+            <div class="ingredient-card reveal-scale">
+                <div class="ingredient-emoji">🌻</div>
+                <h3>Sunflower Oil</h3>
+                <p>European sunflower oil for texture and flavor.</p>
+            </div>
+            <div class="ingredient-card reveal-scale">
+                <div class="ingredient-emoji">🌿</div>
+                <h3>Plant Fibers</h3>
+                <p>Natural fibers for meat-like structure.</p>
+            </div>
+            <div class="ingredient-card reveal-scale">
+                <div class="ingredient-emoji">🧂</div>
+                <h3>Seasonings</h3>
+                <p>Natural herbs, spices, and salt. Nothing artificial.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="production-section">
+        <div class="section-header">
+            <h2 class="reveal">Made in Europe</h2>
+            <p class="reveal">{t.products.badges.swissMade}</p>
+        </div>
+        <div class="production-stats">
+            <div class="production-stat reveal">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Renewable Energy</div>
+            </div>
+            <div class="production-stat reveal">
+                <div class="stat-value">🇨🇭</div>
+                <div class="stat-label">Swiss HQ & R&D</div>
+            </div>
+            <div class="production-stat reveal">
+                <div class="stat-value">🇩🇪</div>
+                <div class="stat-label">Memmingen Facility</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Every meal matters</h2>
+        <p>Ready to make your next meal count?</p>
+        <div class="cta-buttons">
+            <a href={`${base}/${locale}/products`} class="btn btn-green">{t.sustainability.cta.explore}</a>
+            <a href={`${base}/${locale}/#locator`} class="btn btn-secondary">{t.sustainability.cta.find}</a>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .hero {
+        padding: 8rem 1.5rem 4rem;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 10vw, 5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+        line-height: 1.05;
+    }
+
+    .hero h1 span {
+        color: var(--planted-green);
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        line-height: 1.7;
+        opacity: 0.8;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .impact-overview {
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+    .impact-intro .lead {
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+
+    .comparison-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+        opacity: 0.7;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .comparison-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        text-align: center;
+    }
+
+    .product-name {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.3rem;
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+    }
+
+    .comparison-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: 2.5rem;
+        color: var(--planted-green);
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        margin-top: 0.25rem;
+    }
+
+    .comparison-note {
+        font-size: 0.8rem;
+        opacity: 0.5;
+    }
+
+    .methodology-section {
+        background: var(--planted-cream);
+        padding: 4rem 1.5rem;
+    }
+
+    .methodology-content {
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .methodology-text h2 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+    }
+
+    .methodology-text p {
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        opacity: 0.8;
+    }
+
+    .lca-badge {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: white;
+        padding: 1.5rem 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .lca-icon {
+        font-size: 2.5rem;
+    }
+
+    .lca-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .lca-text strong {
+        color: var(--planted-purple);
+    }
+
+    .lca-text span {
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+
+    .factors-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .factors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .factor-card {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .factor-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .factor-card h3 {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .factor-card p {
+        font-size: 0.95rem;
+        opacity: 0.7;
+        line-height: 1.6;
+    }
+
+    .bcorp-section {
+        background: var(--planted-purple);
+        color: white;
+        padding: 4rem 1.5rem;
+    }
+
+    .bcorp-content {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .bcorp-badge {
+        width: 80px;
+        height: 80px;
+        background: white;
+        color: var(--planted-purple);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .bcorp-text h2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .bcorp-text p {
+        opacity: 0.9;
+        line-height: 1.7;
+    }
+
+    .sourcing-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .ingredients-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .ingredient-card {
+        text-align: center;
+        padding: 2rem;
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .ingredient-emoji {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .ingredient-card h3 {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .ingredient-card p {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        line-height: 1.5;
+    }
+
+    .production-section {
+        background: var(--planted-green);
+        padding: 4rem 1.5rem;
+        text-align: center;
+    }
+
+    .production-section .section-header h2,
+    .production-section .section-header p {
+        color: var(--planted-black);
+    }
+
+    .production-stats {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .production-stat {
+        text-align: center;
+    }
+
+    .production-stat .stat-value {
+        font-size: 2.5rem;
+        color: var(--planted-black);
+    }
+
+    .production-stat .stat-label {
+        color: var(--planted-black);
+        opacity: 0.8;
+    }
+
+    .cta-section {
+        padding: 5rem 1.5rem;
+        text-align: center;
+        background: var(--planted-cream);
+    }
+
+    .cta-section h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .cta-section p {
+        opacity: 0.7;
+        margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .methodology-content {
+            grid-template-columns: 1fr auto;
+        }
+
+        .bcorp-content {
+            flex-direction: row;
+            text-align: left;
+        }
+    }
+</style>

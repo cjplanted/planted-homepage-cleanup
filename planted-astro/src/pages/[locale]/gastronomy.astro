@@ -1,0 +1,424 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { getTranslations } from '../../i18n/index';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+---
+
+<Layout title={`${t.gastronomy.pageTitle} – Planted`} description={t.gastronomy.hero.subtitle} currentPage="gastronomy" locale={locale}>
+    <section class="hero">
+        <div class="hero-badge">{t.gastronomy.badge}</div>
+        <h1>{t.gastronomy.hero.title.split(' for ')[0]} <span>for {t.gastronomy.hero.title.split(' for ')[1] || 'professional kitchens'}</span></h1>
+        <p>Join 8,000+ restaurants serving planted. From Michelin stars to fast casual, we've got the products and support you need.</p>
+        <a href="#contact" class="btn btn-green">{t.gastronomy.cta.contact}</a>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <div class="stat-number">{t.gastronomy.stats.restaurants}</div>
+                <div class="stat-label">{t.gastronomy.stats.restaurantsLabel}</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number">{t.gastronomy.stats.countries}</div>
+                <div class="stat-label">{t.gastronomy.stats.countriesLabel}</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number">97%</div>
+                <div class="stat-label">{t.home.impact.lessCO2}</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-number">★★</div>
+                <div class="stat-label">Michelin Partners</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="partners-section">
+        <div class="section-header">
+            <h2 class="reveal">{t.gastronomy.trusted}</h2>
+            <p class="reveal">From two-Michelin-star restaurants to nationwide chains.</p>
+        </div>
+        <div class="partners-grid">
+            <div class="partner-card reveal-scale">
+                <div class="partner-logo">🚄</div>
+                <div class="partner-name">Deutsche Bahn</div>
+                <div class="partner-type">Onboard Dining</div>
+            </div>
+            <div class="partner-card reveal-scale">
+                <div class="partner-logo">🥪</div>
+                <div class="partner-name">Subway</div>
+                <div class="partner-type">Fast Casual</div>
+            </div>
+            <div class="partner-card reveal-scale">
+                <div class="partner-logo">⭐</div>
+                <div class="partner-name">Tim Raue</div>
+                <div class="partner-type">Fine Dining ★★</div>
+            </div>
+            <div class="partner-card reveal-scale">
+                <div class="partner-logo">🍽️</div>
+                <div class="partner-name">NENI</div>
+                <div class="partner-type">Restaurant Group</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="section-header">
+            <h2 class="reveal">{t.gastronomy.builtFor}</h2>
+            <p class="reveal">Products designed for speed, consistency, and incredible taste.</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">⏱️</div>
+                <h3>Fast Prep Time</h3>
+                <p>3-5 minutes from pan to plate. No defrosting, no waste.</p>
+            </div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">📦</div>
+                <h3>Long Shelf Life</h3>
+                <p>Fresh products with extended refrigerated shelf life. Less spoilage, more savings.</p>
+            </div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">🔥</div>
+                <h3>High Heat Stable</h3>
+                <p>Sears, grills, and fries just like meat. Consistent results every time.</p>
+            </div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">💰</div>
+                <h3>Competitive Pricing</h3>
+                <p>Cost-effective alternative with premium menu positioning.</p>
+            </div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">🌱</div>
+                <h3>Clean Label</h3>
+                <p>Simple ingredients your guests will love. No GMOs, no artificial colors.</p>
+            </div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon">📈</div>
+                <h3>Growing Demand</h3>
+                <p>40% of consumers are actively reducing meat. Capture this market.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="range-section">
+        <div class="section-header">
+            <h2 class="reveal">Our foodservice range</h2>
+            <p class="reveal">Bulk formats designed for professional kitchens.</p>
+        </div>
+        <div class="product-categories">
+            <div class="category-card reveal-scale">
+                <div class="category-image" style="background: linear-gradient(135deg, #F5E6B8 0%, #E8D494 100%);">
+                    <span class="category-icon">🍗</span>
+                </div>
+                <h3>planted.chicken</h3>
+                <p>Nature, Lemon Herbs, Teriyaki, Crispy Strips</p>
+            </div>
+            <div class="category-card reveal-scale">
+                <div class="category-image" style="background: linear-gradient(135deg, #E8C4B8 0%, #D4A894 100%);">
+                    <span class="category-icon">🥩</span>
+                </div>
+                <h3>planted.steak</h3>
+                <p>Original, Paprika, Café de Paris</p>
+            </div>
+            <div class="category-card reveal-scale">
+                <div class="category-image" style="background: linear-gradient(135deg, #D4B8C4 0%, #C494A8 100%);">
+                    <span class="category-icon">🍖</span>
+                </div>
+                <h3>planted.pulled</h3>
+                <p>BBQ, Spicy Herbs, Nature</p>
+            </div>
+            <div class="category-card reveal-scale">
+                <div class="category-image" style="background: linear-gradient(135deg, #C8D4B8 0%, #B4C494 100%);">
+                    <span class="category-icon">🍔</span>
+                </div>
+                <h3>planted.burger</h3>
+                <p>Classic, Crispy, Chicken Burger</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <blockquote class="reveal">
+            <p>"Planted has become an essential part of our menu. The quality is exceptional, and our guests can't tell the difference."</p>
+            <cite>— Tim Raue, Restaurant Tim Raue ★★</cite>
+        </blockquote>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-content">
+            <h2 class="reveal">Ready to partner?</h2>
+            <p class="reveal">Get in touch with our foodservice team. We'll set you up with samples, pricing, and support.</p>
+            <div class="contact-options reveal">
+                <a href="mailto:gastronomy@eatplanted.com" class="btn btn-green">
+                    ✉️ gastronomy@eatplanted.com
+                </a>
+                <a href="tel:+41445521000" class="btn btn-secondary">
+                    📞 +41 44 552 10 00
+                </a>
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .hero {
+        padding: var(--space-5xl) var(--space-md) var(--space-3xl);
+        text-align: center;
+        background: var(--planted-purple);
+        color: white;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: rgba(255,255,255,0.15);
+        border-radius: 100px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        margin-bottom: var(--space-lg);
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        max-width: 900px;
+        margin: 0 auto var(--space-md);
+    }
+
+    .hero h1 span {
+        color: var(--planted-green);
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto var(--space-xl);
+    }
+
+    .stats-section {
+        padding: var(--space-3xl) var(--space-md);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--space-lg);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: var(--space-xl);
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .stat-number {
+        font-family: 'VC Henrietta', serif;
+        font-size: 2.5rem;
+        color: var(--planted-purple);
+        line-height: 1;
+    }
+
+    .stat-label {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+
+    .partners-section {
+        padding: var(--space-3xl) var(--space-md);
+        background: var(--planted-cream);
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: var(--space-2xl);
+    }
+
+    .section-header h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+        opacity: 0.7;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .partners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--space-lg);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .partner-card {
+        text-align: center;
+        padding: var(--space-xl);
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .partner-logo {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .partner-name {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        font-size: 1.1rem;
+    }
+
+    .partner-type {
+        font-size: 0.85rem;
+        opacity: 0.6;
+        margin-top: 0.25rem;
+    }
+
+    .products-section {
+        padding: var(--space-3xl) var(--space-md);
+    }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-lg);
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .benefit-card {
+        padding: var(--space-xl);
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .benefit-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .benefit-card h3 {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .benefit-card p {
+        font-size: 0.95rem;
+        opacity: 0.7;
+        line-height: 1.6;
+    }
+
+    .range-section {
+        padding: var(--space-3xl) var(--space-md);
+        background: var(--planted-cream);
+    }
+
+    .product-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-lg);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .category-card {
+        text-align: center;
+    }
+
+    .category-image {
+        aspect-ratio: 1;
+        border-radius: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .category-icon {
+        font-size: 3rem;
+    }
+
+    .category-card h3 {
+        font-family: 'VC Henrietta', serif;
+        color: var(--planted-purple);
+        margin-bottom: 0.25rem;
+    }
+
+    .category-card p {
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+
+    .quote-section {
+        padding: var(--space-3xl) var(--space-md);
+        background: var(--planted-purple);
+        color: white;
+    }
+
+    .quote-section blockquote {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .quote-section p {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.25rem, 4vw, 1.75rem);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .quote-section cite {
+        font-style: normal;
+        opacity: 0.8;
+    }
+
+    .contact-section {
+        padding: var(--space-3xl) var(--space-md);
+        text-align: center;
+    }
+
+    .contact-content h2 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-content p {
+        opacity: 0.7;
+        max-width: 500px;
+        margin: 0 auto var(--space-xl);
+    }
+
+    .contact-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+</style>

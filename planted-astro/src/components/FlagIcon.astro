@@ -1,0 +1,101 @@
+---
+/**
+ * FlagIcon - SVG country flag icons
+ * Clean, scalable SVG flags for the country selector
+ */
+
+interface Props {
+    country: string;
+    size?: number;
+    class?: string;
+}
+
+const { country, size = 24, class: className = '' } = Astro.props;
+---
+
+{country === 'global' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+        <ellipse cx="12" cy="12" rx="4" ry="10" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M2 12h20M4 7h16M4 17h16" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+)}
+
+{country === 'ch' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#DA291C"/>
+        <path d="M10.5 6h3v4.5H18v3h-4.5V18h-3v-4.5H6v-3h4.5V6z" fill="white"/>
+    </svg>
+)}
+
+{country === 'de' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#FFCE00"/>
+        <path d="M0 0h24v8H0z" fill="#000" />
+        <rect x="0" y="0" width="24" height="8" rx="4" ry="4" fill="#000"/>
+        <path d="M0 8h24v8H0z" fill="#DD0000"/>
+        <path d="M0 16h24v4a4 4 0 01-4 4H4a4 4 0 01-4-4v-4z" fill="#FFCE00"/>
+        <path d="M0 4a4 4 0 014-4h16a4 4 0 014 4v4H0V4z" fill="#000"/>
+    </svg>
+)}
+
+{country === 'at' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#ED2939"/>
+        <rect y="8" width="24" height="8" fill="white"/>
+        <path d="M0 4a4 4 0 014-4h16a4 4 0 014 4v4H0V4z" fill="#ED2939"/>
+        <path d="M0 16h24v4a4 4 0 01-4 4H4a4 4 0 01-4-4v-4z" fill="#ED2939"/>
+    </svg>
+)}
+
+{country === 'fr' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="white"/>
+        <path d="M0 4a4 4 0 014-4h4v24H4a4 4 0 01-4-4V4z" fill="#002395"/>
+        <path d="M16 0h4a4 4 0 014 4v16a4 4 0 01-4 4h-4V0z" fill="#ED2939"/>
+    </svg>
+)}
+
+{country === 'it' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="white"/>
+        <path d="M0 4a4 4 0 014-4h4v24H4a4 4 0 01-4-4V4z" fill="#009246"/>
+        <path d="M16 0h4a4 4 0 014 4v16a4 4 0 01-4 4h-4V0z" fill="#CE2B37"/>
+    </svg>
+)}
+
+{country === 'nl' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="white"/>
+        <path d="M0 4a4 4 0 014-4h16a4 4 0 014 4v4H0V4z" fill="#AE1C28"/>
+        <path d="M0 16h24v4a4 4 0 01-4 4H4a4 4 0 01-4-4v-4z" fill="#21468B"/>
+    </svg>
+)}
+
+{country === 'uk' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#012169"/>
+        <path d="M0 0l24 24M24 0L0 24" stroke="white" stroke-width="4"/>
+        <path d="M0 0l24 24M24 0L0 24" stroke="#C8102E" stroke-width="2"/>
+        <path d="M12 0v24M0 12h24" stroke="white" stroke-width="6"/>
+        <path d="M12 0v24M0 12h24" stroke="#C8102E" stroke-width="3.5"/>
+        <!-- Round corners mask -->
+        <rect width="24" height="24" rx="4" fill="none" stroke="#012169" stroke-width="0.5"/>
+    </svg>
+)}
+
+{country === 'es' && (
+    <svg class={`flag-icon ${className}`} width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="4" fill="#FFCD00"/>
+        <path d="M0 4a4 4 0 014-4h16a4 4 0 014 4v2H0V4z" fill="#C60B1E"/>
+        <path d="M0 18h24v2a4 4 0 01-4 4H4a4 4 0 01-4-4v-2z" fill="#C60B1E"/>
+    </svg>
+)}
+
+<style>
+    .flag-icon {
+        flex-shrink: 0;
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>

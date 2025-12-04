@@ -1,41 +1,75 @@
 ---
 /**
  * CountrySelector - On Running-style modal country/language selector
- *
+ * 
  * Features:
- * - Full-screen modal overlay
- * - Countries grouped with flags
- * - Multiple language options per country
- * - Global/International fallback option
+ * - Footer-triggered modal (On Running style)
+ * - SVG flag icons
+ * - Countries grouped by region
+ * - Clean modal with backdrop blur
  * - Smooth animations
  */
 import { locales, countries, countryLocales, type LocaleCode, type CountryCode } from '../i18n/config';
+import FlagIcon from './FlagIcon.astro';
 
 interface Props {
     currentLocale: LocaleCode;
+    variant?: 'footer' | 'minimal';
 }
 
-const { currentLocale } = Astro.props;
+const { currentLocale, variant = 'footer' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const currentLocaleData = locales[currentLocale];
 const currentCountry = currentLocaleData.country as CountryCode;
+
+// Group countries by region
+type Region = 'global' | 'europe';
+
+const regionLabels: Record<Region, string> = {
+    'global': 'Global',
+    'europe': 'Europe'
+};
+
+const countryRegions: Record<CountryCode, Region> = {
+    'global': 'global',
+    'ch': 'europe',
+    'de': 'europe',
+    'at': 'europe',
+    'fr': 'europe',
+    'it': 'europe',
+    'nl': 'europe',
+    'uk': 'europe',
+    'es': 'europe',
+};
+
+// Group countries by region
+const groupedCountries = countries.reduce((acc, country) => {
+    const region = countryRegions[country.code];
+    if (!acc[region]) acc[region] = [];
+    acc[region].push(country);
+    return acc;
+}, {} as Record<Region, typeof countries>);
+
+const regionOrder: Region[] = ['global', 'europe'];
 ---
 
-<!-- Country Selector Button -->
-<button class="country-selector-btn" id="countrySelectorBtn" aria-label="Select country and language">
-    <span class="btn-flag">{currentLocaleData.flag}</span>
-    <span class="btn-label">{currentLocaleData.name}</span>
-    <svg class="btn-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+<!-- Footer Trigger Button -->
+<button 
+    class:list={["country-trigger", variant]} 
+    id="countryTrigger" 
+    aria-label="Select country and language"
+    aria-haspopup="dialog"
+>
+    <FlagIcon country={currentCountry} size={20} />
+    <span class="trigger-label">{currentLocaleData.name}</span>
 </button>
 
 <!-- Country Selector Modal -->
-<div class="country-modal" id="countryModal" aria-hidden="true">
+<div class="country-modal" id="countryModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
     <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal-content">
+    <div class="modal-panel">
         <div class="modal-header">
-            <h2>Select your location</h2>
+            <h2 id="modalTitle">Select your shipping location and language</h2>
             <button class="modal-close" id="modalClose" aria-label="Close">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -45,87 +79,98 @@ const currentCountry = currentLocaleData.country as CountryCode;
         </div>
 
         <div class="modal-body">
-            <div class="countries-grid">
-                {countries.map((country) => {
-                    const isCurrentCountry = country.code === currentCountry;
-                    const countryLocaleOptions = countryLocales[country.code];
+            {regionOrder.map((region) => {
+                const regionCountries = groupedCountries[region];
+                if (!regionCountries?.length) return null;
+                
+                return (
+                    <div class="region-section">
+                        {region !== 'global' && (
+                            <h3 class="region-title">{regionLabels[region]}</h3>
+                        )}
+                        <div class:list={["countries-list", { "global-list": region === 'global' }]}>
+                            {regionCountries.map((country) => {
+                                const isCurrentCountry = country.code === currentCountry;
+                                const countryLocaleOptions = countryLocales[country.code];
 
-                    return (
-                        <div class:list={["country-group", { active: isCurrentCountry }]}>
-                            <div class="country-header">
-                                <span class="country-flag">{country.flag}</span>
-                                <span class="country-name">{country.name}</span>
-                                {country.name !== country.englishName && (
-                                    <span class="country-english">({country.englishName})</span>
-                                )}
-                            </div>
-                            <div class="language-options">
-                                {countryLocaleOptions.map((localeCode) => {
-                                    const localeData = locales[localeCode];
-                                    const isActive = localeCode === currentLocale;
+                                return (
+                                    <div class:list={["country-card", { active: isCurrentCountry }]}>
+                                        <div class="country-header">
+                                            <FlagIcon country={country.code} size={24} />
+                                            <div class="country-info">
+                                                <span class="country-name">{country.name}</span>
+                                                {country.name !== country.englishName && (
+                                                    <span class="country-english">({country.englishName})</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div class="language-options">
+                                            {countryLocaleOptions.map((localeCode) => {
+                                                const localeData = locales[localeCode];
+                                                const isActive = localeCode === currentLocale;
 
-                                    return (
-                                        <a
-                                            href={`${base}/${localeCode}/`}
-                                            class:list={["language-option", { active: isActive }]}
-                                            data-locale={localeCode}
-                                        >
-                                            <span class="lang-name">{localeData.languageName}</span>
-                                            {isActive && (
-                                                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                                </svg>
-                                            )}
-                                        </a>
-                                    );
-                                })}
-                            </div>
+                                                return (
+                                                    <a
+                                                        href={`${base}${localeCode}/`}
+                                                        class:list={["language-pill", { active: isActive }]}
+                                                    >
+                                                        {localeData.languageName}
+                                                        {isActive && (
+                                                            <svg class="check" viewBox="0 0 16 16" fill="currentColor">
+                                                                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+                                                            </svg>
+                                                        )}
+                                                    </a>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    );
-                })}
-            </div>
+                    </div>
+                );
+            })}
         </div>
     </div>
 </div>
 
 <style>
-    /* Selector Button */
-    .country-selector-btn {
-        display: flex;
+    /* Footer Trigger Button */
+    .country-trigger {
+        display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: rgba(97, 38, 158, 0.08);
-        border: 1px solid rgba(97, 38, 158, 0.15);
-        border-radius: 100px;
-        padding: 0.5rem 1rem;
+        background: transparent;
+        border: none;
         cursor: pointer;
         font-family: inherit;
-        font-size: 0.85rem;
-        font-weight: 600;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: inherit;
+        padding: 0.5rem 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .country-trigger:hover {
+        opacity: 0.8;
+    }
+
+    .country-trigger.footer {
+        color: white;
+        opacity: 0.9;
+    }
+
+    .country-trigger.footer:hover {
+        opacity: 1;
+    }
+
+    .country-trigger.minimal {
         color: var(--planted-purple);
-        transition: all 0.3s ease;
     }
 
-    .country-selector-btn:hover {
-        background: rgba(97, 38, 158, 0.12);
-        border-color: rgba(97, 38, 158, 0.25);
-    }
-
-    .btn-flag {
-        font-size: 1.1rem;
-    }
-
-    .btn-label {
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .btn-chevron {
-        width: 14px;
-        height: 14px;
-        transition: transform 0.3s ease;
+    .trigger-label {
+        font-weight: 500;
     }
 
     /* Modal Overlay */
@@ -136,9 +181,10 @@ const currentCountry = currentLocaleData.country as CountryCode;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 1rem;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
     }
 
     .country-modal.open {
@@ -149,97 +195,126 @@ const currentCountry = currentLocaleData.country as CountryCode;
     .modal-backdrop {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
     }
 
-    .modal-content {
+    .modal-panel {
         position: relative;
         background: white;
-        border-radius: 1.5rem;
-        max-width: 600px;
-        width: calc(100% - 2rem);
-        max-height: 85vh;
+        border-radius: 1rem;
+        max-width: 560px;
+        width: 100%;
+        max-height: calc(100vh - 4rem);
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transform: translateY(20px) scale(0.95);
-        transition: transform 0.3s ease;
+        transform: scale(0.95) translateY(10px);
+        transition: transform 0.25s ease;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
-    .country-modal.open .modal-content {
-        transform: translateY(0) scale(1);
+    .country-modal.open .modal-panel {
+        transform: scale(1) translateY(0);
     }
 
     /* Modal Header */
     .modal-header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        padding: 1.5rem 2rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        gap: 1rem;
+        padding: 1.5rem 1.5rem 1rem;
     }
 
     .modal-header h2 {
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--planted-purple);
+        font-family: 'Galano Grotesque', system-ui, sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--planted-black, #1a1a1a);
         margin: 0;
+        line-height: 1.3;
     }
 
     .modal-close {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
         border: none;
-        background: rgba(97, 38, 158, 0.08);
+        background: #f5f5f5;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
         transition: background 0.2s ease;
     }
 
     .modal-close:hover {
-        background: rgba(97, 38, 158, 0.15);
+        background: #e8e8e8;
     }
 
     .modal-close svg {
-        width: 20px;
-        height: 20px;
-        color: var(--planted-purple);
+        width: 18px;
+        height: 18px;
+        color: #333;
     }
 
     /* Modal Body */
     .modal-body {
-        padding: 1.5rem 2rem 2rem;
+        padding: 0 1.5rem 1.5rem;
         overflow-y: auto;
+        overscroll-behavior: contain;
     }
 
-    .countries-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+    /* Region Section */
+    .region-section {
+        margin-bottom: 1.5rem;
     }
 
-    /* Country Group */
-    .country-group {
-        background: rgba(97, 38, 158, 0.03);
-        border-radius: 1rem;
-        padding: 1rem 1.25rem;
-        transition: background 0.2s ease;
+    .region-section:last-child {
+        margin-bottom: 0;
     }
 
-    .country-group:hover {
-        background: rgba(97, 38, 158, 0.06);
+    .region-title {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #999;
+        margin: 0 0 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
     }
 
-    .country-group.active {
-        background: rgba(97, 38, 158, 0.08);
-        border: 1px solid rgba(97, 38, 158, 0.15);
+    /* Countries Grid */
+    .countries-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .global-list {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Country Card */
+    .country-card {
+        background: #fafafa;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        transition: background 0.15s ease;
+    }
+
+    .country-card:hover {
+        background: #f0f0f0;
+    }
+
+    .country-card.active {
+        background: #f0f0f5;
+        outline: 2px solid var(--planted-purple, #61269E);
+        outline-offset: -2px;
     }
 
     .country-header {
@@ -249,23 +324,25 @@ const currentCountry = currentLocaleData.country as CountryCode;
         margin-bottom: 0.75rem;
     }
 
-    .country-flag {
-        font-size: 1.5rem;
+    .country-info {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
     .country-name {
-        font-weight: 700;
-        font-size: 1rem;
-        color: var(--planted-black);
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #1a1a1a;
     }
 
     .country-english {
-        font-size: 0.85rem;
-        color: var(--planted-black);
-        opacity: 0.5;
+        font-size: 0.8rem;
+        color: #888;
     }
 
-    /* Language Options */
+    /* Language Pills */
     .language-options {
         display: flex;
         flex-wrap: wrap;
@@ -273,129 +350,110 @@ const currentCountry = currentLocaleData.country as CountryCode;
         padding-left: 2.25rem;
     }
 
-    .language-option {
+    .language-pill {
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
         padding: 0.5rem 1rem;
         background: white;
-        border: 1px solid rgba(97, 38, 158, 0.15);
+        border: 1px solid #ddd;
         border-radius: 100px;
         text-decoration: none;
-        color: var(--planted-black);
+        color: #333;
         font-size: 0.85rem;
         font-weight: 500;
-        transition: all 0.2s ease;
+        transition: all 0.15s ease;
     }
 
-    .language-option:hover {
-        background: var(--planted-purple);
+    .language-pill:hover {
+        border-color: var(--planted-purple, #61269E);
+        color: var(--planted-purple, #61269E);
+    }
+
+    .language-pill.active {
+        background: var(--planted-black, #1a1a1a);
+        border-color: var(--planted-black, #1a1a1a);
         color: white;
-        border-color: var(--planted-purple);
     }
 
-    .language-option.active {
-        background: var(--planted-purple);
-        color: white;
-        border-color: var(--planted-purple);
-    }
-
-    .check-icon {
+    .language-pill .check {
         width: 14px;
         height: 14px;
     }
 
-    /* Global/International styling */
-    .country-group:first-child {
-        background: linear-gradient(135deg, rgba(107, 191, 89, 0.08), rgba(97, 38, 158, 0.08));
-        border: 1px dashed rgba(97, 38, 158, 0.2);
-    }
-
-    .country-group:first-child:hover {
-        background: linear-gradient(135deg, rgba(107, 191, 89, 0.12), rgba(97, 38, 158, 0.12));
-    }
-
-    /* Mobile styles */
+    /* Mobile Styles */
     @media (max-width: 640px) {
-        .modal-content {
+        .country-modal {
+            align-items: flex-end;
+            padding: 0;
+        }
+
+        .modal-panel {
             max-height: 90vh;
             border-radius: 1.5rem 1.5rem 0 0;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
             transform: translateY(100%);
         }
 
-        .country-modal.open .modal-content {
+        .country-modal.open .modal-panel {
             transform: translateY(0);
         }
 
         .modal-header {
-            padding: 1.25rem 1.5rem;
+            padding: 1.25rem 1.25rem 0.75rem;
         }
 
         .modal-header h2 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
         }
 
         .modal-body {
-            padding: 1rem 1.5rem 2rem;
+            padding: 0 1.25rem 2rem;
         }
 
-        .country-group {
-            padding: 0.875rem 1rem;
+        .country-card {
+            padding: 0.875rem;
         }
 
         .language-options {
             padding-left: 2rem;
         }
-
-        .btn-label {
-            display: none;
-        }
-
-        .country-selector-btn {
-            padding: 0.5rem 0.75rem;
-        }
     }
 
-    @media (min-width: 641px) {
-        .countries-grid {
-            display: grid;
+    /* Desktop: 2 columns for countries */
+    @media (min-width: 480px) {
+        .countries-list:not(.global-list) {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
-        /* Make Global span full width */
-        .country-group:first-child {
-            grid-column: 1 / -1;
         }
     }
 </style>
 
 <script>
     function initCountrySelector() {
-        const btn = document.getElementById('countrySelectorBtn');
+        const trigger = document.getElementById('countryTrigger');
         const modal = document.getElementById('countryModal');
         const backdrop = document.getElementById('modalBackdrop');
         const closeBtn = document.getElementById('modalClose');
 
-        if (!btn || !modal) return;
+        if (!trigger || !modal) return;
 
         function openModal() {
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            // Focus the close button for accessibility
+            closeBtn?.focus();
         }
 
         function closeModal() {
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            // Return focus to trigger
+            trigger.focus();
         }
 
         // Event listeners
-        btn.addEventListener('click', openModal);
+        trigger.addEventListener('click', openModal);
         closeBtn?.addEventListener('click', closeModal);
         backdrop?.addEventListener('click', closeModal);
 
@@ -406,10 +464,10 @@ const currentCountry = currentLocaleData.country as CountryCode;
             }
         });
 
-        // Close when clicking a language option
-        modal.querySelectorAll('.language-option').forEach(link => {
+        // Close when clicking a language option (after a brief delay for visual feedback)
+        modal.querySelectorAll('.language-pill').forEach(link => {
             link.addEventListener('click', () => {
-                closeModal();
+                setTimeout(closeModal, 100);
             });
         });
     }
