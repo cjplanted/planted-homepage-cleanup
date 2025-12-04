@@ -31,8 +31,9 @@ export default {
             countries: '6 landen',
         },
         mission: {
-            title: 'Onze Missie',
-            text: 'We hebben een missie om het voedselsysteem duurzamer te maken. Door plantaardig vlees te maken dat echt naar vlees smaakt, geven we iedereen de kans om betere keuzes te maken – zonder compromissen.',
+            title: 'We geloven dat vlees niet van dieren hoeft te komen.',
+            highlight: 'Het moet gewoon ongelooflijk lekker zijn.',
+            text: 'Made in Switzerland. B Corp gecertificeerd. En eerlijk? Het is echt, echt lekker.',
         },
         products: {
             title: 'Onze Producten',

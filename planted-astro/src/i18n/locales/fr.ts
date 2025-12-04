@@ -31,8 +31,9 @@ export default {
             countries: '6 pays',
         },
         mission: {
-            title: 'Notre Mission',
-            text: 'Nous avons pour mission de rendre le système alimentaire plus durable. En créant de la viande végétale qui a vraiment le goût de la viande, nous donnons à chacun la possibilité de faire de meilleurs choix – sans compromis.',
+            title: 'Nous croyons que la viande n\'a pas besoin de venir des animaux.',
+            highlight: 'Elle doit juste avoir un goût incroyable.',
+            text: 'Made in Switzerland. Certifié B Corp. Et franchement ? C\'est vraiment, vraiment bon.',
         },
         products: {
             title: 'Nos Produits',

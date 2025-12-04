@@ -31,8 +31,9 @@ export default {
             countries: '6 países',
         },
         mission: {
-            title: 'Nuestra Misión',
-            text: 'Nuestra misión es hacer el sistema alimentario más sostenible. Creando carne vegetal que realmente sabe a carne, damos a todos la oportunidad de tomar mejores decisiones – sin compromisos.',
+            title: 'Creemos que la carne no tiene que venir de los animales.',
+            highlight: 'Solo tiene que saber increíble.',
+            text: 'Made in Switzerland. Certificado B Corp. Y honestamente? Es realmente, realmente bueno.',
         },
         products: {
             title: 'Nuestros Productos',

@@ -3,6 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { allLocales, locales, type LocaleCode, getLocalizedProductName, retailers } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
+import StoreLocator from '../../components/StoreLocator.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -35,27 +37,49 @@ const settings = await getEntry('settings', 'global');
                 <video class="hero-video" autoplay muted loop playsinline>
                     <source src={`${base}/video/hero.mp4`} type="video/mp4">
                 </video>
+                <!-- Playful floating sticker -->
+                <div class="hero-sticker">
+                    <span class="sticker-text">{t.home.sticker.text}</span>
+                    <span class="sticker-label">{t.home.sticker.label}</span>
+                </div>
             </div>
         </div>
 
         <div class="hero-content" id="heroContent">
+            <div class="hero-badge">{t.home.hero.badge}</div>
             <h1>{t.home.hero.title}</h1>
             <p class="hero-subtitle">{t.home.hero.subtitle}</p>
             <div class="hero-buttons">
                 <a href="#locator" class="btn btn-primary">
                     {t.nav.findUs}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
                 </a>
                 <a href="#products" class="btn btn-secondary">
                     {t.home.products.viewAll}
                 </a>
             </div>
         </div>
+
+        <!-- Trust indicators -->
+        <div class="hero-trust">
+            <span class="trust-item">{t.home.trust.swissMade}</span>
+            <span class="trust-divider"></span>
+            <span class="trust-item">{t.home.trust.restaurants}</span>
+            <span class="trust-divider"></span>
+            <span class="trust-item">{t.home.trust.countries}</span>
+        </div>
     </section>
 
     <!-- Statement Section -->
     <section class="statement">
         <div class="statement-inner">
-            <h2 class="reveal">{t.home.mission.title}</h2>
+            <h2 class="reveal">
+                {t.home.mission.title}
+                <span class="statement-highlight">{t.home.mission.highlight}</span>
+            </h2>
             <p class="reveal reveal-delay-1">{t.home.mission.text}</p>
         </div>
     </section>
@@ -229,22 +253,59 @@ const settings = await getEntry('settings', 'global');
     </section>
 
     <!-- Store Locator -->
-    <section class="locator" id="locator">
-        <div class="locator-content">
-            <h2 class="reveal">{t.home.locator.title}</h2>
-            <p class="reveal reveal-delay-1">{t.home.locator.subtitle}</p>
+    <StoreLocator
+        title={t.storeLocator.title}
+        subtitle={t.storeLocator.subtitle}
+        translations={{
+            detecting: t.storeLocator.detecting,
+            showingResults: t.storeLocator.showingResults,
+            change: t.storeLocator.change,
+            stores: t.storeLocator.tabs.stores,
+            restaurants: t.storeLocator.tabs.restaurants,
+            noRetail: t.storeLocator.noResults.retail,
+            noFoodservice: t.storeLocator.noResults.foodservice,
+            foodserviceIntro: t.storeLocator.foodserviceIntro,
+            availableProducts: t.storeLocator.availableProducts,
+            cantFind: t.storeLocator.online.badge,
+            orderOnline: t.storeLocator.online.text,
+            shopOnline: t.storeLocator.online.button,
+        }}
+    />
 
-            <div class="locator-search reveal reveal-delay-2">
-                <input type="text" placeholder={t.home.locator.placeholder}>
-                <button>{t.home.locator.button}</button>
+    <!-- Newsletter Signup -->
+    <NewsletterSignup
+        translations={{
+            badge: t.newsletter.title,
+            title: t.newsletter.subtitle,
+            description: t.newsletter.description,
+            placeholder: t.newsletter.placeholder,
+            button: t.newsletter.button,
+            consent: t.newsletter.consent,
+            success: t.newsletter.success,
+        }}
+    />
+
+    <!-- Business Section -->
+    <section class="business" id="business">
+        <div class="business-inner">
+            <div>
+                <span class="business-badge reveal">{t.home.business.badge}</span>
+                <h2 class="reveal">{t.gastronomy.hero.title}</h2>
+                <p class="reveal reveal-delay-1">{t.gastronomy.hero.subtitle}</p>
+                <a href={`${base}/${locale}/gastronomy`} class="business-cta reveal reveal-delay-2">
+                    {t.gastronomy.cta.samples} →
+                </a>
             </div>
 
-            <div class="retailers">
-                {countryRetailers.filter(r => r.type === 'retail').map((retailer) => (
-                    <a href={retailer.url} target="_blank" rel="noopener noreferrer" class="retailer-logo reveal-scale" title={retailer.name}>
-                        <img src={`${base}images/retailers/${retailer.logo}.svg`} alt={retailer.name} loading="lazy">
-                    </a>
-                ))}
+            <div class="business-stats">
+                <div class="business-stat reveal-scale">
+                    <div class="business-stat-value">{t.gastronomy.stats.restaurants}</div>
+                    <div class="business-stat-label">{t.gastronomy.stats.restaurantsLabel}</div>
+                </div>
+                <div class="business-stat reveal-scale">
+                    <div class="business-stat-value">{t.gastronomy.stats.countries}</div>
+                    <div class="business-stat-label">{t.gastronomy.stats.countriesLabel}</div>
+                </div>
             </div>
         </div>
     </section>
@@ -256,7 +317,7 @@ const settings = await getEntry('settings', 'global');
         min-height: 100vh;
         min-height: 100dvh;
         background: var(--planted-cream);
-        padding: 4rem 1.5rem 3rem;
+        padding: 4rem 1.5rem 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -296,11 +357,49 @@ const settings = await getEntry('settings', 'global');
         object-fit: cover;
     }
 
+    /* Playful floating sticker */
+    .hero-sticker {
+        position: absolute;
+        bottom: -1rem;
+        right: -0.5rem;
+        background: var(--planted-green);
+        color: var(--planted-black);
+        padding: 1rem 1.25rem;
+        border-radius: 1rem;
+        transform: rotate(8deg);
+        box-shadow: 0 8px 24px rgba(107, 191, 89, 0.3);
+        text-align: center;
+        z-index: 10;
+        animation: stickerBounce 3s ease-in-out infinite;
+    }
+
+    .sticker-text {
+        display: block;
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .sticker-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.15rem;
+    }
+
+    @keyframes stickerBounce {
+        0%, 100% { transform: rotate(8deg) translateY(0); }
+        50% { transform: rotate(8deg) translateY(-5px); }
+    }
+
     .hero-content {
         position: relative;
         z-index: 1;
         max-width: 900px;
-        margin: 3rem auto 0;
+        margin: 2.5rem auto 0;
         text-align: center;
         opacity: 0;
         transform: translateY(40px);
@@ -316,6 +415,21 @@ const settings = await getEntry('settings', 'global');
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    /* Hero badge */
+    .hero-badge {
+        display: inline-block;
+        background: rgba(97, 38, 158, 0.1);
+        border: 1px solid rgba(97, 38, 158, 0.2);
+        color: var(--planted-purple);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.25rem;
     }
 
     .hero h1 {
@@ -341,6 +455,54 @@ const settings = await getEntry('settings', 'global');
         justify-content: center;
     }
 
+    .hero-buttons .btn-icon {
+        width: 18px;
+        height: 18px;
+        margin-left: 0.25rem;
+    }
+
+    /* Trust indicators */
+    .hero-trust {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: auto;
+        padding-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .trust-item {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--planted-purple);
+        opacity: 0.6;
+    }
+
+    .trust-divider {
+        width: 4px;
+        height: 4px;
+        background: var(--planted-purple);
+        border-radius: 50%;
+        opacity: 0.3;
+    }
+
+    @media (max-width: 640px) {
+        .hero-sticker {
+            bottom: -0.75rem;
+            right: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .sticker-text {
+            font-size: 1.25rem;
+        }
+
+        .hero-trust {
+            display: none;
+        }
+    }
+
     /* Statement Section */
     .statement {
         background: var(--planted-purple);
@@ -363,6 +525,10 @@ const settings = await getEntry('settings', 'global');
         color: white;
         margin-bottom: 1.25rem;
         line-height: 1.1;
+    }
+
+    .statement-highlight {
+        color: var(--planted-green);
     }
 
     .statement p {
@@ -904,6 +1070,119 @@ const settings = await getEntry('settings', 'global');
         .recipes-scroll { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
         .locator { padding: 8rem 5rem; }
         .where-to-find { padding: 8rem 5rem; }
+        .business-inner { max-width: 1200px; gap: 5rem; }
+    }
+
+    /* Business Section */
+    .business {
+        background: var(--planted-black);
+        padding: 6rem 1.5rem;
+        color: white;
+        width: 100%;
+    }
+
+    .business-inner {
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .business-badge {
+        display: inline-block;
+        background: var(--planted-purple);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.25rem;
+    }
+
+    .business h2 {
+        font-size: clamp(1.6rem, 5vw, 2.5rem);
+        margin-bottom: 1rem;
+        max-width: 550px;
+    }
+
+    .business > .business-inner > div > p {
+        font-size: 1rem;
+        opacity: 0.7;
+        line-height: 1.6;
+        margin-bottom: 1.75rem;
+        max-width: 450px;
+    }
+
+    .business-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+        max-width: 360px;
+    }
+
+    .business-stat {
+        padding: 1.25rem;
+        background: rgba(255,255,255,0.05);
+        border-radius: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    .business-stat:hover {
+        background: rgba(255,255,255,0.08);
+        transform: translateY(-4px);
+    }
+
+    .business-stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--planted-green);
+    }
+
+    .business-stat-label {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        margin-top: 0.15rem;
+    }
+
+    .business-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-purple);
+        color: white;
+        font-weight: 700;
+        padding: 1rem 1.75rem;
+        border-radius: 100px;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .business-cta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(97, 38, 158, 0.4);
+    }
+
+    @media (min-width: 1024px) {
+        .business-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .business-stats {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            max-width: none;
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .business { padding: 8rem 5rem; }
     }
 </style>
 

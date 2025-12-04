@@ -31,8 +31,9 @@ export default {
             countries: '6 Länder',
         },
         mission: {
-            title: 'Unsere Mission',
-            text: 'Wir arbeiten daran, das Ernährungssystem nachhaltiger zu gestalten. Indem wir pflanzliches Fleisch entwickeln, das wirklich wie Fleisch schmeckt, geben wir allen die Möglichkeit, bessere Entscheidungen zu treffen – ohne Kompromisse.',
+            title: 'Wir glauben, dass Fleisch nicht von Tieren kommen muss.',
+            highlight: 'Es muss einfach unglaublich schmecken.',
+            text: 'Made in Switzerland. B Corp zertifiziert. Und ehrlich? Es ist wirklich, wirklich gut.',
         },
         products: {
             title: 'Unsere Produkte',

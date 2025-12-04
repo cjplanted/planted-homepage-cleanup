@@ -31,8 +31,9 @@ export default {
             countries: '6 countries',
         },
         mission: {
-            title: 'Our Mission',
-            text: 'We\'re on a mission to make the food system more sustainable. By creating plant-based meat that actually tastes like meat, we\'re giving everyone the chance to make better choices—without compromise.',
+            title: 'We believe meat doesn\'t have to come from animals.',
+            highlight: 'It just has to taste incredible.',
+            text: 'Made in Switzerland. B Corp certified. And honestly? It\'s really, really good.',
         },
         products: {
             title: 'Our Products',

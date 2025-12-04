@@ -1,32 +1,54 @@
 ---
-interface Props {
-    variant?: 'default' | 'footer' | 'inline';
+interface Translations {
+    badge?: string;
+    title?: string;
+    description?: string;
+    placeholder?: string;
+    button?: string;
+    consent?: string;
+    success?: string;
 }
 
-const { variant = 'default' } = Astro.props;
+interface Props {
+    variant?: 'default' | 'footer' | 'inline';
+    translations?: Translations;
+}
+
+const { variant = 'default', translations = {} } = Astro.props;
+
+// Default English translations
+const t = {
+    badge: translations.badge || "Stay in the loop",
+    title: translations.title || "Hungry for more?",
+    description: translations.description || "Get recipes, product news, and exclusive offers. We promise to keep it tasty, not spammy.",
+    placeholder: translations.placeholder || "Your email address",
+    button: translations.button || "Subscribe",
+    consent: translations.consent || "I agree to receive marketing emails.",
+    success: translations.success || "Thanks for subscribing! Check your inbox.",
+};
 ---
 
 <section class={`newsletter-signup ${variant}`}>
     <div class="newsletter-inner">
         {variant === 'default' && (
             <div class="newsletter-content reveal">
-                <span class="newsletter-badge">Stay in the loop</span>
-                <h3>Hungry for more?</h3>
-                <p>Get recipes, product news, and exclusive offers. We promise to keep it tasty, not spammy.</p>
+                <span class="newsletter-badge">{t.badge}</span>
+                <h3>{t.title}</h3>
+                <p>{t.description}</p>
             </div>
         )}
         {variant === 'footer' && (
             <div class="newsletter-content">
-                <p>Subscribe for recipes & news</p>
+                <p>{t.description}</p>
             </div>
         )}
-        <form class="newsletter-form reveal" data-newsletter-form>
+        <form class="newsletter-form reveal" data-newsletter-form data-success-message={t.success}>
             <div class="form-row">
                 <div class="input-wrapper">
                     <input
                         type="email"
                         name="email"
-                        placeholder="Your email address"
+                        placeholder={t.placeholder}
                         required
                         class="newsletter-input"
                     />
@@ -42,7 +64,7 @@ const { variant = 'default' } = Astro.props;
                     <option value="es">🇪🇸 Spain</option>
                 </select>
                 <button type="submit" class="newsletter-button">
-                    <span class="button-text">Subscribe</span>
+                    <span class="button-text">{t.button}</span>
                     <span class="button-loading" hidden>
                         <svg class="spinner" viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="60" stroke-dashoffset="20"/>
@@ -56,7 +78,7 @@ const { variant = 'default' } = Astro.props;
             <div class="newsletter-consent">
                 <label>
                     <input type="checkbox" name="consent" required />
-                    <span>I agree to receive marketing emails. <a href="/privacy">Privacy Policy</a></span>
+                    <span>{t.consent} <a href="/privacy">Privacy Policy</a></span>
                 </label>
             </div>
             <div class="newsletter-message" hidden></div>
@@ -92,7 +114,8 @@ const { variant = 'default' } = Astro.props;
             await new Promise(resolve => setTimeout(resolve, 1200));
 
             // Show success
-            message.innerHTML = '<span class="success-icon">✓</span> Thanks for subscribing! Check your inbox.';
+            const successMessage = formEl.dataset.successMessage || 'Thanks for subscribing! Check your inbox.';
+            message.innerHTML = '<span class="success-icon">✓</span> ' + successMessage;
             message.className = 'newsletter-message success';
             message.hidden = false;
             formEl.reset();

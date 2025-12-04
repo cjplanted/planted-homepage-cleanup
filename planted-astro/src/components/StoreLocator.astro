@@ -1,15 +1,48 @@
 ---
 import { getCollection } from 'astro:content';
 
+interface Translations {
+    detecting?: string;
+    showingResults?: string;
+    change?: string;
+    stores?: string;
+    restaurants?: string;
+    noRetail?: string;
+    noFoodservice?: string;
+    foodserviceIntro?: string;
+    availableProducts?: string;
+    cantFind?: string;
+    orderOnline?: string;
+    shopOnline?: string;
+}
+
 interface Props {
     title?: string;
     subtitle?: string;
+    translations?: Translations;
 }
 
 const {
     title = "Find Us",
-    subtitle = "Discover where to get your planted fix."
+    subtitle = "Discover where to get your planted fix.",
+    translations = {}
 } = Astro.props;
+
+// Default English translations
+const t = {
+    detecting: translations.detecting || "Finding your location...",
+    showingResults: translations.showingResults || "Showing results for",
+    change: translations.change || "Change",
+    stores: translations.stores || "Stores",
+    restaurants: translations.restaurants || "Restaurants",
+    noRetail: translations.noRetail || "No retail partners found in your area.",
+    noFoodservice: translations.noFoodservice || "No restaurant partners yet. Stay tuned!",
+    foodserviceIntro: translations.foodserviceIntro || "We're proud to partner with restaurants and foodservice providers who share our passion for delicious, sustainable food.",
+    availableProducts: translations.availableProducts || "Available products:",
+    cantFind: translations.cantFind || "Can't find a store?",
+    orderOnline: translations.orderOnline || "Order directly from our online shop and get planted delivered to your door.",
+    shopOnline: translations.shopOnline || "Shop Online",
+};
 
 const base = import.meta.env.BASE_URL;
 
@@ -87,12 +120,12 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             <div class="country-detected" id="countryDetected">
                 <div class="detecting">
                     <span class="spinner"></span>
-                    <span>Finding your location...</span>
+                    <span>{t.detecting}</span>
                 </div>
                 <div class="detected" style="display: none;">
                     <span class="flag" id="countryFlag"></span>
-                    <span>Showing results for <strong id="countryName"></strong></span>
-                    <button class="change-country" id="changeCountry">Change</button>
+                    <span>{t.showingResults} <strong id="countryName"></strong></span>
+                    <button class="change-country" id="changeCountry">{t.change}</button>
                 </div>
             </div>
 
@@ -119,7 +152,7 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                     <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
-                Stores
+                {t.stores}
             </button>
             <button class="tab-btn" data-tab="foodservice">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -129,7 +162,7 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                     <line x1="10" y1="1" x2="10" y2="4"/>
                     <line x1="14" y1="1" x2="14" y2="4"/>
                 </svg>
-                Restaurants
+                {t.restaurants}
             </button>
         </div>
 
@@ -178,7 +211,7 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
                             {retailerProducts.length > 0 && (
                                 <div class="products-preview">
-                                    <span class="products-label">Available products:</span>
+                                    <span class="products-label">{t.availableProducts}</span>
                                     <div class="product-pills">
                                         {retailerProducts.map((product: any) => (
                                             <span class="product-pill">{product.name}</span>
@@ -195,14 +228,14 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             </div>
 
             {retailPartners.length === 0 && (
-                <p class="no-results">No retail partners found in your area.</p>
+                <p class="no-results">{t.noRetail}</p>
             )}
         </div>
 
         <!-- Foodservice partners tab -->
         <div class="tab-content" id="foodservice-tab">
             <div class="foodservice-intro reveal">
-                <p>We're proud to partner with restaurants and foodservice providers who share our passion for delicious, sustainable food.</p>
+                <p>{t.foodserviceIntro}</p>
             </div>
 
             <div class="partners-grid foodservice-grid" id="foodserviceGrid">
@@ -251,18 +284,18 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             </div>
 
             {foodservicePartners.length === 0 && (
-                <p class="no-results">No foodservice partners found in your area.</p>
+                <p class="no-results">{t.noFoodservice}</p>
             )}
         </div>
 
         <!-- Online shop CTA -->
         <div class="online-cta reveal">
             <div class="cta-content">
-                <span class="cta-badge">Can't find a store?</span>
-                <span class="cta-text">Order directly from our online shop and get planted delivered to your door.</span>
+                <span class="cta-badge">{t.cantFind}</span>
+                <span class="cta-text">{t.orderOnline}</span>
             </div>
             <a href="https://shop.eatplanted.com" class="btn btn-cta" target="_blank" rel="noopener">
-                Shop Online
+                {t.shopOnline}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
