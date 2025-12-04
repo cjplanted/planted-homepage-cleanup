@@ -1,11 +1,11 @@
 # Robots.txt for planted-website
-# https://eatplanted.com
+# https://cgjen-box.github.io/planted-website/
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://eatplanted.com/sitemap-index.xml
+Sitemap: https://cgjen-box.github.io/planted-website/sitemap-index.xml
 
 # Crawl-delay for politeness
 Crawl-delay: 1

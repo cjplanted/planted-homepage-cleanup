@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
-import { locales, defaultLocale, type LocaleCode } from '../i18n/config';
+import { locales, defaultLocale, allLocales, type LocaleCode } from '../i18n/config';
 
 interface Props {
     title: string;
@@ -25,6 +25,62 @@ const localeData = locales[locale];
 const langCode = localeData?.language || 'en';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL;
+const siteOrigin = Astro.site?.origin || 'https://cgjen-box.github.io';
+const siteUrl = `${siteOrigin}${base}`;
+
+// Get current page path without locale prefix for hreflang generation
+const currentPath = Astro.url.pathname.replace(base, '').replace(/^\/[a-z]{2}(-[a-z]{2})?\//, '/').replace(/^\/?/, '');
+
+// Generate hreflang URLs for all locales
+const hreflangUrls = allLocales.map(loc => {
+    const locData = locales[loc];
+    const langRegion = loc === 'global' ? 'x-default' :
+        loc === 'uk' ? 'en-GB' :
+        `${locData.language}-${locData.country.toUpperCase()}`;
+    const url = `${siteUrl}/${loc}/${currentPath}`;
+    return { lang: langRegion, url };
+});
+
+// Schema.org structured data
+const schemaOrg = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "@id": `${siteUrl}#organization`,
+            "name": "Planted Foods AG",
+            "url": siteUrl,
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${siteUrl}images/planted-logo.svg`
+            },
+            "sameAs": [
+                "https://www.instagram.com/eatplanted/",
+                "https://www.facebook.com/eatplanted/",
+                "https://www.linkedin.com/company/planted-zurich/",
+                "https://twitter.com/eatplanted"
+            ],
+            "description": "Plant-based meat that actually tastes like meat. Made in Switzerland. B Corp certified."
+        },
+        {
+            "@type": "WebSite",
+            "@id": `${siteUrl}#website`,
+            "url": siteUrl,
+            "name": "Planted",
+            "publisher": { "@id": `${siteUrl}#organization` },
+            "inLanguage": langCode
+        },
+        {
+            "@type": "WebPage",
+            "@id": canonicalURL.href,
+            "url": canonicalURL.href,
+            "name": title,
+            "description": description,
+            "isPartOf": { "@id": `${siteUrl}#website` },
+            "inLanguage": langCode
+        }
+    ]
+};
 ---
 
 <!DOCTYPE html>
@@ -52,45 +108,53 @@ const base = import.meta.env.BASE_URL;
     <meta name="twitter:description" content={description}>
     <meta name="twitter:image" content={image}>
 
+    <!-- Hreflang tags for international SEO -->
+    {hreflangUrls.map(({ lang, url }) => (
+        <link rel="alternate" hreflang={lang} href={url} />
+    ))}
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
+
     <!-- Preload critical fonts -->
-    <link rel="preload" href={`${base}fonts/VCHenriettaCondensed-Bold.woff2`} as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href={`${base}fonts/GalanoGrotesque-Medium.otf`} as="font" type="font/otf" crossorigin>
+    <link rel="preload" href={`${base}/fonts/VCHenriettaCondensed-Bold.woff2`} as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href={`${base}/fonts/GalanoGrotesque-Medium.otf`} as="font" type="font/otf" crossorigin>
 
     <!-- Font Face Declarations with dynamic base URL -->
     <style set:html={`
         @font-face {
             font-family: 'VC Henrietta';
-            src: url('${base}fonts/VCHenriettaCondensed-Bold.woff2') format('woff2'),
-                 url('${base}fonts/VCHenriettaCondensed-Bold.woff') format('woff');
+            src: url('${base}/fonts/VCHenriettaCondensed-Bold.woff2') format('woff2'),
+                 url('${base}/fonts/VCHenriettaCondensed-Bold.woff') format('woff');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'VC Henrietta';
-            src: url('${base}fonts/VCHenriettaCondensed-SemiBold.woff2') format('woff2'),
-                 url('${base}fonts/VCHenriettaCondensed-SemiBold.woff') format('woff');
+            src: url('${base}/fonts/VCHenriettaCondensed-SemiBold.woff2') format('woff2'),
+                 url('${base}/fonts/VCHenriettaCondensed-SemiBold.woff') format('woff');
             font-weight: 600;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Galano Grotesque';
-            src: url('${base}fonts/GalanoGrotesque-Regular.otf') format('opentype');
+            src: url('${base}/fonts/GalanoGrotesque-Regular.otf') format('opentype');
             font-weight: 400;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Galano Grotesque';
-            src: url('${base}fonts/GalanoGrotesque-Medium.otf') format('opentype');
+            src: url('${base}/fonts/GalanoGrotesque-Medium.otf') format('opentype');
             font-weight: 500;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Galano Grotesque';
-            src: url('${base}fonts/GalanoGrotesque-Bold.otf') format('opentype');
+            src: url('${base}/fonts/GalanoGrotesque-Bold.otf') format('opentype');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
