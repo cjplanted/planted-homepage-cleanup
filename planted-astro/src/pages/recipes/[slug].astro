@@ -58,12 +58,41 @@ const recipeJsonLd = {
         "https://schema.org/VegetarianDiet"
     ]
 };
+
+// Site URL for schema
+const siteUrl = `https://cgjen-box.github.io${base}`;
+
+// BreadcrumbList schema
+const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${siteUrl}/`
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Recipes",
+            "item": `${siteUrl}/recipes`
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": recipe.data.title
+        }
+    ]
+};
 ---
 
 <Layout title={`${recipe.data.title} – Planted Recipes`} currentPage="recipes">
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(recipeJsonLd)} />
-    
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
     <article class="recipe-page">
         <!-- Hero Section -->
         <header class="recipe-hero">

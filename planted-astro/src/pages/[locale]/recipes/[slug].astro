@@ -35,9 +35,75 @@ const relatedRecipes = allRecipes
 
 const ingredients = recipe.data.ingredients || [];
 const instructions = recipe.data.instructions || [];
+
+// Generate JSON-LD structured data for recipe
+const siteUrl = `https://cgjen-box.github.io${base}`;
+const recipeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": recipe.data.title,
+    "description": recipe.data.description || `A delicious ${recipe.data.difficulty.toLowerCase()} recipe featuring planted products.`,
+    "image": recipe.data.image,
+    "author": {
+        "@type": "Organization",
+        "name": "Planted Foods AG",
+        "url": siteUrl
+    },
+    "datePublished": new Date().toISOString().split('T')[0],
+    "prepTime": `PT${Math.round(recipe.data.cookTime * 0.3)}M`,
+    "cookTime": `PT${recipe.data.cookTime}M`,
+    "totalTime": `PT${recipe.data.cookTime}M`,
+    "recipeYield": recipe.data.servings ? `${recipe.data.servings} ${t.recipes.servings}` : "2-4 servings",
+    "recipeCategory": recipe.data.category || "Main Course",
+    "recipeCuisine": "Plant-based",
+    "keywords": recipe.data.tags?.join(", ") || "plant-based, vegan, planted",
+    "recipeIngredient": ingredients.length > 0 ? ingredients : ["planted product", "seasoning to taste"],
+    "recipeInstructions": instructions.length > 0 ? instructions.map((step: string, index: number) => ({
+        "@type": "HowToStep",
+        "position": index + 1,
+        "text": step
+    })) : undefined,
+    "nutrition": {
+        "@type": "NutritionInformation",
+        "servingSize": "1 portion"
+    },
+    "suitableForDiet": [
+        "https://schema.org/VeganDiet",
+        "https://schema.org/VegetarianDiet"
+    ]
+};
+
+// BreadcrumbList schema
+const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${siteUrl}/${locale}/`
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": t.nav.recipes,
+            "item": `${siteUrl}/${locale}/recipes`
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": recipe.data.title
+        }
+    ]
+};
 ---
 
 <Layout title={`${recipe.data.title} – ${t.recipes.pageTitle}`} currentPage="recipes" locale={locale}>
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(recipeJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
     <article class="recipe-page">
         <!-- Hero Section -->
         <header class="recipe-hero">

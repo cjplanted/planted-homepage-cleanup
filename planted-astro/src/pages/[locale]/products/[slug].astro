@@ -109,9 +109,79 @@ const features = productT?.features || [
 
 // Get localized product name for this locale
 const localizedName = getLocalizedProductName(product.data.name, locale);
+
+// Generate JSON-LD structured data for product
+const siteUrl = `https://cgjen-box.github.io${base}`;
+const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": localizedName + (product.data.variant ? ` ${product.data.variant}` : ''),
+    "description": productT?.description || product.data.description || `Premium plant-based ${product.data.category} made from pea protein.`,
+    "image": product.data.images.main,
+    "brand": {
+        "@type": "Brand",
+        "name": "Planted"
+    },
+    "manufacturer": {
+        "@type": "Organization",
+        "name": "Planted Foods AG",
+        "url": siteUrl
+    },
+    "category": `Plant-based ${product.data.category}`,
+    "nutrition": product.data.nutrition ? {
+        "@type": "NutritionInformation",
+        "servingSize": "100g",
+        "calories": product.data.nutrition.energy,
+        "fatContent": product.data.nutrition.fat,
+        "saturatedFatContent": product.data.nutrition.saturates,
+        "carbohydrateContent": product.data.nutrition.carbs,
+        "sugarContent": product.data.nutrition.sugars,
+        "fiberContent": product.data.nutrition.fiber,
+        "proteinContent": `${product.data.nutrition.protein}g`,
+        "sodiumContent": product.data.nutrition.salt
+    } : undefined,
+    "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": localeData.country === 'ch' ? 'CHF' : 'EUR',
+        "seller": {
+            "@type": "Organization",
+            "name": "Planted Foods AG"
+        }
+    }
+};
+
+// BreadcrumbList schema
+const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": `${siteUrl}/${locale}/`
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": t.nav.products,
+            "item": `${siteUrl}/${locale}/products`
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": localizedName
+        }
+    ]
+};
 ---
 
 <Layout title={`${localizedName} ${product.data.variant} – Planted`} currentPage="products" locale={locale}>
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(productJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
     <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero-sticky">
