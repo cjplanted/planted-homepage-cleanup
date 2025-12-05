@@ -5,7 +5,6 @@ import { allLocales, locales, type LocaleCode, type CountryCode, getLocalizedPro
 import { getTranslations } from '../../i18n/index';
 import StoreLocator from '../../components/StoreLocator.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
-import DeliveryFinder from '../../components/DeliveryFinder.astro';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -274,22 +273,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         </div>
     </section>
 
-    <!-- Delivery Finder -->
-    <DeliveryFinder
-        locale={locale}
-        country={localeData.country as CountryCode}
-        translations={{
-            title: t.home.delivery?.title || 'Order Planted Delivery',
-            subtitle: t.home.delivery?.subtitle || 'Discover restaurants near you that deliver delicious Planted dishes.',
-            orderNow: t.home.delivery?.orderNow || 'Order now',
-            viewMenu: t.home.delivery?.viewMenu || 'View menu',
-            allCities: t.home.delivery?.allCities || 'All cities',
-            noResults: t.home.delivery?.noResults || 'No restaurants found in your area.',
-            poweredBy: t.home.delivery?.poweredBy || 'Available via Wolt, Lieferando, Uber Eats, and more',
-        }}
-    />
-
-    <!-- Store Locator -->
+    <!-- Store Locator (with Stores, Restaurants, and Delivery tabs) -->
     <StoreLocator
         title={t.storeLocator.title}
         subtitle={t.storeLocator.subtitle}
@@ -300,10 +284,16 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             change: t.storeLocator.change,
             stores: t.storeLocator.tabs.stores,
             restaurants: t.storeLocator.tabs.restaurants,
+            delivery: t.home.delivery?.title?.split(' ').pop() || 'Delivery',
             noRetail: t.storeLocator.noResults.retail,
             noFoodservice: t.storeLocator.noResults.foodservice,
+            noDelivery: t.home.delivery?.noResults || 'No delivery partners in your area yet.',
             foodserviceIntro: t.storeLocator.foodserviceIntro,
+            deliveryIntro: t.home.delivery?.subtitle || 'Order planted dishes directly to your door from these partner restaurants.',
             availableProducts: t.storeLocator.availableProducts,
+            orderNow: t.home.delivery?.orderNow || 'Order now',
+            viewMenu: t.home.delivery?.viewMenu || 'View menu',
+            vegan: t.common?.new === 'Nuevo' ? 'Vegano' : (t.common?.new === 'Neu' ? 'Vegan' : 'Vegan'),
             cantFind: t.storeLocator.online.badge,
             orderOnline: t.storeLocator.online.text,
             shopOnline: t.storeLocator.online.button,

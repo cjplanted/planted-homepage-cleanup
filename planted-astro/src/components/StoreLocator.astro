@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { deliveryRestaurants, platformColors, type DeliveryRestaurant } from '../data/deliveryRestaurants';
 
 interface Translations {
     detecting?: string;
@@ -7,10 +8,16 @@ interface Translations {
     change?: string;
     stores?: string;
     restaurants?: string;
+    delivery?: string;
     noRetail?: string;
     noFoodservice?: string;
+    noDelivery?: string;
     foodserviceIntro?: string;
+    deliveryIntro?: string;
     availableProducts?: string;
+    orderNow?: string;
+    viewMenu?: string;
+    vegan?: string;
     cantFind?: string;
     orderOnline?: string;
     shopOnline?: string;
@@ -37,10 +44,16 @@ const t = {
     change: translations.change || "Change",
     stores: translations.stores || "Stores",
     restaurants: translations.restaurants || "Restaurants",
+    delivery: translations.delivery || "Delivery",
     noRetail: translations.noRetail || "No retail partners found in your area.",
     noFoodservice: translations.noFoodservice || "No restaurant partners yet. Stay tuned!",
+    noDelivery: translations.noDelivery || "No delivery partners in your area yet.",
     foodserviceIntro: translations.foodserviceIntro || "We're proud to partner with restaurants and foodservice providers who share our passion for delicious, sustainable food.",
+    deliveryIntro: translations.deliveryIntro || "Order planted dishes directly to your door from these partner restaurants.",
     availableProducts: translations.availableProducts || "Available products:",
+    orderNow: translations.orderNow || "Order now",
+    viewMenu: translations.viewMenu || "View menu",
+    vegan: translations.vegan || "Vegan",
     cantFind: translations.cantFind || "Can't find a store?",
     orderOnline: translations.orderOnline || "Order directly from our online shop and get planted delivered to your door.",
     shopOnline: translations.shopOnline || "Shop Online",
@@ -94,6 +107,18 @@ retailers.forEach(r => {
     });
 });
 const countries = Array.from(allCountries).sort();
+
+// Country code to full name for delivery restaurants
+const deliveryCountryMap: Record<string, string> = {
+    'ch': 'Switzerland',
+    'de': 'Germany',
+    'at': 'Austria',
+    'nl': 'Netherlands',
+    'uk': 'United Kingdom',
+    'fr': 'France',
+    'it': 'Italy',
+    'es': 'Spain'
+};
 
 // Helper to get country name from locale
 function getCountryName(locale: string): string {
@@ -165,6 +190,13 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                     <line x1="14" y1="1" x2="14" y2="4"/>
                 </svg>
                 {t.restaurants}
+            </button>
+            <button class="tab-btn" data-tab="delivery">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                {t.delivery}
             </button>
         </div>
 
@@ -290,6 +322,92 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             )}
         </div>
 
+        <!-- Delivery partners tab -->
+        <div class="tab-content" id="delivery-tab">
+            <div class="delivery-intro reveal">
+                <p>{t.deliveryIntro}</p>
+            </div>
+
+            <div class="delivery-grid" id="deliveryGrid">
+                {deliveryRestaurants.map((restaurant) => {
+                    const countryName = deliveryCountryMap[restaurant.country] || restaurant.country;
+
+                    return (
+                        <div
+                            class="delivery-card reveal-scale"
+                            data-countries={countryName}
+                        >
+                            <div class="delivery-header">
+                                <div class="restaurant-meta">
+                                    <h3 class="restaurant-name">{restaurant.name}</h3>
+                                    <div class="restaurant-info">
+                                        <span class="restaurant-city">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                                <circle cx="12" cy="10" r="3"/>
+                                            </svg>
+                                            {restaurant.city}
+                                        </span>
+                                        <span class="restaurant-cuisine">{restaurant.cuisine}</span>
+                                    </div>
+                                </div>
+                                {restaurant.rating && (
+                                    <div class="restaurant-rating">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                        </svg>
+                                        {restaurant.rating}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div class="dish-menu">
+                                {restaurant.dishes.slice(0, 3).map((dish) => (
+                                    <div class="dish-item">
+                                        <div class="dish-info">
+                                            <div class="dish-name-row">
+                                                <span class="dish-name">{dish.name}</span>
+                                                {dish.isVegan && (
+                                                    <span class="vegan-badge">{t.vegan}</span>
+                                                )}
+                                            </div>
+                                            <p class="dish-description">{dish.description}</p>
+                                        </div>
+                                        {dish.price && (
+                                            <span class="dish-price">{dish.price}</span>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div class="delivery-platforms">
+                                {restaurant.deliveryPlatforms.map((platform) => (
+                                    <a
+                                        href={platform.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="platform-btn"
+                                        style={`--platform-color: ${platformColors[platform.name]}`}
+                                    >
+                                        {platform.displayName}
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {deliveryRestaurants.length === 0 && (
+                <p class="no-results">{t.noDelivery}</p>
+            )}
+        </div>
+
         <!-- Online shop CTA -->
         <div class="online-cta reveal">
             <div class="cta-content">
@@ -390,11 +508,25 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
         // Filter cards by country
         function filterCards(country) {
-            const allCards = document.querySelectorAll('.partner-card');
-
-            allCards.forEach((card) => {
+            // Filter partner cards (retail & foodservice)
+            const partnerCards = document.querySelectorAll('.partner-card');
+            partnerCards.forEach((card) => {
                 const cardCountries = card.dataset.countries?.split(',') || [];
                 const matches = cardCountries.includes(country);
+
+                if (matches) {
+                    card.classList.remove('filtered-out');
+                    card.style.display = '';
+                } else {
+                    card.classList.add('filtered-out');
+                }
+            });
+
+            // Filter delivery cards
+            const deliveryCards = document.querySelectorAll('.delivery-card');
+            deliveryCards.forEach((card) => {
+                const cardCountry = card.dataset.countries || '';
+                const matches = cardCountry === country;
 
                 if (matches) {
                     card.classList.remove('filtered-out');
@@ -412,13 +544,16 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         function checkEmptyTabs() {
             const retailCards = document.querySelectorAll('#retail-tab .partner-card:not(.filtered-out)');
             const foodserviceCards = document.querySelectorAll('#foodservice-tab .partner-card:not(.filtered-out)');
+            const deliveryCards = document.querySelectorAll('#delivery-tab .delivery-card:not(.filtered-out)');
 
             // Update no results messages
             const retailTab = document.getElementById('retail-tab');
             const foodserviceTab = document.getElementById('foodservice-tab');
+            const deliveryTab = document.getElementById('delivery-tab');
 
             let retailNoResults = retailTab?.querySelector('.no-results');
             let foodserviceNoResults = foodserviceTab?.querySelector('.no-results');
+            let deliveryNoResults = deliveryTab?.querySelector('.no-results');
 
             if (retailCards.length === 0 && retailTab) {
                 if (!retailNoResults) {
@@ -444,6 +579,19 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                 }
             } else if (foodserviceNoResults) {
                 foodserviceNoResults.style.display = 'none';
+            }
+
+            if (deliveryCards.length === 0 && deliveryTab) {
+                if (!deliveryNoResults) {
+                    deliveryNoResults = document.createElement('p');
+                    deliveryNoResults.className = 'no-results';
+                    deliveryNoResults.textContent = 'No delivery partners in ' + currentCountry + ' yet. Check back soon!';
+                    deliveryTab.appendChild(deliveryNoResults);
+                } else {
+                    deliveryNoResults.style.display = '';
+                }
+            } else if (deliveryNoResults) {
+                deliveryNoResults.style.display = 'none';
             }
         }
 
@@ -823,6 +971,204 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         font-size: 0.85rem;
         line-height: 1.5;
         color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Delivery tab styles */
+    .delivery-intro {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+
+    .delivery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .delivery-card {
+        background: white;
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+    }
+
+    .delivery-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    :global(.delivery-card.filtered-out) {
+        display: none !important;
+    }
+
+    .delivery-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .restaurant-meta {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .restaurant-name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--planted-charcoal);
+        margin: 0 0 0.35rem;
+        line-height: 1.2;
+    }
+
+    .restaurant-info {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .restaurant-city {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .restaurant-city svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .restaurant-cuisine {
+        font-size: 0.8rem;
+        color: var(--planted-purple);
+        background: rgba(107, 57, 131, 0.1);
+        padding: 0.2rem 0.6rem;
+        border-radius: 100px;
+    }
+
+    .restaurant-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: #FFF8E1;
+        color: #F59E0B;
+        padding: 0.35rem 0.7rem;
+        border-radius: 100px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .restaurant-rating svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Dish menu styles */
+    .dish-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .dish-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dish-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .dish-name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.25rem;
+    }
+
+    .dish-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--planted-charcoal);
+    }
+
+    .vegan-badge {
+        background: linear-gradient(135deg, var(--planted-green), #7CB342);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .dish-description {
+        font-size: 0.8rem;
+        color: #777;
+        line-height: 1.4;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .dish-price {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--planted-green);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* Delivery platform buttons */
+    .delivery-platforms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .platform-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1rem;
+        background: var(--platform-color, #333);
+        color: white;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .platform-btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
+
+    .platform-btn svg {
+        width: 14px;
+        height: 14px;
+        opacity: 0.85;
     }
 
     /* No results */

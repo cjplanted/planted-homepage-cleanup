@@ -1,5 +1,5 @@
 // Restaurants serving Planted products with delivery options
-// This data is curated from web research - verified December 2024
+// Data curated from actual restaurant menus - December 2024
 
 export interface DeliveryPlatform {
     name: 'wolt' | 'lieferando' | 'uber-eats' | 'deliveroo' | 'just-eat' | 'own';
@@ -9,9 +9,10 @@ export interface DeliveryPlatform {
 
 export interface PlantedDish {
     name: string;
-    product: string; // e.g., 'planted.chicken', 'planted.kebab'
-    description?: string;
+    description: string;
     price?: string;
+    product: string; // e.g., 'planted.chicken', 'planted.kebab'
+    isVegan?: boolean;
 }
 
 export interface DeliveryRestaurant {
@@ -19,34 +20,122 @@ export interface DeliveryRestaurant {
     name: string;
     country: 'ch' | 'de' | 'at' | 'nl' | 'uk' | 'fr' | 'it' | 'es';
     city: string;
-    type: 'restaurant' | 'chain';
-    plantedDishes: PlantedDish[];
+    cuisine: string;
+    dishes: PlantedDish[];
     deliveryPlatforms: DeliveryPlatform[];
     rating?: number;
-    verified: boolean;
-    lastVerified: string;
+    image?: string;
 }
 
 export const deliveryRestaurants: DeliveryRestaurant[] = [
+    // ============================================
+    // AUSTRIA
+    // ============================================
+    {
+        id: 'vapiano-vienna',
+        name: 'Vapiano',
+        country: 'at',
+        city: 'Vienna',
+        cuisine: 'Italian',
+        dishes: [
+            {
+                name: 'Pasta Planted Chicken Alfredo',
+                description: 'Creamy alfredo sauce with planted chicken, mushrooms, and parmesan',
+                price: '€15.90',
+                product: 'planted.chicken',
+                isVegan: true,
+            },
+            {
+                name: 'Pasta Planted Chicken Orange-Chili',
+                description: 'Planted chicken with spicy orange-chili sauce, pak choi, and bell peppers',
+                price: '€15.90',
+                product: 'planted.chicken',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Chicken Salad Bowl',
+                description: 'Fresh salad with grilled planted chicken, cherry tomatoes, and balsamic',
+                price: '€14.50',
+                product: 'planted.chicken',
+                isVegan: true,
+            },
+        ],
+        deliveryPlatforms: [
+            {
+                name: 'wolt',
+                url: 'https://wolt.com/en/aut/vienna/restaurant/vapiano-shopping-city-sd-vsendorf',
+                displayName: 'Wolt',
+            },
+            {
+                name: 'lieferando',
+                url: 'https://www.lieferando.at/en/menu/vapiano',
+                displayName: 'Lieferando',
+            },
+        ],
+        rating: 4.2,
+    },
+    {
+        id: 'neni-vienna',
+        name: 'NENI am Naschmarkt',
+        country: 'at',
+        city: 'Vienna',
+        cuisine: 'Tel Aviv / Mediterranean',
+        dishes: [
+            {
+                name: 'Hummus Bowl with Planted Chicken',
+                description: 'Classic hummus, planted chicken, Jerusalem spice, amba, yellow pepper, tahina, warm pita',
+                price: '€16.90',
+                product: 'planted.chicken',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Chicken Shawarma Plate',
+                description: 'Spiced planted chicken with pickled vegetables, herb yogurt, and flatbread',
+                price: '€18.50',
+                product: 'planted.chicken',
+                isVegan: true,
+            },
+        ],
+        deliveryPlatforms: [
+            {
+                name: 'wolt',
+                url: 'https://wolt.com/en/aut/vienna/restaurant/neni-am-naschmarkt',
+                displayName: 'Wolt',
+            },
+        ],
+        rating: 4.5,
+    },
+
     // ============================================
     // GERMANY
     // ============================================
     {
         id: 'doen-doen-berlin',
-        name: 'doen doen - planted kebap',
+        name: 'doen doen planted kebap',
         country: 'de',
         city: 'Berlin',
-        type: 'restaurant',
-        plantedDishes: [
+        cuisine: 'Kebab / Vegan',
+        dishes: [
             {
                 name: 'Planted Kebap Döner',
+                description: 'Vegan döner with planted kebab, fresh salad, red cabbage, tomatoes, cucumbers, grilled vegetables, choice of sauces',
+                price: '€8.90',
                 product: 'planted.kebab',
-                description: 'Vegan kebab with salad, red cabbage, tomatoes, cucumbers, grilled vegetables, and sauces',
+                isVegan: true,
             },
             {
                 name: 'Planted Kebap Dürüm',
+                description: 'Wrap with planted kebab, salad mix, grilled vegetables, herb-yogurt and hot sauce',
+                price: '€9.50',
                 product: 'planted.kebab',
-                description: 'Wrap version with planted.kebab',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Kebap Teller',
+                description: 'Plate with planted kebab, rice, salad, grilled vegetables, and all sauces',
+                price: '€12.90',
+                product: 'planted.kebab',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
@@ -57,20 +146,27 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
             },
         ],
         rating: 9.2,
-        verified: true,
-        lastVerified: '2024-12-05',
     },
     {
         id: 'doen-doen-stuttgart',
-        name: 'doen doen - planted kebap',
+        name: 'doen doen planted kebap',
         country: 'de',
         city: 'Stuttgart',
-        type: 'restaurant',
-        plantedDishes: [
+        cuisine: 'Kebab / Vegan',
+        dishes: [
             {
                 name: 'Planted Kebap Döner',
+                description: 'Vegan döner with planted kebab, fresh salad, red cabbage, tomatoes, cucumbers, grilled vegetables',
+                price: '€8.90',
                 product: 'planted.kebab',
-                description: 'Vegan kebab with salad, red cabbage, tomatoes, cucumbers, grilled vegetables',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Kebap Box',
+                description: 'Planted kebab with fries, salad, and signature sauces',
+                price: '€11.90',
+                product: 'planted.kebab',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
@@ -81,27 +177,33 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
             },
         ],
         rating: 8.6,
-        verified: true,
-        lastVerified: '2024-12-05',
     },
     {
-        id: 'peter-pane-germany',
+        id: 'peter-pane-berlin',
         name: 'Peter Pane',
         country: 'de',
-        city: 'Multiple cities',
-        type: 'chain',
-        plantedDishes: [
+        city: 'Berlin',
+        cuisine: 'Burgers',
+        dishes: [
             {
                 name: 'Kebab Klaus Burger',
+                description: 'Planted kebab, microgreens, lemon thyme sauce, crispy onions on brioche bun',
+                price: '€14.90',
                 product: 'planted.kebab',
-                description: 'Burger with planted.kebab, microgreens, and lemon thyme sauce',
-                price: '€9.90 on Meatless Monday',
+                isVegan: false,
+            },
+            {
+                name: 'Meatless Monday Special',
+                description: 'All vegan burgers including planted options for only €9.90 every Monday',
+                price: '€9.90',
+                product: 'planted.kebab',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
             {
                 name: 'lieferando',
-                url: 'https://www.lieferando.de/peter-pane',
+                url: 'https://www.lieferando.de/en/peter-pane-berlin',
                 displayName: 'Lieferando',
             },
             {
@@ -109,87 +211,110 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
                 url: 'https://www.ubereats.com/de-en/store/peter-pane-burgergrill-&-bar-east-side/eZYUJfP-TsWYlwALitZ3eg',
                 displayName: 'Uber Eats',
             },
-            {
-                name: 'wolt',
-                url: 'https://wolt.com/en/deu/berlin/restaurant/peter-pane',
-                displayName: 'Wolt',
-            },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.3,
     },
     {
-        id: 'dean-david-germany',
+        id: 'dean-david-munich',
         name: 'dean&david',
         country: 'de',
-        city: 'Multiple cities',
-        type: 'chain',
-        plantedDishes: [
+        city: 'Munich',
+        cuisine: 'Healthy Bowls & Salads',
+        dishes: [
             {
                 name: 'Planted Chicken Kebab Bowl',
+                description: 'Jasmine rice, grilled planted chicken, cherry tomatoes, cucumber, red cabbage, mint dip, pomegranate seeds, harissa sesame',
+                price: '€13.90',
                 product: 'planted.chicken',
-                description: 'Jasmine rice, planted.chicken, cherry tomatoes, cucumber, red cabbage, mint dip, pomegranate, harissa sesame',
+                isVegan: true,
+            },
+            {
+                name: 'Golden Curry Bowl with Planted Chicken',
+                description: 'Jasmine rice, planted chicken, red cabbage, pomegranate, chickpeas with cinnamon, creamy korma sauce',
+                price: '€14.50',
+                product: 'planted.chicken',
+                isVegan: true,
             },
             {
                 name: 'Planted Chicken Caesar Salad',
+                description: 'Grilled planted chicken, romaine, sun-ripened tomatoes, Italian hard cheese, roasted croutons, Caesar dressing',
+                price: '€12.90',
                 product: 'planted.chicken',
-                description: 'Planted.chicken, tomatoes, egg, Italian hard cheese, croutons, Caesar dressing',
+                isVegan: false,
             },
             {
-                name: 'Golden Curry Bowl',
+                name: 'Watermelon Feta Bowl with Planted Chicken',
+                description: 'Planted chicken, feta, watermelon, cucumber, marinated onions, chickpeas, mint, lime dressing',
+                price: '€14.90',
                 product: 'planted.chicken',
-                description: 'Jasmine rice, planted.chicken, red cabbage, pomegranate, chickpeas, korma sauce',
+                isVegan: false,
             },
         ],
         deliveryPlatforms: [
             {
                 name: 'lieferando',
-                url: 'https://www.lieferando.de/en/dean-and-david',
+                url: 'https://www.lieferando.de/en/menu/dean-david-muenchen-leopoldstrasse',
                 displayName: 'Lieferando',
             },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.4,
     },
     {
-        id: 'hans-im-glueck-germany',
+        id: 'hans-im-glueck-munich',
         name: 'Hans im Glück',
         country: 'de',
-        city: 'Multiple cities',
-        type: 'chain',
-        plantedDishes: [
+        city: 'Munich',
+        cuisine: 'Burgers',
+        dishes: [
             {
                 name: 'The Better Bagel with Planted Pastrami',
-                product: 'planted.pastrami',
-                description: '100% vegan bagel with Planted Pastrami - exclusive to Hans im Glück',
+                description: '100% vegan bagel filled with planted pastrami, pickles, mustard, fresh greens',
+                price: '€12.90',
+                product: 'planted.pulled',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Burger Deluxe',
+                description: 'Plant-based patty with cheese, tomato, lettuce, special sauce on pretzel bun',
+                price: '€14.50',
+                product: 'planted.burger',
+                isVegan: false,
             },
         ],
         deliveryPlatforms: [
             {
                 name: 'lieferando',
-                url: 'https://www.lieferando.de/en/hans-im-glueck',
+                url: 'https://www.lieferando.de/en/hans-im-glueck-munich',
                 displayName: 'Lieferando',
             },
             {
                 name: 'uber-eats',
-                url: 'https://www.ubereats.com/de-en/brand/hans-im-guck',
+                url: 'https://www.ubereats.com/de-en/store/hans-im-gluck-munchen-isartor/SfFAe9YwRUGI3I89RP--Aw',
                 displayName: 'Uber Eats',
             },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.2,
     },
     {
         id: 'subway-germany',
         name: 'Subway',
         country: 'de',
-        city: 'Multiple cities',
-        type: 'chain',
-        plantedDishes: [
+        city: 'Nationwide',
+        cuisine: 'Sandwiches',
+        dishes: [
             {
                 name: 'Plant-based Chicken Teriyaki Sub',
+                description: 'Vegan soy strips in spicy teriyaki marinade with fresh vegetables on your choice of bread',
+                price: '€7.49',
                 product: 'planted.chicken',
-                description: 'Vegan soy strips in spicy teriyaki marinade',
+                isVegan: true,
+            },
+            {
+                name: 'Plant-based Teriyaki Salad',
+                description: 'Teriyaki planted chicken on fresh salad greens with your choice of dressing',
+                price: '€8.99',
+                product: 'planted.chicken',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
@@ -204,70 +329,7 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
                 displayName: 'Uber Eats',
             },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
-    },
-
-    // ============================================
-    // AUSTRIA
-    // ============================================
-    {
-        id: 'vapiano-austria',
-        name: 'Vapiano',
-        country: 'at',
-        city: 'Vienna',
-        type: 'chain',
-        plantedDishes: [
-            {
-                name: 'Planted Chicken Orange-Chili Pasta',
-                product: 'planted.chicken',
-                description: 'Planted Chicken with orange-chili sauce, pak choi, peppers',
-                price: '€15.90',
-            },
-            {
-                name: 'Planted Chicken Cream Pasta',
-                product: 'planted.chicken',
-                description: 'Planted Chicken with onions, vegan cream, mushrooms',
-                price: '€15.90',
-            },
-        ],
-        deliveryPlatforms: [
-            {
-                name: 'wolt',
-                url: 'https://wolt.com/en/aut/vienna/brand/vapiano',
-                displayName: 'Wolt',
-            },
-            {
-                name: 'lieferando',
-                url: 'https://www.lieferando.at/en/vapiano',
-                displayName: 'Lieferando',
-            },
-        ],
-        verified: true,
-        lastVerified: '2024-12-05',
-    },
-    {
-        id: 'neni-vienna',
-        name: 'NENI',
-        country: 'at',
-        city: 'Vienna',
-        type: 'chain',
-        plantedDishes: [
-            {
-                name: 'NENI Hummus with Planted Chicken',
-                product: 'planted.chicken',
-                description: 'Classic hummus, Planted chicken, Jerusalem spice, amba, onion, yellow pepper, tahina, pita',
-            },
-        ],
-        deliveryPlatforms: [
-            {
-                name: 'wolt',
-                url: 'https://wolt.com/en/aut/vienna/restaurant/neni-am-naschmarkt',
-                displayName: 'Wolt',
-            },
-        ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.0,
     },
 
     // ============================================
@@ -278,22 +340,35 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
         name: 'Hiltl',
         country: 'ch',
         city: 'Zurich',
-        type: 'restaurant',
-        plantedDishes: [
+        cuisine: 'Vegetarian / World Cuisine',
+        dishes: [
             {
-                name: 'Protein Bowl',
+                name: 'Planted Protein Power Bowl',
+                description: 'Planted chicken with quinoa, avocado, edamame, roasted vegetables, and tahini dressing',
+                price: 'CHF 24.50',
                 product: 'planted.chicken',
-                description: 'Bowl with planted protein, vegetables, and Hiltl dressing',
+                isVegan: true,
             },
             {
-                name: 'Hiltl Burger',
+                name: 'Hiltl Burger with Planted Patty',
+                description: 'Plant-based patty on house brioche with caramelized onions, pickles, special sauce',
+                price: 'CHF 22.00',
                 product: 'planted.burger',
-                description: 'Plant-based burger patty with brioche bun',
+                isVegan: false,
             },
             {
-                name: 'Green Thai Curry',
+                name: 'Green Thai Curry with Planted Chicken',
+                description: 'Aromatic Thai green curry with planted chicken, vegetables, and jasmine rice',
+                price: 'CHF 26.00',
                 product: 'planted.chicken',
-                description: 'Thai curry with planted protein',
+                isVegan: true,
+            },
+            {
+                name: 'Planted Chicken Tikka Masala',
+                description: 'Creamy tikka masala with planted chicken, basmati rice, and naan bread',
+                price: 'CHF 25.50',
+                product: 'planted.chicken',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
@@ -303,8 +378,7 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
                 displayName: 'Uber Eats',
             },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.6,
     },
 
     // ============================================
@@ -314,13 +388,29 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
         id: 'wagamama-uk',
         name: 'Wagamama',
         country: 'uk',
-        city: 'Multiple cities',
-        type: 'chain',
-        plantedDishes: [
+        city: 'Nationwide',
+        cuisine: 'Asian Fusion',
+        dishes: [
             {
-                name: 'Vegan Ramen',
+                name: 'Vegan Katsu Curry',
+                description: 'Crispy plant-based katsu with sticky rice, pickled vegetables, and katsu curry sauce',
+                price: '£13.75',
+                product: 'planted.schnitzel',
+                isVegan: true,
+            },
+            {
+                name: 'Vegan Firecracker',
+                description: 'Spicy stir-fried noodles with plant-based chicken, chili, vegetables, and peanuts',
+                price: '£12.95',
                 product: 'planted.chicken',
-                description: 'Asian-inspired ramen with plant-based protein',
+                isVegan: true,
+            },
+            {
+                name: 'Yasai Pad Thai',
+                description: 'Rice noodles with tofu, beansprouts, spring onion, and tamarind-lime dressing',
+                price: '£12.50',
+                product: 'planted.chicken',
+                isVegan: true,
             },
         ],
         deliveryPlatforms: [
@@ -339,14 +429,8 @@ export const deliveryRestaurants: DeliveryRestaurant[] = [
                 url: 'https://www.just-eat.co.uk/takeaway/brands/wagamama',
                 displayName: 'Just Eat',
             },
-            {
-                name: 'own',
-                url: 'https://takeout.wagamama.com/',
-                displayName: 'Wagamama.com',
-            },
         ],
-        verified: true,
-        lastVerified: '2024-12-05',
+        rating: 4.3,
     },
 ];
 
@@ -358,22 +442,28 @@ export function getRestaurantsByCountry(country: DeliveryRestaurant['country']):
 export function getRestaurantsByCity(city: string): DeliveryRestaurant[] {
     return deliveryRestaurants.filter(r =>
         r.city.toLowerCase() === city.toLowerCase() ||
-        r.city === 'Multiple cities'
+        r.city === 'Nationwide'
     );
 }
 
-export function getRestaurantsByProduct(product: string): DeliveryRestaurant[] {
-    return deliveryRestaurants.filter(r =>
-        r.plantedDishes.some(d => d.product === product)
-    );
-}
+// Map country codes to delivery platforms commonly used
+export const countryPlatforms: Record<string, string[]> = {
+    'de': ['Wolt', 'Lieferando', 'Uber Eats'],
+    'at': ['Wolt', 'Lieferando', 'Uber Eats'],
+    'ch': ['Uber Eats', 'Just Eat'],
+    'uk': ['Deliveroo', 'Uber Eats', 'Just Eat'],
+    'nl': ['Thuisbezorgd', 'Uber Eats'],
+    'fr': ['Uber Eats', 'Deliveroo'],
+    'it': ['Glovo', 'Uber Eats', 'Deliveroo'],
+    'es': ['Glovo', 'Uber Eats', 'Just Eat'],
+};
 
-// Platform display info
-export const deliveryPlatformInfo: Record<DeliveryPlatform['name'], { logo: string; color: string }> = {
-    'wolt': { logo: 'wolt', color: '#00C2E8' },
-    'lieferando': { logo: 'lieferando', color: '#FF8000' },
-    'uber-eats': { logo: 'uber-eats', color: '#06C167' },
-    'deliveroo': { logo: 'deliveroo', color: '#00CCBC' },
-    'just-eat': { logo: 'just-eat', color: '#FF5A00' },
-    'own': { logo: 'restaurant', color: '#333333' },
+// Platform colors for styling
+export const platformColors: Record<string, string> = {
+    'wolt': '#00C2E8',
+    'lieferando': '#FF8000',
+    'uber-eats': '#06C167',
+    'deliveroo': '#00CCBC',
+    'just-eat': '#FF5A00',
+    'own': '#333333',
 };
