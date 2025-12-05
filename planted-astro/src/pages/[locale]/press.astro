@@ -156,7 +156,7 @@ const companyFacts = [
         </div>
         <div class="releases-list">
             {sortedNews.map((news) => (
-                <a href={`${base}/${locale}/news/${news.slug}`} class="release-item reveal">
+                <a href={`${base}/${locale}/news/${news.data.slug}`} class="release-item reveal">
                     <div class="release-date">
                         {new Date(news.data.date).toLocaleDateString(localeData.language === 'de' ? 'de-DE' : localeData.language === 'fr' ? 'fr-FR' : localeData.language === 'it' ? 'it-IT' : localeData.language === 'nl' ? 'nl-NL' : localeData.language === 'es' ? 'es-ES' : 'en-GB', { month: 'long', year: 'numeric' })}
                     </div>
