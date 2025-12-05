@@ -22,19 +22,25 @@ const sortedTeam = team.sort((a, b) => a.data.order - b.data.order);
 // Get news for timeline milestones
 const allNews = await getCollection('news');
 
-// Timeline milestones with linked news
+// Timeline milestones with linked news and polaroid images
 const milestones = [
     {
         year: '2019',
         title: t.mission?.timeline?.y2019?.title || 'The Beginning',
         description: t.mission?.timeline?.y2019?.desc || 'Four food scientists and entrepreneurs—Pascal Bieri, Eric Stirnemann, Christoph Jenny, and Lukas Böni—start experimenting with plant proteins in a small ETH Zurich lab. Their goal: create meat from plants that even meat lovers would choose.',
         highlight: true,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-og-image.jpg',
+        caption: 'Day one in Zurich',
+        rotation: -3,
     },
     {
         year: '2020',
         title: t.mission?.timeline?.y2020?.title || 'planted.chicken Launches',
         description: t.mission?.timeline?.y2020?.desc || 'The first planted.chicken hits Swiss retail shelves. It sells out within days. Word spreads: this tastes different. Better.',
         highlight: false,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/files/chicken-nature-new.png?v=1747135663',
+        caption: 'The one that started it all',
+        rotation: 2,
     },
     {
         year: '2021',
@@ -42,18 +48,27 @@ const milestones = [
         description: t.mission?.timeline?.y2021?.desc || 'We officially become a B Corporation—joining a global community using business as a force for good. Not just talking about sustainability, but proving it.',
         newsSlug: 'bcorp-certification',
         highlight: false,
+        image: null,
+        caption: null,
+        rotation: 0,
     },
     {
         year: '2022',
         title: t.mission?.timeline?.y2022?.title || 'European Expansion',
         description: t.mission?.timeline?.y2022?.desc || 'From Switzerland to Germany, Austria, and beyond. The appetite for better meat alternatives crosses borders.',
         highlight: false,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/articles/planted.chicken_Bao.jpg?v=1681291029',
+        caption: 'Going international',
+        rotation: -2,
     },
     {
         year: '2023',
         title: t.mission?.timeline?.y2023?.title || 'planted.steak',
         description: t.mission?.timeline?.y2023?.desc || 'We launch the world\'s first fermented whole-cut plant-based steak. A breakthrough in texture and taste that changes what people think is possible.',
         highlight: true,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/articles/planted_steak_festive_mood_web_8345f4d0-c45a-4c0b-8d87-44ceb352d6df.jpg?v=1763388402',
+        caption: 'The steak moment',
+        rotation: 3,
     },
     {
         year: '2024',
@@ -61,6 +76,9 @@ const milestones = [
         description: t.mission?.timeline?.y2024?.desc || 'Major funding round accelerates our mission. From Michelin-starred restaurants to everyday canteens, planted is now served in over 8,000 locations.',
         newsSlug: 'series-c-funding',
         highlight: false,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/articles/planted-stucki-web-00347_ecfd4dac-755d-4ad7-a430-7179b728df08.jpg?v=1763388920',
+        caption: 'From Michelin to canteens',
+        rotation: -1,
     },
     {
         year: '2025',
@@ -68,6 +86,9 @@ const milestones = [
         description: t.mission?.timeline?.y2025?.desc || 'Our new Memmingen production facility opens—the most advanced plant-based meat factory in Europe. 100% renewable energy. Built for scale.',
         newsSlug: 'memmingen-facility-opening',
         highlight: true,
+        image: 'https://cdn.shopify.com/s/files/1/0049/5383/3521/files/crispy-burger-pack.png?v=1758792139',
+        caption: 'Built for the future',
+        rotation: 2,
     },
 ];
 ---
@@ -139,7 +160,7 @@ const milestones = [
         </div>
     </section>
 
-    <!-- Timeline with News -->
+    <!-- Timeline with News and Polaroid Photos -->
     <section class="timeline-section">
         <div class="timeline-header">
             <h2 class="reveal">{t.mission?.timeline?.title || 'How we got here'}</h2>
@@ -149,7 +170,7 @@ const milestones = [
             {milestones.map((milestone, index) => {
                 const linkedNews = milestone.newsSlug ? allNews.find(n => n.data.slug === milestone.newsSlug) : null;
                 return (
-                    <div class={`timeline-item ${milestone.highlight ? 'highlight' : ''} reveal`}>
+                    <div class={`timeline-item ${milestone.highlight ? 'highlight' : ''} ${milestone.image ? 'has-image' : ''} reveal`}>
                         <div class="timeline-marker">
                             <span class="timeline-year">{milestone.year}</span>
                         </div>
@@ -162,6 +183,16 @@ const milestones = [
                                 </a>
                             )}
                         </div>
+                        {milestone.image && (
+                            <div class="polaroid" style={`--rotation: ${milestone.rotation}deg`}>
+                                <div class="polaroid-inner">
+                                    <img src={milestone.image} alt={milestone.caption || milestone.title} loading="lazy" />
+                                    {milestone.caption && (
+                                        <span class="polaroid-caption">{milestone.caption}</span>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 );
             })}
@@ -408,6 +439,7 @@ const milestones = [
     /* Timeline */
     .timeline-section {
         padding: 5rem 1.5rem;
+        overflow: hidden;
     }
 
     .timeline-header {
@@ -426,7 +458,7 @@ const milestones = [
     }
 
     .timeline {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
         position: relative;
     }
@@ -442,15 +474,19 @@ const milestones = [
     }
 
     .timeline-item {
-        display: flex;
+        display: grid;
+        grid-template-columns: 120px 1fr;
         gap: 2rem;
-        margin-bottom: 3rem;
+        margin-bottom: 4rem;
         position: relative;
+    }
+
+    .timeline-item.has-image {
+        grid-template-columns: 120px 1fr 180px;
     }
 
     .timeline-marker {
         flex-shrink: 0;
-        width: 120px;
         display: flex;
         align-items: flex-start;
         position: relative;
@@ -483,7 +519,6 @@ const milestones = [
     }
 
     .timeline-content {
-        flex: 1;
         padding-bottom: 1rem;
     }
 
@@ -511,6 +546,46 @@ const milestones = [
 
     .timeline-link:hover {
         opacity: 0.7;
+    }
+
+    /* Polaroid Style */
+    .polaroid {
+        --rotation: 0deg;
+        transform: rotate(var(--rotation));
+        transition: transform 0.3s ease;
+    }
+
+    .polaroid:hover {
+        transform: rotate(0deg) scale(1.05);
+        z-index: 10;
+    }
+
+    .polaroid-inner {
+        background: white;
+        padding: 0.6rem 0.6rem 2rem 0.6rem;
+        box-shadow:
+            0 4px 6px rgba(0,0,0,0.1),
+            0 10px 20px rgba(0,0,0,0.08),
+            inset 0 0 0 1px rgba(0,0,0,0.05);
+        border-radius: 2px;
+    }
+
+    .polaroid img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        display: block;
+        filter: saturate(0.95) contrast(1.02);
+    }
+
+    .polaroid-caption {
+        display: block;
+        text-align: center;
+        font-family: 'Caveat', 'Comic Sans MS', cursive;
+        font-size: 0.9rem;
+        color: var(--planted-purple);
+        margin-top: 0.5rem;
+        opacity: 0.8;
     }
 
     /* Values */
@@ -760,17 +835,56 @@ const milestones = [
         }
     }
 
+    @media (max-width: 800px) {
+        .timeline-item,
+        .timeline-item.has-image {
+            grid-template-columns: 80px 1fr;
+            grid-template-rows: auto auto;
+        }
+
+        .polaroid {
+            grid-column: 2;
+            grid-row: 2;
+            max-width: 140px;
+            margin-top: 1rem;
+        }
+    }
+
     @media (max-width: 600px) {
         .timeline::before {
             left: 20px;
         }
 
+        .timeline-item,
+        .timeline-item.has-image {
+            grid-template-columns: 50px 1fr;
+        }
+
         .timeline-marker {
-            width: 60px;
+            width: 50px;
         }
 
         .timeline-year {
-            font-size: 1rem;
+            font-size: 0.9rem;
+            padding-right: 0.5rem;
+        }
+
+        .timeline-marker::after {
+            right: -0.75rem;
+            width: 10px;
+            height: 10px;
+        }
+
+        .polaroid {
+            max-width: 120px;
+        }
+
+        .polaroid-inner {
+            padding: 0.4rem 0.4rem 1.5rem 0.4rem;
+        }
+
+        .polaroid-caption {
+            font-size: 0.75rem;
         }
 
         .bcorp-inner {
