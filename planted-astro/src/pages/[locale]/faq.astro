@@ -1,0 +1,548 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { getTranslations } from '../../i18n/index';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+
+// FAQ Data organized by category
+const faqCategories = [
+    {
+        id: 'general',
+        title: 'General',
+        icon: '❓',
+        questions: [
+            {
+                q: 'Where are Planted products manufactured?',
+                a: 'Our products are manufactured in Switzerland at our headquarters in Kemptthal (Zurich region) and at our new state-of-the-art facility in Memmingen, Germany. Both facilities use our proprietary Whole-Muscle Platform technology to create authentic meat textures from plant proteins.'
+            },
+            {
+                q: 'Where can I buy Planted?',
+                a: 'Planted products are available at major retailers across Europe including Coop and Migros (Switzerland), REWE and EDEKA (Germany), Tesco (UK), Carrefour (France), Albert Heijn (Netherlands), and many more. Use our store locator on the homepage to find planted near you, or order directly from our online shop.'
+            },
+            {
+                q: 'How do I prepare Planted correctly?',
+                a: 'Each product has specific cooking instructions on the packaging. Generally: 1) Heat a pan with a little oil over medium-high heat. 2) Add the product and cook for the recommended time (usually 3-6 minutes). 3) Season to taste. Avoid overcooking - plant-based proteins cook faster than traditional meat. Check individual recipe pages for more detailed instructions.'
+            },
+            {
+                q: 'Why does Planted look like animal meat and why do you name products after animal products?',
+                a: 'We design our products to be familiar and accessible to everyone, including meat lovers. The familiar appearance and naming helps people understand how to use and prepare our products. In May 2025, the Swiss Federal Supreme Court affirmed that generic terms like "steak" and "fillet" can be used for plant-based products when clearly labeled as plant-based.'
+            },
+            {
+                q: 'What makes Planted different from other plant-based meats?',
+                a: 'We use a unique fermentation process and proprietary Whole-Muscle Platform technology developed in-house. Our products contain simple, recognizable ingredients (primarily pea protein), no artificial additives, and are produced in Europe with a focus on sustainability. We\'re also B Corp certified, meeting the highest standards of social and environmental performance.'
+            },
+            {
+                q: 'How is Planted meat made?',
+                a: 'We start with yellow peas, which are milled into protein. This protein is combined with water, sunflower oil, and natural seasonings, then processed through our proprietary extrusion technology to create authentic meat-like fibers. Our planted.steak uses an additional fermentation process that develops unique flavors and textures.'
+            },
+            {
+                q: 'Can Planted meat be frozen?',
+                a: 'Yes! Our products can be frozen. For best quality, freeze before the best-before date and consume within 3 months of freezing. Thaw in the refrigerator before cooking. Some products are sold frozen - check the packaging for specific storage instructions.'
+            },
+            {
+                q: 'Can Planted be reheated after preparation?',
+                a: 'Yes, prepared Planted products can be reheated. Store leftovers in the refrigerator and consume within 2-3 days. Reheat thoroughly in a pan or microwave. Note that texture may change slightly upon reheating.'
+            },
+            {
+                q: 'What is the shelf life of Planted meat?',
+                a: 'Shelf life varies by product, typically 2-4 weeks refrigerated (check the best-before date on packaging). Once opened, consume within 2-3 days. Our products can also be frozen to extend shelf life.'
+            },
+            {
+                q: 'Is it possible to visit the Planted production facility?',
+                a: 'We occasionally host tours and events at our facilities. Follow us on social media or subscribe to our newsletter for announcements about open days and special events. For business inquiries about facility visits, please contact us at hello@eatplanted.com.'
+            }
+        ]
+    },
+    {
+        id: 'ingredients',
+        title: 'Ingredients',
+        icon: '🌱',
+        questions: [
+            {
+                q: 'What ingredients does Planted Meat consist of?',
+                a: 'Our core ingredients are pea protein, water, sunflower oil, and natural seasonings. We use plant fibers for texture and add vitamin B12. Each product has slightly different seasonings - check the packaging for the complete ingredient list. We\'re proud that our products contain only recognizable ingredients you\'d find in a kitchen.'
+            },
+            {
+                q: 'Are Planted products certified organic?',
+                a: 'Currently, our products are not certified organic. However, we carefully source our ingredients with sustainability in mind. Our yellow peas come from European farms, and we work closely with suppliers to ensure quality and responsible farming practices.'
+            },
+            {
+                q: 'Are Planted products vegan?',
+                a: 'Yes! All Planted products are 100% plant-based and suitable for vegans. We use no animal-derived ingredients in our products or production processes.'
+            },
+            {
+                q: 'Are Planted products gluten-free?',
+                a: 'Many of our products are gluten-free, but not all. Please always check the packaging for allergen information. Products containing wheat or gluten are clearly labeled. If you have celiac disease or severe gluten intolerance, please verify the specific product before consumption.'
+            },
+            {
+                q: 'What are the nutritional values of Planted?',
+                a: 'Planted products are high in protein (typically 20-25g per 100g), contain no cholesterol, and are a source of fiber. They\'re also fortified with vitamin B12. Nutritional values vary by product - check the individual product pages or packaging for detailed information.'
+            },
+            {
+                q: 'Do your products contain GMOs?',
+                a: 'No. All Planted products are GMO-free. We use only non-genetically modified ingredients in all our products.'
+            },
+            {
+                q: 'Where does the Vitamin B12 used come from?',
+                a: 'The vitamin B12 in our products is produced through fermentation by microorganisms - a method widely used in the food industry. It\'s the same form of B12 that would be found in animal products, but produced without any animal involvement.'
+            },
+            {
+                q: 'Why is vitamin B12 added?',
+                a: 'Vitamin B12 is essential for nerve function, DNA synthesis, and red blood cell formation. Since it\'s primarily found in animal products, we add it to ensure our products provide comparable nutritional benefits to meat, supporting people who reduce or eliminate animal products from their diet.'
+            }
+        ]
+    },
+    {
+        id: 'sustainability',
+        title: 'Sustainability',
+        icon: '🌍',
+        questions: [
+            {
+                q: 'Is Planted B Corp certified?',
+                a: 'Yes! We received our B Corp certification in September 2023. This certification recognizes our commitment to meeting the highest standards of verified social and environmental performance, transparency, and accountability. We\'re proud to be part of the global B Corp community working toward a more inclusive and sustainable economy.'
+            },
+            {
+                q: 'How is the CO2 and water footprint of Planted products calculated?',
+                a: 'We work with Eaternity, an independent Swiss organization specializing in life cycle assessments (LCA) for food products. They analyze our complete environmental footprint from ingredient sourcing through production to packaging, using peer-reviewed methodologies aligned with international standards.'
+            },
+            {
+                q: 'How is biodiversity considered when selecting products?',
+                a: 'We prioritize ingredients that have lower impact on biodiversity. Peas, our main ingredient, are nitrogen-fixing plants that improve soil health and require no synthetic nitrogen fertilizers. We also consider the biodiversity impact of our packaging materials and production processes.'
+            },
+            {
+                q: 'Is Planted more sustainable compared to animal products?',
+                a: 'Yes, significantly. Our Life Cycle Assessment shows: planted.steak uses 97% less CO₂ and 81% less water than beef; planted.schnitzel uses 87% less CO₂ and 90% less water than pork; planted.chicken uses 77% less CO₂ and 85% less water than chicken. These are verified by independent researchers at Eaternity.'
+            },
+            {
+                q: 'How does Planted consider the circular economy?',
+                a: 'We work to minimize waste throughout our value chain. Our production byproducts are repurposed where possible. We\'re continuously improving our packaging to be more recyclable and working with partners to develop circular solutions for food packaging.'
+            },
+            {
+                q: 'Are the products produced in an environmentally friendly way?',
+                a: 'Yes. Our facilities use 100% renewable energy. Our new Memmingen facility in Germany features groundwater cooling and is designed to be CO₂-neutral. We continuously invest in improving our production efficiency and reducing environmental impact.'
+            },
+            {
+                q: 'How sustainable is the sourcing of raw materials?',
+                a: 'We prioritize European-sourced ingredients to minimize transportation. Our yellow peas come from farms in Europe, primarily Belgium and France. We work directly with farmers and suppliers to ensure sustainable farming practices and fair treatment throughout the supply chain.'
+            },
+            {
+                q: 'How sustainable is pea protein?',
+                a: 'Peas are among the most sustainable protein sources. They\'re nitrogen-fixing plants (improving soil health), require relatively little water, and have a low carbon footprint. Growing peas for protein is significantly more efficient than raising animals - requiring less land, water, and energy per gram of protein.'
+            },
+            {
+                q: 'What does Planted do about food waste?',
+                a: 'We work to minimize food waste at every stage. Our production processes are optimized for efficiency, and we donate products approaching their best-before date to food banks and charities. We also encourage consumers to freeze products to extend shelf life and reduce household food waste.'
+            },
+            {
+                q: 'How are Planted raw materials transported?',
+                a: 'We prioritize local and European sourcing to minimize transportation distances. When transportation is necessary, we optimize logistics to reduce emissions. Our focus on European production helps keep our supply chain short and efficient.'
+            },
+            {
+                q: 'Where do the figures from the comparison with animal products come from?',
+                a: 'All our environmental comparisons come from Life Cycle Assessments conducted by Eaternity, an independent Swiss research organization. They use standardized methodologies and compare our products against average values for conventional animal products using peer-reviewed data sources.'
+            },
+            {
+                q: 'What is the packaging made of?',
+                a: 'Our packaging is designed to protect product freshness while minimizing environmental impact. We use recyclable materials where possible and are continuously working to improve our packaging sustainability. Check local recycling guidelines for proper disposal in your area.'
+            },
+            {
+                q: 'Where are the ingredients sourced from?',
+                a: 'Our main ingredients are sourced from Europe. Yellow peas come primarily from Belgium and France. Sunflower oil is European-sourced. We prioritize local and regional suppliers to minimize transportation and support European agriculture.'
+            }
+        ]
+    },
+    {
+        id: 'gastronomy',
+        title: 'Gastronomy & B2B',
+        icon: '👨‍🍳',
+        questions: [
+            {
+                q: 'How do I become a B2B customer?',
+                a: 'Contact our gastronomy team at gastronomy@eatplanted.com or fill out the contact form on our Gastronomy page. We work with restaurants, catering companies, food service providers, and retailers of all sizes. Our team will discuss your needs and set up your business account.'
+            },
+            {
+                q: 'Can I receive free samples? Which products?',
+                a: 'Yes! We offer free product samples to qualified B2B customers. Sample availability depends on your location and business type. Contact our gastronomy team to discuss which products would be most relevant for your menu and to request samples.'
+            },
+            {
+                q: 'Where can I see B2B prices and conditions?',
+                a: 'B2B pricing is available upon registration as a business customer. Contact gastronomy@eatplanted.com to discuss your requirements and receive pricing information tailored to your order volumes and delivery needs.'
+            },
+            {
+                q: 'What quantities can I purchase as a B2B customer?',
+                a: 'We offer flexible quantities for B2B customers, from small orders for individual restaurants to large volumes for food service operations and retail chains. Minimum order quantities may vary by product and delivery location - contact us to discuss your specific needs.'
+            },
+            {
+                q: 'How long does delivery take?',
+                a: 'Delivery times vary by location and order size. Typically, orders are delivered within 2-5 business days within our delivery areas. For regular customers, we can arrange scheduled deliveries to fit your operational needs.'
+            },
+            {
+                q: 'Are products shipped frozen?',
+                a: 'B2B products are typically shipped frozen in insulated packaging to ensure freshness and quality. This allows for longer shelf life and flexible kitchen scheduling. Specific shipping conditions may vary by product and destination.'
+            },
+            {
+                q: 'Can I buy products online as a business?',
+                a: 'Yes, B2B customers can order through our dedicated business portal once registered. For initial registration and account setup, please contact gastronomy@eatplanted.com. Our team will help you get started and explain the ordering process.'
+            }
+        ]
+    }
+];
+---
+
+<Layout title="FAQ – Planted" description="Frequently asked questions about Planted products, ingredients, sustainability, and more." currentPage="faq" locale={locale}>
+    <section class="hero">
+        <span class="badge">Help Center</span>
+        <h1>Frequently Asked Questions</h1>
+        <p>Everything you need to know about planted products.</p>
+    </section>
+
+    <section class="faq-nav">
+        <div class="nav-inner">
+            {faqCategories.map((category) => (
+                <a href={`#${category.id}`} class="nav-item">
+                    <span class="nav-icon">{category.icon}</span>
+                    <span class="nav-label">{category.title}</span>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <section class="faq-content">
+        {faqCategories.map((category) => (
+            <div class="faq-category" id={category.id}>
+                <div class="category-header reveal">
+                    <span class="category-icon">{category.icon}</span>
+                    <h2>{category.title}</h2>
+                    <span class="category-count">{category.questions.length} questions</span>
+                </div>
+
+                <div class="questions-list">
+                    {category.questions.map((item, index) => (
+                        <details class="faq-item reveal">
+                            <summary class="faq-question">
+                                <span class="question-text">{item.q}</span>
+                                <span class="toggle-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M12 5v14M5 12h14"/>
+                                    </svg>
+                                </span>
+                            </summary>
+                            <div class="faq-answer">
+                                <p>{item.a}</p>
+                            </div>
+                        </details>
+                    ))}
+                </div>
+            </div>
+        ))}
+    </section>
+
+    <section class="contact-cta">
+        <div class="cta-content reveal">
+            <h2>Still have questions?</h2>
+            <p>Can't find what you're looking for? Our team is here to help.</p>
+            <div class="cta-buttons">
+                <a href="mailto:hello@eatplanted.com" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    Contact Us
+                </a>
+                <a href={`${base}/${locale}/gastronomy`} class="btn btn-secondary">
+                    For Business Inquiries
+                </a>
+            </div>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    .hero {
+        padding: 8rem 1.5rem 3rem;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .badge {
+        display: inline-block;
+        background: var(--planted-purple);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+        line-height: 1.05;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        opacity: 0.7;
+    }
+
+    .faq-nav {
+        background: var(--planted-cream);
+        padding: 1.5rem;
+        position: sticky;
+        top: 70px;
+        z-index: 10;
+    }
+
+    .nav-inner {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: white;
+        border-radius: 100px;
+        text-decoration: none;
+        color: var(--planted-charcoal);
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .nav-item:hover {
+        background: var(--planted-purple);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .nav-icon {
+        font-size: 1.1rem;
+    }
+
+    .faq-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+    }
+
+    .faq-category {
+        margin-bottom: 4rem;
+        scroll-margin-top: 150px;
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--planted-cream);
+    }
+
+    .category-icon {
+        font-size: 2rem;
+    }
+
+    .category-header h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.8rem;
+        color: var(--planted-purple);
+        margin: 0;
+        flex: 1;
+    }
+
+    .category-count {
+        font-size: 0.85rem;
+        color: var(--planted-purple);
+        background: var(--planted-cream);
+        padding: 0.35rem 0.75rem;
+        border-radius: 100px;
+        font-weight: 600;
+    }
+
+    .questions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .faq-item {
+        background: white;
+        border: 2px solid var(--planted-cream);
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .faq-item:hover {
+        border-color: rgba(97, 38, 158, 0.2);
+    }
+
+    .faq-item[open] {
+        border-color: var(--planted-purple);
+        box-shadow: 0 4px 20px rgba(97, 38, 158, 0.1);
+    }
+
+    .faq-question {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        cursor: pointer;
+        list-style: none;
+        font-weight: 600;
+        color: var(--planted-charcoal);
+        transition: background 0.2s;
+    }
+
+    .faq-question::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-question:hover {
+        background: rgba(97, 38, 158, 0.03);
+    }
+
+    .question-text {
+        flex: 1;
+        line-height: 1.5;
+    }
+
+    .toggle-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--planted-cream);
+        border-radius: 50%;
+        transition: transform 0.3s, background 0.3s;
+    }
+
+    .toggle-icon svg {
+        width: 14px;
+        height: 14px;
+        color: var(--planted-purple);
+        transition: transform 0.3s;
+    }
+
+    .faq-item[open] .toggle-icon {
+        background: var(--planted-purple);
+    }
+
+    .faq-item[open] .toggle-icon svg {
+        color: white;
+        transform: rotate(45deg);
+    }
+
+    .faq-answer {
+        padding: 0 1.5rem 1.5rem;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .faq-answer p {
+        margin: 0;
+        line-height: 1.8;
+        color: var(--planted-charcoal);
+        opacity: 0.85;
+    }
+
+    .contact-cta {
+        background: var(--planted-purple);
+        padding: 5rem 1.5rem;
+        text-align: center;
+        color: white;
+    }
+
+    .cta-content h2 {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        margin-bottom: 0.75rem;
+    }
+
+    .cta-content p {
+        opacity: 0.85;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border-radius: 100px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .btn-primary {
+        background: var(--planted-green);
+        color: var(--planted-purple);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(139, 197, 63, 0.4);
+    }
+
+    .btn-secondary {
+        background: rgba(255,255,255,0.15);
+        color: white;
+        border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.25);
+        transform: translateY(-3px);
+    }
+
+    @media (min-width: 768px) {
+        .hero {
+            padding: 10rem 2rem 4rem;
+        }
+    }
+</style>

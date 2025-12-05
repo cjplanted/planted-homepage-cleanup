@@ -415,4 +415,96 @@ export default {
         defaultDescription: 'Plant-based meat that actually tastes like meat. Made in Switzerland. B Corp certified.',
         titleSuffix: ' | planted',
     },
+
+    // FAQ page
+    faq: {
+        pageTitle: 'FAQ',
+        hero: {
+            badge: 'Help Center',
+            title: 'Frequently Asked Questions',
+            subtitle: 'Everything you need to know about planted products.',
+        },
+        categories: {
+            general: 'General',
+            ingredients: 'Ingredients',
+            sustainability: 'Sustainability',
+            gastronomy: 'Gastronomy & B2B',
+        },
+        contact: {
+            title: 'Still have questions?',
+            subtitle: 'Can\'t find what you\'re looking for? Our team is here to help.',
+            button: 'Contact Us',
+            business: 'For Business Inquiries',
+        },
+    },
+
+    // Press page
+    press: {
+        pageTitle: 'Press & Media',
+        hero: {
+            badge: 'Press & Media',
+            title: 'News from Planted',
+            subtitle: 'Resources for journalists and media professionals.',
+        },
+        contact: {
+            title: 'Press Contact',
+            subtitle: 'For press inquiries, interview requests, and media opportunities:',
+        },
+        facts: {
+            title: 'Company at a Glance',
+        },
+        resources: {
+            title: 'Media Resources',
+            subtitle: 'Download official brand assets and materials.',
+            logos: 'Logo Package',
+            logosDesc: 'Official Planted logos in various formats (SVG, PNG, EPS) for print and digital use.',
+            brand: 'Brand Guidelines',
+            brandDesc: 'Complete brand style guide including colors, typography, and usage guidelines.',
+            images: 'Product Images',
+            imagesDesc: 'High-resolution product photography, packaging shots, and lifestyle images.',
+            video: 'Video Content',
+            videoDesc: 'B-roll footage, product videos, and behind-the-scenes content.',
+            bios: 'Executive Bios',
+            biosDesc: 'Biographies and headshots of Planted leadership and founders.',
+            data: 'Sustainability Data',
+            dataDesc: 'LCA reports, environmental impact data, and sustainability credentials.',
+            contact: 'Contact press@eatplanted.com',
+        },
+        news: {
+            title: 'Recent News',
+            subtitle: 'Latest announcements and company updates.',
+            viewAll: 'View All News',
+        },
+        about: {
+            title: 'About Planted',
+            boilerplate: 'This boilerplate text can be used in press materials.',
+        },
+        social: {
+            title: 'Follow Planted',
+        },
+    },
+
+    // Legal pages
+    legal: {
+        privacy: {
+            title: 'Privacy Policy',
+            lastUpdated: 'Last updated',
+        },
+        terms: {
+            title: 'Terms of Service',
+            lastUpdated: 'Last updated',
+        },
+        imprint: {
+            title: 'Imprint',
+            subtitle: 'Legal Information',
+            company: 'Company Information',
+            registration: 'Registration',
+            contact: 'Contact',
+            management: 'Management',
+            contentResponsibility: 'Responsible for Content',
+            disclaimer: 'Disclaimer',
+            copyright: 'Copyright',
+            disputes: 'Online Dispute Resolution',
+        },
+    },
 } as const;

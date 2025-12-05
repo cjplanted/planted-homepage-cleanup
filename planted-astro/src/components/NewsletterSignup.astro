@@ -78,7 +78,7 @@ const t = {
             <div class="newsletter-consent">
                 <label>
                     <input type="checkbox" name="consent" required />
-                    <span>{t.consent} <a href="/privacy">Privacy Policy</a></span>
+                    <span>{t.consent} <a href="#" data-privacy-link-newsletter>Privacy Policy</a></span>
                 </label>
             </div>
             <div class="newsletter-message" hidden></div>
@@ -94,15 +94,46 @@ const t = {
 </section>
 
 <script>
+    // Set privacy link based on current locale
+    document.addEventListener('DOMContentLoaded', () => {
+        const privacyLinks = document.querySelectorAll('[data-privacy-link-newsletter]');
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        let locale = 'ch-de'; // default
+        const localePattern = /^(global|ch-de|ch-fr|ch-it|ch-en|de|de-en|at|at-en|it|it-en|fr|fr-en|nl|nl-en|uk|es|es-en)$/;
+        for (const part of pathParts) {
+            if (localePattern.test(part)) {
+                locale = part;
+                break;
+            }
+        }
+        privacyLinks.forEach(link => {
+            (link as HTMLAnchorElement).href = `/${locale}/privacy`;
+        });
+    });
+
     document.querySelectorAll('[data-newsletter-form]').forEach(form => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formEl = e.target as HTMLFormElement;
+            const formData = new FormData(formEl);
             const button = formEl.querySelector('.newsletter-button') as HTMLButtonElement;
             const buttonText = formEl.querySelector('.button-text') as HTMLElement;
             const buttonLoading = formEl.querySelector('.button-loading') as HTMLElement;
             const buttonArrow = formEl.querySelector('.button-arrow') as HTMLElement;
             const message = formEl.querySelector('.newsletter-message') as HTMLElement;
+
+            // Collect form data
+            const email = formData.get('email') as string;
+            const country = formData.get('country') as string;
+            const consent = formData.get('consent') === 'on';
+
+            // Validate
+            if (!email || !consent) {
+                message.innerHTML = '<span class="error-icon">!</span> Please fill in all required fields.';
+                message.className = 'newsletter-message error';
+                message.hidden = false;
+                return;
+            }
 
             // Show loading state
             button.disabled = true;
@@ -110,15 +141,59 @@ const t = {
             buttonArrow.style.display = 'none';
             buttonLoading.hidden = false;
 
-            // Simulate API call (replace with actual endpoint)
-            await new Promise(resolve => setTimeout(resolve, 1200));
+            try {
+                // API endpoint configuration
+                // Replace this URL with your actual newsletter API endpoint
+                // Options: Mailchimp, SendGrid, ConvertKit, or custom backend
+                const API_ENDPOINT = '/api/newsletter'; // Configure your endpoint here
 
-            // Show success
-            const successMessage = formEl.dataset.successMessage || 'Thanks for subscribing! Check your inbox.';
-            message.innerHTML = '<span class="success-icon">✓</span> ' + successMessage;
-            message.className = 'newsletter-message success';
-            message.hidden = false;
-            formEl.reset();
+                // For now, we'll simulate the API call
+                // In production, uncomment the fetch call below and configure your endpoint
+                /*
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        country,
+                        consent,
+                        source: 'website',
+                        timestamp: new Date().toISOString(),
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Subscription failed');
+                }
+                */
+
+                // Simulate API delay (remove in production)
+                await new Promise(resolve => setTimeout(resolve, 1200));
+
+                // Store subscription locally (for analytics/tracking)
+                try {
+                    const subscriptions = JSON.parse(localStorage.getItem('planted_newsletter_pending') || '[]');
+                    subscriptions.push({ email, country, timestamp: new Date().toISOString() });
+                    localStorage.setItem('planted_newsletter_pending', JSON.stringify(subscriptions));
+                } catch (storageError) {
+                    // localStorage not available
+                }
+
+                // Show success
+                const successMessage = formEl.dataset.successMessage || 'Thanks for subscribing! Check your inbox.';
+                message.innerHTML = '<span class="success-icon">✓</span> ' + successMessage;
+                message.className = 'newsletter-message success';
+                message.hidden = false;
+                formEl.reset();
+
+            } catch (error) {
+                // Show error
+                message.innerHTML = '<span class="error-icon">!</span> Something went wrong. Please try again.';
+                message.className = 'newsletter-message error';
+                message.hidden = false;
+            }
 
             // Reset button
             button.disabled = false;

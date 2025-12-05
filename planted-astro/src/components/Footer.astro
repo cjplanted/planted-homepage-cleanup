@@ -54,16 +54,16 @@ const localePath = `/${locale}`;
                 <a href={`${base}${localePath}/sustainability`}>Sustainability</a>
                 <a href={`${base}${localePath}/gastronomy`}>Gastronomy</a>
                 <a href={`${base}${localePath}/news`}>News</a>
-                <a href="https://eatplanted.com/pages/careers" target="_blank" rel="noopener">{t.footer.careers}</a>
-                <a href="mailto:press@eatplanted.com">{t.footer.press}</a>
+                <a href={`${base}${localePath}/press`}>{t.footer.press}</a>
+                <a href={`${base}${localePath}/faq`}>FAQ</a>
                 <a href="mailto:hello@eatplanted.com">{t.footer.contact}</a>
             </div>
 
             <div class="footer-links">
                 <h4>{t.footer.legal}</h4>
-                <a href="https://eatplanted.com/policies/privacy-policy" target="_blank" rel="noopener">{t.footer.privacy}</a>
-                <a href="https://eatplanted.com/policies/terms-of-service" target="_blank" rel="noopener">{t.footer.terms}</a>
-                <a href="https://eatplanted.com/pages/imprint" target="_blank" rel="noopener">{t.footer.imprint}</a>
+                <a href={`${base}${localePath}/privacy`}>{t.footer.privacy}</a>
+                <a href={`${base}${localePath}/terms`}>{t.footer.terms}</a>
+                <a href={`${base}${localePath}/imprint`}>{t.footer.imprint}</a>
             </div>
         </div>
 

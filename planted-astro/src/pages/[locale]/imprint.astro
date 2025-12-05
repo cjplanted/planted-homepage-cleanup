@@ -1,0 +1,323 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allLocales, locales, type LocaleCode } from '../../i18n/config';
+import { getTranslations } from '../../i18n/index';
+
+export async function getStaticPaths() {
+    return allLocales.map((locale) => ({
+        params: { locale },
+        props: { locale },
+    }));
+}
+
+const { locale } = Astro.props as { locale: LocaleCode };
+const base = import.meta.env.BASE_URL;
+const t = getTranslations(locale);
+const localeData = locales[locale];
+---
+
+<Layout title="Imprint – Planted" description="Legal information about Planted Foods AG." currentPage="imprint" locale={locale}>
+    <article class="legal-page">
+        <div class="legal-header">
+            <h1>Imprint</h1>
+            <p class="subtitle">Legal Information</p>
+        </div>
+
+        <div class="legal-content">
+            <section class="company-info">
+                <h2>Company Information</h2>
+                <div class="info-card">
+                    <div class="info-logo">
+                        <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#61269E" d="m193.54,34.47l-2.66-34.47H0l3.78,46.08c1.65,22.09,20.09,20.09,20.09,20.09,0,0,126.37-9.87,148.05-11.64,23.55-2.11,21.62-20.06,21.62-20.06Z"/>
+                            <path fill="#fff" d="m166.22,32.32h0c1.12-1.28,2.97-1.43,4.25-.34,1.31,1.09,1.46,2.93.34,4.21-1.09,1.28-2.93,1.42-4.25.34-1.28-1.09-1.42-2.93-.34-4.21Z"/>
+                            <path fill="#fff" d="m147.2,36.47h0c2.18,1.76,4.68,2.38,7.53,2.15s5.24-1.39,7.12-3.47c1.96-2.18,2.59-5.22,2.29-9.04l-1.16-14.54-5.5.44.67,8.42c-1.59-1.26-3.77-1.42-5.21-1.3-2.84.23-4.97,1.29-6.85,3.34-1.88,2.08-2.69,4.49-2.47,7.26.22,2.77,1.4,5.02,3.58,6.74Zm3.05-10.76h0c.85-1,1.96-1.57,3.32-1.68s2.55.28,3.55,1.13c1,.85,1.57,1.99,1.68,3.36s-.28,2.55-1.13,3.55c-.85,1.03-1.95,1.61-3.32,1.71s-2.55-.28-3.55-1.17c-1-.85-1.57-1.96-1.68-3.32s.28-2.55,1.13-3.58Z"/>
+                            <path fill="#fff" d="m51.71,20.33l5.5-.44,1.5,18.83c.13,1.66.82,2.35,2.33,2.23.52-.04.96-.11,1.32-.25l.39,4.87c-.61.23-1.49.38-2.6.47-4.25.34-6.52-1.67-6.87-6.03l-1.57-19.68Z"/>
+                            <path fill="#fff" d="m65.32,28.91h0c1.62-2.03,3.76-3.12,6.39-3.33,2.81-.22,5.08.75,5.76,2.33l-.19-2.44,5.5-.44.96,12.07c.12,1.48.53,2.04,1.53,1.96.26-.02.59-.08.92-.15l.36,4.58c-.58.23-1.38.41-2.45.49-1.22.1-2.27-.04-3.08-.42-.89-.49-1.5-1.11-1.82-1.86-1.07,1.91-3.03,2.95-5.95,3.19-2.62.21-4.91-.54-6.83-2.24-1.88-1.75-2.95-3.96-3.17-6.7s.49-5.06,2.08-7.04Zm11.85,9.27h0c.89-1,1.28-2.14,1.18-3.44s-.67-2.36-1.7-3.17c-1-.85-2.18-1.2-3.54-1.09s-2.4.64-3.25,1.63c-.85.96-1.21,2.1-1.11,3.4s.64,2.36,1.63,3.21c.99.81,2.14,1.17,3.47,1.06s2.47-.64,3.33-1.6Z"/>
+                            <path fill="#fff" d="m88.98,43.26l-1.48-18.61,5.5-.44.19,2.32c.65-1.69,2.63-2.96,5.14-3.16,4.47-.36,7.28,2.32,7.67,7.15l.37,4.69c.11,1.44.45,1.93,1.37,1.86l.37-.03.22-.06.37,4.65c-.43.22-1.23.36-2.38.45-3.29.26-5.05-1.38-5.34-4.93l-.44-5.54c-.17-2.18-1.42-3.42-3.6-3.24-2.07.16-3.46,1.8-3.29,3.98l.83,10.45-5.5.44Z"/>
+                            <path fill="#fff" d="m110.79,27.81l-2.44.19-.4-4.98,2.44-.19-.57-7.13,5.35-.43.57,7.13,4.14-.33.4,4.98-4.14.33.53,6.65c.14,1.77.9,2.42,2.56,2.29.3-.02.77-.1,1.39-.26l.39,4.87c-.72.24-1.61.39-2.67.47-4.28.34-6.6-1.71-6.95-6.13l-.59-7.46Z"/>
+                            <path fill="#fff" d="m122.2,31.22h0c-.23-2.92.54-5.35,2.28-7.28,1.74-1.96,4.1-3.04,7.02-3.27s5.21.52,7.12,2.18c1.92,1.67,2.98,3.81,3.19,6.51.05.63.06,1.22.07,1.78l-14.07,1.12c.29,2.21,2.32,3.49,5.24,3.26,1.73-.14,3.2-.85,4.4-2.17l3.46,2.81c-2,2.42-4.6,3.78-7.74,4.03s-5.57-.45-7.59-2.03c-2.02-1.62-3.13-3.87-3.36-6.79v-.15Zm13.94-3.23h0c-.14-1.74-2.06-2.96-4.27-2.78-2.4.19-4.25,1.71-4.26,3.46l8.53-.68Z"/>
+                            <path fill="#fff" d="m47.07,30.13h0c-2.18-1.76-4.68-2.38-7.53-2.15s-5.24,1.39-7.12,3.47c-1.96,2.18-2.59,5.22-2.29,9.04l1.16,14.54,5.5-.44-.67-8.42c1.59,1.26,3.77,1.41,5.21,1.3,2.84-.23,4.97-1.29,6.85-3.34,1.88-2.08,2.69-4.49,2.47-7.26-.22-2.77-1.4-5.02-3.58-6.74Zm-3.05,10.76h0c-.85,1-1.96,1.57-3.32,1.68s-2.55-.28-3.55-1.13c-1-.85-1.57-1.99-1.68-3.36s.28-2.55,1.13-3.54c.85-1.03,1.95-1.61,3.32-1.71s2.55.28,3.55,1.17c1,.85,1.57,1.96,1.68,3.32s-.28,2.55-1.13,3.58Z"/>
+                        </svg>
+                    </div>
+                    <div class="info-details">
+                        <h3>Planted Foods AG</h3>
+                        <p>
+                            The Valley<br>
+                            Kemptpark 56<br>
+                            8310 Kemptthal<br>
+                            Switzerland
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Registration</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Company Number</span>
+                        <span class="value">CHE-470.946.656</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Register</span>
+                        <span class="value">Commercial Register of Canton Zurich</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">VAT Number</span>
+                        <span class="value">CHE-470.946.656 MWST</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Legal Form</span>
+                        <span class="value">Aktiengesellschaft (AG) / Public Limited Company</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Contact</h2>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <h3>General Inquiries</h3>
+                        <a href="mailto:hello@eatplanted.com">hello@eatplanted.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3>Press & Media</h3>
+                        <a href="mailto:press@eatplanted.com">press@eatplanted.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                <path d="M2 17l10 5 10-5"/>
+                                <path d="M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>Business / Gastronomy</h3>
+                        <a href="mailto:gastronomy@eatplanted.com">gastronomy@eatplanted.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <h3>Privacy</h3>
+                        <a href="mailto:privacy@eatplanted.com">privacy@eatplanted.com</a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Management</h2>
+                <p>The company is represented by its Board of Directors and Executive Management Team.</p>
+            </section>
+
+            <section>
+                <h2>Responsible for Content</h2>
+                <p>Planted Foods AG<br>
+                Kemptpark 56<br>
+                8310 Kemptthal<br>
+                Switzerland</p>
+            </section>
+
+            <section>
+                <h2>Disclaimer</h2>
+                <p>Despite careful content control, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content.</p>
+                <p>The content of our pages was created with the greatest care. However, we cannot guarantee the accuracy, completeness, and timeliness of the content.</p>
+            </section>
+
+            <section>
+                <h2>Copyright</h2>
+                <p>The content and works on these pages created by the site operators are subject to Swiss copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of copyright law requires the prior written consent of Planted Foods AG.</p>
+            </section>
+
+            <section>
+                <h2>Online Dispute Resolution</h2>
+                <p>The European Commission provides a platform for online dispute resolution (OS): <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a></p>
+                <p>We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.</p>
+            </section>
+        </div>
+    </article>
+</Layout>
+
+<style>
+    .legal-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 6rem 1.5rem 4rem;
+    }
+
+    .legal-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid var(--planted-cream);
+    }
+
+    .legal-header h1 {
+        font-size: clamp(2rem, 6vw, 3rem);
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.6;
+    }
+
+    .legal-content section {
+        margin-bottom: 2.5rem;
+    }
+
+    .legal-content h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.4rem;
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+        padding-top: 1rem;
+    }
+
+    .legal-content p {
+        line-height: 1.8;
+        margin-bottom: 1rem;
+        color: var(--planted-charcoal);
+    }
+
+    .legal-content a {
+        color: var(--planted-purple);
+        text-decoration: underline;
+    }
+
+    .info-card {
+        display: flex;
+        gap: 2rem;
+        background: var(--planted-cream);
+        padding: 2rem;
+        border-radius: 1.5rem;
+        align-items: center;
+    }
+
+    .info-logo svg {
+        width: 120px;
+        height: auto;
+    }
+
+    .info-details h3 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.3rem;
+        color: var(--planted-purple);
+        margin-bottom: 0.5rem;
+    }
+
+    .info-details p {
+        margin: 0;
+        line-height: 1.8;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .info-item {
+        background: var(--planted-cream);
+        padding: 1.25rem;
+        border-radius: 1rem;
+    }
+
+    .info-item .label {
+        display: block;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.6;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-item .value {
+        font-weight: 600;
+        color: var(--planted-purple);
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .contact-card {
+        background: white;
+        border: 2px solid var(--planted-cream);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        text-align: center;
+        transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .contact-card:hover {
+        border-color: var(--planted-purple);
+        transform: translateY(-2px);
+    }
+
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1rem;
+        background: var(--planted-cream);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contact-icon svg {
+        width: 24px;
+        height: 24px;
+        color: var(--planted-purple);
+    }
+
+    .contact-card h3 {
+        font-size: 0.9rem;
+        color: var(--planted-charcoal);
+        margin-bottom: 0.5rem;
+    }
+
+    .contact-card a {
+        font-size: 0.9rem;
+        color: var(--planted-purple);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .contact-card a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .info-card {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .legal-page {
+            padding: 8rem 2rem 5rem;
+        }
+    }
+</style>

@@ -7,7 +7,7 @@
     <div class="cookie-content">
         <div class="cookie-text">
             <h4>🍪 We use cookies</h4>
-            <p>We use cookies to improve your experience and analyze site traffic. By clicking "Accept All", you consent to our use of cookies.</p>
+            <p>We use cookies to improve your experience and analyze site traffic. By clicking "Accept All", you consent to our use of cookies. <a href="#" class="cookie-link" data-privacy-link>Learn more</a></p>
         </div>
         <div class="cookie-actions">
             <button class="btn-cookie btn-accept-all" data-consent="all">Accept All</button>
@@ -87,8 +87,23 @@
             timestamp: Date.now()
         };
         setCookie(COOKIE_NAME, encodeURIComponent(JSON.stringify(fullState)), COOKIE_EXPIRY);
+
+        // Also save to localStorage for GTM and other scripts
+        try {
+            localStorage.setItem('planted_cookie_consent', JSON.stringify(fullState));
+        } catch (e) {
+            // localStorage not available
+        }
+
         hideBanner();
         applyConsent(fullState);
+
+        // Reload to apply GTM if analytics was consented
+        if (fullState.analytics) {
+            // Give GTM a chance to load on next page view
+            // Or reload current page to apply immediately
+            window.location.reload();
+        }
     }
 
     function applyConsent(state: ConsentState) {
@@ -131,8 +146,26 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
+        // Set privacy link based on current locale
+        const privacyLinks = document.querySelectorAll('[data-privacy-link]');
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        // Get base URL (for GitHub Pages)
+        const baseUrl = document.querySelector('base')?.href || '';
+        // Extract locale from path (e.g., /planted-website/ch-de/products -> ch-de)
+        let locale = 'ch-de'; // default
+        const localePattern = /^(global|ch-de|ch-fr|ch-it|ch-en|de|de-en|at|at-en|it|it-en|fr|fr-en|nl|nl-en|uk|es|es-en)$/;
+        for (const part of pathParts) {
+            if (localePattern.test(part)) {
+                locale = part;
+                break;
+            }
+        }
+        privacyLinks.forEach(link => {
+            (link as HTMLAnchorElement).href = `/${locale}/privacy`;
+        });
+
         const existingConsent = getConsentState();
-        
+
         if (!existingConsent) {
             // No consent yet, show banner after a short delay
             setTimeout(showBanner, 1000);
