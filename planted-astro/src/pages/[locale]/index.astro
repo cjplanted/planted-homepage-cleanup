@@ -1,10 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, getEntry } from 'astro:content';
-import { allLocales, locales, type LocaleCode, getLocalizedProductName, getAmbassadorForLocale } from '../../i18n/config';
+import { allLocales, locales, type LocaleCode, type CountryCode, getLocalizedProductName, getAmbassadorForLocale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
 import StoreLocator from '../../components/StoreLocator.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import DeliveryFinder from '../../components/DeliveryFinder.astro';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -272,6 +273,21 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             ))}
         </div>
     </section>
+
+    <!-- Delivery Finder -->
+    <DeliveryFinder
+        locale={locale}
+        country={localeData.country as CountryCode}
+        translations={{
+            title: t.home.delivery?.title || 'Order Planted Delivery',
+            subtitle: t.home.delivery?.subtitle || 'Discover restaurants near you that deliver delicious Planted dishes.',
+            orderNow: t.home.delivery?.orderNow || 'Order now',
+            viewMenu: t.home.delivery?.viewMenu || 'View menu',
+            allCities: t.home.delivery?.allCities || 'All cities',
+            noResults: t.home.delivery?.noResults || 'No restaurants found in your area.',
+            poweredBy: t.home.delivery?.poweredBy || 'Available via Wolt, Lieferando, Uber Eats, and more',
+        }}
+    />
 
     <!-- Store Locator -->
     <StoreLocator

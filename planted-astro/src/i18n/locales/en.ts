@@ -80,6 +80,15 @@ export default {
             badge: 'Brand Ambassador',
             approvedBy: 'Approved by',
         },
+        delivery: {
+            title: 'Order Planted Delivery',
+            subtitle: 'Discover restaurants near you that deliver delicious Planted dishes.',
+            orderNow: 'Order now',
+            viewMenu: 'View menu',
+            allCities: 'All cities',
+            noResults: 'No restaurants found in your area.',
+            poweredBy: 'Available via Wolt, Lieferando, Uber Eats, and more',
+        },
     },
 
     // Products page

@@ -80,6 +80,15 @@ export default {
             badge: 'Markenbotschafter',
             approvedBy: 'Empfohlen von',
         },
+        delivery: {
+            title: 'Planted nach Hause bestellen',
+            subtitle: 'Entdecke Restaurants in deiner Nähe, die Planted-Gerichte liefern.',
+            orderNow: 'Jetzt bestellen',
+            viewMenu: 'Menü ansehen',
+            allCities: 'Alle Städte',
+            noResults: 'Keine Restaurants in deiner Nähe gefunden.',
+            poweredBy: 'Verfügbar über Wolt, Lieferando, Uber Eats und mehr',
+        },
     },
 
     // Products page

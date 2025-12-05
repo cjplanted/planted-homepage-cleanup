@@ -80,6 +80,15 @@ export default {
             badge: 'Ambassadeur',
             approvedBy: 'Goedgekeurd door',
         },
+        delivery: {
+            title: 'Bestel Planted bezorging',
+            subtitle: 'Ontdek restaurants bij jou in de buurt die Planted gerechten bezorgen.',
+            orderNow: 'Nu bestellen',
+            viewMenu: 'Menu bekijken',
+            allCities: 'Alle steden',
+            noResults: 'Geen restaurants gevonden in jouw regio.',
+            poweredBy: 'Beschikbaar via Wolt, Lieferando, Uber Eats en meer',
+        },
     },
 
     // Products page

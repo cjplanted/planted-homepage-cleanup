@@ -80,6 +80,15 @@ export default {
             badge: 'Ambasciatore',
             approvedBy: 'Approvato da',
         },
+        delivery: {
+            title: 'Ordina Planted a domicilio',
+            subtitle: 'Scopri i ristoranti vicino a te che consegnano piatti Planted.',
+            orderNow: 'Ordina ora',
+            viewMenu: 'Vedi menu',
+            allCities: 'Tutte le città',
+            noResults: 'Nessun ristorante trovato nella tua zona.',
+            poweredBy: 'Disponibile su Wolt, Lieferando, Uber Eats e altri',
+        },
     },
 
     // Products page

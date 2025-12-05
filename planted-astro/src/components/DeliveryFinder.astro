@@ -1,0 +1,368 @@
+---
+/**
+ * DeliveryFinder Component
+ * Shows restaurants serving Planted products with delivery options
+ * Filters by country and displays delivery platform links
+ */
+
+import { deliveryRestaurants, deliveryPlatformInfo, type DeliveryRestaurant } from '../data/deliveryRestaurants';
+import type { CountryCode } from '../i18n/config';
+
+interface Props {
+    locale: string;
+    country: CountryCode;
+    translations: {
+        title: string;
+        subtitle: string;
+        orderNow: string;
+        viewMenu: string;
+        allCities: string;
+        noResults: string;
+        poweredBy: string;
+    };
+}
+
+const { locale, country, translations } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+// Get restaurants for this country, plus chain restaurants available in multiple cities
+const countryRestaurants = deliveryRestaurants.filter(r =>
+    r.country === country ||
+    (r.type === 'chain' && ['de', 'at', 'ch', 'uk', 'nl', 'fr', 'it', 'es'].includes(country))
+);
+
+// For countries without specific restaurants, show German ones as example
+const restaurantsToShow = countryRestaurants.length > 0
+    ? countryRestaurants
+    : deliveryRestaurants.filter(r => r.country === 'de').slice(0, 4);
+
+// Get unique cities
+const cities = [...new Set(restaurantsToShow.map(r => r.city))];
+---
+
+<section class="delivery-finder" id="delivery">
+    <div class="delivery-header">
+        <div class="delivery-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="badge-icon">
+                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Order Delivery
+        </div>
+        <h2 class="reveal">{translations.title}</h2>
+        <p class="delivery-subtitle reveal">{translations.subtitle}</p>
+    </div>
+
+    <div class="delivery-grid">
+        {restaurantsToShow.slice(0, 6).map((restaurant) => (
+            <div class="delivery-card reveal-scale">
+                <div class="card-header">
+                    <div class="restaurant-info">
+                        <h3 class="restaurant-name">{restaurant.name}</h3>
+                        <span class="restaurant-city">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="city-icon">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            {restaurant.city}
+                        </span>
+                    </div>
+                    {restaurant.rating && (
+                        <div class="restaurant-rating">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="star-icon">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                            {restaurant.rating}
+                        </div>
+                    )}
+                </div>
+
+                <div class="planted-dishes">
+                    {restaurant.plantedDishes.slice(0, 2).map((dish) => (
+                        <div class="dish-tag">
+                            <span class="dish-product">{dish.product}</span>
+                            {dish.price && <span class="dish-price">{dish.price}</span>}
+                        </div>
+                    ))}
+                </div>
+
+                <div class="delivery-platforms">
+                    {restaurant.deliveryPlatforms.map((platform) => (
+                        <a
+                            href={platform.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="platform-btn"
+                            style={`--platform-color: ${deliveryPlatformInfo[platform.name].color}`}
+                        >
+                            <span class="platform-name">{platform.displayName}</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="external-icon">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        ))}
+    </div>
+
+    <div class="delivery-footer">
+        <p class="delivery-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="info-icon">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            {translations.poweredBy}
+        </p>
+    </div>
+</section>
+
+<style>
+    .delivery-finder {
+        padding: 5rem 1.5rem;
+        background: linear-gradient(180deg, var(--planted-cream) 0%, #f5f0e8 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .delivery-header {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 3rem;
+    }
+
+    .delivery-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-green);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1.5rem;
+    }
+
+    .badge-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .delivery-header h2 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        color: var(--planted-black);
+        margin-bottom: 1rem;
+        line-height: 1.1;
+    }
+
+    .delivery-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        line-height: 1.6;
+    }
+
+    .delivery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .delivery-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .delivery-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .restaurant-info {
+        flex: 1;
+    }
+
+    .restaurant-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--planted-black);
+        margin: 0 0 0.25rem;
+        line-height: 1.2;
+    }
+
+    .restaurant-city {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.85rem;
+        color: #888;
+    }
+
+    .city-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .restaurant-rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        background: #FFF8E1;
+        color: #F59E0B;
+        padding: 0.25rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .star-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .planted-dishes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .dish-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+        padding: 0.4rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .dish-product {
+        color: var(--planted-green);
+        font-weight: 600;
+    }
+
+    .dish-price {
+        color: #666;
+        font-size: 0.75rem;
+    }
+
+    .delivery-platforms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .platform-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1rem;
+        background: var(--platform-color, #333);
+        color: white;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .platform-btn:hover {
+        filter: brightness(1.1);
+        transform: scale(1.02);
+    }
+
+    .platform-name {
+        white-space: nowrap;
+    }
+
+    .external-icon {
+        width: 14px;
+        height: 14px;
+        opacity: 0.8;
+    }
+
+    .delivery-footer {
+        text-align: center;
+        margin-top: 2.5rem;
+    }
+
+    .delivery-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    .info-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Animations */
+    .reveal-scale {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-scale.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    @media (max-width: 768px) {
+        .delivery-finder {
+            padding: 3rem 1rem;
+        }
+
+        .delivery-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .delivery-card {
+            padding: 1.25rem;
+        }
+    }
+</style>
+
+<script>
+    // Reveal animation on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.delivery-card').forEach(card => {
+        observer.observe(card);
+    });
+</script>
