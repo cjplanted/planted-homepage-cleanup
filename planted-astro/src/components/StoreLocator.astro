@@ -122,6 +122,16 @@ const countryCodeToName: Record<string, string> = {
     'ES': 'Spain'
 };
 
+// Platform icons (SVG strings for inline rendering)
+const platformIcons: Record<string, string> = {
+    'wolt': '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M7 12l3 3 7-7" stroke="white" stroke-width="2" fill="none"/></svg>',
+    'lieferando': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/></svg>',
+    'uber-eats': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+    'deliveroo': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.09 5.1 7.63 12 4.18zM4 8.81l7 3.5v7.88l-7-3.5V8.81zm16 7.88l-7 3.5v-7.88l7-3.5v7.88z"/></svg>',
+    'just-eat': '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M8 8h8v2H8zm0 3h8v2H8zm0 3h5v2H8z"/></svg>',
+    'smood': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+};
+
 // Group retailers by type
 const retailPartners = retailers.filter(r => r.data.type !== 'foodservice').sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
 const foodservicePartners = retailers.filter(r => r.data.type === 'foodservice').sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
@@ -472,8 +482,9 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                                         class="platform-btn"
                                         style={`--platform-color: ${chainPlatformColors[platform.name] || '#333'}`}
                                     >
-                                        {platform.displayName}
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <span class="platform-icon" set:html={platformIcons[platform.name] || ''}></span>
+                                        <span class="platform-name">{platform.displayName}</span>
+                                        <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                                             <polyline points="15 3 21 3 21 9"/>
                                             <line x1="10" y1="14" x2="21" y2="3"/>
@@ -627,37 +638,80 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         // Online shops by country - retailers with online delivery
         const onlineShopsByCountry = {
             'Switzerland': [
-                { name: 'Coop', url: 'https://www.coop.ch/de/search/?text=planted' },
-                { name: 'Migros', url: 'https://www.migros.ch/de/search?query=planted' },
-                { name: 'Farmy', url: 'https://www.farmy.ch/search?q=planted' },
+                { name: 'Coop', url: 'https://www.coop.ch/de/search/?text=planted', color: '#e3000f' },
+                { name: 'Migros', url: 'https://www.migros.ch/de/search?query=planted', color: '#ff6600' },
+                { name: 'Farmy', url: 'https://www.farmy.ch/search?q=planted', color: '#7cb342' },
             ],
             'Germany': [
-                { name: 'REWE', url: 'https://shop.rewe.de/productList?search=planted' },
-                { name: 'Vekoop', url: 'https://www.vekoop.de/search?q=planted' },
+                { name: 'REWE', url: 'https://shop.rewe.de/productList?search=planted', color: '#cc071e' },
+                { name: 'Vekoop', url: 'https://www.vekoop.de/search?q=planted', color: '#4caf50' },
             ],
             'Austria': [
-                { name: 'BILLA', url: 'https://shop.billa.at/search/planted' },
-                { name: 'REWE', url: 'https://shop.rewe.de/productList?search=planted' },
+                { name: 'BILLA', url: 'https://shop.billa.at/search/planted', color: '#ffed00' },
+                { name: 'REWE', url: 'https://shop.rewe.de/productList?search=planted', color: '#cc071e' },
             ],
             'United Kingdom': [
-                { name: "Sainsbury's", url: 'https://www.sainsburys.co.uk/gol-ui/SearchResults/planted' },
-                { name: 'Waitrose', url: 'https://www.waitrose.com/ecom/shop/search?searchTerm=planted' },
-                { name: 'Ocado', url: 'https://www.ocado.com/search?entry=planted' },
+                { name: "Sainsbury's", url: 'https://www.sainsburys.co.uk/gol-ui/SearchResults/planted', color: '#f06c00' },
+                { name: 'Waitrose', url: 'https://www.waitrose.com/ecom/shop/search?searchTerm=planted', color: '#6b8e23' },
+                { name: 'Ocado', url: 'https://www.ocado.com/search?entry=planted', color: '#6f2c91' },
             ],
             'Netherlands': [
-                { name: 'Albert Heijn', url: 'https://www.ah.nl/zoeken?query=planted' },
-                { name: 'Picnic', url: 'https://picnic.app' },
+                { name: 'Albert Heijn', url: 'https://www.ah.nl/zoeken?query=planted', color: '#00a0e2' },
+                { name: 'Picnic', url: 'https://picnic.app', color: '#e4002b' },
             ],
             'France': [
-                { name: 'Carrefour', url: 'https://www.carrefour.fr/s?q=planted' },
+                { name: 'Carrefour', url: 'https://www.carrefour.fr/s?q=planted', color: '#004e9e' },
             ],
             'Italy': [
-                { name: 'Carrefour', url: 'https://www.carrefour.it/search?q=planted' },
+                { name: 'Carrefour', url: 'https://www.carrefour.it/search?q=planted', color: '#004e9e' },
             ],
             'Spain': [
-                { name: 'Carrefour', url: 'https://www.carrefour.es/search?query=planted' },
+                { name: 'Carrefour', url: 'https://www.carrefour.es/search?query=planted', color: '#004e9e' },
             ],
         };
+
+        // Delivery platform brand colors and icons
+        const platformBranding = {
+            'wolt': {
+                color: '#00C2E8',
+                name: 'Wolt',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M7 12l3 3 7-7" stroke="white" stroke-width="2" fill="none"/></svg>'
+            },
+            'lieferando': {
+                color: '#FF8000',
+                name: 'Lieferando',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="18" r="2" fill="currentColor"/><circle cx="16" cy="18" r="2" fill="currentColor"/></svg>'
+            },
+            'uber-eats': {
+                color: '#06C167',
+                name: 'Uber Eats',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>'
+            },
+            'deliveroo': {
+                color: '#00CCBC',
+                name: 'Deliveroo',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.09 5.1 7.63 12 4.18zM4 8.81l7 3.5v7.88l-7-3.5V8.81zm16 7.88l-7 3.5v-7.88l7-3.5v7.88z"/></svg>'
+            },
+            'just-eat': {
+                color: '#FF5A00',
+                name: 'Just Eat',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path fill="white" d="M8 8h8v2H8zm0 3h8v2H8zm0 3h5v2H8z"/></svg>'
+            },
+            'smood': {
+                color: '#E91E63',
+                name: 'Smood',
+                icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+            }
+        };
+
+        // Get platform icon HTML
+        function getPlatformIcon(platformName) {
+            const branding = platformBranding[platformName];
+            if (branding?.icon) {
+                return `<span class="platform-icon" style="color: ${branding.color}">${branding.icon}</span>`;
+            }
+            return '';
+        }
 
         // Map locale to country name
         const localeToCountryName = {
@@ -779,7 +833,8 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             if (shops.length > 0) {
                 ctaText.textContent = `Order planted online in ${country}`;
                 ctaShops.innerHTML = shops.map(shop => `
-                    <a href="${shop.url}" class="btn btn-cta-shop" target="_blank" rel="noopener">
+                    <a href="${shop.url}" class="btn btn-cta-shop" target="_blank" rel="noopener" style="--shop-color: ${shop.color}">
+                        <span class="shop-indicator" style="background: ${shop.color}"></span>
                         ${shop.name}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -954,25 +1009,21 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                     // Update delivery platforms if different location
                     const platformsContainer = card.querySelector('.chain-platforms');
                     if (platformsContainer && closestLoc.deliveryPlatforms?.length > 0) {
-                        const platformColors = {
-                            'wolt': '#00C2E8',
-                            'lieferando': '#FF8000',
-                            'uber-eats': '#06C167',
-                            'just-eat': '#FF5A00',
-                            'smood': '#E91E63'
-                        };
-
-                        platformsContainer.innerHTML = closestLoc.deliveryPlatforms.slice(0, 3).map(p => `
-                            <a href="${p.url}" target="_blank" rel="noopener noreferrer"
-                               class="platform-btn" style="--platform-color: ${platformColors[p.name] || '#333'}">
-                                ${p.displayName}
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15 3 21 3 21 9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                            </a>
-                        `).join('');
+                        platformsContainer.innerHTML = closestLoc.deliveryPlatforms.slice(0, 3).map(p => {
+                            const branding = platformBranding[p.name] || { color: '#333', icon: '' };
+                            return `
+                                <a href="${p.url}" target="_blank" rel="noopener noreferrer"
+                                   class="platform-btn" style="--platform-color: ${branding.color}">
+                                    <span class="platform-icon">${branding.icon || ''}</span>
+                                    <span class="platform-name">${p.displayName}</span>
+                                    <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                </a>
+                            `;
+                        }).join('');
                     }
 
                     // Store distance for sorting
@@ -1113,7 +1164,12 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             const onlineShopsHtml = shops.length > 0 ? `
                 <div class="online-shops-row">
                     <span class="online-shops-label">Order online:</span>
-                    ${shops.map(shop => `<a href="${shop.url}" target="_blank" rel="noopener" class="shop-link">${shop.name}</a>`).join('')}
+                    ${shops.map(shop => `
+                        <a href="${shop.url}" target="_blank" rel="noopener" class="shop-link" style="--shop-color: ${shop.color}">
+                            <span class="shop-indicator" style="background: ${shop.color}"></span>
+                            ${shop.name}
+                        </a>
+                    `).join('')}
                 </div>
             ` : '';
 
@@ -2084,8 +2140,8 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     .platform-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.6rem 1rem;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
         background: var(--platform-color, #333);
         color: white;
         border-radius: 8px;
@@ -2098,12 +2154,33 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     .platform-btn:hover {
         filter: brightness(1.1);
         transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .platform-btn svg {
-        width: 14px;
-        height: 14px;
-        opacity: 0.85;
+    .platform-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .platform-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: white;
+    }
+
+    .platform-name {
+        white-space: nowrap;
+    }
+
+    .external-icon {
+        width: 12px;
+        height: 12px;
+        opacity: 0.7;
+        flex-shrink: 0;
     }
 
     /* No results */
@@ -2244,19 +2321,31 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     }
 
     :global(.shop-link) {
-        color: var(--planted-green);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
         font-weight: 600;
         text-decoration: none;
-        padding: 0.4rem 0.75rem;
+        padding: 0.5rem 0.9rem;
         border-radius: 100px;
-        background: rgba(139, 197, 63, 0.15);
+        background: rgba(255, 255, 255, 0.12);
         font-size: 0.9rem;
         transition: all 0.2s;
+        border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     :global(.shop-link:hover) {
-        background: rgba(139, 197, 63, 0.25);
+        background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
+        border-color: var(--shop-color, rgba(255,255,255,0.3));
+    }
+
+    :global(.shop-indicator) {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
     }
 
     /* Online CTA */
@@ -2328,7 +2417,7 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     .btn-cta-shop {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.5rem;
         background: rgba(255, 255, 255, 0.15);
         border: 2px solid rgba(255, 255, 255, 0.2);
         color: white;
@@ -2341,16 +2430,25 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     }
 
     .btn-cta-shop:hover {
-        background: var(--planted-green);
-        border-color: var(--planted-green);
-        color: var(--planted-purple);
+        background: var(--shop-color, var(--planted-green));
+        border-color: var(--shop-color, var(--planted-green));
+        color: white;
         transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-cta-shop .shop-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
     }
 
     .btn-cta-shop svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         opacity: 0.7;
+        flex-shrink: 0;
     }
 
     .btn-cta-shop:hover svg {
