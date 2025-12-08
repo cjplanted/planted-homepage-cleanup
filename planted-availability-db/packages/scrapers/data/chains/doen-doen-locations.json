@@ -1,0 +1,82 @@
+{
+  "chain": {
+    "name": "doen doen planted kebap",
+    "type": "chain",
+    "concept": "100% vegan kebab restaurant",
+    "plantedProducts": ["planted.kebab"],
+    "plantedDishes": [
+      {
+        "name": "Doen Doen Dürüm",
+        "description": "Planted kebab in wrap with salad, red cabbage, red onions, parsley, tomatoes, cucumbers, grilled vegetables and four homemade sauces",
+        "plantedProduct": "planted.kebab"
+      },
+      {
+        "name": "Doen Doen Teller",
+        "description": "Planted kebab plate with salad, red cabbage, red onions, parsley, tomatoes, cucumbers, grilled vegetables and four homemade sauces",
+        "plantedProduct": "planted.kebab"
+      },
+      {
+        "name": "Doen Doen Yufka",
+        "description": "Planted kebab yufka with fresh ingredients and homemade sauces",
+        "plantedProduct": "planted.kebab"
+      }
+    ],
+    "sauces": [
+      "Paprika-Tomato Sauce (warm)",
+      "Herb-yogurt sauce (vegan)",
+      "Garlic sauce",
+      "Hot sauce"
+    ],
+    "website": "https://doendoen.de",
+    "notes": "First 100% vegan planted kebab restaurant chain. All kebab made from pea protein."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "high",
+    "signals": [
+      "Multiple cities (Stuttgart, Berlin)",
+      "Multiple delivery platforms (Wolt, Uber Eats)",
+      "Brand-style naming (repeated word pattern)",
+      "Specialized vegan kebab concept"
+    ]
+  },
+  "totalLocations": 3,
+  "countries": ["DE"],
+  "locations": [
+    {
+      "city": "Stuttgart",
+      "name": "doen doen Stuttgart",
+      "address": "Josef-Hirn-Platz 8",
+      "postalCode": "70173",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt"],
+      "woltUrl": "https://wolt.com/en/deu/stuttgart/restaurant/doen-doen-planted-kebap",
+      "notes": "About 20 indoor seats, outdoor seating available"
+    },
+    {
+      "city": "Berlin",
+      "name": "doen doen Berlin Friedrichshain",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt", "uber_eats"],
+      "woltUrl": "https://wolt.com/en/deu/berlin/district/friedrichshain/deu-doendoen",
+      "uberEatsUrl": "https://www.ubereats.com/de/store/doen-doen-planted-kebap/sne7dq9YT3iXmoAkE4jtMQ"
+    },
+    {
+      "city": "Berlin",
+      "name": "doen doen Berlin Prenzlauer Berg",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt"],
+      "woltUrl": "https://wolt.com/en/deu/berlin/district/prenzlauer-berg/deu-doendoen"
+    }
+  ],
+  "deliveryPlatformSummary": {
+    "wolt": {
+      "cities": ["Stuttgart", "Berlin"]
+    },
+    "uber_eats": {
+      "cities": ["Berlin"]
+    }
+  },
+  "uniqueFeature": "100% vegan kebab chain using only planted.kebab - the first of its kind"
+}

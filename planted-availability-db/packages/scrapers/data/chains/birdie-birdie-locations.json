@@ -1,0 +1,252 @@
+{
+  "chain": {
+    "name": "Birdie Birdie Chicken",
+    "type": "chain",
+    "parentCompany": "TastyUrban",
+    "businessModel": "Virtual/Ghost Kitchen",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      {
+        "name": "Classic Planted Burger",
+        "description": "Crispy original planted.chicken (plant-based), cheese, salad, pickle, Signature Birdie Sauce in a potato bun",
+        "price": "8.85",
+        "currency": "EUR"
+      },
+      {
+        "name": "Spicy Planted Burger",
+        "description": "Crispy original planted.chicken (plant-based), cheese, salad, jalapeños, Chipotle-Jalapeño-Mayo, RedHot Buffalo Sauce in a potato bun",
+        "price": "9.75",
+        "currency": "EUR"
+      },
+      {
+        "name": "planted.chicken Farm Burger",
+        "description": "Crispy original planted.chicken (plant-based), cream cheese-feta cream, corn, pickles, salad, Birdie Signature Sauce in a potato bun",
+        "price": "9.35",
+        "currency": "EUR"
+      },
+      {
+        "name": "BBQ Planted Burger",
+        "description": "Crispy original planted.chicken (plant-based), cheese, coleslaw, pickle, Signature Birdie Sauce, white smoky BBQ sauce in a potato bun",
+        "price": "9.35",
+        "currency": "EUR"
+      },
+      {
+        "name": "Veggie Burger Menu",
+        "description": "Veggie burger of choice with fries and sauce",
+        "price": "12.95",
+        "currency": "EUR"
+      }
+    ],
+    "website": "https://www.birdiebirdie-food.com",
+    "notes": "All meats are 100% Halal. Planted options are plant-based alternatives."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "high",
+    "signals": [
+      "50+ locations mentioned",
+      "20+ cities confirmed",
+      "Multiple delivery platforms (Wolt, Uber Eats, Lieferando)",
+      "Brand naming pattern (repeated word)",
+      "TastyUrban parent company"
+    ]
+  },
+  "totalLocations": "50+",
+  "countries": ["DE"],
+  "locations": {
+    "Berlin": [
+      {
+        "name": "Prenzlauer Berg",
+        "address": "Danziger Str. 63",
+        "postalCode": "10435",
+        "deliveryPlatforms": ["wolt", "uber_eats", "lieferando"],
+        "woltUrl": "https://wolt.com/en/deu/berlin/restaurant/birdie-birdie-prenzlauer-berg",
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-prenzlauer-berg/P-S868PmUYyIuX82FFqwvA"
+      },
+      {
+        "name": "Kreuzberg",
+        "deliveryPlatforms": ["wolt"],
+        "woltUrl": "https://wolt.com/de/deu/berlin/restaurant/birdie-birdie-kreuzberg"
+      },
+      {
+        "name": "Nollendorfkiez",
+        "deliveryPlatforms": ["wolt"],
+        "woltUrl": "https://wolt.com/en/deu/berlin/restaurant/birdie-birdie-nollendorfkiez"
+      },
+      {
+        "name": "Stadtmitte",
+        "deliveryPlatforms": ["wolt", "uber_eats"],
+        "woltUrl": "https://wolt.com/en/deu/berlin/restaurant/birdie-birdie-stadtmitte",
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-stadtmitte/BibqwWYDXd6ziZGAgAs8ng"
+      },
+      {
+        "name": "Frankfurter Allee",
+        "deliveryPlatforms": ["wolt"],
+        "woltUrl": "https://wolt.com/en/deu/berlin/restaurant/birdie-birdie-chicken-frankfurter-allee"
+      },
+      {
+        "name": "Reinickendorf",
+        "deliveryPlatforms": ["uber_eats", "lieferando"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-reinickendorf/_ru39e8vX2W7WDixZ7jKzw"
+      },
+      {
+        "name": "Spandau",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-spandau/4znPuwfyVLaeKJoSVD5-Jw"
+      },
+      {
+        "name": "Schillerkiez",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-schillerkiez"
+      }
+    ],
+    "Hamburg": [
+      {
+        "name": "Barmbek",
+        "address": "Wagnerstr. 60",
+        "postalCode": "22081",
+        "deliveryPlatforms": ["wolt", "lieferando"],
+        "woltUrl": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-hamburg-brmbk",
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-hamburg-barmbek"
+      },
+      {
+        "name": "Eimsbüttel",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-chicken-eimsbuttel-ii"
+      },
+      {
+        "name": "Langenhorn",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-langenhorn/VvF59WKmWwKdm8W5To9h0Q"
+      },
+      {
+        "name": "Altona",
+        "deliveryPlatforms": ["lieferando"]
+      }
+    ],
+    "München": [
+      {
+        "name": "Laim",
+        "deliveryPlatforms": ["wolt", "uber_eats"],
+        "woltUrl": "https://wolt.com/en/deu/munich/restaurant/birdie-birdie-laim",
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-laim/Eb0YkFW8XtyK595BtUc7VA"
+      },
+      {
+        "name": "Trudering",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-3"
+      }
+    ],
+    "Köln": [
+      {
+        "name": "Südbahnhof",
+        "deliveryPlatforms": ["wolt", "lieferando"],
+        "woltUrl": "https://wolt.com/en/deu/cologne/restaurant/birdie-birdie-sdbahnhof",
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-kln-sdbahnhof"
+      }
+    ],
+    "Düsseldorf": [
+      {
+        "name": "Derendorf",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-derendorf/8I-MNxb8XIm_2G0jF7dxDg"
+      },
+      {
+        "name": "Holthausen",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-holthausen/aIGP0DCBUW-o7I6co63e8g"
+      }
+    ],
+    "Leipzig": [
+      {
+        "name": "Gohlis",
+        "deliveryPlatforms": ["wolt", "lieferando"],
+        "woltUrl": "https://wolt.com/en/deu/leipzig/restaurant/birdie-birdie-chicken-gohlis",
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-chicken-gohlis"
+      },
+      {
+        "name": "Volkmarsdorf",
+        "deliveryPlatforms": ["lieferando", "uber_eats"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-volkmarsdorf"
+      }
+    ],
+    "Nürnberg": [
+      {
+        "name": "Südstadt",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-sudstadt/lF2_Fy_3XjuSdNUUji8anQ"
+      }
+    ],
+    "Augsburg": [
+      {
+        "name": "Augsburg",
+        "deliveryPlatforms": ["wolt", "lieferando"],
+        "woltUrl": "https://wolt.com/en/deu/augsburg/restaurant/birdie-birdie-augsburg",
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-augsburg-1"
+      }
+    ],
+    "Karlsruhe": [
+      {
+        "name": "Nordweststadt",
+        "deliveryPlatforms": ["wolt"],
+        "woltUrl": "https://wolt.com/en/deu/karlsruhe/restaurant/birdie-birdie-chicken-nordweststadt"
+      }
+    ],
+    "Potsdam": [
+      {
+        "name": "Am Stern",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-chicken-am-stern"
+      }
+    ],
+    "Dortmund": [
+      {
+        "name": "Dortmund",
+        "deliveryPlatforms": ["lieferando"]
+      }
+    ],
+    "Oldenburg": [
+      {
+        "name": "Etzhorn",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-chicken-etzhorn"
+      }
+    ],
+    "Braunschweig": [
+      {
+        "name": "Braunschweig",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/speisekarte/birdie-birdie-chicken-braunschweig"
+      }
+    ],
+    "Viersen": [
+      {
+        "name": "Viersen",
+        "deliveryPlatforms": ["lieferando"],
+        "lieferandoUrl": "https://www.lieferando.de/en/menu/birdie-birdie-chicken-viersen"
+      }
+    ],
+    "Kiel": [
+      {
+        "name": "Wellsee",
+        "deliveryPlatforms": ["uber_eats"],
+        "uberEatsUrl": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-wellsee/9CIztCNbWdyOibkwBc2Wgw"
+      }
+    ]
+  },
+  "deliveryPlatformSummary": {
+    "wolt": {
+      "brandPage": "https://wolt.com/en/deu/berlin/brand/birdie-birdie",
+      "cities": ["Berlin", "Hamburg", "München", "Köln", "Leipzig", "Augsburg", "Karlsruhe"]
+    },
+    "uber_eats": {
+      "brandPage": "https://www.ubereats.com/de/brand/birdie-birdie",
+      "cities": ["Berlin", "Düsseldorf", "München", "Nürnberg", "Hamburg", "Kiel"]
+    },
+    "lieferando": {
+      "brandPage": "https://www.lieferando.de/birdie-birdie",
+      "cities": ["Hamburg", "Berlin", "Köln", "Leipzig", "München", "Augsburg", "Potsdam", "Dortmund", "Oldenburg", "Braunschweig", "Viersen"]
+    }
+  }
+}

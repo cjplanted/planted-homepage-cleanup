@@ -1,0 +1,2819 @@
+[
+  {
+    "id": "planted-loc-a2Pc40000001QEIEA2",
+    "salesforce_id": "a2Pc40000001QEIEA2",
+    "name": "Brezelkönig Bahnhof Baden",
+    "address": {
+      "street": "Bahnhof Baden Gleis 1",
+      "city": "Baden",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhof Baden Gleis 1, Baden, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4762321,
+      "lng": 8.3076213
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.895Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEIEA2"
+      },
+      "Id": "a2Pc40000001QEIEA2",
+      "Name": "Brezelkönig Bahnhof Baden",
+      "Street__c": "Bahnhof Baden Gleis 1",
+      "City__c": "Baden",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4762321,
+      "lng__c": 8.3076213,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEJEA2",
+    "salesforce_id": "a2Pc40000001QEJEA2",
+    "name": "Brezelkönig Bahnhof Baden",
+    "address": {
+      "street": "Gleis 1",
+      "city": "Baden",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Gleis 1, Baden, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4762321,
+      "lng": 8.3076213
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEJEA2"
+      },
+      "Id": "a2Pc40000001QEJEA2",
+      "Name": "Brezelkönig Bahnhof Baden",
+      "Street__c": "Gleis 1",
+      "City__c": "Baden",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4762321,
+      "lng__c": 8.3076213,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEKEA2",
+    "salesforce_id": "a2Pc40000001QEKEA2",
+    "name": "Brezelkönig Globus",
+    "address": {
+      "street": "Marktplatz 2",
+      "city": "Basel",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Marktplatz 2, Basel, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.5588986,
+      "lng": 7.5879691
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEKEA2"
+      },
+      "Id": "a2Pc40000001QEKEA2",
+      "Name": "Brezelkönig Globus",
+      "Street__c": "Marktplatz 2",
+      "City__c": "Basel",
+      "Country__c": "Switzerland",
+      "lat__c": 47.5588986,
+      "lng__c": 7.5879691,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QELEA2",
+    "salesforce_id": "a2Pc40000001QELEA2",
+    "name": "Brezelkönig Bahnhof Basel, Passarelle 9/10",
+    "address": {
+      "street": "Passarelle, Perron 09/10",
+      "city": "Basel",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Passarelle, Perron 09/10, Basel, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.5469856,
+      "lng": 7.5891549
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QELEA2"
+      },
+      "Id": "a2Pc40000001QELEA2",
+      "Name": "Brezelkönig Bahnhof Basel, Passarelle 9/10",
+      "Street__c": "Passarelle, Perron 09/10",
+      "City__c": "Basel",
+      "Country__c": "Switzerland",
+      "lat__c": 47.5469856,
+      "lng__c": 7.5891549,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEMEA2",
+    "salesforce_id": "a2Pc40000001QEMEA2",
+    "name": "Brezelkönig Bahnhof Bern, Ausgang Bollwerk",
+    "address": {
+      "street": "Bahnhofplatz",
+      "city": "Bern",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz, Bern, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.9492918,
+      "lng": 7.440233
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEMEA2"
+      },
+      "Id": "a2Pc40000001QEMEA2",
+      "Name": "Brezelkönig Bahnhof Bern, Ausgang Bollwerk",
+      "Street__c": "Bahnhofplatz",
+      "City__c": "Bern",
+      "Country__c": "Switzerland",
+      "lat__c": 46.9492918,
+      "lng__c": 7.440233,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QENEA2",
+    "salesforce_id": "a2Pc40000001QENEA2",
+    "name": "Brezelkönig Bahnhof Bern, Unterführung Perron 3/4",
+    "address": {
+      "street": "UnterfUehrung, Perron 7/8",
+      "city": "Bern",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "UnterfUehrung, Perron 7/8, Bern, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.9489354,
+      "lng": 7.437076999999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QENEA2"
+      },
+      "Id": "a2Pc40000001QENEA2",
+      "Name": "Brezelkönig Bahnhof Bern, Unterführung Perron 3/4",
+      "Street__c": "UnterfUehrung, Perron 7/8",
+      "City__c": "Bern",
+      "Country__c": "Switzerland",
+      "lat__c": 46.9489354,
+      "lng__c": 7.437076999999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEOEA2",
+    "salesforce_id": "a2Pc40000001QEOEA2",
+    "name": "Brezelkönig Bahnhof Bern, Welle",
+    "address": {
+      "street": "Bern Welle",
+      "city": "Bern",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bern Welle, Bern, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.9488345,
+      "lng": 7.4367046
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEOEA2"
+      },
+      "Id": "a2Pc40000001QEOEA2",
+      "Name": "Brezelkönig Bahnhof Bern, Welle",
+      "Street__c": "Bern Welle",
+      "City__c": "Bern",
+      "Country__c": "Switzerland",
+      "lat__c": 46.9488345,
+      "lng__c": 7.4367046,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEPEA2",
+    "salesforce_id": "a2Pc40000001QEPEA2",
+    "name": "BREZELKÖNIG",
+    "address": {
+      "street": "Bahnhofplatz 4",
+      "city": "Biel",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 4, Biel, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.1330258,
+      "lng": 7.242623300000001
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEPEA2"
+      },
+      "Id": "a2Pc40000001QEPEA2",
+      "Name": "BREZELKÖNIG",
+      "Street__c": "Bahnhofplatz 4",
+      "City__c": "Biel",
+      "Country__c": "Switzerland",
+      "lat__c": 47.1330258,
+      "lng__c": 7.242623300000001,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEQEA2",
+    "salesforce_id": "a2Pc40000001QEQEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "UnterfUehrung",
+      "city": "Chur",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "UnterfUehrung, Chur, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.8536555,
+      "lng": 9.5298945
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEQEA2"
+      },
+      "Id": "a2Pc40000001QEQEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "UnterfUehrung",
+      "City__c": "Chur",
+      "Country__c": "Switzerland",
+      "lat__c": 46.8536555,
+      "lng__c": 9.5298945,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEREA2",
+    "salesforce_id": "a2Pc40000001QEREA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofplatz",
+      "city": "Dietikon",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz, Dietikon, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4061332,
+      "lng": 8.404715
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEREA2"
+      },
+      "Id": "a2Pc40000001QEREA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofplatz",
+      "City__c": "Dietikon",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4061332,
+      "lng__c": 8.404715,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QESEA2",
+    "salesforce_id": "a2Pc40000001QESEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Staufacherstrasse 1",
+      "city": "Emmen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Staufacherstrasse 1, Emmen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.07412739999999,
+      "lng": 8.2871613
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QESEA2"
+      },
+      "Id": "a2Pc40000001QESEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Staufacherstrasse 1",
+      "City__c": "Emmen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.07412739999999,
+      "lng__c": 8.2871613,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QETEA2",
+    "salesforce_id": "a2Pc40000001QETEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofplatz 75",
+      "city": "Frauenfeld",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 75, Frauenfeld, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.5579638,
+      "lng": 8.8963606
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QETEA2"
+      },
+      "Id": "a2Pc40000001QETEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofplatz 75",
+      "City__c": "Frauenfeld",
+      "Country__c": "Switzerland",
+      "lat__c": 47.5579638,
+      "lng__c": 8.8963606,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEUEA2",
+    "salesforce_id": "a2Pc40000001QEUEA2",
+    "name": "Brezelkönig Gare de Fribourg",
+    "address": {
+      "street": "Place de la gare 1",
+      "city": "Fribourg",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Place de la gare 1, Fribourg, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.8033337,
+      "lng": 7.150662
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEUEA2"
+      },
+      "Id": "a2Pc40000001QEUEA2",
+      "Name": "Brezelkönig Gare de Fribourg",
+      "Street__c": "Place de la gare 1",
+      "City__c": "Fribourg",
+      "Country__c": "Switzerland",
+      "lat__c": 46.8033337,
+      "lng__c": 7.150662,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEVEA2",
+    "salesforce_id": "a2Pc40000001QEVEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "West, 3 Place Cornavin (VST)",
+      "city": "Genève",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "West, 3 Place Cornavin (VST), Genève, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.2101704,
+      "lng": 6.1418881
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEVEA2"
+      },
+      "Id": "a2Pc40000001QEVEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "West, 3 Place Cornavin (VST)",
+      "City__c": "Genève",
+      "Country__c": "Switzerland",
+      "lat__c": 46.2101704,
+      "lng__c": 6.1418881,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEWEA2",
+    "salesforce_id": "a2Pc40000001QEWEA2",
+    "name": "Brezelkönig Avenue de la gare des Eaux-Vives, Genève",
+    "address": {
+      "street": "Avenue De la Gare des Eaux-Vives 11",
+      "city": "Genève",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Avenue De la Gare des Eaux-Vives 11, Genève, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.2009836,
+      "lng": 6.1664615
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEWEA2"
+      },
+      "Id": "a2Pc40000001QEWEA2",
+      "Name": "Brezelkönig Avenue de la gare des Eaux-Vives, Genève",
+      "Street__c": "Avenue De la Gare des Eaux-Vives 11",
+      "City__c": "Genève",
+      "Country__c": "Switzerland",
+      "lat__c": 46.2009836,
+      "lng__c": 6.1664615,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEXEA2",
+    "salesforce_id": "a2Pc40000001QEXEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Place de la Gare 3",
+      "city": "Lausanne",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Place de la Gare 3, Lausanne, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.5169106,
+      "lng": 6.630292499999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEXEA2"
+      },
+      "Id": "a2Pc40000001QEXEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Place de la Gare 3",
+      "City__c": "Lausanne",
+      "Country__c": "Switzerland",
+      "lat__c": 46.5169106,
+      "lng__c": 6.630292499999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEYEA2",
+    "salesforce_id": "a2Pc40000001QEYEA2",
+    "name": "Brezelkönig Place de l'Europe 3, Lausanne",
+    "address": {
+      "street": "Voie du Chariot 5-7",
+      "city": "Lausanne",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Voie du Chariot 5-7, Lausanne, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.5202153,
+      "lng": 6.6303053
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEYEA2"
+      },
+      "Id": "a2Pc40000001QEYEA2",
+      "Name": "Brezelkönig Place de l'Europe 3, Lausanne",
+      "Street__c": "Voie du Chariot 5-7",
+      "City__c": "Lausanne",
+      "Country__c": "Switzerland",
+      "lat__c": 46.5202153,
+      "lng__c": 6.6303053,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEZEA2",
+    "salesforce_id": "a2Pc40000001QEZEA2",
+    "name": "Brezelkönig Place de l'Europe 3, Lausanne",
+    "address": {
+      "street": "Place de l`Europe 5",
+      "city": "Lausanne",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Place de l`Europe 5, Lausanne, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.5202153,
+      "lng": 6.6303053
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEZEA2"
+      },
+      "Id": "a2Pc40000001QEZEA2",
+      "Name": "Brezelkönig Place de l'Europe 3, Lausanne",
+      "Street__c": "Place de l`Europe 5",
+      "City__c": "Lausanne",
+      "Country__c": "Switzerland",
+      "lat__c": 46.5202153,
+      "lng__c": 6.6303053,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEaEAM",
+    "salesforce_id": "a2Pc40000001QEaEAM",
+    "name": "GLOBUS | Lausanne Grand magasin",
+    "address": {
+      "street": "Rue du Pont 5",
+      "city": "Lausanne",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Rue du Pont 5, Lausanne, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.5211111,
+      "lng": 6.6336111
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEaEAM"
+      },
+      "Id": "a2Pc40000001QEaEAM",
+      "Name": "GLOBUS | Lausanne Grand magasin",
+      "Street__c": "Rue du Pont 5",
+      "City__c": "Lausanne",
+      "Country__c": "Switzerland",
+      "lat__c": 46.5211111,
+      "lng__c": 6.6336111,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEbEAM",
+    "salesforce_id": "a2Pc40000001QEbEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofstrasse 60",
+      "city": "Lenzburg",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofstrasse 60, Lenzburg, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3910913,
+      "lng": 8.170365199999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEbEAM"
+      },
+      "Id": "a2Pc40000001QEbEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofstrasse 60",
+      "City__c": "Lenzburg",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3910913,
+      "lng__c": 8.170365199999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEcEAM",
+    "salesforce_id": "a2Pc40000001QEcEAM",
+    "name": "Brezelkönig Lugano Via Nassa",
+    "address": {
+      "street": "via Nassa 22",
+      "city": "Lugano",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "via Nassa 22, Lugano, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.0027341,
+      "lng": 8.9498616
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEcEAM"
+      },
+      "Id": "a2Pc40000001QEcEAM",
+      "Name": "Brezelkönig Lugano Via Nassa",
+      "Street__c": "via Nassa 22",
+      "City__c": "Lugano",
+      "Country__c": "Switzerland",
+      "lat__c": 46.0027341,
+      "lng__c": 8.9498616,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEdEAM",
+    "salesforce_id": "a2Pc40000001QEdEAM",
+    "name": "Brezelkönig Stazione Lugano FFS",
+    "address": {
+      "street": "Palazzo della stazione",
+      "city": "Lugano",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Palazzo della stazione, Lugano, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.0052855,
+      "lng": 8.946876999999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEdEAM"
+      },
+      "Id": "a2Pc40000001QEdEAM",
+      "Name": "Brezelkönig Stazione Lugano FFS",
+      "Street__c": "Palazzo della stazione",
+      "City__c": "Lugano",
+      "Country__c": "Switzerland",
+      "lat__c": 46.0052855,
+      "lng__c": 8.946876999999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEeEAM",
+    "salesforce_id": "a2Pc40000001QEeEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofplatz 1",
+      "city": "Luzern",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 1, Luzern, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.0502942,
+      "lng": 8.310271900000002
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEeEAM"
+      },
+      "Id": "a2Pc40000001QEeEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofplatz 1",
+      "City__c": "Luzern",
+      "Country__c": "Switzerland",
+      "lat__c": 47.0502942,
+      "lng__c": 8.310271900000002,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEfEAM",
+    "salesforce_id": "a2Pc40000001QEfEAM",
+    "name": "Brezelkönig Gare de Morges",
+    "address": {
+      "street": "Place de la gare 2",
+      "city": "Morges",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Place de la gare 2, Morges, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.51105810000001,
+      "lng": 6.4940361
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEfEAM"
+      },
+      "Id": "a2Pc40000001QEfEAM",
+      "Name": "Brezelkönig Gare de Morges",
+      "Street__c": "Place de la gare 2",
+      "City__c": "Morges",
+      "Country__c": "Switzerland",
+      "lat__c": 46.51105810000001,
+      "lng__c": 6.4940361,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEgEAM",
+    "salesforce_id": "a2Pc40000001QEgEAM",
+    "name": "Brezelkönig Gare de Neuchâtel",
+    "address": {
+      "street": "Place de la gare",
+      "city": "Neuenburg",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Place de la gare, Neuenburg, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.99654109999999,
+      "lng": 6.9359327
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEgEAM"
+      },
+      "Id": "a2Pc40000001QEgEAM",
+      "Name": "Brezelkönig Gare de Neuchâtel",
+      "Street__c": "Place de la gare",
+      "City__c": "Neuenburg",
+      "Country__c": "Switzerland",
+      "lat__c": 46.99654109999999,
+      "lng__c": 6.9359327,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEhEAM",
+    "salesforce_id": "a2Pc40000001QEhEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Geissfluhweg 19",
+      "city": "Olten",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Geissfluhweg 19, Olten, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3515709,
+      "lng": 7.9070942
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEhEAM"
+      },
+      "Id": "a2Pc40000001QEhEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Geissfluhweg 19",
+      "City__c": "Olten",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3515709,
+      "lng__c": 7.9070942,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEiEAM",
+    "salesforce_id": "a2Pc40000001QEiEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofplatz",
+      "city": "Rapperswil-Jona",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz, Rapperswil-Jona, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.2250613,
+      "lng": 8.8171727
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEiEAM"
+      },
+      "Id": "a2Pc40000001QEiEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofplatz",
+      "City__c": "Rapperswil-Jona",
+      "Country__c": "Switzerland",
+      "lat__c": 47.2250613,
+      "lng__c": 8.8171727,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEjEAM",
+    "salesforce_id": "a2Pc40000001QEjEAM",
+    "name": "Brezelkönig Bahnhof Schaffhausen, Unterführung",
+    "address": {
+      "street": "Areal SUed",
+      "city": "Schaffhausen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Areal SUed, Schaffhausen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.6985628,
+      "lng": 8.6334541
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEjEAM"
+      },
+      "Id": "a2Pc40000001QEjEAM",
+      "Name": "Brezelkönig Bahnhof Schaffhausen, Unterführung",
+      "Street__c": "Areal SUed",
+      "City__c": "Schaffhausen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.6985628,
+      "lng__c": 8.6334541,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEkEAM",
+    "salesforce_id": "a2Pc40000001QEkEAM",
+    "name": "Brezelkönig Bahnhof Schaffhausen, Unterführung",
+    "address": {
+      "street": "PerronunterfUehrung",
+      "city": "Schaffhausen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "PerronunterfUehrung, Schaffhausen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.6985628,
+      "lng": 8.6334541
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEkEAM"
+      },
+      "Id": "a2Pc40000001QEkEAM",
+      "Name": "Brezelkönig Bahnhof Schaffhausen, Unterführung",
+      "Street__c": "PerronunterfUehrung",
+      "City__c": "Schaffhausen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.6985628,
+      "lng__c": 8.6334541,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QElEAM",
+    "salesforce_id": "a2Pc40000001QElEAM",
+    "name": "Brezelkönig Im Shoppyland, Schönbühl",
+    "address": {
+      "street": "Industriestrasse",
+      "city": "Urtenen-Schönbühl",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Industriestrasse, Urtenen-Schönbühl, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.0168427,
+      "lng": 7.492344999999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QElEAM"
+      },
+      "Id": "a2Pc40000001QElEAM",
+      "Name": "Brezelkönig Im Shoppyland, Schönbühl",
+      "Street__c": "Industriestrasse",
+      "City__c": "Urtenen-Schönbühl",
+      "Country__c": "Switzerland",
+      "lat__c": 47.0168427,
+      "lng__c": 7.492344999999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEmEAM",
+    "salesforce_id": "a2Pc40000001QEmEAM",
+    "name": "Brezelkönig Bahnhof Solothurn, Unterführung",
+    "address": {
+      "street": "UnterfUehrung",
+      "city": "Solothurn",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "UnterfUehrung, Solothurn, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.2040739,
+      "lng": 7.543239199999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEmEAM"
+      },
+      "Id": "a2Pc40000001QEmEAM",
+      "Name": "Brezelkönig Bahnhof Solothurn, Unterführung",
+      "Street__c": "UnterfUehrung",
+      "City__c": "Solothurn",
+      "Country__c": "Switzerland",
+      "lat__c": 47.2040739,
+      "lng__c": 7.543239199999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEnEAM",
+    "salesforce_id": "a2Pc40000001QEnEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Multergasse 47",
+      "city": "St. Gallen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Multergasse 47, St. Gallen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4234427,
+      "lng": 9.3742783
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEnEAM"
+      },
+      "Id": "a2Pc40000001QEnEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Multergasse 47",
+      "City__c": "St. Gallen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4234427,
+      "lng__c": 9.3742783,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEoEAM",
+    "salesforce_id": "a2Pc40000001QEoEAM",
+    "name": "Brezelkönig Bahnhof St. Gallen, Unterführung Ost",
+    "address": {
+      "street": "Bahnhofplatz 2 PersonenunterfUehrung Ost",
+      "city": "St. Gallen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 2 PersonenunterfUehrung Ost, St. Gallen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4236866,
+      "lng": 9.3698858
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEoEAM"
+      },
+      "Id": "a2Pc40000001QEoEAM",
+      "Name": "Brezelkönig Bahnhof St. Gallen, Unterführung Ost",
+      "Street__c": "Bahnhofplatz 2 PersonenunterfUehrung Ost",
+      "City__c": "St. Gallen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4236866,
+      "lng__c": 9.3698858,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEpEAM",
+    "salesforce_id": "a2Pc40000001QEpEAM",
+    "name": "Brezelkönig Bahnhofsplatz 8, St. Gallen",
+    "address": {
+      "street": "Bahnhofplatz 8",
+      "city": "St. Gallen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 8, St. Gallen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.422353,
+      "lng": 9.368622199999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEpEAM"
+      },
+      "Id": "a2Pc40000001QEpEAM",
+      "Name": "Brezelkönig Bahnhofsplatz 8, St. Gallen",
+      "Street__c": "Bahnhofplatz 8",
+      "City__c": "St. Gallen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.422353,
+      "lng__c": 9.368622199999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEqEAM",
+    "salesforce_id": "a2Pc40000001QEqEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Seestrasse 2",
+      "city": "Thun",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Seestrasse 2, Thun, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.7548939,
+      "lng": 7.629724299999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEqEAM"
+      },
+      "Id": "a2Pc40000001QEqEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Seestrasse 2",
+      "City__c": "Thun",
+      "Country__c": "Switzerland",
+      "lat__c": 46.7548939,
+      "lng__c": 7.629724299999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QErEAM",
+    "salesforce_id": "a2Pc40000001QErEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bankstrasse",
+      "city": "Uster",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bankstrasse, Uster, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3505936,
+      "lng": 8.718301499999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QErEAM"
+      },
+      "Id": "a2Pc40000001QErEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bankstrasse",
+      "City__c": "Uster",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3505936,
+      "lng__c": 8.718301499999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEsEAM",
+    "salesforce_id": "a2Pc40000001QEsEAM",
+    "name": "Brezelkönig Vevey",
+    "address": {
+      "street": "Avenue General Guisan 15",
+      "city": "Vevey",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Avenue General Guisan 15, Vevey, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.4630772,
+      "lng": 6.8408069
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEsEAM"
+      },
+      "Id": "a2Pc40000001QEsEAM",
+      "Name": "Brezelkönig Vevey",
+      "Street__c": "Avenue General Guisan 15",
+      "City__c": "Vevey",
+      "Country__c": "Switzerland",
+      "lat__c": 46.4630772,
+      "lng__c": 6.8408069,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEtEAM",
+    "salesforce_id": "a2Pc40000001QEtEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofstrasse 4",
+      "city": "Wädenswil",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofstrasse 4, Wädenswil, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.2293916,
+      "lng": 8.6750244
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEtEAM"
+      },
+      "Id": "a2Pc40000001QEtEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofstrasse 4",
+      "City__c": "Wädenswil",
+      "Country__c": "Switzerland",
+      "lat__c": 47.2293916,
+      "lng__c": 8.6750244,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEuEAM",
+    "salesforce_id": "a2Pc40000001QEuEAM",
+    "name": "Brezelkönig Bahnhofsplatz Wil",
+    "address": {
+      "street": "Bahnhofplatz 1",
+      "city": "Wil",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 1, Wil, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4624183,
+      "lng": 9.0417544
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEuEAM"
+      },
+      "Id": "a2Pc40000001QEuEAM",
+      "Name": "Brezelkönig Bahnhofsplatz Wil",
+      "Street__c": "Bahnhofplatz 1",
+      "City__c": "Wil",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4624183,
+      "lng__c": 9.0417544,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEvEAM",
+    "salesforce_id": "a2Pc40000001QEvEAM",
+    "name": "Brezelkönig Bahnhof Winterthur, Unterführung",
+    "address": {
+      "street": "Bahnhofplatz 5",
+      "city": "Winterthur",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 5, Winterthur, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.49974779999999,
+      "lng": 8.7233732
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEvEAM"
+      },
+      "Id": "a2Pc40000001QEvEAM",
+      "Name": "Brezelkönig Bahnhof Winterthur, Unterführung",
+      "Street__c": "Bahnhofplatz 5",
+      "City__c": "Winterthur",
+      "Country__c": "Switzerland",
+      "lat__c": 47.49974779999999,
+      "lng__c": 8.7233732,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEwEAM",
+    "salesforce_id": "a2Pc40000001QEwEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofplatz 3",
+      "city": "Zermatt",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 3, Zermatt, Switzerland"
+    },
+    "coordinates": {
+      "lat": 46.0239804,
+      "lng": 7.7477428
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEwEAM"
+      },
+      "Id": "a2Pc40000001QEwEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofplatz 3",
+      "City__c": "Zermatt",
+      "Country__c": "Switzerland",
+      "lat__c": 46.0239804,
+      "lng__c": 7.7477428,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QExEAM",
+    "salesforce_id": "a2Pc40000001QExEAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Altstetterplatz 11",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Altstetterplatz 11, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3915154,
+      "lng": 8.4886078
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QExEAM"
+      },
+      "Id": "a2Pc40000001QExEAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Altstetterplatz 11",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3915154,
+      "lng__c": 8.4886078,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001QEyEAM",
+    "salesforce_id": "a2Pc40000001QEyEAM",
+    "name": "Brezelkönig Zürich HB, Shopville",
+    "address": {
+      "street": "Tessinerplatz 10",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Tessinerplatz 10, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3777511,
+      "lng": 8.538122699999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001QEyEAM"
+      },
+      "Id": "a2Pc40000001QEyEAM",
+      "Name": "Brezelkönig Zürich HB, Shopville",
+      "Street__c": "Tessinerplatz 10",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3777511,
+      "lng__c": 8.538122699999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U2xEAE",
+    "salesforce_id": "a2Pc40000001U2xEAE",
+    "name": "Barburrito - Edinburgh Airport",
+    "address": {
+      "street": "DEPARTURES, EDINBURGH AIRPORT",
+      "city": "Ingliston",
+      "postal_code": "EH129DN",
+      "country": "United Kingdom",
+      "full_address": "DEPARTURES, EDINBURGH AIRPORT, Ingliston, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 55.9481753,
+      "lng": -3.3647135
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U2xEAE"
+      },
+      "Id": "a2Pc40000001U2xEAE",
+      "Name": "Barburrito - Edinburgh Airport",
+      "Street__c": "DEPARTURES, EDINBURGH AIRPORT",
+      "Postal_Code__c": "EH129DN",
+      "City__c": "Ingliston",
+      "Country__c": "United Kingdom",
+      "lat__c": 55.9481753,
+      "lng__c": -3.3647135,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U2yEAE",
+    "salesforce_id": "a2Pc40000001U2yEAE",
+    "name": "Barburrito - Edinburgh Forrest Road",
+    "address": {
+      "street": "55 FORREST ROAD",
+      "city": "Scotland",
+      "postal_code": "EH12QP",
+      "country": "United Kingdom",
+      "full_address": "55 FORREST ROAD, Scotland, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 55.9454548,
+      "lng": -3.191497
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U2yEAE"
+      },
+      "Id": "a2Pc40000001U2yEAE",
+      "Name": "Barburrito - Edinburgh Forrest Road",
+      "Street__c": "55 FORREST ROAD",
+      "Postal_Code__c": "EH12QP",
+      "City__c": "Scotland",
+      "Country__c": "United Kingdom",
+      "lat__c": 55.9454548,
+      "lng__c": -3.191497,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U2zEAE",
+    "salesforce_id": "a2Pc40000001U2zEAE",
+    "name": "Barburrito - Glasgow Queen Street",
+    "address": {
+      "street": "138 QUEEN STREET",
+      "city": "Scotland",
+      "postal_code": "G1 3BX",
+      "country": "United Kingdom",
+      "full_address": "138 QUEEN STREET, Scotland, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 55.8606211,
+      "lng": -4.2514455
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U2zEAE"
+      },
+      "Id": "a2Pc40000001U2zEAE",
+      "Name": "Barburrito - Glasgow Queen Street",
+      "Street__c": "138 QUEEN STREET",
+      "Postal_Code__c": "G1 3BX",
+      "City__c": "Scotland",
+      "Country__c": "United Kingdom",
+      "lat__c": 55.8606211,
+      "lng__c": -4.2514455,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U30EAE",
+    "salesforce_id": "a2Pc40000001U30EAE",
+    "name": "Barburrito - Liverpool",
+    "address": {
+      "street": "THE GALLERIA, 14 PARADISE STREET",
+      "city": "England",
+      "postal_code": "L1 8JF",
+      "country": "United Kingdom",
+      "full_address": "THE GALLERIA, 14 PARADISE STREET, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.4041807,
+      "lng": -2.9870867
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U30EAE"
+      },
+      "Id": "a2Pc40000001U30EAE",
+      "Name": "Barburrito - Liverpool",
+      "Street__c": "THE GALLERIA, 14 PARADISE STREET",
+      "Postal_Code__c": "L1 8JF",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.4041807,
+      "lng__c": -2.9870867,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U31EAE",
+    "salesforce_id": "a2Pc40000001U31EAE",
+    "name": "Barburrito - Paddington Station",
+    "address": {
+      "street": "UNIT 18, THE LAWN, PADDINGTON STATION",
+      "city": "England",
+      "postal_code": "W2 1HB",
+      "country": "United Kingdom",
+      "full_address": "UNIT 18, THE LAWN, PADDINGTON STATION, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 51.5159981,
+      "lng": -0.1766912
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U31EAE"
+      },
+      "Id": "a2Pc40000001U31EAE",
+      "Name": "Barburrito - Paddington Station",
+      "Street__c": "UNIT 18, THE LAWN, PADDINGTON STATION",
+      "Postal_Code__c": "W2 1HB",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 51.5159981,
+      "lng__c": -0.1766912,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U32EAE",
+    "salesforce_id": "a2Pc40000001U32EAE",
+    "name": "Barburrito - Manchester Airport T2",
+    "address": {
+      "street": "TERMINAL 2 DEPARTURES, MANCHESTER AIRPORT",
+      "city": "England",
+      "postal_code": "M90 1QX",
+      "country": "United Kingdom",
+      "full_address": "TERMINAL 2 DEPARTURES, MANCHESTER AIRPORT, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.3680295,
+      "lng": -2.2816847
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U32EAE"
+      },
+      "Id": "a2Pc40000001U32EAE",
+      "Name": "Barburrito - Manchester Airport T2",
+      "Street__c": "TERMINAL 2 DEPARTURES, MANCHESTER AIRPORT",
+      "Postal_Code__c": "M90 1QX",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.3680295,
+      "lng__c": -2.2816847,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U33EAE",
+    "salesforce_id": "a2Pc40000001U33EAE",
+    "name": "Barburrito - Manchester Arndale",
+    "address": {
+      "street": "MANCHESTER ARNDALE",
+      "city": "England",
+      "postal_code": "M4 1AZ",
+      "country": "United Kingdom",
+      "full_address": "MANCHESTER ARNDALE, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.4835467,
+      "lng": -2.2420169
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U33EAE"
+      },
+      "Id": "a2Pc40000001U33EAE",
+      "Name": "Barburrito - Manchester Arndale",
+      "Street__c": "MANCHESTER ARNDALE",
+      "Postal_Code__c": "M4 1AZ",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.4835467,
+      "lng__c": -2.2420169,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U34EAE",
+    "salesforce_id": "a2Pc40000001U34EAE",
+    "name": "Barburrito - Manchester Piccadilly Gardens",
+    "address": {
+      "street": "1 PICCADILLY GARDENs",
+      "city": "England",
+      "postal_code": "M1 1RG",
+      "country": "United Kingdom",
+      "full_address": "1 PICCADILLY GARDENs, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.480349,
+      "lng": -2.2364387
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U34EAE"
+      },
+      "Id": "a2Pc40000001U34EAE",
+      "Name": "Barburrito - Manchester Piccadilly Gardens",
+      "Street__c": "1 PICCADILLY GARDENs",
+      "Postal_Code__c": "M1 1RG",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.480349,
+      "lng__c": -2.2364387,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U35EAE",
+    "salesforce_id": "a2Pc40000001U35EAE",
+    "name": "Barburrito - Trafford Centre",
+    "address": {
+      "street": "134 THE ORIENT, THE TRAFFORD CENTRE",
+      "city": "Stretford",
+      "postal_code": "M17 8EH",
+      "country": "United Kingdom",
+      "full_address": "134 THE ORIENT, THE TRAFFORD CENTRE, Stretford, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.465808,
+      "lng": -2.347621
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U35EAE"
+      },
+      "Id": "a2Pc40000001U35EAE",
+      "Name": "Barburrito - Trafford Centre",
+      "Street__c": "134 THE ORIENT, THE TRAFFORD CENTRE",
+      "Postal_Code__c": "M17 8EH",
+      "City__c": "Stretford",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.465808,
+      "lng__c": -2.347621,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U36EAE",
+    "salesforce_id": "a2Pc40000001U36EAE",
+    "name": "Barburrito - Nottingham",
+    "address": {
+      "street": "22 KING STREET",
+      "city": "England",
+      "postal_code": "NG1 2As",
+      "country": "United Kingdom",
+      "full_address": "22 KING STREET, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 52.9546697,
+      "lng": -1.1493416
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U36EAE"
+      },
+      "Id": "a2Pc40000001U36EAE",
+      "Name": "Barburrito - Nottingham",
+      "Street__c": "22 KING STREET",
+      "Postal_Code__c": "NG1 2As",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 52.9546697,
+      "lng__c": -1.1493416,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U37EAE",
+    "salesforce_id": "a2Pc40000001U37EAE",
+    "name": "Barburrito - Sheffield Meadowhall",
+    "address": {
+      "street": "MEADOWHALL CENTRE",
+      "city": "England",
+      "postal_code": "S9 1EP",
+      "country": "United Kingdom",
+      "full_address": "MEADOWHALL CENTRE, England, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 53.4139328,
+      "lng": -1.412974
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U37EAE"
+      },
+      "Id": "a2Pc40000001U37EAE",
+      "Name": "Barburrito - Sheffield Meadowhall",
+      "Street__c": "MEADOWHALL CENTRE",
+      "Postal_Code__c": "S9 1EP",
+      "City__c": "England",
+      "Country__c": "United Kingdom",
+      "lat__c": 53.4139328,
+      "lng__c": -1.412974,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001U38EAE",
+    "salesforce_id": "a2Pc40000001U38EAE",
+    "name": "Barburrito - Cardiff",
+    "address": {
+      "street": "ST DAVIDS",
+      "city": "Wales",
+      "postal_code": "CF10 2EF",
+      "country": "United Kingdom",
+      "full_address": "ST DAVIDS, Wales, United Kingdom"
+    },
+    "coordinates": {
+      "lat": 51.4792748,
+      "lng": -3.1742173
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": null,
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001U38EAE"
+      },
+      "Id": "a2Pc40000001U38EAE",
+      "Name": "Barburrito - Cardiff",
+      "Street__c": "ST DAVIDS",
+      "Postal_Code__c": "CF10 2EF",
+      "City__c": "Wales",
+      "Country__c": "United Kingdom",
+      "lat__c": 51.4792748,
+      "lng__c": -3.1742173,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP1EAM",
+    "salesforce_id": "a2Pc40000001UP1EAM",
+    "name": "Brezelkönig Bahnhofsplatz Aarau",
+    "address": {
+      "street": "Bahnhofplatz 3",
+      "city": "Aarau",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 3, Aarau, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.39175150000001,
+      "lng": 8.0522683
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP1EAM"
+      },
+      "Id": "a2Pc40000001UP1EAM",
+      "Name": "Brezelkönig Bahnhofsplatz Aarau",
+      "Street__c": "Bahnhofplatz 3",
+      "City__c": "Aarau",
+      "Country__c": "Switzerland",
+      "lat__c": 47.39175150000001,
+      "lng__c": 8.0522683,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP2EAM",
+    "salesforce_id": "a2Pc40000001UP2EAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Bahnhofring",
+      "city": "Bülach",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofring, Bülach, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.5232561,
+      "lng": 8.5372329
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP2EAM"
+      },
+      "Id": "a2Pc40000001UP2EAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Bahnhofring",
+      "City__c": "Bülach",
+      "Country__c": "Switzerland",
+      "lat__c": 47.5232561,
+      "lng__c": 8.5372329,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP3EAM",
+    "salesforce_id": "a2Pc40000001UP3EAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Check in, Halle 3",
+      "city": "Kloten",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Check in, Halle 3, Kloten, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.451049,
+      "lng": 8.5607645
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP3EAM"
+      },
+      "Id": "a2Pc40000001UP3EAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Check in, Halle 3",
+      "City__c": "Kloten",
+      "Country__c": "Switzerland",
+      "lat__c": 47.451049,
+      "lng__c": 8.5607645,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP4EAM",
+    "salesforce_id": "a2Pc40000001UP4EAM",
+    "name": "Brezelkönig Glattzentrum, Wallisellen",
+    "address": {
+      "street": "Neue Winterthurerstrasse 99",
+      "city": "Wallisellen",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Neue Winterthurerstrasse 99, Wallisellen, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.40845340000001,
+      "lng": 8.5960556
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP4EAM"
+      },
+      "Id": "a2Pc40000001UP4EAM",
+      "Name": "Brezelkönig Glattzentrum, Wallisellen",
+      "Street__c": "Neue Winterthurerstrasse 99",
+      "City__c": "Wallisellen",
+      "Country__c": "Switzerland",
+      "lat__c": 47.40845340000001,
+      "lng__c": 8.5960556,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP5EAM",
+    "salesforce_id": "a2Pc40000001UP5EAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "HardbrUecke",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "HardbrUecke, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3853205,
+      "lng": 8.5169876
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP5EAM"
+      },
+      "Id": "a2Pc40000001UP5EAM",
+      "Name": "Brezelkönig",
+      "Street__c": "HardbrUecke",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3853205,
+      "lng__c": 8.5169876,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP6EAM",
+    "salesforce_id": "a2Pc40000001UP6EAM",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Museumstrasse 1",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Museumstrasse 1, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3792331,
+      "lng": 8.5362831
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP6EAM"
+      },
+      "Id": "a2Pc40000001UP6EAM",
+      "Name": "Brezelkönig",
+      "Street__c": "Museumstrasse 1",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3792331,
+      "lng__c": 8.5362831,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP7EAM",
+    "salesforce_id": "a2Pc40000001UP7EAM",
+    "name": "Brezelkönig Zürich HB, Shopville",
+    "address": {
+      "street": "Bahnhofplatz 15",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz 15, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3777511,
+      "lng": 8.538122699999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP7EAM"
+      },
+      "Id": "a2Pc40000001UP7EAM",
+      "Name": "Brezelkönig Zürich HB, Shopville",
+      "Street__c": "Bahnhofplatz 15",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3777511,
+      "lng__c": 8.538122699999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP8EAM",
+    "salesforce_id": "a2Pc40000001UP8EAM",
+    "name": "Brezelkönig Zürich HB, Unterführung Sihlquai",
+    "address": {
+      "street": "Sihlquai UnterfUehrung",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Sihlquai UnterfUehrung, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3788315,
+      "lng": 8.536961699999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP8EAM"
+      },
+      "Id": "a2Pc40000001UP8EAM",
+      "Name": "Brezelkönig Zürich HB, Unterführung Sihlquai",
+      "Street__c": "Sihlquai UnterfUehrung",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3788315,
+      "lng__c": 8.536961699999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UP9EAM",
+    "salesforce_id": "a2Pc40000001UP9EAM",
+    "name": "Brezelkönig Bahnhof Oerlikon, Unterführung Ost",
+    "address": {
+      "street": "Hofwiesenstrasse 369",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Hofwiesenstrasse 369, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4124299,
+      "lng": 8.5455934
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UP9EAM"
+      },
+      "Id": "a2Pc40000001UP9EAM",
+      "Name": "Brezelkönig Bahnhof Oerlikon, Unterführung Ost",
+      "Street__c": "Hofwiesenstrasse 369",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4124299,
+      "lng__c": 8.5455934,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UPAEA2",
+    "salesforce_id": "a2Pc40000001UPAEA2",
+    "name": "Brezelkönig Bahnhof Oerlikon, Unterführung Ost",
+    "address": {
+      "street": "UnterfUehrung Ost",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "UnterfUehrung Ost, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.4124299,
+      "lng": 8.5455934
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UPAEA2"
+      },
+      "Id": "a2Pc40000001UPAEA2",
+      "Name": "Brezelkönig Bahnhof Oerlikon, Unterführung Ost",
+      "Street__c": "UnterfUehrung Ost",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.4124299,
+      "lng__c": 8.5455934,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UPBEA2",
+    "salesforce_id": "a2Pc40000001UPBEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Stadelhoferstrasse 8",
+      "city": "Zürich",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Stadelhoferstrasse 8, Zürich, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.3664114,
+      "lng": 8.5488009
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UPBEA2"
+      },
+      "Id": "a2Pc40000001UPBEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Stadelhoferstrasse 8",
+      "City__c": "Zürich",
+      "Country__c": "Switzerland",
+      "lat__c": 47.3664114,
+      "lng__c": 8.5488009,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UPCEA2",
+    "salesforce_id": "a2Pc40000001UPCEA2",
+    "name": "Brezelkönig Flughafen Zürich, Airside Center",
+    "address": {
+      "street": "Airside Center, Level 1",
+      "city": "Kloten",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Airside Center, Level 1, Kloten, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.45240219999999,
+      "lng": 8.560831199999999
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UPCEA2"
+      },
+      "Id": "a2Pc40000001UPCEA2",
+      "Name": "Brezelkönig Flughafen Zürich, Airside Center",
+      "Street__c": "Airside Center, Level 1",
+      "City__c": "Kloten",
+      "Country__c": "Switzerland",
+      "lat__c": 47.45240219999999,
+      "lng__c": 8.560831199999999,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UPDEA2",
+    "salesforce_id": "a2Pc40000001UPDEA2",
+    "name": "Brezelkönig",
+    "address": {
+      "street": "Industriestrasse 15b",
+      "city": "Zug",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Industriestrasse 15b, Zug, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.1730695,
+      "lng": 8.5179264
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UPDEA2"
+      },
+      "Id": "a2Pc40000001UPDEA2",
+      "Name": "Brezelkönig",
+      "Street__c": "Industriestrasse 15b",
+      "City__c": "Zug",
+      "Country__c": "Switzerland",
+      "lat__c": 47.1730695,
+      "lng__c": 8.5179264,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  },
+  {
+    "id": "planted-loc-a2Pc40000001UPEEA2",
+    "salesforce_id": "a2Pc40000001UPEEA2",
+    "name": "Brezelkönig Bahnhof Zug",
+    "address": {
+      "street": "Bahnhofplatz",
+      "city": "Zug",
+      "postal_code": null,
+      "country": "Switzerland",
+      "full_address": "Bahnhofplatz, Zug, Switzerland"
+    },
+    "coordinates": {
+      "lat": 47.1736681,
+      "lng": 8.5153356
+    },
+    "type": "restaurant",
+    "source": "planted-locations-api",
+    "source_url": "https://locations.eatplanted.com/",
+    "brand": "Brezelkoenig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "is_promoted": false,
+    "steak_available": false,
+    "scraped_at": "2025-12-07T21:34:28.896Z",
+    "_raw": {
+      "attributes": {
+        "type": "Store_Locator__c",
+        "url": "/services/data/v65.0/sobjects/Store_Locator__c/a2Pc40000001UPEEA2"
+      },
+      "Id": "a2Pc40000001UPEEA2",
+      "Name": "Brezelkönig Bahnhof Zug",
+      "Street__c": "Bahnhofplatz",
+      "City__c": "Zug",
+      "Country__c": "Switzerland",
+      "lat__c": 47.1736681,
+      "lng__c": 8.5153356,
+      "Is_Promoted__c": false,
+      "Steak_Available__c": false,
+      "Type__c": "Restaurant",
+      "Thumbnail__c": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png"
+    }
+  }
+]

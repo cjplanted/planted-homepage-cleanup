@@ -1,0 +1,131 @@
+{
+  "discoverySession": {
+    "date": "2025-12-08",
+    "method": "Intelligent Chain Discovery Agent",
+    "approach": "Web search on delivery platforms with automatic chain detection and enumeration"
+  },
+  "statistics": {
+    "totalChainsDiscovered": 8,
+    "totalLocationsEnumerated": 234,
+    "countriesCovered": ["DE", "CH", "AT", "LU"],
+    "deliveryPlatformsSearched": ["wolt", "uber_eats", "lieferando", "just_eat", "smood"],
+    "plantedProductsFound": ["planted.chicken", "planted.kebab", "planted.duck", "planted.pulled"]
+  },
+  "chains": [
+    {
+      "name": "dean&david",
+      "file": "dean-david-locations.json",
+      "locations": 118,
+      "countries": ["DE", "AT", "CH", "LU"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Largest Planted partner chain in DACH region"
+    },
+    {
+      "name": "Birdie Birdie Chicken",
+      "file": "birdie-birdie-locations.json",
+      "locations": "50+",
+      "countries": ["DE"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Ghost kitchen model via TastyUrban, 20+ German cities"
+    },
+    {
+      "name": "KAIMUG",
+      "file": "kaimug-locations.json",
+      "locations": 38,
+      "countries": ["CH", "DE"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Thai cuisine chain, franchise model"
+    },
+    {
+      "name": "Nooch Asian Kitchen",
+      "file": "nooch-locations.json",
+      "locations": 9,
+      "countries": ["CH"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Swiss Asian street food chain with planted.chicken dishes"
+    },
+    {
+      "name": "Chidoba Mexican Grill",
+      "file": "chidoba-locations.json",
+      "locations": 9,
+      "countries": ["DE"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Mexican fast-casual, franchise opportunities"
+    },
+    {
+      "name": "Stadtsalat",
+      "file": "stadtsalat-locations.json",
+      "locations": 5,
+      "countries": ["DE"],
+      "plantedProducts": ["planted.chicken"],
+      "highlight": "Healthy bowl delivery, venture-funded"
+    },
+    {
+      "name": "doen doen planted kebap",
+      "file": "doen-doen-locations.json",
+      "locations": 3,
+      "countries": ["DE"],
+      "plantedProducts": ["planted.kebab"],
+      "highlight": "First 100% vegan planted.kebab restaurant chain"
+    },
+    {
+      "name": "råbowls",
+      "file": "rabowls-locations.json",
+      "locations": 2,
+      "countries": ["DE"],
+      "plantedProducts": ["planted.chicken", "planted.duck", "planted.pulled"],
+      "highlight": "Only chain with 3 different Planted products"
+    }
+  ],
+  "chainsByCountry": {
+    "DE": {
+      "chains": ["dean&david", "Birdie Birdie Chicken", "KAIMUG", "Chidoba Mexican Grill", "Stadtsalat", "doen doen planted kebap", "råbowls"],
+      "estimatedLocations": 183
+    },
+    "CH": {
+      "chains": ["dean&david", "KAIMUG", "Nooch Asian Kitchen"],
+      "estimatedLocations": 42
+    },
+    "AT": {
+      "chains": ["dean&david"],
+      "estimatedLocations": 7
+    },
+    "LU": {
+      "chains": ["dean&david"],
+      "estimatedLocations": 3
+    }
+  },
+  "chainsByProduct": {
+    "planted.chicken": ["dean&david", "Birdie Birdie Chicken", "KAIMUG", "Nooch Asian Kitchen", "Chidoba Mexican Grill", "Stadtsalat", "råbowls"],
+    "planted.kebab": ["doen doen planted kebap"],
+    "planted.duck": ["råbowls"],
+    "planted.pulled": ["råbowls"]
+  },
+  "notPlantedPartners": [
+    {
+      "name": "Hans im Glück",
+      "reason": "Uses Moving Mountains and Greenforce patties, NOT Planted products",
+      "locations": 66,
+      "note": "Major burger chain but partnered with competitors"
+    }
+  ],
+  "keyInsights": [
+    "dean&david is the largest Planted partner with 118+ locations across 4 countries",
+    "Ghost kitchens (Birdie Birdie) represent a major distribution channel with 50+ locations",
+    "Switzerland has strong Planted presence: KAIMUG (25+ locations), Nooch (9 locations), dean&david (5-8 locations)",
+    "doen doen is unique as the only 100% vegan planted.kebab restaurant chain",
+    "råbowls is unique in offering 3 different Planted products (chicken, duck, pulled)",
+    "Delivery platforms are the primary distribution channel - most chains are delivery-focused",
+    "Total: ~234 restaurant locations serving Planted products across 8 chains"
+  ],
+  "dataFiles": [
+    "dean-david-locations.json",
+    "birdie-birdie-locations.json",
+    "kaimug-locations.json",
+    "nooch-locations.json",
+    "chidoba-locations.json",
+    "stadtsalat-locations.json",
+    "doen-doen-locations.json",
+    "rabowls-locations.json"
+  ]
+}

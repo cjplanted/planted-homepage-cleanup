@@ -1,0 +1,108 @@
+{
+  "chain": {
+    "name": "Nooch Asian Kitchen",
+    "type": "chain",
+    "concept": "Asian street food & fusion",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      {
+        "name": "Fried Rice with planted.chicken",
+        "description": "Fried Rice with planted.chicken, vegetables and egg, garnished with bean sprouts, chili and coriander - can be made vegan on request",
+        "plantedProduct": "planted.chicken"
+      },
+      {
+        "name": "Sweet'n'Sour planted.chicken",
+        "description": "planted.chicken in fine tempura batter with peppers, pineapple, homemade Sweet'n'Sour Sauce and jasmine rice",
+        "plantedProduct": "planted.chicken"
+      },
+      {
+        "name": "Kari Sach Moan",
+        "description": "Cambodian curry with planted chicken, water spinach, broccoli, lotus roots and green pepper, served with jasmine rice",
+        "plantedProduct": "planted.chicken"
+      }
+    ],
+    "website": "https://www.nooch.ch",
+    "storeLocatorUrl": "https://www.nooch.ch/en/locations",
+    "notes": "Asian street food chain in Switzerland. Offers wok pans, curries, dumplings, and sushi."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "high",
+    "signals": [
+      "Store locator page exists",
+      "8+ locations across Switzerland",
+      "Multiple delivery platforms (Uber Eats)",
+      "Consistent branding"
+    ]
+  },
+  "totalLocations": 9,
+  "countries": ["CH"],
+  "locations": [
+    {
+      "city": "Zürich",
+      "name": "Nooch Steinfels",
+      "address": "Heinrichstrasse 267",
+      "country": "CH",
+      "deliveryPlatforms": ["uber_eats"],
+      "uberEatsUrl": "https://www.ubereats.com/ch/brand-city/zürich-zh/nooch-asian-kitchen"
+    },
+    {
+      "city": "Zürich",
+      "name": "Nooch Badenerstrasse",
+      "country": "CH",
+      "deliveryPlatforms": ["uber_eats"],
+      "uberEatsUrl": "https://www.ubereats.com/ch/store/nooch-asian-kitchen-badenerstrasse/KEEw39QXS4qeonR4BIC86w"
+    },
+    {
+      "city": "Zürich",
+      "name": "Nooch Zürich-West @ Kitchen Republic",
+      "country": "CH"
+    },
+    {
+      "city": "Basel",
+      "name": "Nooch Singerhaus",
+      "country": "CH"
+    },
+    {
+      "city": "Bern",
+      "name": "Nooch Bern",
+      "address": "Viktoriapl. 1",
+      "postalCode": "3013",
+      "country": "CH"
+    },
+    {
+      "city": "Ebikon",
+      "name": "Nooch Mall of Switzerland",
+      "country": "CH",
+      "website": "https://www.noochebikon.ch/"
+    },
+    {
+      "city": "Uster",
+      "name": "Nooch Bankstrasse",
+      "country": "CH"
+    },
+    {
+      "city": "Wallisellen",
+      "name": "Nooch Richti",
+      "country": "CH"
+    },
+    {
+      "city": "Kriens",
+      "name": "Nooch Mattenhof",
+      "country": "CH"
+    }
+  ],
+  "deliveryPlatformSummary": {
+    "uber_eats": {
+      "brandPage": "https://www.ubereats.com/ch/brand-city/zürich-zh/nooch-asian-kitchen",
+      "cities": ["Zürich"]
+    }
+  },
+  "openingHours": {
+    "kitchenClose": {
+      "monSat": "22:00",
+      "sun": "21:30"
+    }
+  }
+}

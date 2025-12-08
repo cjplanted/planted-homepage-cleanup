@@ -1,0 +1,135 @@
+{
+  "chain": {
+    "name": "KAIMUG",
+    "type": "chain",
+    "founded": 1994,
+    "origin": "Asian streetfood cart",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      {
+        "name": "Veganes Thai-Gericht mit planted.chicken",
+        "description": "Planted chicken (pea protein) with broccoli, bamboo, carrots, cabbage, onions, bean sprouts, mushrooms, black mushrooms in soy sauce, served with jasmine rice",
+        "plantedProduct": "planted.chicken"
+      }
+    ],
+    "website": "https://www.kaimug.ch",
+    "groupWebsite": "https://kaimug-group.de",
+    "notes": "Authentic Thai cuisine chain with franchise model. Official Planted partnership."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "high",
+    "signals": [
+      "38 business units total",
+      "Franchise model",
+      "Multiple countries (CH, DE)",
+      "Official Planted partnership announcement"
+    ]
+  },
+  "totalLocations": 38,
+  "countries": ["CH", "DE"],
+  "locationSummary": {
+    "Switzerland": {
+      "total": "~25 (including 13 franchise)",
+      "regions": ["Zürich area (~10)", "Other Swiss cities"]
+    },
+    "Germany": {
+      "total": "3 franchise + company-owned",
+      "cities": ["Berlin", "Frankfurt", "München", "Roppenheim"]
+    }
+  },
+  "locations": {
+    "Switzerland": [
+      {
+        "city": "Zürich",
+        "name": "KAIMUG Restaurant",
+        "country": "CH",
+        "deliveryPlatforms": ["smood"]
+      },
+      {
+        "city": "Wallisellen",
+        "name": "KAIMUG Glattzentrum",
+        "address": "Neue Winterthurerstrasse 99",
+        "postalCode": "8304",
+        "country": "CH",
+        "deliveryPlatforms": ["smood"]
+      },
+      {
+        "city": "Pfäffikon SZ",
+        "name": "KAIMUG Seedamm-Center",
+        "country": "CH"
+      },
+      {
+        "city": "Zürich",
+        "name": "KAIMUG Sihlquai",
+        "country": "CH",
+        "deliveryPlatforms": ["smood"]
+      },
+      {
+        "city": "Zürich",
+        "name": "KAIMUG Stadelhofen",
+        "address": "Falkenstrasse 21",
+        "country": "CH"
+      },
+      {
+        "city": "Zürich",
+        "name": "KAIMUG HB Halle Landesmuseum",
+        "country": "CH"
+      },
+      {
+        "city": "Zürich",
+        "name": "KAIMUG Neumarkt Oerlikon",
+        "country": "CH"
+      },
+      {
+        "city": "Zürich",
+        "name": "KAIMUG Altstetten",
+        "country": "CH"
+      },
+      {
+        "city": "Regensdorf",
+        "name": "KAIMUG Regensdorf",
+        "country": "CH"
+      }
+    ],
+    "Germany": [
+      {
+        "city": "München",
+        "name": "KAIMUG Karlsplatz",
+        "address": "Karlsplatz, 1. UG",
+        "postalCode": "80335",
+        "country": "DE"
+      },
+      {
+        "city": "München",
+        "name": "KAIMUG Therme Erding",
+        "country": "DE"
+      },
+      {
+        "city": "Berlin",
+        "name": "KAIMUG Berlin (Franchise)",
+        "country": "DE",
+        "type": "franchise"
+      },
+      {
+        "city": "Frankfurt",
+        "name": "KAIMUG Frankfurt (Franchise)",
+        "country": "DE",
+        "type": "franchise"
+      },
+      {
+        "city": "Roppenheim",
+        "name": "KAIMUG Roppenheim (Franchise)",
+        "country": "DE",
+        "type": "franchise"
+      }
+    ]
+  },
+  "deliveryPlatformSummary": {
+    "smood": {
+      "country": "CH",
+      "cities": ["Zürich", "Wallisellen"]
+    }
+  }
+}

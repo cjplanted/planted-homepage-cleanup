@@ -334,6 +334,21 @@ export const chainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
+    id: 'dd-luzern',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Luzern',
+    city: 'Luzern',
+    address: 'Morgartenstrasse 4',
+    postalCode: '6003',
+    country: 'ch',
+    coordinates: { lat: 47.0502, lng: 8.3093 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/store/dean-david-luzern', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
     id: 'dd-luxembourg',
     chainId: 'dean-david',
     chainName: 'dean&david',

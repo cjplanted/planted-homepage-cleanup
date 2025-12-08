@@ -1,0 +1,116 @@
+{
+  "chain": {
+    "name": "Stadtsalat",
+    "type": "chain",
+    "founded": 2016,
+    "founders": ["Marcus Berg", "Tom Smets"],
+    "headquarters": "Große Theaterstraße 31-35, 20354 Hamburg",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      {
+        "name": "Vegan Fit Planted",
+        "description": "Bio-Quinoa, chickpea, planted.chicken, broccoli, carrot-lax, pea-guacamole, beetroot hummus, spinach, bio-cashew, pomegranate, bio-garden cress with cucumber-tahini dressing",
+        "price": "13.95-15.95",
+        "currency": "EUR",
+        "tags": ["vegan", "organic"]
+      },
+      {
+        "name": "Mexican Taco Planted",
+        "description": "Bio-rice, planted.chicken, sweet potato, red cabbage, black bio-bean, tomato, pea-guacamole, arugula, tortilla chips, lime, green chili, coriander with chipotle dressing",
+        "price": "13.95-15.95",
+        "currency": "EUR",
+        "tags": ["vegan"]
+      },
+      {
+        "name": "Caesar Planted",
+        "description": "planted.chicken, cucumber, tomato, leaf salads, romana, croutons, spinach, bio-grana padano, lime with caesar dressing",
+        "price": "13.95-15.95",
+        "currency": "EUR",
+        "tags": ["vegetarian"]
+      },
+      {
+        "name": "Classy Kebap Planted",
+        "description": "planted.chicken kebab style with coleslaw, potato salad, pumpkin, tomato, leaf salads, red onion, spinach, bio-pumpkin seeds, bio-garden cress with ranch dressing",
+        "price": "13.95-15.95",
+        "currency": "EUR"
+      }
+    ],
+    "website": "https://stadtsalat.de",
+    "values": ["organic", "sustainable", "healthy", "recyclable packaging", "low food waste", "seasonal local products"],
+    "notes": "Salad and bowl delivery chain focused on fresh, organic ingredients. Uses planted.chicken as plant-based protein option."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "medium",
+    "signals": [
+      "5 cities confirmed (Hamburg, Berlin, Frankfurt, Köln, Düsseldorf)",
+      "Venture-funded (€5M+ raised)",
+      "Expanding to German-speaking region",
+      "Multiple delivery platforms"
+    ]
+  },
+  "totalLocations": 5,
+  "countries": ["DE"],
+  "locations": [
+    {
+      "city": "Hamburg",
+      "name": "Hamburg",
+      "address": "Große Theaterstraße 31-35",
+      "postalCode": "20354",
+      "country": "DE",
+      "openingHours": {
+        "monFri": "11:30-20:00",
+        "satSun": "12:00-20:00"
+      },
+      "deliveryPlatforms": ["uber_eats", "wolt"],
+      "uberEatsUrl": "https://www.ubereats.com/de/store/stadtsalat-salate-&-bowls-hamburg/cyWtPSydVQujqwBw5001IA",
+      "woltUrl": "https://wolt.com/en/deu/hamburg/restaurant/stadtsalat-hamburg",
+      "isHeadquarters": true
+    },
+    {
+      "city": "Berlin",
+      "name": "Berlin Mitte",
+      "address": "Berlin-Mitte",
+      "country": "DE",
+      "opened": "July 2019",
+      "deliveryPlatforms": ["uber_eats", "wolt"],
+      "uberEatsUrl": "https://www.ubereats.com/de/store/stadtsalat-salate-&-bowls-berlin/LFmYSk-TXDSD64x310mgeA",
+      "woltUrl": "https://wolt.com/en/deu/berlin/restaurant/stadtsalat-berlin",
+      "notes": "First flagship store outside Hamburg"
+    },
+    {
+      "city": "Frankfurt",
+      "name": "Frankfurt am Main",
+      "country": "DE",
+      "opened": "Early 2020",
+      "deliveryPlatforms": ["uber_eats", "wolt"]
+    },
+    {
+      "city": "Köln",
+      "name": "Cologne",
+      "country": "DE",
+      "deliveryPlatforms": ["uber_eats", "wolt"]
+    },
+    {
+      "city": "Düsseldorf",
+      "name": "Düsseldorf",
+      "country": "DE",
+      "status": "coming soon",
+      "notes": "Expansion announced"
+    }
+  ],
+  "deliveryPlatformSummary": {
+    "uber_eats": {
+      "brandPage": "https://www.ubereats.com/de-en/brand-city/hamburg-hh/stadtsalat",
+      "cities": ["Hamburg", "Berlin", "Frankfurt", "Köln"]
+    },
+    "wolt": {
+      "cities": ["Hamburg", "Berlin", "Frankfurt", "Köln"]
+    }
+  },
+  "funding": {
+    "totalRaised": "5M+ EUR",
+    "investors": ["Triodos Food Transition Europe Fund"]
+  }
+}

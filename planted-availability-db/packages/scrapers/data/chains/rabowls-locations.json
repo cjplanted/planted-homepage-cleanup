@@ -1,0 +1,74 @@
+{
+  "chain": {
+    "name": "råbowls",
+    "type": "chain",
+    "concept": "Healthy bowl restaurant",
+    "plantedProducts": ["planted.chicken", "planted.duck", "planted.pulled"],
+    "plantedDishes": [
+      {
+        "name": "Mad Mediterranean",
+        "description": "Lemon-herbs planted.chicken with Mediterranean flavors",
+        "plantedProduct": "planted.chicken"
+      },
+      {
+        "name": "Calming Curry",
+        "description": "Curry planted.chicken bowl",
+        "plantedProduct": "planted.chicken"
+      },
+      {
+        "name": "Decadent Duck",
+        "description": "Hoisin planted.duck bowl",
+        "plantedProduct": "planted.duck"
+      },
+      {
+        "name": "Cheating Chili",
+        "description": "BBQ chili planted.pulled bowl",
+        "plantedProduct": "planted.pulled"
+      },
+      {
+        "name": "Sōre Slayer BBQ",
+        "description": "Double protein planted.pulled with BBQ",
+        "plantedProduct": "planted.pulled"
+      }
+    ],
+    "website": "https://rabowls.de",
+    "notes": "Features three different Planted products - chicken, duck, and pulled. Strong plant-based focus."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "medium",
+    "signals": [
+      "Multiple delivery platform presence",
+      "Brand-style naming",
+      "2 Hamburg locations confirmed"
+    ]
+  },
+  "totalLocations": 2,
+  "countries": ["DE"],
+  "locations": [
+    {
+      "city": "Hamburg",
+      "name": "råbowls Eppendorf",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt", "lieferando"],
+      "woltUrl": "https://wolt.com/en/deu/hamburg/restaurant/rabowls-eppendorf"
+    },
+    {
+      "city": "Hamburg",
+      "name": "råbowls Winterhude",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt", "lieferando"],
+      "woltUrl": "https://wolt.com/en/deu/hamburg/restaurant/rabowls-winterhude"
+    }
+  ],
+  "deliveryPlatformSummary": {
+    "wolt": {
+      "cities": ["Hamburg"]
+    },
+    "lieferando": {
+      "cities": ["Hamburg"]
+    }
+  },
+  "uniqueFeature": "One of few restaurants offering planted.duck and planted.pulled in addition to planted.chicken"
+}

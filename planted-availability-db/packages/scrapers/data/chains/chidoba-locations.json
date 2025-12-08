@@ -1,0 +1,114 @@
+{
+  "chain": {
+    "name": "Chidoba Mexican Grill",
+    "type": "chain",
+    "businessModel": "Franchise",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      {
+        "name": "planted.chicken Burrito",
+        "description": "Seasoned planted.chicken with homemade guacamole, salad, rice, beans, and salsa",
+        "plantedProduct": "planted.chicken"
+      }
+    ],
+    "website": "https://www.chidoba.com",
+    "storeLocatorUrl": "https://www.chidoba.com/standorte",
+    "notes": "Mexican fast-casual chain with franchise opportunities. Offers planted.chicken as vegan protein option."
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "Intelligent Chain Discovery Agent",
+  "chainDetection": {
+    "confidence": "high",
+    "signals": [
+      "Store locator page (chidoba.com/standorte)",
+      "Franchise information available",
+      "Multiple locations across Germany",
+      "Multiple delivery platforms"
+    ]
+  },
+  "totalLocations": 9,
+  "countries": ["DE"],
+  "locations": [
+    {
+      "city": "Wiesbaden",
+      "name": "Bahnhofsplatz",
+      "address": "Bahnhofsplatz 3",
+      "postalCode": "65189",
+      "country": "DE",
+      "openingHours": {
+        "monSat": "11:00-20:00",
+        "sun": "Closed"
+      }
+    },
+    {
+      "city": "Hofheim",
+      "name": "Niederhofheimer Str.",
+      "address": "Niederhofheimer Str. 48",
+      "postalCode": "65719",
+      "country": "DE",
+      "openingHours": {
+        "monThu": "11:00-21:00",
+        "friSat": "11:00-22:00",
+        "sun": "13:00-21:00"
+      }
+    },
+    {
+      "city": "Frankfurt",
+      "name": "Bahnhofsviertel (Kaiserstraße)",
+      "address": "Kaiserstraße 49",
+      "postalCode": "60329",
+      "country": "DE",
+      "deliveryPlatforms": ["wolt"],
+      "woltUrl": "https://wolt.com/en/deu/frankfurt/restaurant/chidoba-mexican-grill"
+    },
+    {
+      "city": "Frankfurt",
+      "name": "NordWestZentrum",
+      "address": "Nidacorso 5",
+      "postalCode": "60439",
+      "country": "DE"
+    },
+    {
+      "city": "Sulzbach (Taunus)",
+      "name": "Main-Taunus-Zentrum",
+      "address": "Main-Taunus-Zentrum 1",
+      "postalCode": "65843",
+      "country": "DE"
+    },
+    {
+      "city": "Bad Soden am Taunus",
+      "name": "Rosenthalstraße",
+      "address": "Rosenthalstraße 2",
+      "postalCode": "65812",
+      "country": "DE"
+    },
+    {
+      "city": "Berlin",
+      "name": "Lichtenberg",
+      "address": "Prerower Platz 1 Basement",
+      "postalCode": "13051",
+      "country": "DE"
+    },
+    {
+      "city": "Mainz",
+      "name": "Schillerstraße",
+      "address": "Schillerstr. 50",
+      "postalCode": "55116",
+      "country": "DE",
+      "deliveryPlatforms": ["lieferando"]
+    }
+  ],
+  "franchise": {
+    "available": true,
+    "types": ["single-unit", "multi-unit", "location-specific (airports, amusement parks)"],
+    "notes": "Actively seeking franchise partners nationwide (bundesweit)"
+  },
+  "deliveryPlatformSummary": {
+    "wolt": {
+      "cities": ["Frankfurt"]
+    },
+    "lieferando": {
+      "cities": ["Mainz"]
+    }
+  }
+}

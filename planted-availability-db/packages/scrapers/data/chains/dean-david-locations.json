@@ -1,0 +1,581 @@
+{
+  "chain": {
+    "name": "dean&david",
+    "type": "chain",
+    "plantedProducts": ["planted.chicken"],
+    "plantedDishes": [
+      "Planted Tuscany Chicken Salad",
+      "Caesar Salad with Planted Chicken",
+      "Crunchy Chicken Bowl with Planted",
+      "Chicken Vitality Salad with Planted"
+    ],
+    "website": "https://deananddavid.com",
+    "deliveryUrl": "https://delivery.deananddavid.ch",
+    "notes": "Offers planted.chicken as swap option in most dishes at no extra charge"
+  },
+  "discoveredAt": "2025-12-08",
+  "source": "WebSearch chain enumeration",
+  "totalLocations": 118,
+  "summary": {
+    "Germany": "~100 restaurants",
+    "Austria": "7 restaurants",
+    "Switzerland": "8 restaurants",
+    "Luxembourg": "3 restaurants"
+  },
+  "locations": {
+    "Germany": [
+      {
+        "city": "Aachen",
+        "name": "Elisenbrunnen",
+        "address": "Friedrich-Wilhelm-Platz 12",
+        "postalCode": "52062",
+        "country": "DE"
+      },
+      {
+        "city": "Augsburg",
+        "name": "Rathausplatz",
+        "address": "Philippine-Welser-Str. 14",
+        "postalCode": "86150",
+        "country": "DE"
+      },
+      {
+        "city": "Bad Kreuznach",
+        "name": "Kreuzstr.",
+        "address": "Kreuzstraße 6",
+        "postalCode": "55543",
+        "country": "DE"
+      },
+      {
+        "city": "Berlin",
+        "name": "Kranzlereck",
+        "address": "Kurfürstendamm 21",
+        "postalCode": "10719",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt", "uber_eats", "lieferando"]
+      },
+      {
+        "city": "Berlin",
+        "name": "Monbijouplatz",
+        "address": "Monbijouplatz 5",
+        "postalCode": "10178",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt", "uber_eats"]
+      },
+      {
+        "city": "Berlin",
+        "name": "Friedrichstr.",
+        "address": "Friedrichstr. 96",
+        "postalCode": "10117",
+        "country": "DE",
+        "deliveryPlatforms": ["uber_eats"]
+      },
+      {
+        "city": "Berlin",
+        "name": "Schönhauser Allee Arcaden",
+        "address": "Schönhauser Allee 80",
+        "postalCode": "10439",
+        "country": "DE"
+      },
+      {
+        "city": "Berlin",
+        "name": "Hauptbahnhof",
+        "address": "Europaplatz 1",
+        "postalCode": "10557",
+        "country": "DE"
+      },
+      {
+        "city": "Berlin",
+        "name": "Marienkirche",
+        "address": "Karl-Liebknecht-Str. 7",
+        "postalCode": "10178",
+        "country": "DE"
+      },
+      {
+        "city": "Berlin",
+        "name": "Mühlenstr.",
+        "address": "Mühlenstr.",
+        "postalCode": "10243",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Berlin",
+        "name": "Schloßstraße",
+        "address": "Schloßstraße",
+        "postalCode": "12163",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Berlin",
+        "name": "Potsdamer Platz",
+        "address": "Potsdamer Platz",
+        "postalCode": "10785",
+        "country": "DE",
+        "deliveryPlatforms": ["uber_eats", "wolt"]
+      },
+      {
+        "city": "Bielefeld",
+        "name": "Jahnplatz",
+        "address": "Oberntorwall 24",
+        "postalCode": "33602",
+        "country": "DE"
+      },
+      {
+        "city": "Bonn",
+        "name": "Markt",
+        "address": "Markt 3",
+        "postalCode": "53111",
+        "country": "DE"
+      },
+      {
+        "city": "Braunschweig",
+        "name": "Sack",
+        "address": "Sack 24",
+        "postalCode": "38100",
+        "country": "DE"
+      },
+      {
+        "city": "Bremen",
+        "name": "Pieperstr.",
+        "address": "Pieperstr. 10-12",
+        "postalCode": "28195",
+        "country": "DE"
+      },
+      {
+        "city": "Dortmund",
+        "name": "City",
+        "address": "Silberstraße 21",
+        "postalCode": "44137",
+        "country": "DE"
+      },
+      {
+        "city": "Düsseldorf",
+        "name": "Altstadt",
+        "address": "Hunsrückenstr. 44",
+        "postalCode": "40213",
+        "country": "DE"
+      },
+      {
+        "city": "Frankfurt",
+        "name": "Bockenheimer Landstr.",
+        "address": "Bockenheimer Landstr. 51-53",
+        "postalCode": "60325",
+        "country": "DE",
+        "phone": "+49 69 50697724",
+        "email": "frankfurt.bockenheim@deananddavid.com"
+      },
+      {
+        "city": "Frankfurt",
+        "name": "Kaiserstr.",
+        "address": "Kaiserstr. 33",
+        "postalCode": "60329",
+        "country": "DE",
+        "phone": "+49 69 80088363",
+        "email": "frankfurt.kaiserstrasse@deananddavid.com"
+      },
+      {
+        "city": "Frankfurt",
+        "name": "Mainzer Landstr.",
+        "address": "Mainzer Landstr. 36",
+        "postalCode": "60325",
+        "country": "DE",
+        "phone": "+49 69 77012761",
+        "email": "frankfurt.mainzer.landstrasse@deananddavid.com"
+      },
+      {
+        "city": "Frankfurt",
+        "name": "Bahnhofsplatz",
+        "address": "Bahnhofsplatz",
+        "postalCode": "60329",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Frankfurt",
+        "name": "Tower 185",
+        "address": "Tower 185",
+        "postalCode": "60327",
+        "country": "DE",
+        "email": "frankfurt.tower185@deananddavid.com"
+      },
+      {
+        "city": "Freiburg",
+        "name": "Hauptbahnhof",
+        "address": "Hauptbahnhof",
+        "postalCode": "79098",
+        "country": "DE"
+      },
+      {
+        "city": "Hamburg",
+        "name": "Jungfernstieg",
+        "address": "Europapassage, Ballindamm 40",
+        "postalCode": "20095",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Hamburg",
+        "name": "Altona",
+        "address": "Scheel-Plessen-Straße 17",
+        "postalCode": "22765",
+        "country": "DE",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Hamburg",
+        "name": "Georgsplatz",
+        "address": "Georgsplatz",
+        "postalCode": "20099",
+        "country": "DE"
+      },
+      {
+        "city": "Hannover",
+        "name": "Lister Meile",
+        "address": "Lister Meile",
+        "postalCode": "30161",
+        "country": "DE"
+      },
+      {
+        "city": "Hannover",
+        "name": "Osterstr.",
+        "address": "Osterstr. 24",
+        "postalCode": "30159",
+        "country": "DE"
+      },
+      {
+        "city": "Heidelberg",
+        "name": "Poststr.",
+        "address": "Poststr. 4",
+        "postalCode": "69115",
+        "country": "DE"
+      },
+      {
+        "city": "Heilbronn",
+        "name": "Sülmerstr.",
+        "address": "Sülmerstr. 27",
+        "postalCode": "74072",
+        "country": "DE"
+      },
+      {
+        "city": "Karlsruhe",
+        "name": "Karl-Friedrich-Straße",
+        "address": "Karl-Friedrich-Straße 22",
+        "postalCode": "76133",
+        "country": "DE"
+      },
+      {
+        "city": "Köln",
+        "name": "Karstadt Warenhaus",
+        "address": "Breite Straße 103-135",
+        "postalCode": "50667",
+        "country": "DE"
+      },
+      {
+        "city": "Köln",
+        "name": "Hauptbahnhof",
+        "address": "Hauptbahnhof",
+        "postalCode": "50667",
+        "country": "DE"
+      },
+      {
+        "city": "Ludwigshafen",
+        "name": "Yorckstr.",
+        "address": "Yorckstr. 1",
+        "postalCode": "67061",
+        "country": "DE"
+      },
+      {
+        "city": "München",
+        "name": "Leopoldstraße",
+        "address": "Leopoldstr. 52",
+        "postalCode": "80802",
+        "country": "DE",
+        "phone": "+49 89 38346262",
+        "email": "muenchen.leopoldstrasse@deananddavid.com",
+        "deliveryPlatforms": ["uber_eats", "lieferando"]
+      },
+      {
+        "city": "München",
+        "name": "Parkstadt Schwabing",
+        "address": "Oskar-Schlemmer-Str. 7",
+        "postalCode": "80807",
+        "country": "DE",
+        "phone": "+49 89 66059353",
+        "email": "muenchen.parkstadt@deananddavid.com"
+      },
+      {
+        "city": "München",
+        "name": "Nymphenburger Höfe",
+        "address": "Nymphenburger Str. 4-12",
+        "postalCode": "80335",
+        "country": "DE",
+        "phone": "+49 89 57949972"
+      },
+      {
+        "city": "München",
+        "name": "Schellingstraße",
+        "address": "Schellingstr. 13",
+        "postalCode": "80799",
+        "country": "DE",
+        "phone": "+49 89 33098318",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "München",
+        "name": "Hauptbahnhof",
+        "address": "Bayerstr. 10A",
+        "postalCode": "80335",
+        "country": "DE"
+      },
+      {
+        "city": "München",
+        "name": "Werksviertel",
+        "address": "Friedenstraße 22",
+        "postalCode": "81671",
+        "country": "DE"
+      },
+      {
+        "city": "München",
+        "name": "Arnulfpark",
+        "address": "Arnulfpark",
+        "postalCode": "80636",
+        "country": "DE",
+        "deliveryPlatforms": ["uber_eats"]
+      },
+      {
+        "city": "München",
+        "name": "Fünf Höfe",
+        "address": "Kardinal-Faulhaber-Str. 11",
+        "postalCode": "80333",
+        "country": "DE"
+      },
+      {
+        "city": "München",
+        "name": "Stachus",
+        "address": "Stachus",
+        "postalCode": "80335",
+        "country": "DE",
+        "phone": "+49 89 51114979"
+      },
+      {
+        "city": "München",
+        "name": "Rosenkavalierplatz",
+        "address": "Rosenkavalierplatz",
+        "postalCode": "81925",
+        "country": "DE",
+        "phone": "+49 89 44469288"
+      },
+      {
+        "city": "München",
+        "name": "Pasing Bahnhof",
+        "address": "Bahnhof Pasing",
+        "postalCode": "81241",
+        "country": "DE",
+        "email": "muenchen.pasing.bhf@deananddavid.com"
+      },
+      {
+        "city": "Nürnberg",
+        "name": "Nürnberg",
+        "address": "TBD",
+        "country": "DE"
+      },
+      {
+        "city": "Stuttgart",
+        "name": "Hauptbahnhof Express",
+        "address": "Arnulf-Klett-Platz 2",
+        "postalCode": "70173",
+        "country": "DE"
+      },
+      {
+        "city": "Stuttgart",
+        "name": "Calwerstraße",
+        "address": "Calwer Str. 60",
+        "postalCode": "70173",
+        "country": "DE",
+        "phone": "+49 711 99785535",
+        "email": "stuttgart.calwerstrasse@deananddavid.com"
+      },
+      {
+        "city": "Grafenwöhr",
+        "name": "U.S. Army Garrison",
+        "address": "U.S. Army Garrison",
+        "postalCode": "92655",
+        "country": "DE",
+        "notes": "Restricted access"
+      }
+    ],
+    "Austria": [
+      {
+        "city": "Wien",
+        "name": "Austria Campus",
+        "address": "Austria Campus",
+        "postalCode": "1020",
+        "country": "AT",
+        "phone": "+43 1 2127493",
+        "email": "wien.austria-campus@deananddavid.com"
+      },
+      {
+        "city": "Wien",
+        "name": "Erste Campus Am Belvedere",
+        "address": "Am Belvedere 1",
+        "postalCode": "1100",
+        "country": "AT",
+        "phone": "+43 17963606",
+        "email": "wien.erste.campus@deananddavid.com"
+      },
+      {
+        "city": "Wien",
+        "name": "Euro Plaza",
+        "address": "Euro Plaza",
+        "postalCode": "1120",
+        "country": "AT"
+      },
+      {
+        "city": "Wien",
+        "name": "Millennium City",
+        "address": "Millennium City",
+        "postalCode": "1200",
+        "country": "AT",
+        "deliveryPlatforms": ["wolt"]
+      },
+      {
+        "city": "Salzburg",
+        "name": "Makartplatz",
+        "address": "Makartplatz 3",
+        "postalCode": "5020",
+        "country": "AT",
+        "phone": "+43 662 230895",
+        "email": "salzburg.makartplatz@deananddavid.com"
+      },
+      {
+        "city": "Graz",
+        "name": "Zinzendorfgasse (Geidorf)",
+        "address": "Zinzendorfgasse 30",
+        "postalCode": "8010",
+        "country": "AT",
+        "phone": "+43 316 415015",
+        "email": "graz.geidorf@deananddavid.com"
+      },
+      {
+        "city": "Graz",
+        "name": "Jakoministrasse",
+        "address": "Jakoministr. 34",
+        "postalCode": "8010",
+        "country": "AT",
+        "phone": "+43 316 840680",
+        "email": "graz.jakoministrasse@deananddavid.com"
+      }
+    ],
+    "Switzerland": [
+      {
+        "city": "Zürich",
+        "name": "Bleicherweg",
+        "address": "Bleicherweg 19",
+        "postalCode": "8002",
+        "country": "CH",
+        "phone": "+41 43 222 48 45",
+        "email": "zh.bleicherweg@deananddavid.ch",
+        "deliveryPlatforms": ["uber_eats"]
+      },
+      {
+        "city": "Zug",
+        "name": "Baarerstrasse",
+        "address": "Baarerstrasse 36",
+        "postalCode": "6300",
+        "country": "CH",
+        "phone": "+41 41 710 10 36",
+        "email": "zg.baarerstrasse@deananddavid.ch",
+        "deliveryPlatforms": ["uber_eats"]
+      },
+      {
+        "city": "Basel",
+        "name": "Centralbahnplatz",
+        "address": "Centralbahnplatz 8",
+        "postalCode": "4051",
+        "country": "CH",
+        "phone": "+41 61 271 21 59",
+        "email": "bs.centralbahnplatz@deananddavid.ch"
+      },
+      {
+        "city": "Bern",
+        "name": "Hirschengraben",
+        "address": "Hirschengraben 10",
+        "postalCode": "3011",
+        "country": "CH",
+        "phone": "+41 31 533 50 33",
+        "email": "be.hirschengraben@deananddavid.ch",
+        "deliveryPlatforms": ["uber_eats"]
+      },
+      {
+        "city": "St. Gallen",
+        "name": "Neumarkt",
+        "address": "Neumarkt 1 + 2",
+        "postalCode": "9000",
+        "country": "CH",
+        "phone": "+41 71 571 08 00",
+        "email": "sg.neumarkt@deananddavid.ch"
+      }
+    ],
+    "Luxembourg": [
+      {
+        "city": "Luxembourg",
+        "name": "Luxembourg 1",
+        "address": "TBD",
+        "country": "LU"
+      },
+      {
+        "city": "Luxembourg",
+        "name": "Luxembourg 2",
+        "address": "TBD",
+        "country": "LU"
+      },
+      {
+        "city": "Luxembourg",
+        "name": "Luxembourg 3",
+        "address": "TBD",
+        "country": "LU"
+      }
+    ]
+  },
+  "deliveryPlatformSummary": {
+    "wolt": {
+      "countries": ["DE", "AT"],
+      "brandPage": "https://wolt.com/en/deu/hamburg/germany_deandavid",
+      "confirmedLocations": [
+        "Berlin Monbijouplatz",
+        "Berlin Mühlenstr.",
+        "Berlin Schloßstraße",
+        "Berlin Potsdamer Platz",
+        "Hamburg Jungfernstieg",
+        "Hamburg Altona",
+        "Frankfurt Bahnhofsplatz",
+        "München Schellingstraße",
+        "Wien Millennium City"
+      ]
+    },
+    "uber_eats": {
+      "countries": ["DE", "CH", "AT"],
+      "confirmedLocations": [
+        "Berlin Friedrichstr.",
+        "Berlin Potsdamer Platz",
+        "München Leopoldstraße",
+        "München Arnulfpark",
+        "Zürich Bleicherweg",
+        "Zug Baarerstrasse",
+        "Bern Hirschengraben"
+      ]
+    },
+    "lieferando": {
+      "countries": ["DE", "AT"],
+      "confirmedLocations": [
+        "München Leopoldstraße"
+      ]
+    },
+    "own_delivery": {
+      "countries": ["CH"],
+      "url": "https://delivery.deananddavid.ch",
+      "plantedMenuUrl": "https://delivery.deananddavid.ch/delivery/de/salads/planted-tuscany-chicken-salad-598p"
+    }
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "discoveredAt": "2024-12-06",
+  "source": "WebSearch discovery",
+  "totalPartners": 15,
+  "partners": [
+    {
+      "name": "dean&david",
+      "type": "chain",
+      "country": "DE",
+      "cities": ["Berlin", "Munich", "Frankfurt", "Bremen", "Düsseldorf", "Hannover", "Stuttgart", "Nürnberg", "Fürth", "Erlangen"],
+      "locationCount": "20+",
+      "products": ["planted.chicken"],
+      "menuItems": ["Bowls", "Salads", "Curries", "Caesar Salad", "Red Thai Curry"],
+      "deliveryPlatforms": ["Wolt", "Uber Eats", "Lieferando"],
+      "woltUrls": [
+        "https://wolt.com/en/deu/berlin/restaurant/deandavid-potsdamer-platz",
+        "https://wolt.com/en/deu/munich/restaurant/deandavid-theresienhhe"
+      ],
+      "uberEatsUrls": [
+        "https://www.ubereats.com/de-en/store/dean&david-berlin-bulowstrasse/idOCsndLVaiDoMTdsK8ryQ",
+        "https://www.ubereats.com/de-en/store/dean&david-berlin-schonhauser-allee/lJmRXT0hQD-XU31F5YxxAw"
+      ],
+      "website": "https://deananddavid.com",
+      "storeLocator": "https://deananddavid.com/en/locations/",
+      "notes": "Offers planted.chicken as swap option in most dishes at no extra charge"
+    },
+    {
+      "name": "Doen Doen Planted Kebap",
+      "type": "restaurant",
+      "country": "DE",
+      "cities": ["Berlin", "Stuttgart"],
+      "products": ["planted.kebab"],
+      "menuItems": ["Planted Kebab", "Vegan Turkish cuisine"],
+      "deliveryPlatforms": ["Wolt"],
+      "woltUrls": [
+        "https://wolt.com/en/deu/berlin/restaurant/doen-doen-planted-kebap-berlin",
+        "https://wolt.com/en/deu/stuttgart/restaurant/doen-doen-planted-kebap"
+      ],
+      "addresses": {
+        "Stuttgart": "Josef-Hirn-Platz 8, 70173 Stuttgart"
+      },
+      "ratings": {
+        "Berlin": 9.2,
+        "Stuttgart": 8.6
+      },
+      "notes": "Dedicated planted kebab restaurant with vegan Turkish cuisine"
+    },
+    {
+      "name": "Zerö Kebab Plant-Based Doener",
+      "type": "restaurant",
+      "country": "DE",
+      "cities": ["Berlin"],
+      "products": ["planted.kebab"],
+      "deliveryPlatforms": ["Wolt"],
+      "ratings": {
+        "Berlin": 9.0
+      },
+      "notes": "Plant-based kebab enjoyment without compromise"
+    },
+    {
+      "name": "Yardbird Southern Fried Chicken",
+      "type": "restaurant",
+      "country": "CH",
+      "cities": ["Zurich"],
+      "products": ["planted.chicken"],
+      "menuItems": ["Planted Chicken (27 CHF)"],
+      "addresses": {
+        "Zurich": "Weststrasse, Wiedikon"
+      },
+      "website": "https://yardbird.ch",
+      "notes": "60-seater restaurant with terrace, planted.chicken as vegetarian/vegan option"
+    },
+    {
+      "name": "Hiltl",
+      "type": "restaurant",
+      "country": "CH",
+      "cities": ["Zurich"],
+      "products": ["planted.chicken", "planted.kebab", "planted.pulled"],
+      "website": "https://hiltl.ch",
+      "notes": "World's oldest vegetarian restaurant. Also operates Planted Bistro at Planted HQ in Kemptthal"
+    },
+    {
+      "name": "NENI Restaurants",
+      "type": "chain",
+      "country": "DE/AT/CH",
+      "cities": ["Berlin", "Munich", "Vienna", "Zurich"],
+      "products": ["planted.chicken"],
+      "website": "https://neni.at",
+      "notes": "Plant-based Israeli cuisine. 'NENI and Planted fit together perfectly'"
+    },
+    {
+      "name": "Figlmüller",
+      "type": "restaurant",
+      "country": "AT",
+      "cities": ["Vienna"],
+      "products": ["planted.schnitzel"],
+      "website": "https://figlmueller.at",
+      "notes": "World-famous schnitzel restaurant. Co-developed planted.schnitzel with Planted"
+    },
+    {
+      "name": "Max & Benito",
+      "type": "chain",
+      "country": "AT",
+      "cities": ["Vienna"],
+      "locationCount": 5,
+      "products": ["planted.chicken"],
+      "menuItems": ["planted.chicken with homemade Mexican achiote marinade"],
+      "notes": "5 locations in Vienna"
+    },
+    {
+      "name": "Tim Raue",
+      "type": "restaurant",
+      "country": "DE",
+      "cities": ["Berlin"],
+      "products": ["planted.chicken"],
+      "notes": "Michelin-starred restaurant"
+    },
+    {
+      "name": "Bullerei by Tim Mälzer",
+      "type": "restaurant",
+      "country": "DE",
+      "cities": ["Hamburg"],
+      "products": ["planted products"],
+      "website": "https://bullerei.com",
+      "notes": "Celebrity chef Tim Mälzer's restaurant"
+    },
+    {
+      "name": "La Piadineria",
+      "type": "chain",
+      "country": "IT",
+      "locationCount": "400+",
+      "products": ["planted.chicken"],
+      "menuItems": ["La Supergreen"],
+      "notes": "Major Italian chain with 400+ stores"
+    },
+    {
+      "name": "Veganitas",
+      "type": "restaurant",
+      "country": "CH",
+      "cities": ["Zurich"],
+      "products": ["planted.chicken"],
+      "notes": "Found in Zurich search results"
+    },
+    {
+      "name": "THE ASH",
+      "type": "restaurant",
+      "country": "DE",
+      "cities": ["Munich"],
+      "products": ["Vegan Chicken Supreme"],
+      "website": "https://the-ash.com",
+      "menuItems": ["Vegan Chicken Supreme with grilled vegetables, rosemary potatoes, chimichurri"],
+      "notes": "May be Planted-based - needs verification"
+    },
+    {
+      "name": "Mildred's",
+      "type": "restaurant",
+      "country": "UK",
+      "cities": ["London"],
+      "products": ["planted products"],
+      "notes": "Vegan restaurant, UK market"
+    },
+    {
+      "name": "The Gate",
+      "type": "restaurant",
+      "country": "UK",
+      "cities": ["London"],
+      "products": ["planted products"],
+      "notes": "Vegetarian restaurant, UK market"
+    }
+  ],
+  "distributors": [
+    {
+      "name": "Pistor",
+      "country": "CH"
+    },
+    {
+      "name": "Saviva",
+      "country": "CH"
+    },
+    {
+      "name": "Transgourmet",
+      "country": "DE/AT/CH"
+    },
+    {
+      "name": "Bianchi",
+      "country": "CH"
+    },
+    {
+      "name": "Bolay",
+      "country": "DE"
+    }
+  ],
+  "stats": {
+    "totalRestaurants": "6,100+",
+    "totalRetailOutlets": "8,700+",
+    "markets": ["Switzerland", "Germany", "Austria", "France", "Italy", "UK", "BeNeLux"]
+  },
+  "officialPages": {
+    "CH": "https://eatplanted.com/pages/gastronomy",
+    "DE_AT": "https://de.eatplanted.com/en/pages/gastronomy",
+    "UK": "https://uk.shop.eatplanted.com/pages/gastronomy",
+    "general": "https://en.eatplanted.com/gastronomie"
+  }
+}
