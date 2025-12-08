@@ -817,8 +817,14 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             }
         }
 
-        // Get closest location for each chain
-        function getClosestChainLocations(lat, lng, country) {
+        // Get delivery radius for a chain
+        function getDeliveryRadius(chainId) {
+            const chain = chainsMeta.find(c => c.id === chainId);
+            return chain?.deliveryRadiusKm || 8; // Default 8km
+        }
+
+        // Get chains that CAN DELIVER to this location (within delivery radius)
+        function getDeliverableChainLocations(lat, lng, country) {
             const countryCodeMap = {
                 'Switzerland': 'ch',
                 'Germany': 'de',
@@ -845,8 +851,18 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                 }
             }
 
+            // CRITICAL: Filter to only chains that can actually deliver
+            // (closest location must be within delivery radius)
+            const deliverable = [];
+            for (const [chainId, loc] of chainMap) {
+                const deliveryRadius = getDeliveryRadius(chainId);
+                if (loc.distance <= deliveryRadius) {
+                    deliverable.push(loc);
+                }
+            }
+
             // Sort by distance
-            return Array.from(chainMap.values()).sort((a, b) => a.distance - b.distance);
+            return deliverable.sort((a, b) => a.distance - b.distance);
         }
 
         // Update chain cards with distances
@@ -958,22 +974,43 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             if (zipLoading) zipLoading.style.display = 'flex';
             if (zipResult) zipResult.style.display = 'none';
 
+            // Hide any existing no-delivery message
+            const existingNoDelivery = document.getElementById('noDeliveryMessage');
+            if (existingNoDelivery) existingNoDelivery.style.display = 'none';
+
             try {
                 const coords = await geocodeZip(zip, countryCode);
                 currentCoords = coords;
 
-                // Get closest locations and update cards
-                const closest = getClosestChainLocations(coords.lat, coords.lng, currentCountry);
-                updateChainCardsWithDistance(closest);
+                // Get DELIVERABLE locations (within delivery radius)
+                const deliverable = getDeliverableChainLocations(coords.lat, coords.lng, currentCountry);
+                updateChainCardsWithDistance(deliverable);
 
                 // Show result
                 if (zipLoading) zipLoading.style.display = 'none';
-                if (zipResult) {
-                    zipResult.style.display = 'flex';
-                    const resultText = zipResult.querySelector('.zip-result-text');
-                    if (resultText) {
-                        resultText.textContent = `${closest.length} restaurants near ${coords.displayName || zip}`;
+
+                if (deliverable.length > 0) {
+                    // Found restaurants that can deliver
+                    if (zipResult) {
+                        zipResult.style.display = 'flex';
+                        const resultText = zipResult.querySelector('.zip-result-text');
+                        if (resultText) {
+                            resultText.textContent = `${deliverable.length} restaurant${deliverable.length > 1 ? 's' : ''} deliver to ${coords.displayName || zip}`;
+                        }
                     }
+                } else {
+                    // NO restaurants can deliver to this location
+                    if (zipResult) {
+                        zipResult.style.display = 'flex';
+                        zipResult.classList.add('no-delivery');
+                        const resultText = zipResult.querySelector('.zip-result-text');
+                        if (resultText) {
+                            resultText.textContent = `No delivery to ${coords.displayName || zip}`;
+                        }
+                    }
+
+                    // Show helpful no-delivery message
+                    showNoDeliveryMessage(coords.displayName || zip);
                 }
 
                 // Switch to delivery tab to show results
@@ -995,13 +1032,63 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             }
         }
 
+        // Show no delivery available message with alternatives
+        function showNoDeliveryMessage(location) {
+            const chainGrid = document.getElementById('chainGrid');
+            if (!chainGrid) return;
+
+            // Check if message already exists
+            let noDeliveryMsg = document.getElementById('noDeliveryMessage');
+            if (!noDeliveryMsg) {
+                noDeliveryMsg = document.createElement('div');
+                noDeliveryMsg.id = 'noDeliveryMessage';
+                noDeliveryMsg.className = 'no-delivery-message';
+                chainGrid.parentNode.insertBefore(noDeliveryMsg, chainGrid);
+            }
+
+            noDeliveryMsg.innerHTML = `
+                <div class="no-delivery-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <h3>No delivery partners in ${location} yet</h3>
+                <p>Our delivery partners don't currently cover this area. But you can still get planted!</p>
+                <div class="no-delivery-alternatives">
+                    <button class="alt-btn" onclick="document.querySelector('[data-tab=retail]')?.click()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        Find retail stores
+                    </button>
+                    <a href="https://shop.eatplanted.com" target="_blank" rel="noopener" class="alt-btn alt-btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        Order online
+                    </a>
+                </div>
+            `;
+            noDeliveryMsg.style.display = 'block';
+        }
+
         // Clear ZIP search
         function clearZipSearch() {
             currentCoords = null;
             if (zipInput) zipInput.value = '';
             if (zipInputContainer) zipInputContainer.style.display = 'block';
-            if (zipResult) zipResult.style.display = 'none';
+            if (zipResult) {
+                zipResult.style.display = 'none';
+                zipResult.classList.remove('no-delivery');
+            }
             if (zipLoading) zipLoading.style.display = 'none';
+
+            // Hide no-delivery message
+            const noDeliveryMsg = document.getElementById('noDeliveryMessage');
+            if (noDeliveryMsg) noDeliveryMsg.style.display = 'none';
 
             clearDistanceBadges();
             filterCards(currentCountry);
@@ -1960,6 +2047,118 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         color: rgba(255, 255, 255, 0.7);
         font-size: 1rem;
         padding: 2rem;
+    }
+
+    /* No delivery available state */
+    .zip-result.no-delivery {
+        background: rgba(255, 107, 107, 0.15);
+        border-color: rgba(255, 107, 107, 0.5);
+    }
+
+    .zip-result.no-delivery .zip-result-text {
+        color: #FFB4B4;
+    }
+
+    /* No delivery message with alternatives */
+    :global(.no-delivery-message) {
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 1.25rem;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    :global(.no-delivery-message .no-delivery-icon) {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1.25rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    :global(.no-delivery-message .no-delivery-icon svg) {
+        width: 32px;
+        height: 32px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    :global(.no-delivery-message h3) {
+        color: white;
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+    }
+
+    :global(.no-delivery-message p) {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        margin: 0 0 1.5rem;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    :global(.no-delivery-alternatives) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    :global(.alt-btn) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.5rem;
+        border-radius: 100px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        font-family: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    :global(.alt-btn:hover) {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    :global(.alt-btn svg) {
+        width: 18px;
+        height: 18px;
+    }
+
+    :global(.alt-btn-primary) {
+        background: var(--planted-green);
+        border-color: var(--planted-green);
+        color: var(--planted-purple);
+    }
+
+    :global(.alt-btn-primary:hover) {
+        background: #9BD55A;
+        border-color: #9BD55A;
+        box-shadow: 0 6px 20px rgba(139, 197, 63, 0.35);
     }
 
     /* Online CTA */

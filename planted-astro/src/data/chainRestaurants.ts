@@ -48,6 +48,7 @@ export interface Chain {
   totalLocations: number;
   countries: string[];
   highlight?: string;
+  deliveryRadiusKm: number; // Maximum delivery distance in km
 }
 
 // City coordinates for geocoding (Central points)
@@ -96,7 +97,9 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   'Luxembourg': { lat: 49.6116, lng: 6.1319 },
 };
 
-// Chain metadata
+// Chain metadata with delivery radius
+// Typical delivery radius: 5-10km for food delivery platforms
+// Ghost kitchens often have slightly larger radius due to delivery optimization
 export const chains: Chain[] = [
   {
     id: 'dean-david',
@@ -108,6 +111,7 @@ export const chains: Chain[] = [
     totalLocations: 118,
     countries: ['DE', 'AT', 'CH', 'LU'],
     highlight: 'Largest Planted partner chain',
+    deliveryRadiusKm: 8,
   },
   {
     id: 'birdie-birdie',
@@ -119,6 +123,7 @@ export const chains: Chain[] = [
     totalLocations: 50,
     countries: ['DE'],
     highlight: 'Ghost kitchen in 20+ cities',
+    deliveryRadiusKm: 10, // Ghost kitchens often have larger radius
   },
   {
     id: 'kaimug',
@@ -130,6 +135,7 @@ export const chains: Chain[] = [
     totalLocations: 38,
     countries: ['CH', 'DE'],
     highlight: 'Authentic Thai cuisine',
+    deliveryRadiusKm: 8,
   },
   {
     id: 'nooch',
@@ -141,6 +147,7 @@ export const chains: Chain[] = [
     totalLocations: 9,
     countries: ['CH'],
     highlight: 'Swiss Asian street food',
+    deliveryRadiusKm: 8,
   },
   {
     id: 'chidoba',
@@ -152,6 +159,7 @@ export const chains: Chain[] = [
     totalLocations: 9,
     countries: ['DE'],
     highlight: 'Mexican fast-casual',
+    deliveryRadiusKm: 8,
   },
   {
     id: 'stadtsalat',
@@ -163,6 +171,7 @@ export const chains: Chain[] = [
     totalLocations: 5,
     countries: ['DE'],
     highlight: 'Healthy bowl delivery',
+    deliveryRadiusKm: 10, // Delivery-focused business
   },
   {
     id: 'doen-doen',
@@ -174,6 +183,7 @@ export const chains: Chain[] = [
     totalLocations: 3,
     countries: ['DE'],
     highlight: '100% vegan kebab',
+    deliveryRadiusKm: 8,
   },
   {
     id: 'rabowls',
@@ -185,8 +195,12 @@ export const chains: Chain[] = [
     totalLocations: 2,
     countries: ['DE'],
     highlight: '3 different Planted products',
+    deliveryRadiusKm: 8,
   },
 ];
+
+// Default delivery radius if not specified
+export const DEFAULT_DELIVERY_RADIUS_KM = 8;
 
 // All chain locations with coordinates
 export const chainLocations: ChainLocation[] = [
