@@ -2137,13 +2137,13 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     }
 
     /* Delivery platform buttons */
-    .delivery-platforms {
+    :global(.delivery-platforms) {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
     }
 
-    .platform-btn {
+    :global(.platform-btn) {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -2157,13 +2157,13 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         transition: all 0.2s ease;
     }
 
-    .platform-btn:hover {
+    :global(.platform-btn:hover) {
         filter: brightness(1.1);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .platform-icon {
+    :global(.platform-icon) {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2172,17 +2172,17 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         flex-shrink: 0;
     }
 
-    .platform-icon svg {
+    :global(.platform-icon svg) {
         width: 100%;
         height: 100%;
         fill: white;
     }
 
-    .platform-name {
+    :global(.platform-name) {
         white-space: nowrap;
     }
 
-    .external-icon {
+    :global(.external-icon) {
         width: 12px;
         height: 12px;
         opacity: 0.7;
