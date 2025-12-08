@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { deliveryRestaurants, platformColors, type DeliveryRestaurant } from '../data/deliveryRestaurants';
-import { chainLocations, chains, chainPlatformColors, type ChainLocation, type Chain } from '../data/chainRestaurants';
+import { chainLocations, chains, chainPlatformColors, getDishPrice, type ChainLocation, type Chain, type ChainDish } from '../data/chainRestaurants';
 
 interface Translations {
     detecting?: string;
@@ -121,6 +121,14 @@ const countryCodeToName: Record<string, string> = {
     'GB': 'United Kingdom',
     'ES': 'Spain'
 };
+
+// Get price country code from locale (for dish prices)
+const priceCountryCode = (locale ? localeToCountry[locale]?.code?.toLowerCase() : 'de') as 'ch' | 'de' | 'at' | 'lu';
+
+// Helper to get dish price for current locale
+function getLocalizedDishPrice(dish: ChainDish): string | undefined {
+    return getDishPrice(dish, priceCountryCode);
+}
 
 // Platform icons (SVG strings for inline rendering - white icons for colored buttons)
 const platformIcons: Record<string, string> = {
@@ -465,8 +473,8 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                                                 </div>
                                                 <p class="dish-description">{dish.description}</p>
                                             </div>
-                                            {dish.price && (
-                                                <span class="dish-price">{dish.price}</span>
+                                            {getLocalizedDishPrice(dish) && (
+                                                <span class="dish-price">{getLocalizedDishPrice(dish)}</span>
                                             )}
                                         </div>
                                     ))}
@@ -600,7 +608,7 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
     <div class="bg-pattern"></div>
 </section>
 
-<script define:vars={{ countryCodeToName, locale, chainDataForClient, chainsMetaForClient }}>
+<script define:vars={{ countryCodeToName, locale, chainDataForClient, chainsMetaForClient, priceCountryCode }}>
     function initStoreLocator() {
         const countryDetected = document.getElementById('countryDetected');
         const detectingEl = countryDetected?.querySelector('.detecting');
@@ -625,6 +633,17 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
         // Parse chain data from server
         const chainLocations = JSON.parse(chainDataForClient);
         const chainsMeta = JSON.parse(chainsMetaForClient);
+
+        // Helper to get dish price for a specific country
+        function getDishPriceForCountry(dish, countryCode) {
+            if (dish.priceByCountry && dish.priceByCountry[countryCode]) {
+                return dish.priceByCountry[countryCode];
+            }
+            return dish.price;
+        }
+
+        // Current price country code (from locale)
+        const currentPriceCountry = priceCountryCode || 'de';
 
         let currentCountry = null;
         let currentCoords = null; // { lat, lng } when ZIP is searched

@@ -33,7 +33,10 @@ export interface DeliveryPlatformLink {
 export interface ChainDish {
   name: string;
   description?: string;
+  /** @deprecated Use priceByCountry instead */
   price?: string;
+  /** Country-specific prices (e.g., { ch: 'CHF 14.90', de: '€12.90', at: '€12.90' }) */
+  priceByCountry?: Record<'ch' | 'de' | 'at' | 'lu', string>;
   plantedProduct: string;
   isVegan?: boolean;
 }
@@ -87,6 +90,13 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   'Kriens': { lat: 47.0333, lng: 8.2833 },
   'Regensdorf': { lat: 47.4333, lng: 8.4667 },
   'Pfäffikon SZ': { lat: 47.2000, lng: 8.7833 },
+  'St. Gallen': { lat: 47.4245, lng: 9.3767 },
+  'Winterthur': { lat: 47.5001, lng: 8.7240 },
+  'Olten': { lat: 47.3500, lng: 7.9000 },
+  'Thun': { lat: 46.7580, lng: 7.6280 },
+  'Fribourg': { lat: 46.8065, lng: 7.1620 },
+  'Dietikon': { lat: 47.4044, lng: 8.4005 },
+  'Vevey': { lat: 46.4628, lng: 6.8430 },
   // Austria
   'Wien': { lat: 48.2082, lng: 16.3738 },
   'Graz': { lat: 47.0707, lng: 15.4395 },
@@ -197,6 +207,18 @@ export const chains: Chain[] = [
     highlight: '3 different Planted products',
     deliveryRadiusKm: 8,
   },
+  {
+    id: 'brezelkoenig',
+    name: 'Brezelkönig',
+    logo: '/images/chains/brezelkoenig.svg',
+    website: 'https://brezelkoenig.ch',
+    cuisine: 'Pretzels & Baguettes',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 64,
+    countries: ['CH'],
+    highlight: 'Baguette Planted Chicken Curry',
+    deliveryRadiusKm: 5,
+  },
 ];
 
 // Default delivery radius if not specified
@@ -223,8 +245,8 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'Tuscany Chicken Salad', description: 'planted.chicken with Italian flavors, sun-dried tomatoes, pine nuts', price: '€12.90', plantedProduct: 'planted.chicken', isVegan: true },
-      { name: 'Planted Chicken Kebab Bowl', description: 'Jasmine rice, planted chicken, pomegranate, harissa', price: '€13.90', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Tuscany Chicken Salad', description: 'planted.chicken with Italian flavors, sun-dried tomatoes, pine nuts', priceByCountry: { de: '€12.90', at: '€13.50', ch: 'CHF 18.90', lu: '€13.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Planted Chicken Kebab Bowl', description: 'Jasmine rice, planted chicken, pomegranate, harissa', priceByCountry: { de: '€13.90', at: '€14.50', ch: 'CHF 19.90', lu: '€14.90' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -380,8 +402,8 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'Classic Planted Burger', description: 'Crispy planted.chicken, cheese, salad, pickle, Signature Sauce', price: '€8.85', plantedProduct: 'planted.chicken', isVegan: true },
-      { name: 'Spicy Planted Burger', description: 'planted.chicken, jalapeños, Chipotle Mayo, Buffalo Sauce', price: '€9.75', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Classic Planted Burger', description: 'Crispy planted.chicken, cheese, salad, pickle, Signature Sauce', priceByCountry: { de: '€8.85', at: '€8.85', ch: 'CHF 12.90', lu: '€8.85' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Spicy Planted Burger', description: 'planted.chicken, jalapeños, Chipotle Mayo, Buffalo Sauce', priceByCountry: { de: '€9.75', at: '€9.75', ch: 'CHF 13.90', lu: '€9.75' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -501,7 +523,7 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'Thai-Gericht mit planted.chicken', description: 'planted chicken with broccoli, bamboo, carrots, mushrooms in soy sauce, jasmine rice', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Thai-Gericht mit planted.chicken', description: 'planted chicken with broccoli, bamboo, carrots, mushrooms in soy sauce, jasmine rice', priceByCountry: { ch: 'CHF 22.90', de: '€16.90', at: '€16.90', lu: '€16.90' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -561,8 +583,8 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'Fried Rice with planted.chicken', description: 'Fried rice with planted chicken, vegetables, bean sprouts, chili, coriander', plantedProduct: 'planted.chicken', isVegan: true },
-      { name: "Sweet'n'Sour planted.chicken", description: 'planted chicken in tempura batter with peppers, pineapple, sweet & sour sauce, jasmine rice', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Fried Rice with planted.chicken', description: 'Fried rice with planted chicken, vegetables, bean sprouts, chili, coriander', priceByCountry: { ch: 'CHF 24.50', de: '€18.90', at: '€18.90', lu: '€18.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: "Sweet'n'Sour planted.chicken", description: 'planted chicken in tempura batter with peppers, pineapple, sweet & sour sauce, jasmine rice', priceByCountry: { ch: 'CHF 25.90', de: '€19.90', at: '€19.90', lu: '€19.90' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -621,7 +643,7 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'planted.chicken Burrito', description: 'planted.chicken with guacamole, salad, rice, beans, salsa', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'planted.chicken Burrito', description: 'planted.chicken with guacamole, salad, rice, beans, salsa', priceByCountry: { de: '€11.90', at: '€12.50', ch: 'CHF 16.90', lu: '€12.50' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -685,8 +707,8 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken'],
     dishes: [
-      { name: 'Vegan Fit Planted', description: 'Quinoa, chickpea, planted chicken, broccoli, beetroot hummus, cashew', price: '€13.95', plantedProduct: 'planted.chicken', isVegan: true },
-      { name: 'Mexican Taco Planted', description: 'Rice, planted chicken, sweet potato, black bean, guacamole, tortilla chips', price: '€13.95', plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Vegan Fit Planted', description: 'Quinoa, chickpea, planted chicken, broccoli, beetroot hummus, cashew', priceByCountry: { de: '€13.95', at: '€14.50', ch: 'CHF 19.90', lu: '€14.50' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Mexican Taco Planted', description: 'Rice, planted chicken, sweet potato, black bean, guacamole, tortilla chips', priceByCountry: { de: '€13.95', at: '€14.50', ch: 'CHF 19.90', lu: '€14.50' }, plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
@@ -750,8 +772,8 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.kebab'],
     dishes: [
-      { name: 'Planted Kebap Döner', description: 'Vegan döner with planted kebab, fresh salad, grilled vegetables, sauces', price: '€8.90', plantedProduct: 'planted.kebab', isVegan: true },
-      { name: 'Planted Kebap Dürüm', description: 'Wrap with planted kebab, salad mix, grilled vegetables, herb-yogurt sauce', price: '€9.50', plantedProduct: 'planted.kebab', isVegan: true },
+      { name: 'Planted Kebap Döner', description: 'Vegan döner with planted kebab, fresh salad, grilled vegetables, sauces', priceByCountry: { de: '€8.90', at: '€9.50', ch: 'CHF 13.90', lu: '€9.50' }, plantedProduct: 'planted.kebab', isVegan: true },
+      { name: 'Planted Kebap Dürüm', description: 'Wrap with planted kebab, salad mix, grilled vegetables, herb-yogurt sauce', priceByCountry: { de: '€9.50', at: '€10.00', ch: 'CHF 14.90', lu: '€10.00' }, plantedProduct: 'planted.kebab', isVegan: true },
     ],
   },
   {
@@ -799,9 +821,9 @@ export const chainLocations: ChainLocation[] = [
     ],
     plantedProducts: ['planted.chicken', 'planted.duck', 'planted.pulled'],
     dishes: [
-      { name: 'Mad Mediterranean', description: 'Lemon-herbs planted.chicken bowl', plantedProduct: 'planted.chicken', isVegan: true },
-      { name: 'Decadent Duck', description: 'Hoisin planted.duck bowl', plantedProduct: 'planted.duck', isVegan: true },
-      { name: 'Cheating Chili', description: 'BBQ chili planted.pulled bowl', plantedProduct: 'planted.pulled', isVegan: true },
+      { name: 'Mad Mediterranean', description: 'Lemon-herbs planted.chicken bowl', priceByCountry: { de: '€14.90', at: '€15.50', ch: 'CHF 21.90', lu: '€15.50' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Decadent Duck', description: 'Hoisin planted.duck bowl', priceByCountry: { de: '€15.90', at: '€16.50', ch: 'CHF 22.90', lu: '€16.50' }, plantedProduct: 'planted.duck', isVegan: true },
+      { name: 'Cheating Chili', description: 'BBQ chili planted.pulled bowl', priceByCountry: { de: '€14.90', at: '€15.50', ch: 'CHF 21.90', lu: '€15.50' }, plantedProduct: 'planted.pulled', isVegan: true },
     ],
   },
   {
@@ -817,6 +839,193 @@ export const chainLocations: ChainLocation[] = [
       { name: 'lieferando', url: 'https://www.lieferando.de/speisekarte/rabowls-winterhude', displayName: 'Lieferando' },
     ],
     plantedProducts: ['planted.chicken', 'planted.duck', 'planted.pulled'],
+  },
+
+  // ============================================
+  // BREZELKÖNIG - Swiss Pretzel Chain
+  // ============================================
+  {
+    id: 'bk-zurich-hb',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich HB',
+    city: 'Zürich',
+    address: 'Bahnhofplatz',
+    country: 'ch',
+    coordinates: { lat: 47.3779, lng: 8.5403 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-zuerich', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+    dishes: [
+      { name: 'Baguette Planted Chicken Curry', description: 'Pretzel baguette with planted.chicken, Lollo Verde lettuce, and curry sauce', priceByCountry: { ch: 'CHF 8.20', de: '€6.90', at: '€7.20', lu: '€7.20' }, plantedProduct: 'planted.chicken', isVegan: true },
+    ],
+  },
+  {
+    id: 'bk-zurich-stadelhofen',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich Stadelhofen',
+    city: 'Zürich',
+    address: 'Stadelhofen',
+    country: 'ch',
+    coordinates: { lat: 47.3667, lng: 8.5483 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-zuerich-stadelhofen', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-basel',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Basel',
+    city: 'Basel',
+    country: 'ch',
+    coordinates: { lat: 47.5476, lng: 7.5897 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-basel', displayName: 'Just Eat' },
+      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/basel/brezelkoenig-basel', displayName: 'Smood' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-basel-gueterstr',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Basel Güterstrasse',
+    city: 'Basel',
+    address: 'Güterstrasse',
+    country: 'ch',
+    coordinates: { lat: 47.5500, lng: 7.5900 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-basel-1', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-bern-bollwerk',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bern Bollwerk',
+    city: 'Bern',
+    address: 'Bollwerk',
+    country: 'ch',
+    coordinates: { lat: 46.9490, lng: 7.4400 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-bern-bollwerk', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lausanne-cff',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Lausanne CFF',
+    city: 'Lausanne',
+    address: 'Gare CFF',
+    country: 'ch',
+    coordinates: { lat: 46.5167, lng: 6.6292 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-lausanne-cff', displayName: 'Just Eat' },
+      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/restaurants/lausanne/brezelkoenig-lausanne', displayName: 'Smood' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-luzern',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Luzern',
+    city: 'Luzern',
+    country: 'ch',
+    coordinates: { lat: 47.0502, lng: 8.3093 },
+    deliveryPlatforms: [
+      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/lucerne/brezelkoenig-luzern', displayName: 'Smood' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-st-gallen',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig St. Gallen',
+    city: 'St. Gallen',
+    address: 'Bahnhofplatz 8B',
+    country: 'ch',
+    coordinates: { lat: 47.4232, lng: 9.3695 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-st-gallen', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-olten-sbb',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Olten SBB',
+    city: 'Olten',
+    address: 'SBB Perronunterführung',
+    country: 'ch',
+    coordinates: { lat: 47.3520, lng: 7.9070 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-olten-sbb-perronunterfhrung', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-thun-sbb',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Thun SBB',
+    city: 'Thun',
+    address: 'Bahnhof SBB',
+    country: 'ch',
+    coordinates: { lat: 46.7547, lng: 7.6297 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkonig-thun-sbb', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-fribourg',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Fribourg',
+    city: 'Fribourg',
+    country: 'ch',
+    coordinates: { lat: 46.8065, lng: 7.1620 },
+    deliveryPlatforms: [
+      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/fribourg/brezelkoenig-fribourg', displayName: 'Smood' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-dietikon',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Dietikon',
+    city: 'Dietikon',
+    country: 'ch',
+    coordinates: { lat: 47.4044, lng: 8.4005 },
+    deliveryPlatforms: [
+      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/zurich/brezelkoenig-dietikon', displayName: 'Smood' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-vevey-manor',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Vevey Manor',
+    city: 'Vevey',
+    address: 'Manor',
+    country: 'ch',
+    coordinates: { lat: 46.4628, lng: 6.8430 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkonig-vevey-manor', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
   },
 ];
 
@@ -919,6 +1128,17 @@ export function formatDistance(km: number): string {
  */
 export function getChainById(chainId: string): Chain | undefined {
   return chains.find(c => c.id === chainId);
+}
+
+/**
+ * Get dish price for a specific country
+ * Falls back to default price if country-specific price not available
+ */
+export function getDishPrice(dish: ChainDish, country: 'ch' | 'de' | 'at' | 'lu'): string | undefined {
+  if (dish.priceByCountry && dish.priceByCountry[country]) {
+    return dish.priceByCountry[country];
+  }
+  return dish.price;
 }
 
 // Platform colors for UI
