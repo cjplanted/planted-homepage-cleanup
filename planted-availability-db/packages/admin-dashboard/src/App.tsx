@@ -2,7 +2,12 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
+// New primary pages
+import CommandCenterPage from './pages/CommandCenterPage';
+import ReviewQueuePage from './pages/ReviewQueuePage';
+import DataBrowserPage from './pages/DataBrowserPage';
+import OperationsPage from './pages/OperationsPage';
+// Legacy pages (kept for backward compatibility)
 import VenuesPage from './pages/VenuesPage';
 import DishesPage from './pages/DishesPage';
 import ScrapersPage from './pages/ScrapersPage';
@@ -45,7 +50,12 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<DashboardPage />} />
+        {/* New primary routes */}
+        <Route index element={<CommandCenterPage />} />
+        <Route path="review" element={<ReviewQueuePage />} />
+        <Route path="browser" element={<DataBrowserPage />} />
+        <Route path="operations" element={<OperationsPage />} />
+        {/* Legacy routes (kept for backward compatibility) */}
         <Route path="venues" element={<VenuesPage />} />
         <Route path="dishes" element={<DishesPage />} />
         <Route path="scrapers" element={<ScrapersPage />} />
