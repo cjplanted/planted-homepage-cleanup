@@ -49,6 +49,12 @@ function Layout() {
             Moderation
           </NavLink>
           <NavLink
+            to="/discovery-review"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            Discovery Review
+          </NavLink>
+          <NavLink
             to="/partners"
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
           >

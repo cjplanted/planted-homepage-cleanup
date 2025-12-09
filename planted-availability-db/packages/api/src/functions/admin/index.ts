@@ -12,3 +12,5 @@ export {
 } from './status.js';
 
 export { adminPartnersHandler, adminBatchesHandler } from './partners.js';
+
+export { adminDiscoveredVenuesHandler } from './discovery-review.js';

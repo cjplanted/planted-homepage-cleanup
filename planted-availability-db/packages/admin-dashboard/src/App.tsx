@@ -9,6 +9,7 @@ import ScrapersPage from './pages/ScrapersPage';
 import PromotionsPage from './pages/PromotionsPage';
 import ModerationPage from './pages/ModerationPage';
 import PartnersPage from './pages/PartnersPage';
+import DiscoveryReviewPage from './pages/DiscoveryReviewPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -48,6 +49,7 @@ function App() {
         <Route path="promotions" element={<PromotionsPage />} />
         <Route path="moderation" element={<ModerationPage />} />
         <Route path="partners" element={<PartnersPage />} />
+        <Route path="discovery-review" element={<DiscoveryReviewPage />} />
       </Route>
     </Routes>
   );

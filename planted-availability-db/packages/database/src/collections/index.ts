@@ -10,6 +10,14 @@ export * from './retail-availability.js';
 export * from './partners.js';
 export * from './ingestionBatches.js';
 export * from './staging/index.js';
+export * from './discovery-strategies.js';
+export * from './discovery-runs.js';
+export * from './discovered-venues.js';
+export * from './search-feedback.js';
+export * from './dish-extraction-strategies.js';
+export * from './dish-extraction-runs.js';
+export * from './discovered-dishes.js';
+export * from './dish-feedback.js';
 
 // Export collection instances for convenience
 export { venues } from './venues.js';
@@ -23,3 +31,11 @@ export { retailAvailability } from './retail-availability.js';
 export { partners } from './partners.js';
 export { ingestionBatches } from './ingestionBatches.js';
 export { stagedVenues, stagedDishes, stagedPromotions, stagedAvailability } from './staging/index.js';
+export { discoveryStrategies } from './discovery-strategies.js';
+export { discoveryRuns } from './discovery-runs.js';
+export { discoveredVenues } from './discovered-venues.js';
+export { searchFeedback } from './search-feedback.js';
+export { dishExtractionStrategies } from './dish-extraction-strategies.js';
+export { dishExtractionRuns } from './dish-extraction-runs.js';
+export { discoveredDishes } from './discovered-dishes.js';
+export { dishFeedback } from './dish-feedback.js';

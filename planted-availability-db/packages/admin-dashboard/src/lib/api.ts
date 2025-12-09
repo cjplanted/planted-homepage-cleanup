@@ -396,6 +396,112 @@ export const partnersApi = {
     }),
 };
 
+// Discovery Review API
+export interface DiscoveredVenueForReview {
+  id: string;
+  name: string;
+  is_chain: boolean;
+  chain_id?: string;
+  chain_name?: string;
+  chain_confidence?: number;
+  address: {
+    street?: string;
+    city: string;
+    postal_code?: string;
+    country: string;
+  };
+  coordinates?: { lat: number; lng: number };
+  delivery_platforms: {
+    platform: string;
+    url: string;
+    rating?: number;
+    review_count?: number;
+  }[];
+  planted_products: string[];
+  dishes: {
+    name: string;
+    price?: string;
+    product: string;
+    description?: string;
+    confidence?: number;
+  }[];
+  confidence_score: number;
+  confidence_factors: {
+    factor: string;
+    score: number;
+    reason: string;
+  }[];
+  status: 'discovered' | 'verified' | 'rejected' | 'promoted' | 'stale';
+  rejection_reason?: string;
+  discovered_by_strategy_id: string;
+  discovered_by_query: string;
+  created_at: string;
+  verified_at?: string;
+}
+
+export interface DiscoveryReviewParams {
+  status?: string;
+  country?: string;
+  platform?: string;
+  chain_id?: string;
+  min_confidence?: number;
+  max_confidence?: number;
+  limit?: number;
+  offset?: number;
+}
+
+export const discoveryReviewApi = {
+  getVenues: (params?: DiscoveryReviewParams) => {
+    const query = buildQueryParams(params as Record<string, unknown> | undefined);
+    return fetchWithAuth<{ venues: DiscoveredVenueForReview[]; total: number }>(
+      `/api/v1/admin/discovered-venues${query ? `?${query}` : ''}`
+    );
+  },
+
+  getVenueById: (id: string) =>
+    fetchWithAuth<DiscoveredVenueForReview>(`/api/v1/admin/discovered-venues/${id}`),
+
+  verifyVenue: (id: string, updates?: Partial<DiscoveredVenueForReview>) =>
+    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/verify`, {
+      method: 'POST',
+      body: JSON.stringify({ updates }),
+    }),
+
+  rejectVenue: (id: string, reason: string) =>
+    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/reject`, {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    }),
+
+  updateAndVerify: (id: string, data: Partial<DiscoveredVenueForReview>) =>
+    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/update-and-verify`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  bulkVerify: (ids: string[]) =>
+    fetchWithAuth<{ success: boolean; verified: number }>(`/api/v1/admin/discovered-venues/bulk-verify`, {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+
+  bulkReject: (ids: string[], reason: string) =>
+    fetchWithAuth<{ success: boolean; rejected: number }>(`/api/v1/admin/discovered-venues/bulk-reject`, {
+      method: 'POST',
+      body: JSON.stringify({ ids, reason }),
+    }),
+
+  getStats: () =>
+    fetchWithAuth<{
+      total_discovered: number;
+      total_verified: number;
+      total_rejected: number;
+      by_country: Record<string, number>;
+      by_platform: Record<string, number>;
+      by_confidence: { low: number; medium: number; high: number };
+    }>('/api/v1/admin/discovered-venues/stats'),
+};
+
 // Ingestion Batches API
 export const batchesApi = {
   getAll: (params?: { partner_id?: string; status?: string; channel?: string; limit?: number }) => {

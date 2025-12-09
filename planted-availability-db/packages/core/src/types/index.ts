@@ -8,3 +8,5 @@ export * from './changelog.js';
 export * from './scraper.js';
 export * from './partner.js';
 export * from './staging.js';
+export * from './discovery.js';
+export * from './dish-discovery.js';

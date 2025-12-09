@@ -11,23 +11,30 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "scrape": "tsx src/cli.ts"
+    "scrape": "tsx src/cli.ts",
+    "discovery": "tsx src/cli/run-discovery.ts",
+    "search-pool": "tsx src/cli/search-pool.ts",
+    "review": "tsx src/cli/review-venues.ts",
+    "dish-finder": "tsx src/cli/run-dish-finder.ts",
+    "review-dishes": "tsx src/cli/review-dishes.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
+    "@google/generative-ai": "^0.24.1",
     "@pad/core": "workspace:*",
     "@pad/database": "workspace:*",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
+    "p-queue": "^8.0.1",
+    "p-retry": "^6.2.0",
     "puppeteer": "^23.6.0",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "p-queue": "^8.0.1",
-    "p-retry": "^6.2.0"
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
     "@types/node": "^22.10.1",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   },
   "engines": {
     "node": ">=20"

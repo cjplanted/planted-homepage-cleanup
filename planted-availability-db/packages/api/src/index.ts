@@ -22,6 +22,7 @@ export {
   adminScraperStatusHandler as adminScraperStatus,
   adminPartnersHandler as adminPartners,
   adminBatchesHandler as adminBatches,
+  adminDiscoveredVenuesHandler as adminDiscoveredVenues,
 } from './functions/admin/index.js';
 
 // Partner API endpoints
