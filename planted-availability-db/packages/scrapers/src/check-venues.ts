@@ -25,7 +25,7 @@ async function main() {
     console.log('---');
     console.log('Name:', v.name);
     console.log('Platforms:', JSON.stringify(v.delivery_platforms, null, 2));
-    console.log('Source URL:', v.source_url);
+    console.log('City:', v.address.city);
   }
 }
 

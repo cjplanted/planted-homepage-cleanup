@@ -102,14 +102,8 @@ export class PuppeteerFetcher {
     // Import the default config - use dynamic import for ESM compatibility
     this.config = {
       headless: true,
-      timeout: 30000,
       timeout_ms: 30000,
       viewport: { width: 1280, height: 800 },
-      userAgents: [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-      ],
       ...config,
     };
   }

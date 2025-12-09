@@ -29,8 +29,7 @@ import type {
   DeliveryPlatform,
   SupportedCountry,
   ConfidenceFactor,
-  PlantedProductSku,
-  DishFeedback,
+  PlantedProductSku
 } from '@pad/core';
 import {
   DISH_SEED_STRATEGIES,
@@ -87,19 +86,24 @@ export class SmartDishFinderAgent {
       extraction: {
         max_venues_per_run: 50,
         rate_limit_ms: 2000,
-        batch_size: 10,
+        retry_attempts: 3,
+        retry_delay_ms: 1000,
       },
       puppeteer: {
         headless: true,
-        timeout: 30000,
+        timeout_ms: 30000,
+        viewport: { width: 1280, height: 800 },
       },
-      ai: {
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
+      learning: {
+        min_feedback_for_learning: 10,
+        low_success_threshold: 0.3,
+        high_success_threshold: 0.8,
+        auto_deprecate_below: 0.1,
       },
       claude: {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4096,
+        temperature: 0.3,
       },
     };
 
@@ -522,50 +526,7 @@ export class SmartDishFinderAgent {
     }
   }
 
-  /**
-   * Parse Claude's extraction response
-   */
-  private parseExtractionResponse(responseText: string): PageExtractionResult {
-    try {
-      // Find JSON in response (handle markdown code blocks)
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        return {
-          dishes: [],
-          page_quality: {
-            menu_found: false,
-            prices_visible: false,
-            descriptions_available: false,
-            images_available: false,
-          },
-        };
-      }
-
-      const parsed = JSON.parse(jsonMatch[0]);
-
-      return {
-        dishes: parsed.dishes || [],
-        page_quality: parsed.page_quality || {
-          menu_found: false,
-          prices_visible: false,
-          descriptions_available: false,
-          images_available: false,
-        },
-        extraction_notes: parsed.extraction_notes,
-      };
-    } catch (error) {
-      this.log(`Failed to parse extraction response: ${error}`);
-      return {
-        dishes: [],
-        page_quality: {
-          menu_found: false,
-          prices_visible: false,
-          descriptions_available: false,
-          images_available: false,
-        },
-      };
-    }
-  }
+  
 
   /**
    * Store extracted dishes

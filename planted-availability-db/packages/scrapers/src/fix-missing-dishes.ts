@@ -147,8 +147,8 @@ async function extractDishesForVenue(
   venueId: string,
   venueName: string,
   url: string,
-  platform: DeliveryPlatform,
-  country: SupportedCountry,
+  _platform: DeliveryPlatform,
+  _country: SupportedCountry,
   dryRun: boolean,
   verbose: boolean
 ): Promise<{ success: boolean; dishCount: number; error?: string }> {
