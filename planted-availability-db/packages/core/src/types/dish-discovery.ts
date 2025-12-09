@@ -289,7 +289,7 @@ export interface PageExtractionResult {
 
 export interface VenuePage {
   url: string;
-  platform: DeliveryPlatform;
+  platform: DeliveryPlatform | 'unknown'; // 'unknown' for AI-mode analysis of arbitrary websites
   country: SupportedCountry;
   venue_name: string;
   venue_id: string;
