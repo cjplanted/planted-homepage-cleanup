@@ -23,16 +23,16 @@
     --planted-trust: var(--planted-purple);
     --planted-warmth: var(--planted-cream);
 
-    /* Spacing Scale (8-point grid) */
+    /* Spacing Scale (8-point grid) - Compact for better scrolling UX */
     --space-xs: 0.5rem;   /* 8px */
     --space-sm: 1rem;     /* 16px */
-    --space-md: 1.5rem;   /* 24px */
-    --space-lg: 2rem;     /* 32px */
-    --space-xl: 3rem;     /* 48px */
-    --space-2xl: 4rem;    /* 64px */
-    --space-3xl: 6rem;    /* 96px */
-    --space-4xl: 8rem;    /* 128px */
-    --space-5xl: 10rem;   /* 160px */
+    --space-md: 1.25rem;  /* 20px */
+    --space-lg: 1.5rem;   /* 24px */
+    --space-xl: 2rem;     /* 32px */
+    --space-2xl: 3rem;    /* 48px */
+    --space-3xl: 4rem;    /* 64px */
+    --space-4xl: 5rem;    /* 80px */
+    --space-5xl: 6rem;    /* 96px */
 
     /* Animation Easing */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);

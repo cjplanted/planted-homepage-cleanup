@@ -32,7 +32,7 @@ export default {
         },
         mission: {
             title: 'Wir glauben, dass Fleisch nicht von Tieren kommen muss.',
-            highlight: 'Es muss einfach unglaublich schmecken.',
+            highlight: 'Es muss einfach unglaublich lecker schmecken.',
             text: 'Made in Switzerland. B Corp zertifiziert. Und ehrlich? Es ist wirklich, wirklich gut.',
         },
         products: {
@@ -65,7 +65,7 @@ export default {
             badge: 'Die Zahlen sprechen für sich',
             lessCO2: 'Weniger CO₂',
             lessWater: 'Weniger Wasser',
-            animalsHarmed: 'Tiere getötet',
+            animalsHarmed: 'Tiere geschlachtet',
             vsCow: 'vs. Rindfleisch',
             ever: 'nie',
             tagline: 'Gleicher Geschmack. Besser für den Planeten.',

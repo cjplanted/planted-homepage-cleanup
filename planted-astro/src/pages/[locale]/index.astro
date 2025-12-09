@@ -48,7 +48,10 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         </div>
 
         <div class="hero-content" id="heroContent">
-            <div class="hero-badge">{t.home.hero.badge}</div>
+            <div class="hero-badge">
+                <img src={`${base}/images/b-corp-logo.svg`} alt="B Corp Certified" class="bcorp-logo" />
+                <span>{t.home.hero.badge}</span>
+            </div>
             <h1>{t.home.hero.title}</h1>
             <p class="hero-subtitle">{t.home.hero.subtitle}</p>
             <div class="hero-buttons">
@@ -71,7 +74,36 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             <span class="trust-divider"></span>
             <span class="trust-item">{t.home.trust.restaurants}</span>
             <span class="trust-divider"></span>
-            <span class="trust-item">{t.home.trust.countries}</span>
+            <button class="trust-item trust-countries" id="countriesBtn" type="button">
+                {t.home.trust.countries}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="countries-icon">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Countries Modal -->
+        <div class="countries-modal" id="countriesModal">
+            <div class="countries-modal-backdrop" id="countriesModalBackdrop"></div>
+            <div class="countries-modal-content">
+                <button class="countries-modal-close" id="countriesModalClose" type="button" aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <h3>{t.countries ? 'Available in' : 'Available in'}</h3>
+                <div class="countries-grid">
+                    <div class="country-item"><span class="country-flag">🇨🇭</span><span>{t.countries?.switzerland || 'Switzerland'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇩🇪</span><span>{t.countries?.germany || 'Germany'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇦🇹</span><span>{t.countries?.austria || 'Austria'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇫🇷</span><span>{t.countries?.france || 'France'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇮🇹</span><span>{t.countries?.italy || 'Italy'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇳🇱</span><span>{t.countries?.netherlands || 'Netherlands'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇬🇧</span><span>{t.countries?.unitedKingdom || 'United Kingdom'}</span></div>
+                    <div class="country-item"><span class="country-flag">🇪🇸</span><span>{t.countries?.spain || 'Spain'}</span></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -232,8 +264,16 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <div class="ambassador-attribution">
                         <div class="ambassador-name">{ambassador.name}</div>
                         <div class="ambassador-title">{ambassadorTitle}</div>
+                        {ambassador.signature && (
+                            <img
+                                src={`${base}${ambassador.signature}`}
+                                alt={`${ambassador.name} signature`}
+                                class="ambassador-signature"
+                                loading="lazy"
+                            />
+                        )}
                     </div>
-                    <div class="ambassador-approved">
+                    <div class="ambassador-actions">
                         <span class="approved-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="approved-icon">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -241,6 +281,14 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                             </svg>
                             {t.home.ambassador.approvedBy} {ambassador.name.split(' ')[0]}
                         </span>
+                        {ambassador.videoUrl && (
+                            <a href={ambassador.videoUrl} target="_blank" rel="noopener" class="ambassador-video-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="video-icon">
+                                    <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/>
+                                </svg>
+                                {localeData.language === 'en' ? ambassador.videoLabelEn : ambassador.videoLabel}
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>
@@ -443,7 +491,9 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
     /* Hero badge */
     .hero-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         background: rgba(97, 38, 158, 0.1);
         border: 1px solid rgba(97, 38, 158, 0.2);
         color: var(--planted-purple);
@@ -451,9 +501,15 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 1rem 0.4rem 0.5rem;
         border-radius: 100px;
         margin-bottom: 1.25rem;
+    }
+
+    .hero-badge .bcorp-logo {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
     }
 
     .hero h1 {
@@ -511,6 +567,140 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         opacity: 0.3;
     }
 
+    /* Countries button */
+    .trust-countries {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-family: inherit;
+        transition: opacity 0.3s, color 0.3s;
+    }
+
+    .trust-countries:hover {
+        opacity: 1;
+        color: var(--planted-green);
+    }
+
+    .countries-icon {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.3s ease;
+    }
+
+    .trust-countries:hover .countries-icon {
+        transform: translateY(2px);
+    }
+
+    /* Countries Modal */
+    .countries-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .countries-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .countries-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+    }
+
+    .countries-modal-content {
+        position: relative;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        max-width: 420px;
+        width: calc(100% - 2rem);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+        transform: translateY(20px) scale(0.95);
+        transition: transform 0.3s ease;
+    }
+
+    .countries-modal.active .countries-modal-content {
+        transform: translateY(0) scale(1);
+    }
+
+    .countries-modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: rgba(97, 38, 158, 0.1);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+    }
+
+    .countries-modal-close:hover {
+        background: rgba(97, 38, 158, 0.2);
+    }
+
+    .countries-modal-close svg {
+        width: 18px;
+        height: 18px;
+        color: var(--planted-purple);
+    }
+
+    .countries-modal-content h3 {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.5rem;
+        color: var(--planted-purple);
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+
+    .countries-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .country-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: var(--planted-cream);
+        border-radius: 0.75rem;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .country-item:hover {
+        background: rgba(97, 38, 158, 0.1);
+        transform: translateX(4px);
+    }
+
+    .country-flag {
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+
+    .country-item span:last-child {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--planted-charcoal);
+    }
+
     @media (max-width: 640px) {
         .hero-approved-claim {
             bottom: -2rem;
@@ -526,7 +716,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     /* Statement Section */
     .statement {
         background: var(--planted-purple);
-        padding: 6rem 1.5rem;
+        padding: 4rem 1.5rem;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -562,7 +752,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     /* Products Section */
     .products {
         background: var(--planted-cream);
-        padding: 5rem 0 4rem;
+        padding: 3.5rem 0 3rem;
         overflow: hidden;
     }
 
@@ -1019,7 +1209,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     /* Recipes Section */
-    .recipes-section { background: var(--planted-cream); padding: 6rem 0; }
+    .recipes-section { background: var(--planted-cream); padding: 4rem 0; }
     .recipes-header { padding: 0 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
     .recipes-header h2 { font-size: clamp(1.8rem, 7vw, 3rem); color: var(--planted-purple); text-transform: uppercase; }
     .recipes-header a { color: var(--planted-purple); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: opacity 0.3s; }
@@ -1030,7 +1220,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     .recipes-scroll .recipe-card { flex: 0 0 280px; scroll-snap-align: start; }
 
     /* Store Locator */
-    .locator { background: var(--planted-purple); padding: 6rem 1.5rem; text-align: center; position: relative; overflow: hidden; width: 100%; }
+    .locator { background: var(--planted-purple); padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden; width: 100%; }
     .locator-content { max-width: 1200px; margin: 0 auto; }
     .locator h2 { font-size: clamp(2rem, 8vw, 4rem); color: white; margin-bottom: 0.5rem; }
     .locator-content > p { font-size: 1.1rem; color: rgba(255,255,255,0.8); margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
@@ -1103,22 +1293,22 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         .hero { padding: 5rem 5rem 5rem; }
         .hero-video-wrapper { max-width: 950px; }
         .hero h1 { font-size: 5.5rem; }
-        .products { padding: 6rem 0 5rem; }
-        .products-header { padding: 0 5rem 3rem; max-width: 1600px; margin: 0 auto; }
+        .products { padding: 4rem 0 3.5rem; }
+        .products-header { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
         .products-carousel { padding: 0 5rem; max-width: 1600px; margin: 0 auto; }
-        .statement { padding: 8rem 5rem; }
-        .impact { padding: 8rem 5rem; }
-        .recipes-section { padding: 8rem 0; }
-        .recipes-header { padding: 0 5rem 2.5rem; max-width: 1400px; margin: 0 auto; }
+        .statement { padding: 5rem 5rem; }
+        .impact { padding: 5rem 5rem; }
+        .recipes-section { padding: 5rem 0; }
+        .recipes-header { padding: 0 5rem 2rem; max-width: 1400px; margin: 0 auto; }
         .recipes-scroll { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
-        .locator { padding: 8rem 5rem; }
-        .business-inner { max-width: 1200px; gap: 5rem; }
+        .locator { padding: 5rem 5rem; }
+        .business-inner { max-width: 1200px; gap: 4rem; }
     }
 
     /* Business Section */
     .business {
         background: var(--planted-black);
-        padding: 6rem 1.5rem;
+        padding: 4rem 1.5rem;
         color: white;
         width: 100%;
     }
@@ -1429,9 +1619,18 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         font-weight: 500;
     }
 
-    /* Approved badge */
-    .ambassador-approved {
+    .ambassador-signature {
+        max-width: 150px;
+        height: auto;
+        margin-top: 1rem;
+        opacity: 0.8;
+    }
+
+    /* Ambassador actions */
+    .ambassador-actions {
         display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
         justify-content: center;
     }
 
@@ -1460,6 +1659,32 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         stroke: var(--planted-green);
     }
 
+    .ambassador-video-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-purple);
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.6rem 1.25rem;
+        border-radius: 100px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .ambassador-video-link:hover {
+        background: var(--planted-purple-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(97, 38, 158, 0.3);
+    }
+
+    .video-icon {
+        width: 14px;
+        height: 14px;
+        color: white;
+    }
+
     /* Responsive layout */
     @media (min-width: 768px) {
         .ambassador {
@@ -1486,7 +1711,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             transform: none;
         }
 
-        .ambassador-approved {
+        .ambassador-actions {
             justify-content: flex-start;
         }
     }
@@ -1640,6 +1865,32 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     });
                     lastActiveIndex = activeIndex;
                 }
+            }
+        });
+
+        // Countries Modal
+        const countriesBtn = document.getElementById('countriesBtn');
+        const countriesModal = document.getElementById('countriesModal');
+        const countriesModalBackdrop = document.getElementById('countriesModalBackdrop');
+        const countriesModalClose = document.getElementById('countriesModalClose');
+
+        function openCountriesModal() {
+            countriesModal?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCountriesModal() {
+            countriesModal?.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        countriesBtn?.addEventListener('click', openCountriesModal);
+        countriesModalBackdrop?.addEventListener('click', closeCountriesModal);
+        countriesModalClose?.addEventListener('click', closeCountriesModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && countriesModal?.classList.contains('active')) {
+                closeCountriesModal();
             }
         });
     }

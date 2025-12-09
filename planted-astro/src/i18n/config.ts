@@ -186,6 +186,10 @@ export const ambassadors: Record<CountryCode, {
     quoteEn: string;
     image: string;
     backgroundImage?: string;
+    signature?: string;
+    videoUrl?: string;
+    videoLabel?: string;
+    videoLabelEn?: string;
 } | null> = {
     'global': null,
     'ch': {
@@ -203,6 +207,10 @@ export const ambassadors: Record<CountryCode, {
         quote: 'Besonders schätze ich die Textur der Planted-Produkte, die Faserigkeit ist extrem nah an der von tierischem Fleisch. Sie enthalten keine Zusatzstoffe und die Aromen sind sehr fein.',
         quoteEn: 'I especially appreciate the texture of Planted products, the fibrousness is extremely close to that of animal meat. They also contain no additives and the aromatics are very fine.',
         image: '/images/ambassadors/tim-raue.jpg',
+        signature: '/images/ambassadors/tim-raue-signature.svg',
+        videoUrl: 'https://www.youtube.com/watch?v=planted-tim-raue',
+        videoLabel: 'Video ansehen',
+        videoLabelEn: 'Watch video',
     },
     'at': null,
     'it': null,
