@@ -8,6 +8,31 @@
  *   pnpm run discovery --dry-run
  */
 
+// Load environment variables from .env file (look in parent directories too)
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '../../../..'); // planted-availability-db/
+
+// Try loading from multiple locations
+dotenv.config({ path: path.resolve(rootDir, '.env') }); // planted-availability-db/.env
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') }); // packages/.env
+dotenv.config({ path: path.resolve(__dirname, '../../.env') }); // scrapers/.env
+
+// Fix relative GOOGLE_APPLICATION_CREDENTIALS path - resolve relative to the .env location (rootDir)
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  const credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  if (!path.isAbsolute(credPath)) {
+    const resolvedPath = path.resolve(rootDir, credPath);
+    if (existsSync(resolvedPath)) {
+      process.env.GOOGLE_APPLICATION_CREDENTIALS = resolvedPath;
+    }
+  }
+}
+
 import { SmartDiscoveryAgent } from '../agents/smart-discovery/SmartDiscoveryAgent.js';
 import {
   GoogleSearchProvider,

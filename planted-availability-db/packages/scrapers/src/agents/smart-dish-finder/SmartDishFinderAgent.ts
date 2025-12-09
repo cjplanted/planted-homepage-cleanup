@@ -5,7 +5,7 @@
  * pages. It learns from feedback to improve extraction accuracy over time.
  */
 
-import Anthropic from '@anthropic-ai/sdk';
+import { DishFinderAIClient } from './DishFinderAIClient.js';
 import {
   dishExtractionStrategies,
   dishExtractionRuns,
@@ -38,15 +38,6 @@ import {
   PLANTED_PRODUCT_SKUS,
 } from '@pad/core';
 import { PuppeteerFetcher, getPuppeteerFetcher, closePuppeteerFetcher } from './PuppeteerFetcher.js';
-import {
-  DISH_FINDER_SYSTEM_PROMPT,
-  DISH_EXTRACTION_PROMPT,
-  DISH_LEARNING_PROMPT,
-  JSON_MENU_EXTRACTION_PROMPT,
-  fillPromptTemplate,
-  truncateContent,
-  cleanHtmlForExtraction,
-} from './prompts.js';
 
 export interface DishFinderAgentConfig {
   maxVenuesPerRun?: number;
@@ -80,7 +71,7 @@ const VERIFIED_CHAIN_PRODUCTS: Record<string, PlantedProductSku[]> = {
 };
 
 export class SmartDishFinderAgent {
-  private anthropic: Anthropic;
+  private aiClient: DishFinderAIClient;
   private fetcher: PuppeteerFetcher;
   private config: Required<DishFinderAgentConfig>;
   private fullConfig: DishFinderConfig;
@@ -88,11 +79,29 @@ export class SmartDishFinderAgent {
   private stats: DishExtractionRunStats;
 
   constructor(config?: DishFinderAgentConfig) {
-    this.anthropic = new Anthropic();
+    this.aiClient = new DishFinderAIClient();
     this.fetcher = getPuppeteerFetcher();
 
-    const { DEFAULT_DISH_FINDER_CONFIG } = require('@pad/core');
-    this.fullConfig = DEFAULT_DISH_FINDER_CONFIG;
+    // Default config - inline to avoid ESM/CJS issues
+    this.fullConfig = {
+      extraction: {
+        max_venues_per_run: 50,
+        rate_limit_ms: 2000,
+        batch_size: 10,
+      },
+      puppeteer: {
+        headless: true,
+        timeout: 30000,
+      },
+      ai: {
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+      },
+      claude: {
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+      },
+    };
 
     this.config = {
       maxVenuesPerRun: config?.maxVenuesPerRun || this.fullConfig.extraction.max_venues_per_run,
@@ -489,69 +498,17 @@ export class SmartDishFinderAgent {
   }
 
   /**
-   * Extract dishes from a page
+   * Extract dishes from a page using Gemini AI
    */
   private async extractDishes(
     page: VenuePage,
     _strategy: DishExtractionStrategy | null
   ): Promise<PageExtractionResult> {
-    // Prepare content for Claude
-    let content: string;
-
-    if (page.json_data) {
-      // Use JSON extraction prompt
-      content = JSON.stringify(page.json_data, null, 2);
-    } else if (page.html) {
-      // Clean and truncate HTML
-      content = cleanHtmlForExtraction(page.html);
-      content = truncateContent(content, 6000);
-    } else {
-      return {
-        dishes: [],
-        page_quality: {
-          menu_found: false,
-          prices_visible: false,
-          descriptions_available: false,
-          images_available: false,
-        },
-      };
-    }
-
-    // Get known products for this chain
-    const knownProducts = page.chain_id && VERIFIED_CHAIN_PRODUCTS[page.chain_id]
-      ? VERIFIED_CHAIN_PRODUCTS[page.chain_id].join(', ')
-      : 'unknown';
-
-    // Build prompt
-    const prompt = fillPromptTemplate(
-      page.json_data ? JSON_MENU_EXTRACTION_PROMPT : DISH_EXTRACTION_PROMPT,
-      {
-        platform: page.platform,
-        country: page.country,
-        venue_name: page.venue_name,
-        known_products: knownProducts,
-        page_content: content,
-        json_data: page.json_data ? content : undefined,
-      }
-    );
-
     try {
-      const response = await this.anthropic.messages.create({
-        model: this.fullConfig.claude.model,
-        max_tokens: this.fullConfig.claude.max_tokens,
-        temperature: this.fullConfig.claude.temperature,
-        system: DISH_FINDER_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: prompt }],
-      });
-
-      // Parse response
-      const responseText = response.content[0].type === 'text'
-        ? response.content[0].text
-        : '';
-
-      return this.parseExtractionResponse(responseText);
+      // Use the DishFinderAIClient which handles all the prompting and parsing
+      return await this.aiClient.extractDishes(page);
     } catch (error) {
-      this.log(`Claude extraction error: ${error}`);
+      this.log(`Gemini extraction error: ${error}`);
       return {
         dishes: [],
         page_quality: {
@@ -822,7 +779,7 @@ export class SmartDishFinderAgent {
   }
 
   /**
-   * Run the learning process
+   * Run the learning process using Gemini AI
    */
   async learn(): Promise<DishLearningResult> {
     this.log('Starting learning process...');
@@ -841,52 +798,17 @@ export class SmartDishFinderAgent {
     // Get current strategies
     const strategies = await dishExtractionStrategies.getAll();
 
-    // Prepare feedback summary
-    const feedbackSummary = recentFeedback.map((f: DishFeedback) => ({
-      result_type: f.result_type,
-      strategy_id: f.strategy_id,
-      details: f.feedback_details,
-    }));
-
-    // Ask Claude to analyze
-    const prompt = fillPromptTemplate(DISH_LEARNING_PROMPT, {
-      days: '7',
-      feedback_data: JSON.stringify(feedbackSummary, null, 2),
-      strategies: JSON.stringify(strategies.map((s: DishExtractionStrategy) => ({
-        id: s.id,
-        platform: s.platform,
-        success_rate: s.success_rate,
-        total_uses: s.total_uses,
-      })), null, 2),
-    });
-
     try {
-      const response = await this.anthropic.messages.create({
-        model: this.fullConfig.claude.model,
-        max_tokens: 2048,
-        temperature: 0.3,
-        system: DISH_FINDER_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: prompt }],
-      });
-
-      const responseText = response.content[0].type === 'text'
-        ? response.content[0].text
-        : '';
-
-      // Parse and return learning result
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]) as DishLearningResult;
-      }
+      // Use the DishFinderAIClient to learn from feedback
+      return await this.aiClient.learnFromFeedback(recentFeedback, strategies);
     } catch (error) {
       this.log(`Learning error: ${error}`);
+      return {
+        strategy_updates: [],
+        new_strategies: [],
+        insights: [],
+      };
     }
-
-    return {
-      strategy_updates: [],
-      new_strategies: [],
-      insights: [],
-    };
   }
 
   /**

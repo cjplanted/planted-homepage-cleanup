@@ -246,6 +246,115 @@ export class DishFinderAIClient {
   }
 
   /**
+   * Extract complete objects from a potentially truncated JSON array
+   * This is more robust than trying to fix truncated JSON by closing brackets
+   */
+  private extractCompleteObjects(jsonStr: string): unknown[] {
+    const results: unknown[] = [];
+
+    // Find the start of the array
+    const arrayStart = jsonStr.indexOf('[');
+    if (arrayStart === -1) return results;
+
+    let depth = 0;
+    let objectStart = -1;
+    let inString = false;
+    let escapeNext = false;
+
+    for (let i = arrayStart + 1; i < jsonStr.length; i++) {
+      const char = jsonStr[i];
+
+      if (escapeNext) {
+        escapeNext = false;
+        continue;
+      }
+      if (char === '\\') {
+        escapeNext = true;
+        continue;
+      }
+      if (char === '"') {
+        inString = !inString;
+        continue;
+      }
+      if (inString) continue;
+
+      if (char === '{') {
+        if (depth === 0) objectStart = i;
+        depth++;
+      } else if (char === '}') {
+        depth--;
+        if (depth === 0 && objectStart !== -1) {
+          // We have a complete object
+          const objectStr = jsonStr.substring(objectStart, i + 1);
+          try {
+            const obj = JSON.parse(objectStr);
+            results.push(obj);
+          } catch {
+            // Skip invalid object
+          }
+          objectStart = -1;
+        }
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * Attempt to fix truncated JSON by closing open brackets/braces
+   */
+  private fixTruncatedJson(jsonStr: string): string {
+    // Remove trailing comma if present
+    let fixed = jsonStr.replace(/,\s*$/, '');
+
+    // Count open brackets and braces
+    let openBraces = 0;
+    let openBrackets = 0;
+    let inString = false;
+    let escapeNext = false;
+
+    for (const char of fixed) {
+      if (escapeNext) {
+        escapeNext = false;
+        continue;
+      }
+      if (char === '\\') {
+        escapeNext = true;
+        continue;
+      }
+      if (char === '"') {
+        inString = !inString;
+        continue;
+      }
+      if (inString) continue;
+
+      if (char === '{') openBraces++;
+      if (char === '}') openBraces--;
+      if (char === '[') openBrackets++;
+      if (char === ']') openBrackets--;
+    }
+
+    // Close any unclosed strings (if we ended in string state)
+    if (inString) {
+      fixed += '"';
+    }
+
+    // Close unclosed brackets and braces in reverse order
+    // We need to track the order they were opened to close properly
+    // For simplicity, close all brackets first, then all braces
+    while (openBrackets > 0) {
+      fixed += ']';
+      openBrackets--;
+    }
+    while (openBraces > 0) {
+      fixed += '}';
+      openBraces--;
+    }
+
+    return fixed;
+  }
+
+  /**
    * Parse the extraction response
    */
   private parseExtractionResponse(responseText: string): PageExtractionResult {
@@ -266,39 +375,66 @@ export class DishFinderAIClient {
       let parsed: unknown;
       try {
         parsed = JSON.parse(cleanJson);
-      } catch {
-        // If direct parse fails, try to extract JSON from the response
-        // Find the first [ or { and the last ] or }
-        const firstBracket = cleanJson.indexOf('[');
-        const firstBrace = cleanJson.indexOf('{');
-        const start = Math.min(
-          firstBracket >= 0 ? firstBracket : Infinity,
-          firstBrace >= 0 ? firstBrace : Infinity
-        );
+      } catch (directParseError) {
+        // Try to fix truncated JSON before giving up
+        console.log('   Attempting to fix truncated JSON...');
+        const fixedJson = this.fixTruncatedJson(cleanJson);
 
-        if (start === Infinity) {
-          throw new Error('No JSON found in response');
-        }
+        try {
+          parsed = JSON.parse(fixedJson);
+          console.log('   Successfully fixed truncated JSON');
+        } catch {
+          // Try extracting complete objects from the truncated array
+          // This handles cases where the JSON is cut off mid-object
+          const extractedObjects = this.extractCompleteObjects(cleanJson);
+          if (extractedObjects.length > 0) {
+            console.log(`   Extracted ${extractedObjects.length} complete objects from truncated JSON`);
+            parsed = extractedObjects;
+          } else {
+            // If that didn't work, try to extract JSON from the response
+            // Find the first [ or { and the last ] or }
+            const firstBracket = cleanJson.indexOf('[');
+            const firstBrace = cleanJson.indexOf('{');
+            const start = Math.min(
+              firstBracket >= 0 ? firstBracket : Infinity,
+              firstBrace >= 0 ? firstBrace : Infinity
+            );
 
-        // Find matching end bracket (count nesting)
-        let depth = 0;
-        let end = -1;
-        for (let i = start; i < cleanJson.length; i++) {
-          const char = cleanJson[i];
-          if (char === '[' || char === '{') depth++;
-          if (char === ']' || char === '}') depth--;
-          if (depth === 0) {
-            end = i + 1;
-            break;
+            if (start === Infinity) {
+              throw new Error('No JSON found in response');
+            }
+
+            // Extract from start and try to fix
+            const partialJson = cleanJson.substring(start);
+            const fixedPartial = this.fixTruncatedJson(partialJson);
+
+            try {
+              parsed = JSON.parse(fixedPartial);
+              console.log('   Successfully fixed partial JSON');
+            } catch {
+              // Last resort: try to find matching end bracket (count nesting)
+              let depth = 0;
+              let end = -1;
+              for (let i = start; i < cleanJson.length; i++) {
+                const char = cleanJson[i];
+                if (char === '[' || char === '{') depth++;
+                if (char === ']' || char === '}') depth--;
+                if (depth === 0) {
+                  end = i + 1;
+                  break;
+                }
+              }
+
+              if (end === -1) {
+                // JSON is truly truncated, try fix one more time on the partial
+                throw new Error(`Unclosed JSON in response. Original error: ${directParseError}`);
+              }
+
+              const jsonStr = cleanJson.substring(start, end);
+              parsed = JSON.parse(jsonStr);
+            }
           }
         }
-
-        if (end === -1) {
-          throw new Error('Unclosed JSON in response');
-        }
-
-        const jsonStr = cleanJson.substring(start, end);
-        parsed = JSON.parse(jsonStr);
       }
 
       // Handle array format (just dishes)

@@ -5,8 +5,6 @@
  * JavaScript-rendered content. Includes stealth mode to avoid detection.
  */
 
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import type { Browser, Page } from 'puppeteer';
 import type {
   VenuePage,
@@ -15,8 +13,23 @@ import type {
   DishFinderConfig,
 } from '@pad/core';
 
-// Add stealth plugin to avoid detection
-puppeteer.use(StealthPlugin());
+// Puppeteer-extra is loaded dynamically due to ESM compatibility issues
+let puppeteerInitialized = false;
+let puppeteerModule: { use: (plugin: unknown) => void; launch: (opts: unknown) => Promise<Browser> };
+
+async function initPuppeteer(): Promise<typeof puppeteerModule> {
+  if (puppeteerInitialized) return puppeteerModule;
+
+  const puppeteerExtra = await import('puppeteer-extra');
+  const puppeteer = (puppeteerExtra.default || puppeteerExtra) as unknown as typeof puppeteerModule;
+  const stealthModule = await import('puppeteer-extra-plugin-stealth');
+  const StealthPlugin = stealthModule.default || stealthModule;
+
+  puppeteer.use(StealthPlugin());
+  puppeteerModule = puppeteer;
+  puppeteerInitialized = true;
+  return puppeteer;
+}
 
 export interface FetchResult {
   success: boolean;
@@ -82,21 +95,56 @@ export class PuppeteerFetcher {
   private browser: Browser | null = null;
   private config: DishFinderConfig['puppeteer'];
   private userAgentIndex = 0;
+  private consecutiveFailures = 0;
+  private maxConsecutiveFailures = 3;
 
   constructor(config?: Partial<DishFinderConfig['puppeteer']>) {
-    const { DEFAULT_DISH_FINDER_CONFIG } = require('@pad/core');
+    // Import the default config - use dynamic import for ESM compatibility
     this.config = {
-      ...DEFAULT_DISH_FINDER_CONFIG.puppeteer,
+      headless: true,
+      timeout: 30000,
+      timeout_ms: 30000,
+      viewport: { width: 1280, height: 800 },
+      userAgents: [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+      ],
       ...config,
     };
+  }
+
+  /**
+   * Check if the browser is healthy
+   */
+  private async isBrowserHealthy(): Promise<boolean> {
+    if (!this.browser) return false;
+    try {
+      // Try to get the browser version - this will fail if disconnected
+      await this.browser.version();
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
    * Initialize the browser
    */
   async init(): Promise<void> {
-    if (this.browser) return;
+    if (this.browser && await this.isBrowserHealthy()) return;
 
+    // Close existing browser if it exists but is unhealthy
+    if (this.browser) {
+      try {
+        await this.browser.close();
+      } catch {
+        // Ignore close errors
+      }
+      this.browser = null;
+    }
+
+    const puppeteer = await initPuppeteer();
     this.browser = await puppeteer.launch({
       headless: this.config.headless,
       args: [
@@ -106,8 +154,18 @@ export class PuppeteerFetcher {
         '--disable-accelerated-2d-canvas',
         '--disable-gpu',
         '--window-size=1280,800',
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--disable-sync',
+        '--disable-translate',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-first-run',
+        '--safebrowsing-disable-auto-update',
       ],
-    });
+    }) as Browser;
+
+    this.consecutiveFailures = 0;
   }
 
   /**
@@ -131,14 +189,40 @@ export class PuppeteerFetcher {
 
   /**
    * Detect platform from URL
+   * Returns 'unknown' for unrecognized platforms to allow AI-based extraction
    */
-  detectPlatform(url: string): DeliveryPlatform | null {
+  detectPlatform(url: string): DeliveryPlatform | 'unknown' {
     if (url.includes('ubereats.com')) return 'uber-eats';
     if (url.includes('lieferando.de') || url.includes('lieferando.at')) return 'lieferando';
     if (url.includes('wolt.com')) return 'wolt';
     if (url.includes('just-eat.ch') || url.includes('eat.ch')) return 'just-eat';
     if (url.includes('smood.ch')) return 'smood';
-    return null;
+    // Return 'unknown' for unrecognized platforms - AI will analyze the page
+    return 'unknown';
+  }
+
+  /**
+   * Detect country from URL domain for unknown platforms
+   */
+  detectCountryFromDomain(url: string): SupportedCountry | null {
+    try {
+      const urlObj = new URL(url);
+      const domain = urlObj.hostname.toLowerCase();
+
+      // Check TLD
+      if (domain.endsWith('.ch')) return 'CH';
+      if (domain.endsWith('.de')) return 'DE';
+      if (domain.endsWith('.at')) return 'AT';
+
+      // Check common country indicators in domain
+      if (domain.includes('-ch') || domain.includes('swiss') || domain.includes('schweiz')) return 'CH';
+      if (domain.includes('-de') || domain.includes('german') || domain.includes('deutsch')) return 'DE';
+      if (domain.includes('-at') || domain.includes('austria') || domain.includes('österreich')) return 'AT';
+
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -157,7 +241,18 @@ export class PuppeteerFetcher {
   }
 
   /**
-   * Fetch a venue page
+   * Restart the browser if needed after consecutive failures
+   */
+  private async restartBrowserIfNeeded(): Promise<void> {
+    if (this.consecutiveFailures >= this.maxConsecutiveFailures) {
+      console.log(`[PuppeteerFetcher] ${this.consecutiveFailures} consecutive failures, restarting browser...`);
+      await this.close();
+      await this.init();
+    }
+  }
+
+  /**
+   * Fetch a venue page with retry logic
    */
   async fetchPage(
     url: string,
@@ -168,26 +263,91 @@ export class PuppeteerFetcher {
     },
     options?: FetchOptions
   ): Promise<FetchResult> {
-    if (!this.browser) {
+    const maxRetries = 2;
+    let lastError: string = '';
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const result = await this.fetchPageOnce(url, venueInfo, options);
+
+      if (result.success) {
+        this.consecutiveFailures = 0;
+        return result;
+      }
+
+      lastError = result.error || 'Unknown error';
+
+      // Check if error is retryable
+      const isProtocolError = lastError.includes('Protocol error') ||
+                              lastError.includes('Connection closed') ||
+                              lastError.includes('Target closed');
+
+      if (isProtocolError) {
+        this.consecutiveFailures++;
+        await this.restartBrowserIfNeeded();
+
+        if (attempt < maxRetries) {
+          console.log(`[PuppeteerFetcher] Protocol error on attempt ${attempt + 1}, retrying...`);
+          await new Promise(r => setTimeout(r, 1000 * (attempt + 1))); // Backoff
+          continue;
+        }
+      }
+
+      // Non-retryable error or max retries reached
+      if (!result.retryable || attempt >= maxRetries) {
+        return result;
+      }
+
+      // Wait before retrying
+      await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+    }
+
+    return {
+      success: false,
+      error: lastError,
+      retryable: false,
+    };
+  }
+
+  /**
+   * Fetch a venue page (single attempt)
+   */
+  private async fetchPageOnce(
+    url: string,
+    venueInfo: {
+      venue_id: string;
+      venue_name: string;
+      chain_id?: string;
+    },
+    options?: FetchOptions
+  ): Promise<FetchResult> {
+    // Ensure browser is initialized and healthy
+    if (!this.browser || !(await this.isBrowserHealthy())) {
       await this.init();
     }
 
     const platform = this.detectPlatform(url);
-    if (!platform) {
-      return {
-        success: false,
-        error: `Unknown platform for URL: ${url}`,
-        retryable: false,
-      };
-    }
 
-    const country = this.detectCountry(url, platform);
-    if (!country) {
-      return {
-        success: false,
-        error: `Could not detect country for URL: ${url}`,
-        retryable: false,
-      };
+    // For unknown platforms, try to detect country from domain
+    // This enables AI-based extraction from any website
+    let country: SupportedCountry | null = null;
+    if (platform === 'unknown') {
+      country = this.detectCountryFromDomain(url);
+      if (!country) {
+        // Default to DE for unknown platforms if we can't detect country
+        country = 'DE';
+        console.log(`[AI Mode] Unknown platform, defaulting to DE for: ${url}`);
+      } else {
+        console.log(`[AI Mode] Detected country ${country} from domain for: ${url}`);
+      }
+    } else {
+      country = this.detectCountry(url, platform);
+      if (!country) {
+        return {
+          success: false,
+          error: `Could not detect country for URL: ${url}`,
+          retryable: false,
+        };
+      }
     }
 
     let page: Page | null = null;
@@ -232,14 +392,23 @@ export class PuppeteerFetcher {
       }
 
       // Wait for menu content to load
-      const waitSelector = options?.waitForSelector || PLATFORM_WAIT_SELECTORS[platform];
-      try {
-        await page.waitForSelector(waitSelector, {
-          timeout: 10000,
-        });
-      } catch {
-        // Menu selector not found, but page might still have content
-        console.warn(`Menu selector not found for ${platform}, continuing anyway`);
+      // For unknown platforms, we skip selector waiting and just wait for content
+      if (platform !== 'unknown') {
+        const waitSelector = options?.waitForSelector || PLATFORM_WAIT_SELECTORS[platform];
+        if (waitSelector) {
+          try {
+            await page.waitForSelector(waitSelector, {
+              timeout: 10000,
+            });
+          } catch {
+            // Menu selector not found, but page might still have content
+            console.warn(`Menu selector not found for ${platform}, continuing anyway`);
+          }
+        }
+      } else {
+        // For unknown platforms, just wait a bit for dynamic content to load
+        console.log(`[AI Mode] Waiting for page content to stabilize...`);
+        await new Promise((r) => setTimeout(r, 3000));
       }
 
       // Scroll to load lazy content if requested
@@ -275,7 +444,10 @@ export class PuppeteerFetcher {
       // Determine if retryable
       const retryable = message.includes('timeout') ||
                        message.includes('Navigation') ||
-                       message.includes('net::');
+                       message.includes('net::') ||
+                       message.includes('Protocol error') ||
+                       message.includes('Connection closed') ||
+                       message.includes('Target closed');
 
       return {
         success: false,
@@ -284,7 +456,11 @@ export class PuppeteerFetcher {
       };
     } finally {
       if (page) {
-        await page.close();
+        try {
+          await page.close();
+        } catch {
+          // Ignore page close errors - page might already be closed
+        }
       }
     }
   }
@@ -323,7 +499,7 @@ export class PuppeteerFetcher {
   /**
    * Extract JSON data embedded in page (many platforms use this)
    */
-  private async extractJsonData(page: Page, platform: DeliveryPlatform): Promise<unknown> {
+  private async extractJsonData(page: Page, platform: DeliveryPlatform | 'unknown'): Promise<unknown> {
     try {
       switch (platform) {
         case 'uber-eats':
@@ -390,20 +566,50 @@ export class PuppeteerFetcher {
 
         case 'just-eat':
         case 'smood':
-          // Try generic JSON-LD extraction
+        case 'unknown':
+          // For unknown platforms and generic cases, try multiple extraction methods
           return await page.evaluate(() => {
+            const result: { jsonLd?: unknown[]; nextData?: unknown; initialState?: unknown } = {};
+
+            // Try JSON-LD (schema.org)
             const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-            const data: unknown[] = [];
+            if (scripts.length > 0) {
+              result.jsonLd = [];
+              scripts.forEach((script: Element) => {
+                try {
+                  result.jsonLd!.push(JSON.parse(script.textContent || '{}'));
+                } catch {
+                  // Skip invalid JSON
+                }
+              });
+            }
 
-            scripts.forEach((script: Element) => {
+            // Try __NEXT_DATA__ (Next.js)
+            const nextData = document.getElementById('__NEXT_DATA__');
+            if (nextData) {
               try {
-                data.push(JSON.parse(script.textContent || '{}'));
+                result.nextData = JSON.parse(nextData.textContent || '{}');
               } catch {
-                // Skip invalid JSON
+                // Ignore
               }
-            });
+            }
 
-            return data.length > 0 ? (data.length === 1 ? data[0] : data) : null;
+            // Try window state variables
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const w = window as any;
+            if (w.__INITIAL_STATE__) {
+              result.initialState = w.__INITIAL_STATE__;
+            }
+            if (w.__APP_INITIAL_STATE__) {
+              result.initialState = w.__APP_INITIAL_STATE__;
+            }
+            if (w.__PRELOADED_STATE__) {
+              result.initialState = w.__PRELOADED_STATE__;
+            }
+
+            // Return combined data if any found
+            const hasData = result.jsonLd?.length || result.nextData || result.initialState;
+            return hasData ? result : null;
           });
 
         default:
@@ -464,4 +670,8 @@ export async function closePuppeteerFetcher(): Promise<void> {
     await fetcherInstance.close();
     fetcherInstance = null;
   }
+}
+
+export function resetPuppeteerFetcher(): void {
+  fetcherInstance = null;
 }

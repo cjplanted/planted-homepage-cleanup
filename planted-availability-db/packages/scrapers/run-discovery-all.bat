@@ -4,10 +4,31 @@ REM Runs discovery for all DACH countries
 
 cd /d C:\Users\christoph\planted-website\planted-availability-db\packages\scrapers
 
-set GOOGLE_APPLICATION_CREDENTIALS=C:\Users\christoph\planted-website\planted-availability-db\service-account.json
-set GOOGLE_SEARCH_API_KEY=AIzaSyD-k_V6FM1uy8kKYmFSchjiIu88Mnst8Uc
-set GOOGLE_SEARCH_ENGINE_ID=23940e3d612724074
-set GOOGLE_AI_API_KEY=AIzaSyBN6L9OzRVtruuL_NfvusvQz-YjNrmjTgM
+REM Load environment variables from root .env file
+if exist "..\..\..\.env" (
+    for /f "usebackq tokens=1,* delims==" %%a in ("..\..\..\.env") do (
+        if not "%%a"=="" if not "%%a:~0,1%"=="#" set "%%a=%%b"
+    )
+)
+
+REM Fallback: Load from local .env if root doesn't exist
+if exist ".env" (
+    for /f "usebackq tokens=1,* delims==" %%a in (".env") do (
+        if not "%%a"=="" if not "%%a:~0,1%"=="#" set "%%a=%%b"
+    )
+)
+
+REM Check required variables
+if "%GOOGLE_AI_API_KEY%"=="" (
+    echo ERROR: GOOGLE_AI_API_KEY not set. Please create a .env file.
+    echo See .env.example for required variables.
+    exit /b 1
+)
+
+if "%GOOGLE_SEARCH_API_KEY%"=="" (
+    echo ERROR: GOOGLE_SEARCH_API_KEY not set. Please create a .env file.
+    exit /b 1
+)
 
 echo ========================================
 echo Smart Discovery Agent - %date% %time%
