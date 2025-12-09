@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { deliveryRestaurants, platformColors, type DeliveryRestaurant } from '../data/deliveryRestaurants';
-import { chainLocations, chains, chainPlatformColors, getDishPrice, type ChainLocation, type Chain, type ChainDish } from '../data/chainRestaurants';
+import { allChainLocations, chains, chainPlatformColors, getDishPrice, type ChainLocation, type Chain, type ChainDish } from '../data/chainRestaurants';
 
 interface Translations {
     detecting?: string;
@@ -27,6 +27,8 @@ interface Translations {
     findNearest?: string;
     nearYou?: string;
     locations?: string;
+    enterZipToStart?: string;
+    enterZipHint?: string;
 }
 
 interface Props {
@@ -68,6 +70,8 @@ const t = {
     findNearest: translations.findNearest || "Find nearest",
     nearYou: translations.nearYou || "near you",
     locations: translations.locations || "locations",
+    enterZipToStart: translations.enterZipToStart || "Enter your ZIP code to find planted near you",
+    enterZipHint: translations.enterZipHint || "Use the search above to discover stores, restaurants, and delivery options in your area.",
 };
 
 // ZIP code placeholders by country
@@ -84,7 +88,7 @@ const zipPlaceholders: Record<string, string> = {
 };
 
 // Pass chain data to client
-const chainDataForClient = JSON.stringify(chainLocations);
+const chainDataForClient = JSON.stringify(allChainLocations);
 const chainsMetaForClient = JSON.stringify(chains);
 
 const base = import.meta.env.BASE_URL;
@@ -292,7 +296,19 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
         <!-- Retail partners tab -->
         <div class="tab-content active" id="retail-tab">
-            <div class="partners-grid" id="retailGrid">
+            <!-- Initial state - shown before ZIP search -->
+            <div class="initial-state" id="retailInitialState">
+                <div class="initial-state-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+                <h3 class="initial-state-title">{t.enterZipToStart}</h3>
+                <p class="initial-state-hint">{t.enterZipHint}</p>
+            </div>
+            <div class="partners-grid hidden-initial" id="retailGrid">
                 {retailPartners.map((retailer) => {
                     const retailerCountries = getRetailerCountries(retailer);
                     const retailerProducts = (retailer.data.products || [])
@@ -358,11 +374,23 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
         <!-- Foodservice partners tab -->
         <div class="tab-content" id="foodservice-tab">
-            <div class="foodservice-intro reveal">
+            <!-- Initial state - shown before ZIP search -->
+            <div class="initial-state" id="foodserviceInitialState">
+                <div class="initial-state-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+                <h3 class="initial-state-title">{t.enterZipToStart}</h3>
+                <p class="initial-state-hint">{t.enterZipHint}</p>
+            </div>
+            <div class="foodservice-intro reveal hidden-initial">
                 <p>{t.foodserviceIntro}</p>
             </div>
 
-            <div class="partners-grid foodservice-grid" id="foodserviceGrid">
+            <div class="partners-grid foodservice-grid hidden-initial" id="foodserviceGrid">
                 {foodservicePartners.map((partner) => {
                     const partnerCountries = getRetailerCountries(partner);
 
@@ -414,15 +442,27 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
         <!-- Delivery partners tab -->
         <div class="tab-content" id="delivery-tab">
-            <div class="delivery-intro reveal">
+            <!-- Initial state - shown before ZIP search -->
+            <div class="initial-state" id="deliveryInitialState">
+                <div class="initial-state-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+                <h3 class="initial-state-title">{t.enterZipToStart}</h3>
+                <p class="initial-state-hint">{t.enterZipHint}</p>
+            </div>
+            <div class="delivery-intro reveal hidden-initial">
                 <p>{t.deliveryIntro}</p>
             </div>
 
             <!-- Chain restaurants grid (populated by JS based on ZIP) -->
-            <div class="chain-grid" id="chainGrid">
+            <div class="chain-grid hidden-initial" id="chainGrid">
                 {chains.map((chain) => {
                     // Get first location for this chain as default
-                    const defaultLocation = chainLocations.find(loc => loc.chainId === chain.id);
+                    const defaultLocation = allChainLocations.find(loc => loc.chainId === chain.id);
                     const codeToName = { 'DE': 'Germany', 'CH': 'Switzerland', 'AT': 'Austria', 'LU': 'Luxembourg' };
 
                     return defaultLocation && (
@@ -1100,6 +1140,23 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
             });
         }
 
+        // Reveal content after ZIP search (hide initial states)
+        function revealContent() {
+            // Add class to all tab contents to reveal hidden content
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.add('content-revealed');
+            });
+        }
+
+        // Hide content (show initial states again)
+        function hideContent() {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.remove('content-revealed');
+            });
+        }
+
         // Handle ZIP search
         async function handleZipSearch() {
             const zip = zipInput?.value?.trim();
@@ -1150,6 +1207,9 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
                     // Show helpful no-delivery message
                     showNoDeliveryMessage(coords.displayName || zip);
                 }
+
+                // Reveal content in all tabs (hide initial states)
+                revealContent();
 
                 // Switch to delivery tab to show results
                 const deliveryTab = document.querySelector('[data-tab="delivery"]');
@@ -1238,6 +1298,9 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
             clearDistanceBadges();
             filterCards(currentCountry);
+
+            // Hide content and show initial states again
+            hideContent();
         }
 
         // Update ZIP placeholder based on country
@@ -1671,6 +1734,71 @@ function getRetailerCountries(retailer: typeof retailers[0]): string[] {
 
     .tab-content.active {
         display: block;
+    }
+
+    /* Initial state - shown before ZIP search */
+    .initial-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4rem 2rem;
+        min-height: 300px;
+    }
+
+    .initial-state-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+        opacity: 0.6;
+    }
+
+    .initial-state-icon svg {
+        width: 100%;
+        height: 100%;
+        stroke: var(--color-primary, #8BC34A);
+    }
+
+    .initial-state-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 0.75rem;
+    }
+
+    .initial-state-hint {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 400px;
+        line-height: 1.5;
+    }
+
+    /* Hidden initial state class - content hidden before ZIP search */
+    .hidden-initial {
+        display: none !important;
+    }
+
+    /* When content is revealed after ZIP search */
+    .content-revealed .initial-state {
+        display: none;
+    }
+
+    .content-revealed .hidden-initial {
+        display: grid !important;
+    }
+
+    .content-revealed .hidden-initial.partners-grid {
+        display: grid !important;
+    }
+
+    .content-revealed .hidden-initial.chain-grid {
+        display: grid !important;
+    }
+
+    .content-revealed .hidden-initial.foodservice-intro,
+    .content-revealed .hidden-initial.delivery-intro {
+        display: block !important;
     }
 
     .foodservice-intro {

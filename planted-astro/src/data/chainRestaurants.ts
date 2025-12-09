@@ -6,6 +6,8 @@
  * When user enters ZIP code, we show only the closest location per chain.
  */
 
+import { discoveredChainLocations } from './discoveredLocations';
+
 export interface ChainLocation {
   id: string;
   chainId: string;
@@ -14,7 +16,7 @@ export interface ChainLocation {
   city: string;
   address?: string;
   postalCode?: string;
-  country: 'ch' | 'de' | 'at' | 'lu';
+  country: 'ch' | 'de' | 'at' | 'lu' | 'uk' | 'nl';
   coordinates: {
     lat: number;
     lng: number;
@@ -25,7 +27,7 @@ export interface ChainLocation {
 }
 
 export interface DeliveryPlatformLink {
-  name: 'wolt' | 'lieferando' | 'uber-eats' | 'just-eat' | 'smood';
+  name: 'wolt' | 'lieferando' | 'uber-eats' | 'just-eat' | 'smood' | 'own';
   url: string;
   displayName: string;
 }
@@ -36,7 +38,7 @@ export interface ChainDish {
   /** Single price - use for chains operating in one country only */
   price?: string;
   /** Country-specific prices for multi-country chains (e.g., { ch: 'CHF 14.90', de: '€12.90' }) */
-  priceByCountry?: Partial<Record<'ch' | 'de' | 'at' | 'lu', string>>;
+  priceByCountry?: Partial<Record<'ch' | 'de' | 'at' | 'lu' | 'uk' | 'nl', string>>;
   plantedProduct: string;
   isVegan?: boolean;
 }
@@ -105,6 +107,17 @@ const CITY_COORDS: Record<string, { lat: number; lng: number }> = {
   'Innsbruck': { lat: 47.2692, lng: 11.4041 },
   // Luxembourg
   'Luxembourg': { lat: 49.6116, lng: 6.1319 },
+  // United Kingdom
+  'London': { lat: 51.5074, lng: -0.1278 },
+  'Manchester': { lat: 53.4808, lng: -2.2426 },
+  'Edinburgh': { lat: 55.9533, lng: -3.1883 },
+  'Glasgow': { lat: 55.8642, lng: -4.2518 },
+  'Liverpool': { lat: 53.4084, lng: -2.9916 },
+  'Sheffield': { lat: 53.3811, lng: -1.4701 },
+  'Nottingham': { lat: 52.9548, lng: -1.1581 },
+  'Cardiff': { lat: 51.4816, lng: -3.1791 },
+  'Ingliston': { lat: 55.9482, lng: -3.3647 },
+  'Stretford': { lat: 53.4656, lng: -2.3475 },
 };
 
 // Chain metadata with delivery radius
@@ -142,7 +155,7 @@ export const chains: Chain[] = [
     website: 'https://kaimug.ch',
     cuisine: 'Thai Street Food',
     plantedProducts: ['planted.chicken'],
-    totalLocations: 38,
+    totalLocations: 35,
     countries: ['CH', 'DE'],
     highlight: 'Authentic Thai cuisine',
     deliveryRadiusKm: 8,
@@ -214,10 +227,120 @@ export const chains: Chain[] = [
     website: 'https://brezelkoenig.ch',
     cuisine: 'Pretzels & Baguettes',
     plantedProducts: ['planted.chicken'],
-    totalLocations: 64,
+    totalLocations: 51,
     countries: ['CH'],
     highlight: 'Baguette Planted Chicken Curry',
     deliveryRadiusKm: 5,
+  },
+  {
+    id: 'barburrito',
+    name: 'Barburrito',
+    logo: '/images/chains/barburrito.svg',
+    website: 'https://barburrito.co.uk',
+    cuisine: 'Mexican Burritos',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 12,
+    countries: ['UK'],
+    highlight: 'UK Mexican chain with planted.chicken',
+    deliveryRadiusKm: 8,
+  },
+  // New chains discovered via Smart Discovery Agent
+  {
+    id: 'green-club',
+    name: 'Green Club',
+    cuisine: 'Healthy Fast Food',
+    plantedProducts: ['planted.chicken', 'planted.kebab', 'planted.pastrami'],
+    totalLocations: 5,
+    countries: ['DE'],
+    highlight: 'Vegan-friendly healthy bowls',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'beets-roots',
+    name: 'beets&roots',
+    website: 'https://beetsandroots.de',
+    cuisine: 'Healthy Bowls',
+    plantedProducts: ['planted.chicken', 'planted.steak'],
+    totalLocations: 5,
+    countries: ['DE'],
+    highlight: 'Fresh salads and bowls',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'kaspar-schmauser',
+    name: 'Kaspar Schmauser',
+    website: 'https://kaspar-schmauser.de',
+    cuisine: 'German Comfort Food',
+    plantedProducts: ['planted.chicken', 'planted.kebab', 'planted.steak'],
+    totalLocations: 4,
+    countries: ['DE'],
+    highlight: 'German comfort dishes with planted',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'veganitas',
+    name: 'Veganitas',
+    cuisine: 'Vegan',
+    plantedProducts: ['planted.steak', 'planted.chicken'],
+    totalLocations: 3,
+    countries: ['CH'],
+    highlight: '100% vegan restaurant',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'kaisin',
+    name: 'kaisin.',
+    website: 'https://kaisin.ch',
+    cuisine: 'Asian Fusion',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 3,
+    countries: ['CH'],
+    highlight: 'Asian fusion bowls',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'rice-up',
+    name: 'Rice Up!',
+    website: 'https://rice-up.ch',
+    cuisine: 'Asian Bowls',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 8,
+    countries: ['CH'],
+    highlight: 'Swiss Asian fast-casual',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'cotidiano',
+    name: 'Cotidiano',
+    website: 'https://cotidiano.de',
+    cuisine: 'Café & Restaurant',
+    plantedProducts: ['planted.chicken_burger', 'planted.pastrami'],
+    totalLocations: 2,
+    countries: ['DE'],
+    highlight: 'All-day café with planted options',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'tibits',
+    name: 'Tibits',
+    website: 'https://tibits.ch',
+    cuisine: 'Vegetarian Buffet',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 9,
+    countries: ['CH'],
+    highlight: 'Vegetarian buffet restaurant',
+    deliveryRadiusKm: 8,
+  },
+  {
+    id: 'hiltl',
+    name: 'Hiltl',
+    website: 'https://hiltl.ch',
+    cuisine: 'Vegetarian World Cuisine',
+    plantedProducts: ['planted.chicken'],
+    totalLocations: 4,
+    countries: ['CH'],
+    highlight: "World's oldest vegetarian restaurant",
+    deliveryRadiusKm: 8,
   },
 ];
 
@@ -554,33 +677,6 @@ export const chainLocations: ChainLocation[] = [
     deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
-  {
-    id: 'kaimug-berlin-hbf',
-    chainId: 'kaimug',
-    chainName: 'KAIMUG',
-    name: 'KAIMUG Berlin Hauptbahnhof',
-    city: 'Berlin',
-    address: 'Washingtonplatz 3',
-    postalCode: '10557',
-    country: 'de',
-    coordinates: { lat: 52.5251, lng: 13.3694 },
-    deliveryPlatforms: [],
-    plantedProducts: ['planted.chicken'],
-  },
-  {
-    id: 'kaimug-berlin-zoo',
-    chainId: 'kaimug',
-    chainName: 'KAIMUG',
-    name: 'KAIMUG Berlin Zoo',
-    city: 'Berlin',
-    address: 'Hardenbergplatz 9-11',
-    postalCode: '10623',
-    country: 'de',
-    coordinates: { lat: 52.5069, lng: 13.3325 },
-    deliveryPlatforms: [],
-    plantedProducts: ['planted.chicken'],
-  },
-
   // ============================================
   // NOOCH ASIAN KITCHEN
   // ============================================
@@ -857,162 +953,292 @@ export const chainLocations: ChainLocation[] = [
   },
 
   // ============================================
-  // BREZELKÖNIG - Swiss Pretzel Chain
+  // BARBURRITO - UK Mexican Chain
   // ============================================
   {
-    id: 'bk-zurich-hb',
+    id: 'barburrito-edinburgh-airport',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Edinburgh Airport',
+    city: 'Edinburgh',
+    address: 'Departures, Edinburgh Airport',
+    postalCode: 'EH12 9DN',
+    country: 'uk',
+    coordinates: { lat: 55.9481753, lng: -3.3647135 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+    dishes: [
+      { name: 'Planted Chicken Burrito', description: 'Burrito with planted.chicken, rice, beans, salsa, guacamole', price: '£9.95', plantedProduct: 'planted.chicken', isVegan: true },
+    ],
+  },
+  {
+    id: 'barburrito-edinburgh-forrest-road',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Edinburgh Forrest Road',
+    city: 'Edinburgh',
+    address: '55 Forrest Road',
+    postalCode: 'EH1 2QP',
+    country: 'uk',
+    coordinates: { lat: 55.9454548, lng: -3.191497 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-glasgow-queen-street',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Glasgow Queen Street',
+    city: 'Glasgow',
+    address: '138 Queen Street',
+    postalCode: 'G1 3BX',
+    country: 'uk',
+    coordinates: { lat: 55.8606211, lng: -4.2514455 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-liverpool',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Liverpool',
+    city: 'Liverpool',
+    address: 'The Galleria, 14 Paradise Street',
+    postalCode: 'L1 8JF',
+    country: 'uk',
+    coordinates: { lat: 53.4041807, lng: -2.9870867 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-paddington-station',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Paddington Station',
+    city: 'London',
+    address: 'Unit 18, The Lawn, Paddington Station',
+    postalCode: 'W2 1HB',
+    country: 'uk',
+    coordinates: { lat: 51.5159981, lng: -0.1766912 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-manchester-airport-t2',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Manchester Airport T2',
+    city: 'Manchester',
+    address: 'Terminal 2 Departures, Manchester Airport',
+    postalCode: 'M90 1QX',
+    country: 'uk',
+    coordinates: { lat: 53.3680295, lng: -2.2816847 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-manchester-arndale',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Manchester Arndale',
+    city: 'Manchester',
+    address: 'Manchester Arndale',
+    postalCode: 'M4 1AZ',
+    country: 'uk',
+    coordinates: { lat: 53.4835467, lng: -2.2420169 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-manchester-piccadilly',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Manchester Piccadilly Gardens',
+    city: 'Manchester',
+    address: '1 Piccadilly Gardens',
+    postalCode: 'M1 1RG',
+    country: 'uk',
+    coordinates: { lat: 53.480349, lng: -2.2364387 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-trafford-centre',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Trafford Centre',
+    city: 'Manchester',
+    address: '134 The Orient, The Trafford Centre',
+    postalCode: 'M17 8EH',
+    country: 'uk',
+    coordinates: { lat: 53.465808, lng: -2.347621 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-nottingham',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Nottingham',
+    city: 'Nottingham',
+    address: '22 King Street',
+    postalCode: 'NG1 2AS',
+    country: 'uk',
+    coordinates: { lat: 52.9546697, lng: -1.1493416 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-sheffield-meadowhall',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Sheffield Meadowhall',
+    city: 'Sheffield',
+    address: 'Meadowhall Centre',
+    postalCode: 'S9 1EP',
+    country: 'uk',
+    coordinates: { lat: 53.4139328, lng: -1.412974 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'barburrito-cardiff',
+    chainId: 'barburrito',
+    chainName: 'Barburrito',
+    name: 'Barburrito - Cardiff',
+    city: 'Cardiff',
+    address: 'St Davids',
+    postalCode: 'CF10 2EF',
+    country: 'uk',
+    coordinates: { lat: 51.4792748, lng: -3.1742173 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+
+  // ============================================
+  // BREZELKÖNIG - Swiss Pretzel Chain (51 locations)
+  // ============================================
+  {
+    id: 'bk-aarau',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Zürich HB',
-    city: 'Zürich',
-    address: 'Bahnhofplatz',
+    name: 'Brezelkönig Bahnhofsplatz Aarau',
+    city: 'Aarau',
+    address: 'Bahnhofplatz 3',
     country: 'ch',
-    coordinates: { lat: 47.3779, lng: 8.5403 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-zuerich', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.39175150000001, lng: 8.0522683 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
     dishes: [
       { name: 'Baguette Planted Chicken Curry', description: 'Pretzel baguette with planted.chicken, Lollo Verde lettuce, and curry sauce', price: 'CHF 8.20', plantedProduct: 'planted.chicken', isVegan: true },
     ],
   },
   {
-    id: 'bk-zurich-stadelhofen',
+    id: 'bk-baden',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Zürich Stadelhofen',
-    city: 'Zürich',
-    address: 'Stadelhofen',
+    name: 'Brezelkönig Bahnhof Baden',
+    city: 'Baden',
+    address: 'Bahnhof Baden Gleis 1',
     country: 'ch',
-    coordinates: { lat: 47.3667, lng: 8.5483 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-zuerich-stadelhofen', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.4762321, lng: 8.3076213 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-basel',
+    id: 'bk-basel-globus',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Basel',
+    name: 'Brezelkönig Globus',
     city: 'Basel',
+    address: 'Marktplatz 2',
     country: 'ch',
-    coordinates: { lat: 47.5476, lng: 7.5897 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-basel', displayName: 'Just Eat' },
-      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/basel/brezelkoenig-basel', displayName: 'Smood' },
-    ],
+    coordinates: { lat: 47.5588986, lng: 7.5879691 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-basel-gueterstr',
+    id: 'bk-basel-passarelle',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Basel Güterstrasse',
+    name: 'Brezelkönig Bahnhof Basel, Passarelle 9/10',
     city: 'Basel',
-    address: 'Güterstrasse',
+    address: 'Passarelle, Perron 09/10',
     country: 'ch',
-    coordinates: { lat: 47.5500, lng: 7.5900 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-basel-1', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.5469856, lng: 7.5891549 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
     id: 'bk-bern-bollwerk',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Bern Bollwerk',
+    name: 'Brezelkönig Bahnhof Bern, Ausgang Bollwerk',
     city: 'Bern',
-    address: 'Bollwerk',
+    address: 'Bahnhofplatz',
     country: 'ch',
-    coordinates: { lat: 46.9490, lng: 7.4400 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-bern-bollwerk', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 46.9492918, lng: 7.440233 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-lausanne-cff',
+    id: 'bk-bern-perron',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Lausanne CFF',
-    city: 'Lausanne',
-    address: 'Gare CFF',
+    name: 'Brezelkönig Bahnhof Bern, Unterführung Perron 3/4',
+    city: 'Bern',
+    address: 'Unterführung, Perron 7/8',
     country: 'ch',
-    coordinates: { lat: 46.5167, lng: 6.6292 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-lausanne-cff', displayName: 'Just Eat' },
-      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/restaurants/lausanne/brezelkoenig-lausanne', displayName: 'Smood' },
-    ],
+    coordinates: { lat: 46.9489354, lng: 7.437076999999999 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-luzern',
+    id: 'bk-bern-welle',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Luzern',
-    city: 'Luzern',
+    name: 'Brezelkönig Bahnhof Bern, Welle',
+    city: 'Bern',
+    address: 'Bern Welle',
     country: 'ch',
-    coordinates: { lat: 47.0502, lng: 8.3093 },
-    deliveryPlatforms: [
-      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/lucerne/brezelkoenig-luzern', displayName: 'Smood' },
-    ],
+    coordinates: { lat: 46.9488345, lng: 7.4367046 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-st-gallen',
+    id: 'bk-biel',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig St. Gallen',
-    city: 'St. Gallen',
-    address: 'Bahnhofplatz 8B',
+    name: 'Brezelkönig Biel',
+    city: 'Biel',
+    address: 'Bahnhofplatz 4',
     country: 'ch',
-    coordinates: { lat: 47.4232, lng: 9.3695 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkoenig-st-gallen', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.1330258, lng: 7.242623300000001 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-olten-sbb',
+    id: 'bk-buelach',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Olten SBB',
-    city: 'Olten',
-    address: 'SBB Perronunterführung',
+    name: 'Brezelkönig Bülach',
+    city: 'Bülach',
+    address: 'Bahnhofring',
     country: 'ch',
-    coordinates: { lat: 47.3520, lng: 7.9070 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelknig-olten-sbb-perronunterfhrung', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.5232561, lng: 8.5372329 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-thun-sbb',
+    id: 'bk-chur',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Thun SBB',
-    city: 'Thun',
-    address: 'Bahnhof SBB',
+    name: 'Brezelkönig Chur',
+    city: 'Chur',
+    address: 'Unterführung',
     country: 'ch',
-    coordinates: { lat: 46.7547, lng: 7.6297 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkonig-thun-sbb', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken'],
-  },
-  {
-    id: 'bk-fribourg',
-    chainId: 'brezelkoenig',
-    chainName: 'Brezelkönig',
-    name: 'Brezelkönig Fribourg',
-    city: 'Fribourg',
-    country: 'ch',
-    coordinates: { lat: 46.8065, lng: 7.1620 },
-    deliveryPlatforms: [
-      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/fribourg/brezelkoenig-fribourg', displayName: 'Smood' },
-    ],
+    coordinates: { lat: 46.8536555, lng: 9.5298945 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
@@ -1021,25 +1247,490 @@ export const chainLocations: ChainLocation[] = [
     chainName: 'Brezelkönig',
     name: 'Brezelkönig Dietikon',
     city: 'Dietikon',
+    address: 'Bahnhofplatz',
     country: 'ch',
-    coordinates: { lat: 47.4044, lng: 8.4005 },
-    deliveryPlatforms: [
-      { name: 'smood', url: 'https://www.smood.ch/en/delivery-takeaway/stores/zurich/brezelkoenig-dietikon', displayName: 'Smood' },
-    ],
+    coordinates: { lat: 47.4061332, lng: 8.404715 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'bk-vevey-manor',
+    id: 'bk-emmen',
     chainId: 'brezelkoenig',
     chainName: 'Brezelkönig',
-    name: 'Brezelkönig Vevey Manor',
-    city: 'Vevey',
-    address: 'Manor',
+    name: 'Brezelkönig Emmen',
+    city: 'Emmen',
+    address: 'Staufacherstrasse 1',
     country: 'ch',
-    coordinates: { lat: 46.4628, lng: 6.8430 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.just-eat.ch/en/menu/brezelkonig-vevey-manor', displayName: 'Just Eat' },
-    ],
+    coordinates: { lat: 47.07412739999999, lng: 8.2871613 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-frauenfeld',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Frauenfeld',
+    city: 'Frauenfeld',
+    address: 'Bahnhofplatz 75',
+    country: 'ch',
+    coordinates: { lat: 47.5579638, lng: 8.8963606 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-fribourg',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Gare de Fribourg',
+    city: 'Fribourg',
+    address: 'Place de la gare 1',
+    country: 'ch',
+    coordinates: { lat: 46.8033337, lng: 7.150662 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-geneve-cornavin',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Genève Cornavin',
+    city: 'Genève',
+    address: 'West, 3 Place Cornavin',
+    country: 'ch',
+    coordinates: { lat: 46.2101704, lng: 6.1418881 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-geneve-eaux-vives',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Avenue de la gare des Eaux-Vives, Genève',
+    city: 'Genève',
+    address: 'Avenue De la Gare des Eaux-Vives 11',
+    country: 'ch',
+    coordinates: { lat: 46.2009836, lng: 6.1664615 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-kloten-checkin',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Flughafen Check-in',
+    city: 'Kloten',
+    address: 'Check in, Halle 3',
+    country: 'ch',
+    coordinates: { lat: 47.451049, lng: 8.5607645 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-kloten-airside',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Flughafen Zürich, Airside Center',
+    city: 'Kloten',
+    address: 'Airside Center, Level 1',
+    country: 'ch',
+    coordinates: { lat: 47.45240219999999, lng: 8.560831199999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lausanne-gare',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Lausanne Gare',
+    city: 'Lausanne',
+    address: 'Place de la Gare 3',
+    country: 'ch',
+    coordinates: { lat: 46.5169106, lng: 6.630292499999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lausanne-europe',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: "Brezelkönig Place de l'Europe 3, Lausanne",
+    city: 'Lausanne',
+    address: 'Voie du Chariot 5-7',
+    country: 'ch',
+    coordinates: { lat: 46.5202153, lng: 6.6303053 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lenzburg',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Lenzburg',
+    city: 'Lenzburg',
+    address: 'Bahnhofstrasse 60',
+    country: 'ch',
+    coordinates: { lat: 47.3910913, lng: 8.170365199999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lugano-nassa',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Lugano Via Nassa',
+    city: 'Lugano',
+    address: 'via Nassa 22',
+    country: 'ch',
+    coordinates: { lat: 46.0027341, lng: 8.9498616 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-lugano-stazione',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Stazione Lugano FFS',
+    city: 'Lugano',
+    address: 'Palazzo della stazione',
+    country: 'ch',
+    coordinates: { lat: 46.0052855, lng: 8.946876999999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-luzern',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Luzern',
+    city: 'Luzern',
+    address: 'Bahnhofplatz 1',
+    country: 'ch',
+    coordinates: { lat: 47.0502942, lng: 8.310271900000002 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-morges',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Gare de Morges',
+    city: 'Morges',
+    address: 'Place de la gare 2',
+    country: 'ch',
+    coordinates: { lat: 46.51105810000001, lng: 6.4940361 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-neuchatel',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Gare de Neuchâtel',
+    city: 'Neuchâtel',
+    address: 'Place de la gare',
+    country: 'ch',
+    coordinates: { lat: 46.99654109999999, lng: 6.9359327 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-olten',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Olten',
+    city: 'Olten',
+    address: 'Geissfluhweg 19',
+    country: 'ch',
+    coordinates: { lat: 47.3515709, lng: 7.9070942 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-rapperswil',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Rapperswil-Jona',
+    city: 'Rapperswil-Jona',
+    address: 'Bahnhofplatz',
+    country: 'ch',
+    coordinates: { lat: 47.2250613, lng: 8.8171727 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-schaffhausen',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof Schaffhausen, Unterführung',
+    city: 'Schaffhausen',
+    address: 'Areal Süd',
+    country: 'ch',
+    coordinates: { lat: 47.6985628, lng: 8.6334541 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-solothurn',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof Solothurn, Unterführung',
+    city: 'Solothurn',
+    address: 'Unterführung',
+    country: 'ch',
+    coordinates: { lat: 47.2040739, lng: 7.543239199999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-stgallen-multergasse',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig St. Gallen Multergasse',
+    city: 'St. Gallen',
+    address: 'Multergasse 47',
+    country: 'ch',
+    coordinates: { lat: 47.4234427, lng: 9.3742783 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-stgallen-bahnhof',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof St. Gallen, Unterführung Ost',
+    city: 'St. Gallen',
+    address: 'Bahnhofplatz 2 Personenunterführung Ost',
+    country: 'ch',
+    coordinates: { lat: 47.4236866, lng: 9.3698858 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-stgallen-bahnhofsplatz',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhofsplatz 8, St. Gallen',
+    city: 'St. Gallen',
+    address: 'Bahnhofplatz 8',
+    country: 'ch',
+    coordinates: { lat: 47.422353, lng: 9.368622199999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-thun',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Thun',
+    city: 'Thun',
+    address: 'Seestrasse 2',
+    country: 'ch',
+    coordinates: { lat: 46.7548939, lng: 7.629724299999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-schoenbuhl',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Im Shoppyland, Schönbühl',
+    city: 'Urtenen-Schönbühl',
+    address: 'Industriestrasse',
+    country: 'ch',
+    coordinates: { lat: 47.0168427, lng: 7.492344999999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-uster',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Uster',
+    city: 'Uster',
+    address: 'Bankstrasse',
+    country: 'ch',
+    coordinates: { lat: 47.3505936, lng: 8.718301499999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-vevey',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Vevey',
+    city: 'Vevey',
+    address: 'Avenue General Guisan 15',
+    country: 'ch',
+    coordinates: { lat: 46.4630772, lng: 6.8408069 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-waedenswil',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Wädenswil',
+    city: 'Wädenswil',
+    address: 'Bahnhofstrasse 4',
+    country: 'ch',
+    coordinates: { lat: 47.2293916, lng: 8.6750244 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-wallisellen',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Glattzentrum, Wallisellen',
+    city: 'Wallisellen',
+    address: 'Neue Winterthurerstrasse 99',
+    country: 'ch',
+    coordinates: { lat: 47.40845340000001, lng: 8.5960556 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-wil',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhofsplatz Wil',
+    city: 'Wil',
+    address: 'Bahnhofplatz 1',
+    country: 'ch',
+    coordinates: { lat: 47.4624183, lng: 9.0417544 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-winterthur',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof Winterthur, Unterführung',
+    city: 'Winterthur',
+    address: 'Bahnhofplatz 5',
+    country: 'ch',
+    coordinates: { lat: 47.49974779999999, lng: 8.7233732 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zermatt',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zermatt',
+    city: 'Zermatt',
+    address: 'Bahnhofplatz 3',
+    country: 'ch',
+    coordinates: { lat: 46.0239804, lng: 7.7477428 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zug-industrie',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zug Industriestrasse',
+    city: 'Zug',
+    address: 'Industriestrasse 15b',
+    country: 'ch',
+    coordinates: { lat: 47.1730695, lng: 8.5179264 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zug-bahnhof',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof Zug',
+    city: 'Zug',
+    address: 'Bahnhofplatz',
+    country: 'ch',
+    coordinates: { lat: 47.1736681, lng: 8.5153356 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-altstetten',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich Altstetten',
+    city: 'Zürich',
+    address: 'Altstetterplatz 11',
+    country: 'ch',
+    coordinates: { lat: 47.3915154, lng: 8.4886078 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-hb-shopville',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich HB, Shopville',
+    city: 'Zürich',
+    address: 'Tessinerplatz 10',
+    country: 'ch',
+    coordinates: { lat: 47.3777511, lng: 8.538122699999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-hardbruecke',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich Hardbrücke',
+    city: 'Zürich',
+    address: 'Hardbrücke',
+    country: 'ch',
+    coordinates: { lat: 47.3853205, lng: 8.5169876 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-landesmuseum',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich Landesmuseum',
+    city: 'Zürich',
+    address: 'Museumstrasse 1',
+    country: 'ch',
+    coordinates: { lat: 47.3792331, lng: 8.5362831 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-sihlquai',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich HB, Unterführung Sihlquai',
+    city: 'Zürich',
+    address: 'Sihlquai Unterführung',
+    country: 'ch',
+    coordinates: { lat: 47.3788315, lng: 8.536961699999999 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-oerlikon',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Bahnhof Oerlikon, Unterführung Ost',
+    city: 'Zürich',
+    address: 'Hofwiesenstrasse 369',
+    country: 'ch',
+    coordinates: { lat: 47.4124299, lng: 8.5455934 },
+    deliveryPlatforms: [],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'bk-zurich-stadelhofen',
+    chainId: 'brezelkoenig',
+    chainName: 'Brezelkönig',
+    name: 'Brezelkönig Zürich Stadelhofen',
+    city: 'Zürich',
+    address: 'Stadelhoferstrasse 8',
+    country: 'ch',
+    coordinates: { lat: 47.3664114, lng: 8.5488009 },
+    deliveryPlatforms: [],
     plantedProducts: ['planted.chicken'],
   },
 ];
@@ -1149,7 +1840,7 @@ export function getChainById(chainId: string): Chain | undefined {
  * Get dish price for a specific country
  * Falls back to default price if country-specific price not available
  */
-export function getDishPrice(dish: ChainDish, country: 'ch' | 'de' | 'at' | 'lu'): string | undefined {
+export function getDishPrice(dish: ChainDish, country: 'ch' | 'de' | 'at' | 'lu' | 'uk' | 'nl'): string | undefined {
   if (dish.priceByCountry && dish.priceByCountry[country]) {
     return dish.priceByCountry[country];
   }
@@ -1164,3 +1855,91 @@ export const chainPlatformColors: Record<string, string> = {
   'just-eat': '#FF5A00',
   'smood': '#E91E63',
 };
+
+// ============================================
+// MERGED LOCATIONS (Manual + Discovered)
+// ============================================
+
+/**
+ * All chain locations merged from manual curation and smart discovery
+ * Deduplicates by URL to avoid showing the same location twice
+ */
+export const allChainLocations: ChainLocation[] = (() => {
+  const seenUrls = new Set<string>();
+  const merged: ChainLocation[] = [];
+
+  // Add manual locations first (higher priority)
+  for (const loc of chainLocations) {
+    const url = loc.deliveryPlatforms[0]?.url;
+    if (url && !seenUrls.has(url)) {
+      seenUrls.add(url);
+      merged.push(loc);
+    } else if (!url) {
+      // Include locations without delivery URLs (in-store only)
+      merged.push(loc);
+    }
+  }
+
+  // Add discovered locations (skip duplicates)
+  for (const loc of discoveredChainLocations) {
+    const url = loc.deliveryPlatforms[0]?.url;
+    if (url && !seenUrls.has(url)) {
+      seenUrls.add(url);
+      merged.push(loc);
+    }
+  }
+
+  return merged;
+})();
+
+/**
+ * Get all locations (merged) sorted by distance
+ */
+export function getAllMergedLocationsByDistance(
+  lat: number,
+  lng: number,
+  country?: string
+): (ChainLocation & { distance: number })[] {
+  let locations = country
+    ? allChainLocations.filter(loc => loc.country === country.toLowerCase())
+    : allChainLocations;
+
+  return locations
+    .map(loc => ({
+      ...loc,
+      distance: calculateDistance(lat, lng, loc.coordinates.lat, loc.coordinates.lng),
+    }))
+    .sort((a, b) => a.distance - b.distance);
+}
+
+/**
+ * Get the closest location for each chain from merged locations
+ */
+export function getClosestMergedChainLocations(
+  lat: number,
+  lng: number,
+  country?: string
+): (ChainLocation & { distance: number })[] {
+  let locations = country
+    ? allChainLocations.filter(loc => loc.country === country.toLowerCase())
+    : allChainLocations;
+
+  // Calculate distances
+  const locationsWithDistance = locations.map(loc => ({
+    ...loc,
+    distance: calculateDistance(lat, lng, loc.coordinates.lat, loc.coordinates.lng),
+  }));
+
+  // Group by chain and get closest for each
+  const chainMap = new Map<string, ChainLocation & { distance: number }>();
+
+  for (const loc of locationsWithDistance) {
+    const existing = chainMap.get(loc.chainId);
+    if (!existing || loc.distance < existing.distance) {
+      chainMap.set(loc.chainId, loc);
+    }
+  }
+
+  // Sort by distance
+  return Array.from(chainMap.values()).sort((a, b) => a.distance - b.distance);
+}
