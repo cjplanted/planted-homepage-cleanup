@@ -11,8 +11,8 @@ This guide explains how to run, use, and maintain the Planted Availability Datab
 - Node.js 20+
 - pnpm 9.x (`npm install -g pnpm`)
 - Firebase CLI (`npm install -g firebase-tools`)
-- Anthropic API key (for AI features)
-- SerpAPI key (for web search)
+- Gemini API key (for AI features) - recommended
+- Google Custom Search API key + Engine ID (for web search)
 
 ### Initial Setup
 
@@ -120,9 +120,32 @@ pnpm run discovery --country DE --max-queries 20
 |------|-------------|
 | `--country, -c` | Target country (CH, DE, AT) |
 | `--platform, -p` | Specific platform (uber-eats, lieferando, wolt, just-eat, smood) |
-| `--max-queries` | Maximum search queries to execute |
+| `--max-queries` | Maximum search queries to execute (default: 2000) |
 | `--dry-run` | Don't save results to database |
 | `--verbose, -v` | Detailed logging |
+| `--ai` | AI provider: gemini (default) or claude |
+| `--provider` | Search provider: google (default), serpapi, mock |
+
+**Budget & Caching:**
+- Default budget: 2,000 queries per run
+- First 600 queries are free (6 search engines × 100 each)
+- Queries 601-2000 cost $5 per 1,000 queries
+- Query cache prevents duplicate searches (24h for results, 7d for no results)
+
+### Search Pool Management
+
+Monitor and manage search engine quota:
+
+```bash
+# View current quota usage
+pnpm run search-pool stats
+
+# Detailed per-engine usage
+pnpm run search-pool list
+
+# Test engine rotation
+pnpm run search-pool test
+```
 
 ### Dish Extraction
 

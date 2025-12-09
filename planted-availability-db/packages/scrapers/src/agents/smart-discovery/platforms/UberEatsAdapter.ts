@@ -115,8 +115,8 @@ export class UberEatsAdapter extends BasePlatformAdapter {
 
             if (storeInfo.location.latitude && storeInfo.location.longitude) {
               data.coordinates = {
-                lat: storeInfo.location.latitude,
-                lng: storeInfo.location.longitude,
+                latitude: storeInfo.location.latitude,
+                longitude: storeInfo.location.longitude,
                 accuracy: 'exact',
               };
             }

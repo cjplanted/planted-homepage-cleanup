@@ -27,6 +27,8 @@ import type {
 } from '@pad/core';
 import { type AIClient, type AIProvider, getAIClient } from './AIClient.js';
 import { DishFinderAIClient } from '../smart-dish-finder/DishFinderAIClient.js';
+import { getQueryCache, type QueryCache } from './QueryCache.js';
+import { getSearchEnginePool, type SearchEnginePool } from './SearchEnginePool.js';
 
 export interface DiscoveryAgentConfig {
   maxQueriesPerRun?: number;
@@ -35,6 +37,10 @@ export interface DiscoveryAgentConfig {
   verbose?: boolean;
   aiProvider?: AIProvider;
   extractDishesInline?: boolean; // Whether to extract dishes during venue discovery
+  enableQueryCache?: boolean; // Whether to skip cached queries (default: true)
+  budgetLimit?: number; // Max queries per run for budget control (default: 2000)
+  batchCitySize?: number; // Number of cities to batch in a single query (default: 3)
+  maxDishesPerVenue?: number; // Max dishes to extract per venue (default: 50)
 }
 
 export interface WebSearchResult {
@@ -83,6 +89,9 @@ export class SmartDiscoveryAgent {
   private currentRun: DiscoveryRun | null = null;
   private stats: DiscoveryRunStats;
   private dishFinder: DishFinderAIClient | null = null;
+  private queryCache: QueryCache;
+  private searchEnginePool: SearchEnginePool;
+  private queriesSkipped = 0;
 
   constructor(
     searchProvider: WebSearchProvider,
@@ -96,8 +105,14 @@ export class SmartDiscoveryAgent {
       dryRun: config?.dryRun || false,
       verbose: config?.verbose || false,
       extractDishesInline: config?.extractDishesInline ?? true, // Default to inline extraction
+      enableQueryCache: config?.enableQueryCache ?? true, // Default to cache enabled
+      budgetLimit: config?.budgetLimit || 2000, // Default budget: 2000 queries
+      batchCitySize: config?.batchCitySize || 3, // Default to batching 3 cities per query
+      maxDishesPerVenue: config?.maxDishesPerVenue || 50, // Default limit: 50 dishes per venue
     };
     this.stats = this.emptyStats();
+    this.queryCache = getQueryCache();
+    this.searchEnginePool = getSearchEnginePool();
   }
 
   private emptyStats(): DiscoveryRunStats {
@@ -110,6 +125,8 @@ export class SmartDiscoveryAgent {
       venues_rejected: 0,
       chains_detected: 0,
       new_strategies_created: 0,
+      dishes_extracted: 0,
+      dish_extraction_failures: 0,
     };
   }
 
@@ -117,6 +134,36 @@ export class SmartDiscoveryAgent {
     if (this.config.verbose) {
       console.log(`[SmartDiscovery] ${message}`, data ? JSON.stringify(data, null, 2) : '');
     }
+  }
+
+  /**
+   * Batch cities into groups for efficient querying
+   * @param cities Array of city names
+   * @param batchSize Number of cities per batch
+   * @returns Array of city batches
+   */
+  private batchCities(cities: string[], batchSize: number): string[][] {
+    const batches: string[][] = [];
+    for (let i = 0; i < cities.length; i += batchSize) {
+      batches.push(cities.slice(i, i + batchSize));
+    }
+    return batches;
+  }
+
+  /**
+   * Build a query with batched cities using OR syntax
+   * @param template Query template with {city} placeholder
+   * @param cities Array of city names to batch
+   * @returns Query string with OR syntax for cities
+   */
+  private buildBatchQuery(template: string, cities: string[]): string {
+    if (cities.length === 1) {
+      return template.replace('{city}', cities[0]);
+    }
+
+    // Build OR syntax: (City1 OR City2 OR City3)
+    const cityBatch = `(${cities.join(' OR ')})`;
+    return template.replace('{city}', cityBatch);
   }
 
   /**
@@ -162,6 +209,12 @@ export class SmartDiscoveryAgent {
   async runDiscovery(config: DiscoveryRunConfig): Promise<DiscoveryRun> {
     this.log('Starting discovery run', config);
     this.stats = this.emptyStats();
+    this.queriesSkipped = 0;
+
+    // Log budget info at start
+    const poolStats = await this.searchEnginePool.getStats();
+    this.log(`Search budget: ${this.config.budgetLimit} queries max`);
+    this.log(`Search pool: ${poolStats.freeQueriesUsed}/${poolStats.freeQueriesTotal} free used, mode: ${poolStats.mode}`);
 
     // Create the run record
     this.currentRun = await discoveryRuns.createRun({
@@ -192,7 +245,16 @@ export class SmartDiscoveryAgent {
         this.stats
       );
 
-      this.log('Discovery run completed', this.stats);
+      // Log final stats including cache and budget info
+      const finalPoolStats = await this.searchEnginePool.getStats();
+      const cacheStats = await this.queryCache.getStats();
+      this.log('Discovery run completed', {
+        ...this.stats,
+        queriesSkipped: this.queriesSkipped,
+        cacheStats,
+        searchPoolMode: finalPoolStats.mode,
+        estimatedCost: `$${finalPoolStats.estimatedCost.toFixed(2)}`,
+      });
       return this.currentRun;
     } catch (error) {
       // Record failure
@@ -235,14 +297,20 @@ export class SmartDiscoveryAgent {
         for (const strategy of strategies.slice(0, 3)) {
           // Get cities for this country
           const cities = CITIES_BY_COUNTRY[country] || [];
+          const citiesToSearch = cities.slice(0, 5);
 
-          for (const city of cities.slice(0, 5)) {
+          // Batch cities for efficient querying
+          const cityBatches = this.batchCities(citiesToSearch, this.config.batchCitySize);
+
+          this.log(`Batched ${citiesToSearch.length} cities into ${cityBatches.length} queries (batch size: ${this.config.batchCitySize})`);
+
+          for (const cityBatch of cityBatches) {
             if (this.stats.queries_executed >= this.config.maxQueriesPerRun) {
               this.log('Max queries reached');
               return;
             }
 
-            await this.executeStrategy(strategy, { city });
+            await this.executeBatchStrategy(strategy, cityBatch);
             await this.delay(this.config.rateLimitMs);
           }
         }
@@ -259,31 +327,51 @@ export class SmartDiscoveryAgent {
   ): Promise<void> {
     const { CITIES_BY_COUNTRY } = await import('@pad/core');
     const cities = CITIES_BY_COUNTRY[country] || [];
+    const citiesToSearch = cities.slice(0, 3);
 
-    for (const city of cities.slice(0, 3)) {
+    // Batch cities for efficient querying
+    const cityBatches = this.batchCities(citiesToSearch, this.config.batchCitySize);
+
+    this.log(`Claude exploration: Batched ${citiesToSearch.length} cities into ${cityBatches.length} queries`);
+
+    for (const cityBatch of cityBatches) {
+      // For Claude-generated queries, we use the first city as context
+      // but will apply batching to the generated query template
       const context: SearchContext = {
         platform,
         country,
-        city,
+        city: cityBatch[0], // Use first city as context for AI
       };
 
       const ai = await this.getAI();
       const queries = await ai.generateQueries(context);
 
-      for (const query of queries) {
+      for (const generatedQuery of queries) {
         if (this.stats.queries_executed >= this.config.maxQueriesPerRun) {
           return;
         }
 
-        await this.executeQuery(query.query, platform, country);
+        // Apply city batching to the generated query
+        let query = generatedQuery.query;
+
+        // If the query contains a city name and we have multiple cities, apply batching
+        if (cityBatch.length > 1 && query.includes(cityBatch[0])) {
+          query = query.replace(cityBatch[0], `(${cityBatch.join(' OR ')})`);
+          this.log(`Batched Claude query: ${query}`);
+        }
+
+        await this.executeQuery(query, platform, country);
         await this.delay(this.config.rateLimitMs);
       }
     }
   }
 
   /**
-   * Execute a strategy with variable substitution
+   * Execute a strategy with variable substitution (single city)
+   * Note: This method is kept for backward compatibility but is not currently used.
+   * Use executeBatchStrategy for batched city queries.
    */
+  // @ts-ignore - Keep for backward compatibility
   private async executeStrategy(
     strategy: DiscoveryStrategy,
     variables: Record<string, string>
@@ -308,6 +396,33 @@ export class SmartDiscoveryAgent {
   }
 
   /**
+   * Execute a strategy with batched cities
+   */
+  private async executeBatchStrategy(
+    strategy: DiscoveryStrategy,
+    cities: string[]
+  ): Promise<void> {
+    let query = strategy.query_template;
+
+    // Build batched city query
+    query = this.buildBatchQuery(query, cities);
+
+    // Replace platform URL
+    const { PLATFORM_URLS } = await import('@pad/core');
+    query = query.replace('{platform}', PLATFORM_URLS[strategy.platform]);
+
+    this.log(`Executing batched query for cities: ${cities.join(', ')}`);
+    this.log(`Query: ${query}`);
+
+    await this.executeQuery(query, strategy.platform, strategy.country, strategy.id);
+
+    // Track strategy usage
+    if (this.currentRun) {
+      await discoveryRuns.addStrategyUsed(this.currentRun.id, strategy.id);
+    }
+  }
+
+  /**
    * Execute a single search query
    */
   private async executeQuery(
@@ -316,12 +431,39 @@ export class SmartDiscoveryAgent {
     country: SupportedCountry,
     strategyId?: string
   ): Promise<void> {
+    // Budget enforcement: check if we've hit the budget limit
+    if (this.stats.queries_executed >= this.config.budgetLimit) {
+      this.log(`Budget limit reached (${this.config.budgetLimit} queries). Stopping.`);
+      return;
+    }
+
+    // Query cache: skip if recently executed (non-blocking - cache failures shouldn't stop discovery)
+    if (this.config.enableQueryCache) {
+      try {
+        const shouldSkip = await this.queryCache.shouldSkipQuery(query);
+        if (shouldSkip) {
+          this.queriesSkipped++;
+          this.log(`[CACHE SKIP] Query already executed recently: ${query}`);
+          return;
+        }
+      } catch (cacheError) {
+        this.log(`[CACHE WARN] Cache check failed, proceeding with query: ${cacheError}`);
+      }
+    }
+
     this.log(`Executing query: ${query}`);
     this.stats.queries_executed++;
 
     try {
       // Perform web search
       const results = await this.searchProvider.search(query);
+
+      // Record query in cache (with result count) - non-blocking
+      if (this.config.enableQueryCache) {
+        this.queryCache.recordQuery(query, results.length).catch((err) => {
+          this.log(`[CACHE WARN] Failed to record query in cache: ${err}`);
+        });
+      }
 
       if (results.length === 0) {
         this.stats.queries_failed++;
@@ -444,8 +586,13 @@ export class SmartDiscoveryAgent {
     // Extract dishes inline if enabled
     let dishes: DiscoveredDish[] = [];
     if (this.config.extractDishesInline) {
-      dishes = await this.extractDishesForVenue(venue.url, venue.name, platform, country);
-      this.log(`Extracted ${dishes.length} dishes for venue: ${venue.name}`);
+      dishes = await this.extractDishesForVenue(
+        venue.url,
+        venue.name,
+        platform,
+        country,
+        knownProducts !== null // Pass true if this is a known chain
+      );
 
       // Update products based on extracted dishes if we didn't have any
       if (products.length === 0 && dishes.length > 0) {
@@ -468,6 +615,7 @@ export class SmartDiscoveryAgent {
         {
           platform,
           url: venue.url,
+          active: true,
           verified: false,
         },
       ],
@@ -490,30 +638,65 @@ export class SmartDiscoveryAgent {
     url: string,
     venueName: string,
     platform: DeliveryPlatform,
-    country: SupportedCountry
+    country: SupportedCountry,
+    isKnownChain: boolean = false
   ): Promise<DiscoveredDish[]> {
-    try {
-      const dishFinder = this.getDishFinder();
-      const result = await dishFinder.extractDishesFromUrl(url, {
-        platform,
-        country,
-        venue_name: venueName,
-      });
+    this.log(`[DISH] Extracting dishes from ${venueName}...`);
 
-      // Convert extracted dishes to DiscoveredDish format
-      return result.dishes.map((dish: ExtractedDishFromPage) => ({
-        name: dish.name,
-        description: dish.description,
-        price: dish.price,
-        currency: dish.currency,
-        planted_product: dish.planted_product_guess || 'planted.chicken',
-        is_vegan: dish.is_vegan,
-        confidence: dish.product_confidence || 50,
-      }));
-    } catch (error) {
-      this.log(`Failed to extract dishes for ${venueName}: ${error}`);
-      return [];
+    let lastError: Error | null = null;
+    const maxRetries = 1;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const dishFinder = this.getDishFinder();
+        const result = await dishFinder.extractDishesFromUrl(url, {
+          platform,
+          country,
+          venue_name: venueName,
+        });
+
+        // Convert extracted dishes to DiscoveredDish format
+        let dishes = result.dishes.map((dish: ExtractedDishFromPage) => ({
+          name: dish.name,
+          description: dish.description,
+          price: dish.price,
+          currency: dish.currency,
+          planted_product: dish.planted_product_guess || 'planted.chicken',
+          is_vegan: dish.is_vegan,
+          confidence: dish.product_confidence || 50,
+        }));
+
+        // Limit dishes to maxDishesPerVenue
+        if (dishes.length > this.config.maxDishesPerVenue) {
+          this.log(`[DISH] Limiting dishes from ${dishes.length} to ${this.config.maxDishesPerVenue}`);
+          dishes = dishes.slice(0, this.config.maxDishesPerVenue);
+        }
+
+        // Boost confidence for known chains
+        if (isKnownChain) {
+          dishes = dishes.map(dish => ({
+            ...dish,
+            confidence: Math.min(95, dish.confidence + 20), // Boost confidence by 20, max 95
+          }));
+        }
+
+        this.log(`[DISH] Found ${dishes.length} dishes from ${venueName}`);
+        this.stats.dishes_extracted += dishes.length;
+        return dishes;
+      } catch (error) {
+        lastError = error as Error;
+
+        if (attempt < maxRetries) {
+          this.log(`[DISH] Extraction failed for ${venueName}, retrying in 2s... (attempt ${attempt + 1}/${maxRetries + 1})`);
+          await this.delay(2000);
+        }
+      }
     }
+
+    // All retries failed
+    this.log(`[DISH] Failed to extract dishes for ${venueName} after ${maxRetries + 1} attempts: ${lastError?.message}`);
+    this.stats.dish_extraction_failures++;
+    return [];
   }
 
   /**

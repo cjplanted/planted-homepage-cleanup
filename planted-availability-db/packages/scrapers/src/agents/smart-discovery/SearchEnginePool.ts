@@ -1,11 +1,12 @@
 /**
  * Search Engine Credential Pool
  *
- * Manages multiple Google Custom Search API credentials to work around
+ * Manages multiple Google Custom Search Engine IDs to work around
  * the 100 queries/day free tier limit. Automatically rotates between
- * credentials and tracks daily usage in Firestore.
+ * search engines and tracks daily usage in Firestore.
  *
- * With 20 credential sets: 20 × 100 = 2,000 free queries/day
+ * With 6 search engines: 6 × 100 = 600 free queries/day
+ * After exhausting free quota, switches to paid mode ($5/1000 queries)
  */
 
 import { getFirestore, Timestamp } from '@pad/database';
@@ -37,6 +38,12 @@ export interface PoolStats {
   totalCredentials: number;
   activeCredentials: number;
   disabledCredentials: number;
+  freeQueriesUsed: number;
+  freeQueriesTotal: number;
+  paidQueriesUsed: number;
+  estimatedCost: number;
+  mode: 'free' | 'paid';
+  // Legacy fields for backwards compatibility
   totalQueriesAvailableToday: number;
   totalQueriesUsedToday: number;
   queriesRemaining: number;
@@ -50,8 +57,10 @@ export class SearchEnginePool {
   private credentials: SearchCredential[];
   private db: Firestore;
   private collectionName = 'search_engine_quota';
+  private paidUsageCollection = 'search_engine_paid_usage';
   private dailyLimit: number;
   private initialized = false;
+  private costPerPaidQuery = 0.005; // $5 per 1000 queries
 
   constructor(options?: {
     credentials?: SearchCredential[];
@@ -65,62 +74,47 @@ export class SearchEnginePool {
   /**
    * Load credentials from environment variables
    *
-   * Format: GOOGLE_SEARCH_CREDENTIALS as JSON array, or
-   * individual GOOGLE_SEARCH_API_KEY_1, GOOGLE_SEARCH_ENGINE_ID_1, etc.
+   * Supports 6 search engines with the same API key but different engine IDs.
+   * Each engine gets 100 free queries/day for a total of 600 free queries.
    */
   private loadCredentialsFromEnv(): SearchCredential[] {
     const credentials: SearchCredential[] = [];
 
-    // Try JSON format first (preferred)
-    const jsonCredentials = process.env.GOOGLE_SEARCH_CREDENTIALS;
-    if (jsonCredentials) {
-      try {
-        const parsed = JSON.parse(jsonCredentials) as Array<{
-          apiKey: string;
-          searchEngineId: string;
-          name?: string;
-        }>;
-        return parsed.map((cred, index) => ({
-          id: `cred_${index + 1}`,
-          apiKey: cred.apiKey,
-          searchEngineId: cred.searchEngineId,
-          name: cred.name || `Credential ${index + 1}`,
-        }));
-      } catch (e) {
-        console.warn('Failed to parse GOOGLE_SEARCH_CREDENTIALS JSON');
-      }
+    // Get the shared API key
+    const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
+
+    if (!apiKey) {
+      console.warn('GOOGLE_SEARCH_API_KEY not found in environment');
+      return credentials;
     }
 
-    // Try numbered format: GOOGLE_SEARCH_API_KEY_1, GOOGLE_SEARCH_ENGINE_ID_1, etc.
-    for (let i = 1; i <= 50; i++) {
-      const apiKey = process.env[`GOOGLE_SEARCH_API_KEY_${i}`];
-      const searchEngineId = process.env[`GOOGLE_SEARCH_ENGINE_ID_${i}`];
+    // Predefined search engine IDs
+    const searchEngineIds = [
+      '5197714c708c342da',
+      '11d0363b458124bf9',
+      'd00179eae32804ecf',
+      '76e01e0818708470a',
+      '31f7192c1ff464765',
+      '323cdbf28a6974711',
+    ];
 
-      if (apiKey && searchEngineId) {
+    // Load search engine IDs from env vars (GOOGLE_SEARCH_ENGINE_ID_1 through _6)
+    // or fall back to predefined IDs
+    for (let i = 1; i <= 6; i++) {
+      const envEngineId = process.env[`GOOGLE_SEARCH_ENGINE_ID_${i}`];
+      const searchEngineId = envEngineId || searchEngineIds[i - 1];
+
+      if (searchEngineId) {
         credentials.push({
-          id: `cred_${i}`,
+          id: `engine_${i}`,
           apiKey,
           searchEngineId,
-          name: `Project ${i}`,
+          name: `Search Engine ${i}`,
         });
       }
     }
 
-    // Fall back to single credential (backwards compatibility)
-    if (credentials.length === 0) {
-      const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
-      const searchEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
-
-      if (apiKey && searchEngineId) {
-        credentials.push({
-          id: 'cred_default',
-          apiKey,
-          searchEngineId,
-          name: 'Default',
-        });
-      }
-    }
-
+    console.log(`[SearchEnginePool] Loaded ${credentials.length} search engines`);
     return credentials;
   }
 
@@ -171,12 +165,14 @@ export class SearchEnginePool {
 
   /**
    * Get the next available credential with remaining quota
+   * If all free quota is exhausted, returns a credential for paid mode
    */
   async getAvailableCredential(): Promise<SearchCredential | null> {
     await this.initialize();
 
     const today = this.getTodayDateString();
 
+    // First, try to find a credential with free quota remaining
     for (const cred of this.credentials) {
       const docRef = this.db.collection(this.collectionName).doc(cred.id);
       const doc = await docRef.get();
@@ -203,26 +199,122 @@ export class SearchEnginePool {
       }
     }
 
-    return null; // All credentials exhausted for today
+    // All free quota exhausted - switch to paid mode
+    // Return any active credential (quota is account-wide in paid mode)
+    console.log('[SearchEnginePool] All free quota exhausted, switching to paid mode');
+
+    for (const cred of this.credentials) {
+      const docRef = this.db.collection(this.collectionName).doc(cred.id);
+      const doc = await docRef.get();
+
+      if (!doc.exists) continue;
+
+      const usage = doc.data() as CredentialUsage;
+
+      // Return first non-disabled credential for paid mode
+      if (!usage.isDisabled) {
+        return cred;
+      }
+    }
+
+    return null; // No credentials available at all
+  }
+
+  /**
+   * Check if we're currently in paid mode (all free quota exhausted)
+   */
+  private async isInPaidMode(): Promise<boolean> {
+    const today = this.getTodayDateString();
+
+    for (const cred of this.credentials) {
+      const docRef = this.db.collection(this.collectionName).doc(cred.id);
+      const doc = await docRef.get();
+
+      if (!doc.exists) continue;
+
+      const usage = doc.data() as CredentialUsage;
+
+      // Skip disabled credentials
+      if (usage.isDisabled) continue;
+
+      // If it's a new day or has quota remaining, we're in free mode
+      if (usage.lastResetDate !== today || usage.queriesUsedToday < usage.dailyLimit) {
+        return false;
+      }
+    }
+
+    // All active credentials exhausted
+    return true;
   }
 
   /**
    * Record a successful query usage
+   * Automatically detects if query was free or paid based on quota status
    */
   async recordUsage(credentialId: string): Promise<void> {
-    const docRef = this.db.collection(this.collectionName).doc(credentialId);
+    const isPaid = await this.isInPaidMode();
+
+    if (isPaid) {
+      // Record paid usage in separate collection
+      await this.recordPaidUsage();
+    } else {
+      // Record free usage for the specific credential
+      const docRef = this.db.collection(this.collectionName).doc(credentialId);
+
+      await this.db.runTransaction(async (transaction) => {
+        const doc = await transaction.get(docRef);
+        if (!doc.exists) return;
+
+        const usage = doc.data() as CredentialUsage;
+        transaction.update(docRef, {
+          queriesUsedToday: usage.queriesUsedToday + 1,
+          totalQueriesAllTime: usage.totalQueriesAllTime + 1,
+          lastUsedAt: Timestamp.now(),
+        });
+      });
+    }
+  }
+
+  /**
+   * Record a paid query usage
+   */
+  private async recordPaidUsage(): Promise<void> {
+    const today = this.getTodayDateString();
+    const docRef = this.db.collection(this.paidUsageCollection).doc(today);
 
     await this.db.runTransaction(async (transaction) => {
       const doc = await transaction.get(docRef);
-      if (!doc.exists) return;
 
-      const usage = doc.data() as CredentialUsage;
-      transaction.update(docRef, {
-        queriesUsedToday: usage.queriesUsedToday + 1,
-        totalQueriesAllTime: usage.totalQueriesAllTime + 1,
-        lastUsedAt: Timestamp.now(),
-      });
+      if (!doc.exists) {
+        // Create new paid usage record for today
+        transaction.set(docRef, {
+          date: today,
+          queriesUsed: 1,
+          lastUsedAt: Timestamp.now(),
+        });
+      } else {
+        // Increment existing record
+        const data = doc.data();
+        transaction.update(docRef, {
+          queriesUsed: (data?.queriesUsed || 0) + 1,
+          lastUsedAt: Timestamp.now(),
+        });
+      }
     });
+  }
+
+  /**
+   * Get paid queries used today
+   */
+  private async getPaidQueriesUsedToday(): Promise<number> {
+    const today = this.getTodayDateString();
+    const docRef = this.db.collection(this.paidUsageCollection).doc(today);
+    const doc = await docRef.get();
+
+    if (!doc.exists) return 0;
+
+    const data = doc.data();
+    return data?.queriesUsed || 0;
   }
 
   /**
@@ -275,8 +367,8 @@ export class SearchEnginePool {
     const today = this.getTodayDateString();
     let activeCredentials = 0;
     let disabledCredentials = 0;
-    let totalUsedToday = 0;
-    let totalAvailableToday = 0;
+    let freeQueriesUsed = 0;
+    let freeQueriesTotal = 0;
 
     for (const cred of this.credentials) {
       const docRef = this.db.collection(this.collectionName).doc(cred.id);
@@ -290,22 +382,37 @@ export class SearchEnginePool {
         disabledCredentials++;
       } else {
         activeCredentials++;
-        totalAvailableToday += usage.dailyLimit;
+        freeQueriesTotal += usage.dailyLimit;
 
         // Only count today's usage
         if (usage.lastResetDate === today) {
-          totalUsedToday += usage.queriesUsedToday;
+          freeQueriesUsed += usage.queriesUsedToday;
         }
       }
     }
+
+    // Get paid queries used today
+    const paidQueriesUsed = await this.getPaidQueriesUsedToday();
+
+    // Calculate estimated cost
+    const estimatedCost = paidQueriesUsed * this.costPerPaidQuery;
+
+    // Determine mode
+    const mode: 'free' | 'paid' = freeQueriesUsed >= freeQueriesTotal ? 'paid' : 'free';
 
     return {
       totalCredentials: this.credentials.length,
       activeCredentials,
       disabledCredentials,
-      totalQueriesAvailableToday: totalAvailableToday,
-      totalQueriesUsedToday: totalUsedToday,
-      queriesRemaining: totalAvailableToday - totalUsedToday,
+      freeQueriesUsed,
+      freeQueriesTotal,
+      paidQueriesUsed,
+      estimatedCost,
+      mode,
+      // Legacy fields for backwards compatibility
+      totalQueriesAvailableToday: freeQueriesTotal,
+      totalQueriesUsedToday: freeQueriesUsed + paidQueriesUsed,
+      queriesRemaining: Math.max(0, freeQueriesTotal - freeQueriesUsed),
     };
   }
 

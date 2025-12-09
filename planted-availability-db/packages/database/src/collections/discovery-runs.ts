@@ -35,6 +35,8 @@ const EMPTY_STATS: DiscoveryRunStats = {
   venues_rejected: 0,
   chains_detected: 0,
   new_strategies_created: 0,
+  dishes_extracted: 0,
+  dish_extraction_failures: 0,
 };
 
 /**

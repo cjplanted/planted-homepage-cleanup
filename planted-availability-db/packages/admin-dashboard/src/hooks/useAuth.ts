@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import {
   signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+
+const googleProvider = new GoogleAuthProvider();
 
 interface AuthState {
   user: User | null;
@@ -39,6 +43,17 @@ export function useAuth() {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      setState((prev) => ({ ...prev, error: null }));
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Google sign in failed';
+      setState((prev) => ({ ...prev, error: message }));
+      throw error;
+    }
+  };
+
   const signOut = async () => {
     try {
       await firebaseSignOut(auth);
@@ -52,6 +67,7 @@ export function useAuth() {
   return {
     ...state,
     signIn,
+    signInWithGoogle,
     signOut,
   };
 }

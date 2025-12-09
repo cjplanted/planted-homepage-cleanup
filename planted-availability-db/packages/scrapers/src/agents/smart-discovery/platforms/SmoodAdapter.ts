@@ -133,8 +133,8 @@ export class SmoodAdapter extends BasePlatformAdapter {
           if (restaurant.coordinates || restaurant.location) {
             const coords = restaurant.coordinates || restaurant.location;
             data.coordinates = {
-              lat: coords.lat || coords.latitude,
-              lng: coords.lng || coords.longitude,
+              latitude: coords.lat || coords.latitude,
+              longitude: coords.lng || coords.longitude,
               accuracy: 'exact',
             };
           }

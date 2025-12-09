@@ -49,6 +49,20 @@ export const dataSourceSchema = z.object({
   scraper_id: z.string().optional(),
 });
 
+// Delivery partner types
+export const deliveryPartnerSchema = z.enum([
+  'uber_eats', 'wolt', 'lieferando', 'deliveroo', 'just_eat', 'glovo'
+]);
+
+// Venue-level delivery platform link
+export const deliveryPlatformLinkSchema = z.object({
+  partner: deliveryPartnerSchema,
+  url: z.string().url(),
+  venue_id_on_platform: z.string().optional(),
+  active: z.boolean(),
+  last_verified: z.coerce.date().optional(),
+});
+
 export const venueSchema = z.object({
   id: z.string(),
   type: venueTypeSchema,
@@ -59,6 +73,8 @@ export const venueSchema = z.object({
   opening_hours: openingHoursSchema,
   delivery_zones: z.union([z.array(z.string()), z.any()]).optional(), // GeoJSON geometry
   contact: contactSchema,
+  // Delivery platform links (URLs stored once per venue)
+  delivery_platforms: z.array(deliveryPlatformLinkSchema).optional(),
   source: dataSourceSchema,
   last_verified: z.coerce.date(),
   status: venueStatusSchema,

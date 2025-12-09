@@ -1,8 +1,16 @@
 import type { Request, Response, NextFunction } from 'express';
-import * as admin from 'firebase-admin';
+import { getApps, initializeApp } from 'firebase-admin/app';
+import { getAuth, type DecodedIdToken } from 'firebase-admin/auth';
+
+// Ensure firebase-admin is initialized
+function ensureInitialized() {
+  if (getApps().length === 0) {
+    initializeApp();
+  }
+}
 
 export interface AuthenticatedRequest extends Request {
-  user?: admin.auth.DecodedIdToken;
+  user?: DecodedIdToken;
 }
 
 /**
@@ -13,6 +21,8 @@ export async function verifyAuth(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  ensureInitialized();
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -26,7 +36,7 @@ export async function verifyAuth(
   const idToken = authHeader.split('Bearer ')[1];
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await getAuth().verifyIdToken(idToken);
     req.user = decodedToken;
     next();
   } catch (error) {
@@ -75,6 +85,8 @@ export async function optionalAuth(
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  ensureInitialized();
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -85,7 +97,7 @@ export async function optionalAuth(
   const idToken = authHeader.split('Bearer ')[1];
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await getAuth().verifyIdToken(idToken);
     req.user = decodedToken;
   } catch (error) {
     // Ignore auth errors for optional auth
@@ -94,5 +106,3 @@ export async function optionalAuth(
 
   next();
 }
-
-export { admin };

@@ -383,13 +383,132 @@ The system learns from human feedback:
    - Deprecate strategies below 10% success
 
 2. **Strategy Evolution**
-   - Claude analyzes patterns in successful queries
+   - AI analyzes patterns in successful queries
    - Generates new query variations
    - Creates "evolved" strategies from parents
 
 3. **Feedback Collection**
    - `search_feedback` - Was the venue correct?
    - `dish_feedback` - Was the extraction accurate?
+
+### 3.6 Search Engine Credential Pool
+
+The system manages multiple Google Custom Search API credentials to maximize free-tier usage.
+
+**Architecture:**
+```
+┌─────────────────────────────────────────────────────┐
+│                SearchEnginePool                      │
+├─────────────────────────────────────────────────────┤
+│  Credentials: [cred_1, cred_2, ... cred_n]          │
+│  Daily Limit: 100 queries/credential (free tier)    │
+│  Quota Reset: Midnight UTC                          │
+│  Storage: Firestore (search_engine_quota)           │
+└─────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────┐
+│           Credential Rotation Logic                  │
+├─────────────────────────────────────────────────────┤
+│  1. Get next credential with remaining quota        │
+│  2. Execute query via Google Custom Search API      │
+│  3. On success: increment usage counter             │
+│  4. On 429 error: mark exhausted, rotate to next    │
+│  5. If all exhausted: throw error                   │
+└─────────────────────────────────────────────────────┘
+```
+
+**Scaling:**
+- 1 credential = 100 queries/day free
+- 20 credentials = 2,000 queries/day free
+- 50 credentials = 5,000 queries/day free
+
+**Configuration:**
+```bash
+# Option 1: JSON array (recommended)
+GOOGLE_SEARCH_CREDENTIALS='[
+  {"apiKey":"AIza...1","searchEngineId":"abc...1"},
+  {"apiKey":"AIza...2","searchEngineId":"abc...2"}
+]'
+
+# Option 2: Numbered environment variables
+GOOGLE_SEARCH_API_KEY_1=AIza...
+GOOGLE_SEARCH_ENGINE_ID_1=abc...
+GOOGLE_SEARCH_API_KEY_2=AIza...
+GOOGLE_SEARCH_ENGINE_ID_2=abc...
+
+# Option 3: Single credential (legacy)
+GOOGLE_SEARCH_API_KEY=AIza...
+GOOGLE_SEARCH_ENGINE_ID=abc...
+```
+
+**CLI Tools:**
+```bash
+pnpm run search-pool stats    # View pool statistics
+pnpm run search-pool list     # Detailed per-credential usage
+pnpm run search-pool test     # Test credential rotation
+```
+
+### 3.7 AI Provider Architecture
+
+The system supports multiple AI providers with auto-detection:
+
+**Smart Discovery (Reasoning & Query Generation):**
+| Provider | Model | Use Case |
+|----------|-------|----------|
+| Gemini | gemini-2.5-flash | Default - fast, cost-effective |
+| Claude | claude-sonnet-4 | Alternative - higher reasoning |
+
+**Dish Extraction:**
+| Provider | Model | Use Case |
+|----------|-------|----------|
+| Gemini | gemini-2.5-flash | Default - menu parsing (with 2.0-flash fallback) |
+
+**Auto-Detection Priority:**
+1. Check `GOOGLE_AI_API_KEY` or `GEMINI_API_KEY` → use Gemini
+2. Check `ANTHROPIC_API_KEY` → use Claude
+3. No keys → error
+
+**Automatic Fallback:**
+- If Gemini 2.5 Flash fails, automatically falls back to 2.0 Flash
+- Maintains all settings during fallback
+
+**Manual Selection:**
+```bash
+pnpm run discovery --ai gemini    # Force Gemini
+pnpm run discovery --ai claude    # Force Claude
+```
+
+### 3.8 Query Deduplication Cache
+
+The system prevents redundant API calls by caching executed queries:
+
+**Location:** `QueryCache.ts`
+
+**Cache Rules:**
+- Skip if same query executed in last **24 hours** (had results)
+- Skip if same query executed in last **7 days** (had 0 results)
+
+**Query Normalization:**
+```
+"Planted Chicken Berlin" → "berlin chicken planted"
+"  BERLIN   chicken  PLANTED  " → "berlin chicken planted"
+```
+All variations are treated as identical queries.
+
+**Storage:** Firestore collection `query_cache`
+
+### 3.9 Budget Enforcement
+
+The SmartDiscoveryAgent enforces query budgets to control costs:
+
+**Default Budget:** 2,000 queries per run
+
+**Cost Structure:**
+| Queries | Free | Paid | Cost |
+|---------|------|------|------|
+| 0-600 | 600 | 0 | $0 |
+| 601-2000 | 600 | 1400 | $7.00 |
 
 ---
 
@@ -688,11 +807,32 @@ FIREBASE_API_KEY=...
 FIREBASE_AUTH_DOMAIN=...
 ```
 
-### API Keys
+### AI Provider Keys
 ```env
-ANTHROPIC_API_KEY=...          # Claude AI
-SERPAPI_API_KEY=...            # Web search
-GOOGLE_API_KEY=...             # Google Custom Search
+# Gemini AI (recommended - default provider)
+GOOGLE_AI_API_KEY=...          # Primary Gemini key
+GEMINI_API_KEY=...             # Alternative Gemini key
+
+# Claude AI (alternative)
+ANTHROPIC_API_KEY=...          # Claude API key
+```
+
+### Web Search Keys
+```env
+# Google Custom Search (recommended)
+# Option 1: JSON array for multiple credentials
+GOOGLE_SEARCH_CREDENTIALS='[{"apiKey":"...","searchEngineId":"..."},...]'
+
+# Option 2: Numbered variables
+GOOGLE_SEARCH_API_KEY_1=...
+GOOGLE_SEARCH_ENGINE_ID_1=...
+
+# Option 3: Single credential (legacy)
+GOOGLE_SEARCH_API_KEY=...
+GOOGLE_SEARCH_ENGINE_ID=...
+
+# SerpAPI (alternative/fallback)
+SERPAPI_API_KEY=...
 ```
 
 ### Optional

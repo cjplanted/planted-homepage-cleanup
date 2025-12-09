@@ -120,8 +120,8 @@ export class JustEatAdapter extends BasePlatformAdapter {
     const lngMatch = html.match(/"longitude"\s*:\s*"?(-?\d+\.?\d*)"/);
     if (latMatch && lngMatch) {
       data.coordinates = {
-        lat: parseFloat(latMatch[1]),
-        lng: parseFloat(lngMatch[1]),
+        latitude: parseFloat(latMatch[1]),
+        longitude: parseFloat(lngMatch[1]),
         accuracy: 'exact',
       };
     }

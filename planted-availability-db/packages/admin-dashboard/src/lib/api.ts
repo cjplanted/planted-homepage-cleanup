@@ -1,31 +1,60 @@
 import { auth } from './firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
 
-async function getAuthHeaders(): Promise<HeadersInit> {
-  const user = auth.currentUser;
+// Wait for auth state to be ready
+function getCurrentUser(): Promise<User | null> {
+  return new Promise((resolve) => {
+    // If already have a user, return immediately
+    if (auth.currentUser) {
+      resolve(auth.currentUser);
+      return;
+    }
+    // Otherwise wait for auth state change
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+}
+
+interface AuthHeaders {
+  'Content-Type': string;
+  Authorization: string;
+}
+
+async function getAuthHeaders(): Promise<AuthHeaders> {
+  const user = await getCurrentUser();
   if (!user) {
     throw new Error('Not authenticated');
   }
-  const token = await user.getIdToken();
+  // Force refresh token to get latest custom claims
+  const token = await user.getIdToken(true);
   return {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   };
 }
 
-async function fetchWithAuth<T>(
-  endpoint: string,
+async function fetchFunction<T>(
+  functionName: string,
+  path: string = '',
   options: RequestInit = {}
 ): Promise<T> {
+  console.log('[API] Fetching:', functionName, path);
   const headers = await getAuthHeaders();
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const url = `${API_BASE_URL}/${functionName}${path}`;
+  console.log('[API] URL:', url);
+  console.log('[API] Has auth:', !!headers.Authorization);
+  const response = await fetch(url, {
     ...options,
     headers: {
       ...headers,
       ...options.headers,
     },
   });
+  console.log('[API] Response status:', response.status);
 
   if (!response.ok) {
     // Try to parse error response as JSON
@@ -62,27 +91,28 @@ function buildQueryParams(params?: Record<string, unknown>): string {
 export const venuesApi = {
   getAll: (params?: { limit?: number; offset?: number }) => {
     const query = buildQueryParams(params);
-    return fetchWithAuth<{ venues: unknown[]; total: number }>(
-      `/api/v1/admin/venues${query ? `?${query}` : ''}`
+    return fetchFunction<{ venues: unknown[]; total: number }>(
+      'adminVenues',
+      query ? `?${query}` : ''
     );
   },
 
-  getById: (id: string) => fetchWithAuth<unknown>(`/api/v1/admin/venues/${id}`),
+  getById: (id: string) => fetchFunction<unknown>('adminVenues', `/${id}`),
 
   create: (data: unknown) =>
-    fetchWithAuth<unknown>('/api/v1/admin/venues', {
+    fetchFunction<unknown>('adminVenues', '', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   update: (id: string, data: unknown) =>
-    fetchWithAuth<unknown>(`/api/v1/admin/venues/${id}`, {
+    fetchFunction<unknown>('adminVenues', `/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
 
   delete: (id: string) =>
-    fetchWithAuth<void>(`/api/v1/admin/venues/${id}`, {
+    fetchFunction<void>('adminVenues', `/${id}`, {
       method: 'DELETE',
     }),
 };
@@ -91,27 +121,28 @@ export const venuesApi = {
 export const dishesApi = {
   getAll: (params?: { venue_id?: string; limit?: number }) => {
     const query = buildQueryParams(params);
-    return fetchWithAuth<{ dishes: unknown[]; total: number }>(
-      `/api/v1/admin/dishes${query ? `?${query}` : ''}`
+    return fetchFunction<{ dishes: unknown[]; total: number }>(
+      'adminDishes',
+      query ? `?${query}` : ''
     );
   },
 
-  getById: (id: string) => fetchWithAuth<unknown>(`/api/v1/admin/dishes/${id}`),
+  getById: (id: string) => fetchFunction<unknown>('adminDishes', `/${id}`),
 
   create: (data: unknown) =>
-    fetchWithAuth<unknown>('/api/v1/admin/dishes', {
+    fetchFunction<unknown>('adminDishes', '', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   update: (id: string, data: unknown) =>
-    fetchWithAuth<unknown>(`/api/v1/admin/dishes/${id}`, {
+    fetchFunction<unknown>('adminDishes', `/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
 
   delete: (id: string) =>
-    fetchWithAuth<void>(`/api/v1/admin/dishes/${id}`, {
+    fetchFunction<void>('adminDishes', `/${id}`, {
       method: 'DELETE',
     }),
 };
@@ -150,46 +181,38 @@ export interface ScraperStatusResponse {
 
 export const scrapersApi = {
   getStatus: (params?: { scraper_id?: string; status?: string; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.scraper_id) searchParams.set('scraper_id', params.scraper_id);
-    if (params?.status) searchParams.set('status', params.status);
-    if (params?.limit) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return fetchWithAuth<ScraperStatusResponse>(
-      `/api/v1/admin/scraper-status${query ? `?${query}` : ''}`
+    const query = buildQueryParams(params);
+    return fetchFunction<ScraperStatusResponse>(
+      'adminScraperStatus',
+      query ? `?${query}` : ''
     );
   },
 
   triggerScraper: () =>
-    fetch(`${API_BASE_URL}/api/v1/admin/trigger-scrapers`, {
+    fetchFunction<unknown>('triggerScrapersManually', '', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: '{}',
-    }).then(res => res.json()),
+    }),
 };
 
 // Promotions API
 export const promotionsApi = {
   getAll: (params?: { venue_id?: string; chain_id?: string; active_only?: boolean; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.venue_id) searchParams.set('venue_id', params.venue_id);
-    if (params?.chain_id) searchParams.set('chain_id', params.chain_id);
-    if (params?.active_only !== undefined) searchParams.set('active_only', String(params.active_only));
-    if (params?.limit) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return fetchWithAuth<{ promotions: unknown[]; total: number }>(
-      `/api/v1/admin/promotions${query ? `?${query}` : ''}`
+    const query = buildQueryParams(params);
+    return fetchFunction<{ promotions: unknown[]; total: number }>(
+      'adminPromotions',
+      query ? `?${query}` : ''
     );
   },
 
   create: (data: unknown) =>
-    fetchWithAuth<unknown>('/api/v1/admin/promotions', {
+    fetchFunction<unknown>('adminPromotions', '', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   delete: (id: string) =>
-    fetchWithAuth<void>(`/api/v1/admin/promotions/${id}`, {
+    fetchFunction<void>('adminPromotions', `/${id}`, {
       method: 'DELETE',
     }),
 };
@@ -206,23 +229,20 @@ export interface FlaggedItem {
 
 export const moderationApi = {
   getFlagged: (params?: { type?: 'stale' | 'conflict' | 'error' | 'all'; collection?: string; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.type) searchParams.set('type', params.type);
-    if (params?.collection) searchParams.set('collection', params.collection);
-    if (params?.limit) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return fetchWithAuth<{ items: FlaggedItem[]; total: number }>(
-      `/api/v1/admin/flagged${query ? `?${query}` : ''}`
+    const query = buildQueryParams(params);
+    return fetchFunction<{ items: FlaggedItem[]; total: number }>(
+      'adminFlagged',
+      query ? `?${query}` : ''
     );
   },
 
   approve: (collection: string, id: string) =>
-    fetchWithAuth<void>(`/api/v1/admin/${collection}/${id}/verify`, {
+    fetchFunction<void>(`admin${collection.charAt(0).toUpperCase() + collection.slice(1)}`, `/${id}/verify`, {
       method: 'POST',
     }),
 
   archive: (collection: string, id: string) =>
-    fetchWithAuth<void>(`/api/v1/admin/${collection}/${id}`, {
+    fetchFunction<void>(`admin${collection.charAt(0).toUpperCase() + collection.slice(1)}`, `/${id}`, {
       method: 'DELETE',
     }),
 };
@@ -230,22 +250,20 @@ export const moderationApi = {
 // Webhook staging API
 export const webhookApi = {
   getStaging: (params?: { status?: string; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params?.status) searchParams.set('status', params.status);
-    if (params?.limit) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return fetchWithAuth<{ items: unknown[]; count: number }>(
-      `/api/v1/webhooks/staging${query ? `?${query}` : ''}`
+    const query = buildQueryParams(params);
+    return fetchFunction<{ items: unknown[]; count: number }>(
+      'webhookStaging',
+      query ? `?${query}` : ''
     );
   },
 
   approve: (id: string) =>
-    fetchWithAuth<void>(`/api/v1/webhooks/staging/${id}/approve`, {
+    fetchFunction<void>('webhookApprove', `/${id}`, {
       method: 'POST',
     }),
 
   reject: (id: string, reason?: string) =>
-    fetchWithAuth<void>(`/api/v1/webhooks/staging/${id}/reject`, {
+    fetchFunction<void>('webhookReject', `/${id}`, {
       method: 'POST',
       body: JSON.stringify({ reason }),
     }),
@@ -254,12 +272,12 @@ export const webhookApi = {
 // Dashboard stats
 export const statsApi = {
   getDashboard: () =>
-    fetchWithAuth<{
+    fetchFunction<{
       totalVenues: number;
       totalDishes: number;
       activeScrapers: number;
       recentChanges: number;
-    }>('/api/v1/admin/stats'),
+    }>('adminVenues', '/stats'),
 };
 
 // Partners API
@@ -348,49 +366,50 @@ export interface CreatePartnerResponse {
 export const partnersApi = {
   getAll: (params?: { status?: string; type?: string; limit?: number; offset?: number }) => {
     const query = buildQueryParams(params);
-    return fetchWithAuth<{ partners: Partner[]; total: number; stats: unknown }>(
-      `/adminPartners${query ? `?${query}` : ''}`
+    return fetchFunction<{ partners: Partner[]; total: number; stats: unknown }>(
+      'adminPartners',
+      query ? `?${query}` : ''
     );
   },
 
-  getById: (id: string) => fetchWithAuth<Partner>(`/adminPartners/${id}`),
+  getById: (id: string) => fetchFunction<Partner>('adminPartners', `/${id}`),
 
   create: (data: CreatePartnerInput) =>
-    fetchWithAuth<CreatePartnerResponse>('/adminPartners', {
+    fetchFunction<CreatePartnerResponse>('adminPartners', '', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   update: (id: string, data: Partial<Partner>) =>
-    fetchWithAuth<Partner>(`/adminPartners/${id}`, {
+    fetchFunction<Partner>('adminPartners', `/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
 
   activate: (id: string) =>
-    fetchWithAuth<{ message: string; partner: Partner }>(`/adminPartners/${id}/activate`, {
+    fetchFunction<{ message: string; partner: Partner }>('adminPartners', `/${id}/activate`, {
       method: 'POST',
     }),
 
   suspend: (id: string, reason?: string) =>
-    fetchWithAuth<{ message: string; partner: Partner }>(`/adminPartners/${id}/suspend`, {
+    fetchFunction<{ message: string; partner: Partner }>('adminPartners', `/${id}/suspend`, {
       method: 'POST',
       body: JSON.stringify({ reason }),
     }),
 
   rotateCredentials: (id: string) =>
-    fetchWithAuth<{
+    fetchFunction<{
       message: string;
       api_key: string;
       webhook_secret: string;
       old_credentials_valid_until: string;
       warning: string;
-    }>(`/adminPartners/${id}/rotate-credentials`, {
+    }>('adminPartners', `/${id}/rotate-credentials`, {
       method: 'POST',
     }),
 
   updateEmailWhitelist: (id: string, domains: string[]) =>
-    fetchWithAuth<{ message: string; domains: string[] }>(`/adminPartners/${id}/email-whitelist`, {
+    fetchFunction<{ message: string; domains: string[] }>('adminPartners', `/${id}/email-whitelist`, {
       method: 'POST',
       body: JSON.stringify({ domains }),
     }),
@@ -453,80 +472,83 @@ export interface DiscoveryReviewParams {
 export const discoveryReviewApi = {
   getVenues: (params?: DiscoveryReviewParams) => {
     const query = buildQueryParams(params as Record<string, unknown> | undefined);
-    return fetchWithAuth<{ venues: DiscoveredVenueForReview[]; total: number }>(
-      `/api/v1/admin/discovered-venues${query ? `?${query}` : ''}`
+    return fetchFunction<{ venues: DiscoveredVenueForReview[]; total: number }>(
+      'adminDiscoveredVenues',
+      query ? `?${query}` : ''
     );
   },
 
   getVenueById: (id: string) =>
-    fetchWithAuth<DiscoveredVenueForReview>(`/api/v1/admin/discovered-venues/${id}`),
+    fetchFunction<DiscoveredVenueForReview>('adminDiscoveredVenues', `/${id}`),
 
   verifyVenue: (id: string, updates?: Partial<DiscoveredVenueForReview>) =>
-    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/verify`, {
+    fetchFunction<{ success: boolean; message: string }>('adminDiscoveredVenues', `/${id}/verify`, {
       method: 'POST',
       body: JSON.stringify({ updates }),
     }),
 
   rejectVenue: (id: string, reason: string) =>
-    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/reject`, {
+    fetchFunction<{ success: boolean; message: string }>('adminDiscoveredVenues', `/${id}/reject`, {
       method: 'POST',
       body: JSON.stringify({ reason }),
     }),
 
   updateAndVerify: (id: string, data: Partial<DiscoveredVenueForReview>) =>
-    fetchWithAuth<{ success: boolean; message: string }>(`/api/v1/admin/discovered-venues/${id}/update-and-verify`, {
+    fetchFunction<{ success: boolean; message: string }>('adminDiscoveredVenues', `/${id}/update-and-verify`, {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   bulkVerify: (ids: string[]) =>
-    fetchWithAuth<{ success: boolean; verified: number }>(`/api/v1/admin/discovered-venues/bulk-verify`, {
+    fetchFunction<{ success: boolean; verified: number }>('adminDiscoveredVenues', '/bulk-verify', {
       method: 'POST',
       body: JSON.stringify({ ids }),
     }),
 
   bulkReject: (ids: string[], reason: string) =>
-    fetchWithAuth<{ success: boolean; rejected: number }>(`/api/v1/admin/discovered-venues/bulk-reject`, {
+    fetchFunction<{ success: boolean; rejected: number }>('adminDiscoveredVenues', '/bulk-reject', {
       method: 'POST',
       body: JSON.stringify({ ids, reason }),
     }),
 
   getStats: () =>
-    fetchWithAuth<{
+    fetchFunction<{
       total_discovered: number;
       total_verified: number;
       total_rejected: number;
       by_country: Record<string, number>;
       by_platform: Record<string, number>;
       by_confidence: { low: number; medium: number; high: number };
-    }>('/api/v1/admin/discovered-venues/stats'),
+    }>('adminDiscoveredVenues', '/stats'),
 };
 
 // Ingestion Batches API
 export const batchesApi = {
   getAll: (params?: { partner_id?: string; status?: string; channel?: string; limit?: number }) => {
     const query = buildQueryParams(params);
-    return fetchWithAuth<{ batches: IngestionBatch[]; total: number }>(
-      `/adminBatches${query ? `?${query}` : ''}`
+    return fetchFunction<{ batches: IngestionBatch[]; total: number }>(
+      'adminBatches',
+      query ? `?${query}` : ''
     );
   },
 
-  getById: (id: string) => fetchWithAuth<IngestionBatch>(`/adminBatches/${id}`),
+  getById: (id: string) => fetchFunction<IngestionBatch>('adminBatches', `/${id}`),
 
   getPendingReview: (limit?: number) => {
     const query = buildQueryParams({ limit });
-    return fetchWithAuth<{ batches: IngestionBatch[]; total: number }>(
-      `/adminBatches/pending-review${query ? `?${query}` : ''}`
+    return fetchFunction<{ batches: IngestionBatch[]; total: number }>(
+      'adminBatches',
+      `/pending-review${query ? `?${query}` : ''}`
     );
   },
 
   getStats: (since?: string) => {
     const query = buildQueryParams({ since });
-    return fetchWithAuth<{
+    return fetchFunction<{
       total: number;
       byStatus: Record<string, number>;
       byChannel: Record<string, number>;
       avgProcessingTime: number;
-    }>(`/adminBatches/stats${query ? `?${query}` : ''}`);
+    }>('adminBatches', `/stats${query ? `?${query}` : ''}`);
   },
 };

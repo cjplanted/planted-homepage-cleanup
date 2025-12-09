@@ -50,12 +50,12 @@ export class GoogleSearchProvider implements WebSearchProvider {
     const credential = await this.pool.getAvailableCredential();
 
     if (!credential) {
-      // All credentials exhausted
+      // No credentials available at all (all disabled)
       const stats = await this.pool.getStats();
       throw new Error(
-        `All Google Search API credentials exhausted for today. ` +
-        `Used ${stats.totalQueriesUsedToday}/${stats.totalQueriesAvailableToday} queries across ${stats.activeCredentials} credentials. ` +
-        `Quota resets at midnight UTC.`
+        `No Google Search API credentials available. ` +
+        `All ${stats.totalCredentials} search engines are disabled. ` +
+        `Please check credential configuration.`
       );
     }
 
@@ -94,21 +94,19 @@ export class GoogleSearchProvider implements WebSearchProvider {
 
     // Handle rate limiting (429) - mark this credential as exhausted and try next
     if (response.status === 429) {
-      this.log(`[GoogleSearch] Credential ${credential.name || credential.id} hit rate limit (429)`);
+      this.log(`[GoogleSearch] Search engine ${credential.name || credential.id} hit rate limit (429)`);
       await this.pool.markExhausted(credential.id);
 
       // Try again with a different credential
       const stats = await this.pool.getStats();
       if (stats.queriesRemaining > 0) {
-        this.log(`[GoogleSearch] Rotating to next credential (${stats.queriesRemaining} queries remaining in pool)`);
+        this.log(`[GoogleSearch] Rotating to next search engine (${stats.queriesRemaining} free queries remaining)`);
         return this.search(query); // Recursive call with new credential
       }
 
-      throw new Error(
-        `All Google Search API credentials exhausted. ` +
-        `Used ${stats.totalQueriesUsedToday}/${stats.totalQueriesAvailableToday} queries. ` +
-        `Quota resets at midnight UTC.`
-      );
+      // Free quota exhausted - will switch to paid mode on next request
+      this.log(`[GoogleSearch] All free quota exhausted (${stats.freeQueriesUsed}/${stats.freeQueriesTotal}). Switching to paid mode.`);
+      return this.search(query); // Retry in paid mode
     }
 
     // For other errors, throw

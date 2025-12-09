@@ -10,6 +10,9 @@ import PromotionsPage from './pages/PromotionsPage';
 import ModerationPage from './pages/ModerationPage';
 import PartnersPage from './pages/PartnersPage';
 import DiscoveryReviewPage from './pages/DiscoveryReviewPage';
+import BudgetMonitoringPage from './pages/BudgetMonitoringPage';
+import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
+import BatchImportPage from './pages/BatchImportPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -50,6 +53,9 @@ function App() {
         <Route path="moderation" element={<ModerationPage />} />
         <Route path="partners" element={<PartnersPage />} />
         <Route path="discovery-review" element={<DiscoveryReviewPage />} />
+        <Route path="budget" element={<BudgetMonitoringPage />} />
+        <Route path="analytics" element={<AnalyticsDashboardPage />} />
+        <Route path="import" element={<BatchImportPage />} />
       </Route>
     </Routes>
   );

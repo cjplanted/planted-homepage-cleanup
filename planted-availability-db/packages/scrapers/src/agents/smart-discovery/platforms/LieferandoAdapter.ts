@@ -115,8 +115,8 @@ export class LieferandoAdapter extends BasePlatformAdapter {
 
           if (restaurant.location) {
             data.coordinates = {
-              lat: restaurant.location.lat,
-              lng: restaurant.location.lng,
+              latitude: restaurant.location.lat,
+              longitude: restaurant.location.lng,
               accuracy: 'exact',
             };
           }

@@ -384,8 +384,6 @@ export const EXAMPLE_OUTPUT: DiscoveredChain = {
 export class PlantedChainDiscoveryAgent {
   private config: AgentConfig;
   private discoveredChains: Map<string, DiscoveredChain> = new Map();
-  private taskQueue: SearchTask[] = [];
-  private completedTasks: Set<string> = new Set();
 
   constructor(config?: Partial<AgentConfig>) {
     this.config = {

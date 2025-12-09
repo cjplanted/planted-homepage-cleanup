@@ -1,8 +1,28 @@
+import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useNotifications } from '../hooks/useNotifications';
+import NotificationBell from './NotificationBell';
+import NotificationPanel from './NotificationPanel';
 
 function Layout() {
   const { signOut } = useAuth();
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    clearAll,
+  } = useNotifications();
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const togglePanel = () => {
+    setIsPanelOpen(!isPanelOpen);
+  };
+
+  const closePanel = () => {
+    setIsPanelOpen(false);
+  };
 
   return (
     <div className="layout">
@@ -60,6 +80,24 @@ function Layout() {
           >
             Partners
           </NavLink>
+          <NavLink
+            to="/budget"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            Budget Monitor
+          </NavLink>
+          <NavLink
+            to="/analytics"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            Analytics
+          </NavLink>
+          <NavLink
+            to="/import"
+            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+          >
+            Batch Import
+          </NavLink>
         </nav>
         <div style={{ padding: '1rem' }}>
           <button className="btn btn-secondary" onClick={signOut} style={{ width: '100%' }}>
@@ -67,9 +105,35 @@ function Layout() {
           </button>
         </div>
       </aside>
-      <main className="main-content">
-        <Outlet />
-      </main>
+      <div className="main-container">
+        <header className="top-header">
+          <div className="header-content">
+            <div className="header-title">
+              <h2>Planted Availability Dashboard</h2>
+            </div>
+            <div className="header-actions">
+              <div className="notification-container">
+                <NotificationBell
+                  unreadCount={unreadCount}
+                  onClick={togglePanel}
+                  isOpen={isPanelOpen}
+                />
+                <NotificationPanel
+                  notifications={notifications}
+                  isOpen={isPanelOpen}
+                  onClose={closePanel}
+                  onMarkAsRead={markAsRead}
+                  onMarkAllAsRead={markAllAsRead}
+                  onClearAll={clearAll}
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

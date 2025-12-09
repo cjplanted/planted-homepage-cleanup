@@ -68,8 +68,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run tests
+      - name: Run unit tests
         run: pnpm run test
+
+      - name: Run Phase 2 feature tests
+        run: cd packages/scrapers && npx vitest run src/tests/phase2-features.test.ts --reporter=verbose
 
   deploy-preview:
     name: Deploy Preview

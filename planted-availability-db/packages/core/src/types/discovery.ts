@@ -105,6 +105,8 @@ export interface DiscoveryRunStats {
   venues_rejected: number;
   chains_detected: number;
   new_strategies_created: number;
+  dishes_extracted: number;
+  dish_extraction_failures: number;
 }
 
 export interface DiscoveryRun {
@@ -160,26 +162,34 @@ export type DiscoveredVenueStatus =
   | 'promoted'      // Moved to production venues collection
   | 'stale';        // Needs re-verification
 
+// Aligned with production Address type (venue.ts)
+// Only difference: street/postal_code optional during discovery
 export interface DiscoveredVenueAddress {
   street?: string;
   city: string;
   postal_code?: string;
   country: SupportedCountry;
-  full_address?: string;
+  full_address?: string; // Raw address for geocoding fallback
 }
 
+// Use same field names as production GeoPoint for easier promotion
+// latitude/longitude instead of lat/lng
 export interface DiscoveredVenueCoordinates {
-  lat: number;
-  lng: number;
+  latitude: number;  // Aligned with GeoPoint
+  longitude: number; // Aligned with GeoPoint
   accuracy?: 'exact' | 'approximate' | 'city-center';
 }
 
+// Aligned with production DeliveryPlatformLink (venue.ts)
+// Adds discovery-specific fields (rating, review_count)
 export interface DiscoveredDeliveryLink {
   platform: DeliveryPlatform;
   url: string;
   venue_id_on_platform?: string;
-  verified: boolean;
+  active: boolean; // Aligned with DeliveryPlatformLink
+  verified: boolean; // Discovery-specific: has this link been manually verified?
   last_verified?: Date;
+  // Discovery-specific metadata from platform
   rating?: number;
   review_count?: number;
 }

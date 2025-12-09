@@ -147,8 +147,8 @@ export class WoltAdapter extends BasePlatformAdapter {
 
           if (venue.location) {
             data.coordinates = {
-              lat: venue.location.coordinates?.[1] || venue.location.lat,
-              lng: venue.location.coordinates?.[0] || venue.location.lng,
+              latitude: venue.location.coordinates?.[1] || venue.location.lat,
+              longitude: venue.location.coordinates?.[0] || venue.location.lng,
               accuracy: 'exact',
             };
           }

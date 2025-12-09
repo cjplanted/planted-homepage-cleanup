@@ -24,25 +24,48 @@ async function main() {
         const stats = await pool.getStats();
         console.log('\n📊 Search Engine Pool Statistics');
         console.log('================================');
-        console.log(`Total credentials:     ${stats.totalCredentials}`);
-        console.log(`Active credentials:    ${stats.activeCredentials}`);
-        console.log(`Disabled credentials:  ${stats.disabledCredentials}`);
-        console.log('');
-        console.log(`Queries available today: ${stats.totalQueriesAvailableToday}`);
-        console.log(`Queries used today:      ${stats.totalQueriesUsedToday}`);
-        console.log(`Queries remaining:       ${stats.queriesRemaining}`);
+        console.log(`Total search engines:  ${stats.totalCredentials}`);
+        console.log(`Active engines:        ${stats.activeCredentials}`);
+        console.log(`Disabled engines:      ${stats.disabledCredentials}`);
         console.log('');
 
-        const usagePercent = stats.totalQueriesAvailableToday > 0
-          ? ((stats.totalQueriesUsedToday / stats.totalQueriesAvailableToday) * 100).toFixed(1)
+        // Display mode
+        const modeIcon = stats.mode === 'free' ? '🆓' : '💳';
+        console.log(`Current mode: ${modeIcon} ${stats.mode.toUpperCase()}`);
+        console.log('');
+
+        // Free quota
+        console.log('FREE QUOTA (100 queries/engine/day)');
+        console.log('-----------------------------------');
+        console.log(`Used:      ${stats.freeQueriesUsed} / ${stats.freeQueriesTotal}`);
+        console.log(`Remaining: ${stats.queriesRemaining}`);
+
+        const usagePercent = stats.freeQueriesTotal > 0
+          ? ((stats.freeQueriesUsed / stats.freeQueriesTotal) * 100).toFixed(1)
           : 0;
-        console.log(`Usage: ${usagePercent}%`);
+        console.log(`Usage:     ${usagePercent}%`);
 
         // Visual progress bar
         const barLength = 40;
-        const filledLength = Math.round((stats.totalQueriesUsedToday / stats.totalQueriesAvailableToday) * barLength) || 0;
+        const filledLength = Math.round((stats.freeQueriesUsed / stats.freeQueriesTotal) * barLength) || 0;
         const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
         console.log(`[${bar}]`);
+
+        // Paid usage
+        if (stats.paidQueriesUsed > 0) {
+          console.log('');
+          console.log('PAID USAGE ($5 per 1000 queries)');
+          console.log('--------------------------------');
+          console.log(`Queries used: ${stats.paidQueriesUsed}`);
+          console.log(`Estimated cost: $${stats.estimatedCost.toFixed(2)}`);
+        }
+
+        // Total
+        console.log('');
+        console.log('TOTAL TODAY');
+        console.log('-----------');
+        console.log(`Total queries: ${stats.totalQueriesUsedToday}`);
+
         break;
       }
 
@@ -94,42 +117,41 @@ Usage:
 
 Commands:
   stats       Show pool statistics (default)
-  list        List all credentials with detailed usage
+  list        List all search engines with detailed usage
   test        Test getting an available credential
   help        Show this help
 
 Configuration:
-  Add credentials using one of these methods:
+  Supports 6 search engines with a single API key:
 
-  1. JSON array (recommended for many credentials):
-     GOOGLE_SEARCH_CREDENTIALS='[
-       {"apiKey":"AIza...","searchEngineId":"abc123","name":"Project 1"},
-       {"apiKey":"AIza...","searchEngineId":"def456","name":"Project 2"}
-     ]'
+  GOOGLE_SEARCH_API_KEY=AIza...           (required - shared across all engines)
+  GOOGLE_SEARCH_ENGINE_ID_1=abc123...     (optional - defaults to predefined IDs)
+  GOOGLE_SEARCH_ENGINE_ID_2=def456...     (optional)
+  ... up to GOOGLE_SEARCH_ENGINE_ID_6
 
-  2. Numbered environment variables:
-     GOOGLE_SEARCH_API_KEY_1=AIza...
-     GOOGLE_SEARCH_ENGINE_ID_1=abc123
-     GOOGLE_SEARCH_API_KEY_2=AIza...
-     GOOGLE_SEARCH_ENGINE_ID_2=def456
+Free Quota:
+  - Each search engine gets 100 free queries per day
+  - Total: 6 engines × 100 = 600 free queries/day
+  - Resets daily at midnight UTC
 
-  3. Single credential (backwards compatible):
-     GOOGLE_SEARCH_API_KEY=AIza...
-     GOOGLE_SEARCH_ENGINE_ID=abc123
+Paid Fallback:
+  - After exhausting all free quota, automatically switches to paid mode
+  - Paid mode: $5 per 1,000 queries (account-wide)
+  - Cost tracking is shown in stats
 
 Setup Guide:
   1. Go to https://console.cloud.google.com
-  2. Create a new project (or select existing)
+  2. Create a new project (or use existing)
   3. Enable "Custom Search API"
   4. Go to "APIs & Services" > "Credentials"
-  5. Create an API key
+  5. Create an API key → Set as GOOGLE_SEARCH_API_KEY
   6. Go to https://programmablesearchengine.google.com
-  7. Create a new search engine (search the entire web)
-  8. Copy the Search Engine ID
-  9. Add both values to your environment
+  7. Create 6 search engines (search the entire web)
+  8. Copy each Search Engine ID → Set as GOOGLE_SEARCH_ENGINE_ID_1 through _6
+     (Or use the predefined IDs - they will be loaded automatically)
+  9. Enable billing on your Google Cloud project for paid mode support
 
-  Repeat for each project to get 100 queries/day each.
-  With 20 projects = 2,000 queries/day for free!
+With this setup: 600 free queries/day, then $5/1000 after that!
 `);
     }
 

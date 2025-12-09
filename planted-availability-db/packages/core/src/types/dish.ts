@@ -1,7 +1,9 @@
-import type { DataSource, VenueStatus } from './venue.js';
+import type { DataSource, VenueStatus, DeliveryPartner } from './venue.js';
 
 export type AvailabilityType = 'permanent' | 'limited' | 'seasonal';
-export type DeliveryPartner = 'uber_eats' | 'wolt' | 'lieferando' | 'deliveroo' | 'just_eat' | 'glovo';
+
+// Re-export for backwards compatibility
+export type { DeliveryPartner } from './venue.js';
 
 export interface LocalizedString {
   [locale: string]: string;
@@ -12,6 +14,13 @@ export interface Price {
   currency: string; // ISO 4217
 }
 
+// Multi-country pricing for chain restaurants operating across borders
+export interface CountryPrice {
+  country: string; // ISO 3166-1 alpha-2 (e.g., 'CH', 'DE', 'AT')
+  amount: number;
+  currency: string; // ISO 4217 (e.g., 'CHF', 'EUR')
+}
+
 export interface DishAvailability {
   type: AvailabilityType;
   start_date?: Date;
@@ -19,10 +28,11 @@ export interface DishAvailability {
   days_available?: string[]; // DayOfWeek[]
 }
 
+// Dish-specific delivery info (URL is inherited from venue.delivery_platforms)
 export interface DeliveryPartnerInfo {
   partner: DeliveryPartner;
-  url: string;
-  price?: number;
+  url?: string; // @deprecated - Use venue.delivery_platforms instead. Kept for backwards compatibility.
+  price?: number; // Dish-specific price on this platform (may differ from base price)
 }
 
 export interface Dish {
@@ -33,13 +43,20 @@ export interface Dish {
   description: string;
   description_localized?: LocalizedString;
   planted_products: string[]; // SKUs from products collection
-  price: Price;
+
+  // Pricing
+  price: Price; // Default/primary price
+  prices_by_country?: CountryPrice[]; // For chains operating in multiple countries (e.g., Hans im Glück)
+
   image_url?: string;
   image_source?: string;
   dietary_tags: string[];
   cuisine_type?: string;
   availability: DishAvailability;
+
+  // Delivery info (URLs now on venue.delivery_platforms, only prices stored here)
   delivery_partners?: DeliveryPartnerInfo[];
+
   source: DataSource;
   last_verified: Date;
   status: VenueStatus;

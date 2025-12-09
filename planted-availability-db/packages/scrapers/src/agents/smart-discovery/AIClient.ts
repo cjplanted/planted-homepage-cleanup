@@ -150,9 +150,15 @@ export async function createAIClient(config?: Partial<AIClientConfig>): Promise<
 
 /**
  * Detect which AI provider is available based on environment variables
+ *
+ * Priority order:
+ * 1. Gemini (GOOGLE_AI_API_KEY or GEMINI_API_KEY) - Preferred for cost efficiency and performance
+ * 2. Claude (ANTHROPIC_API_KEY) - Fallback option
+ *
+ * Gemini is the default choice when both keys are available.
  */
 export function detectAvailableProvider(): AIProvider {
-  // Check for Gemini first (free credits)
+  // Check for Gemini first (preferred for free credits and performance)
   if (process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY) {
     return 'gemini';
   }

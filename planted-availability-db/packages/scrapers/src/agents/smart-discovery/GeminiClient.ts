@@ -87,6 +87,7 @@ export class GeminiClient {
   private temperature: number;
 
   constructor(config?: GeminiClientConfig) {
+    // Check for API key in order of preference: config > GOOGLE_AI_API_KEY > GEMINI_API_KEY
     const apiKey = config?.apiKey || process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY || '';
 
     if (!apiKey) {
@@ -94,13 +95,16 @@ export class GeminiClient {
     }
 
     this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = config?.model || 'gemini-2.0-flash';
+    // Default to Gemini 2.5 Flash for improved performance and quality
+    // Falls back to 2.0-flash automatically if 2.5 is unavailable
+    this.model = config?.model || 'gemini-2.5-flash';
     this.maxTokens = config?.maxTokens || 4096;
     this.temperature = config?.temperature || 0.3;
   }
 
   /**
    * Send a chat message to Gemini
+   * Automatically falls back to gemini-2.0-flash if 2.5-flash is unavailable
    */
   private async chat(systemPrompt: string, userMessage: string): Promise<string> {
     const model = this.genAI.getGenerativeModel({
@@ -114,11 +118,38 @@ export class GeminiClient {
     // Gemini handles system prompts differently - we prepend it to the user message
     const fullPrompt = `${systemPrompt}\n\n---\n\n${userMessage}`;
 
-    const result = await model.generateContent(fullPrompt);
-    const response = result.response;
-    const text = response.text();
+    try {
+      const result = await model.generateContent(fullPrompt);
+      const response = result.response;
+      const text = response.text();
 
-    return text;
+      return text;
+    } catch (error) {
+      // If using 2.5-flash fails, fall back to 2.0-flash
+      if (this.model === 'gemini-2.5-flash') {
+        console.warn('Gemini 2.5 Flash failed, falling back to 2.0 Flash...');
+
+        // Persist the fallback to avoid repeated failures
+        this.model = 'gemini-2.0-flash';
+
+        const fallbackModel = this.genAI.getGenerativeModel({
+          model: this.model,
+          generationConfig: {
+            maxOutputTokens: this.maxTokens,
+            temperature: this.temperature,
+          },
+        });
+
+        const result = await fallbackModel.generateContent(fullPrompt);
+        const response = result.response;
+        const text = response.text();
+
+        return text;
+      }
+
+      // Re-throw if not a 2.5 fallback scenario
+      throw error;
+    }
   }
 
   /**

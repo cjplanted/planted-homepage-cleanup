@@ -33,6 +33,29 @@ export type {
   PoolStats,
 } from './SearchEnginePool.js';
 
+export {
+  QueryCache,
+  getQueryCache,
+} from './QueryCache.js';
+export type {
+  QueryCacheEntry,
+  QueryCacheStats,
+} from './QueryCache.js';
+
+export {
+  QueryPrioritizer,
+  getQueryPrioritizer,
+  resetQueryPrioritizer,
+} from './QueryPrioritizer.js';
+export type {
+  QueryPlan,
+  ChainEnumerationQuery,
+  HighYieldQuery,
+  CityExplorationQuery,
+  BudgetAllocation,
+  ChainMetadata,
+} from './QueryPrioritizer.js';
+
 export * from './prompts.js';
 
 // Platform adapters

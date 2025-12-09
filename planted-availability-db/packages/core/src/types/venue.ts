@@ -48,6 +48,18 @@ export interface DataSource {
   scraper_id?: string;
 }
 
+// Delivery platform types (shared with dish.ts)
+export type DeliveryPartner = 'uber_eats' | 'wolt' | 'lieferando' | 'deliveroo' | 'just_eat' | 'glovo';
+
+// Venue-level delivery platform link (URL stored once per venue, not per dish)
+export interface DeliveryPlatformLink {
+  partner: DeliveryPartner;
+  url: string;
+  venue_id_on_platform?: string;
+  active: boolean;
+  last_verified?: Date;
+}
+
 export interface Venue {
   id: string;
   type: VenueType;
@@ -58,6 +70,10 @@ export interface Venue {
   opening_hours: OpeningHours;
   delivery_zones?: string[] | GeoJSONGeometry;
   contact?: Contact;
+
+  // Delivery platform links (URLs stored at venue level, not duplicated per dish)
+  delivery_platforms?: DeliveryPlatformLink[];
+
   source: DataSource;
   last_verified: Date;
   status: VenueStatus;
