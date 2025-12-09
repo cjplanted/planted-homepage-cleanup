@@ -6,6 +6,7 @@ import {
   type DiscoveredVenueForReview,
   type DiscoveryReviewParams,
 } from '../lib/api';
+import VenueEditModal from '../components/VenueEditModal';
 
 // Country and type labels
 const COUNTRY_NAMES: Record<string, string> = {
@@ -70,6 +71,9 @@ function ReviewQueuePage() {
 
   // Selection state
   const [selectedVenues, setSelectedVenues] = useState<Set<string>>(new Set());
+
+  // Edit modal state
+  const [editingVenue, setEditingVenue] = useState<DiscoveredVenueForReview | null>(null);
 
   // Filter state from URL params
   const status = searchParams.get('status') || 'discovered';
@@ -224,6 +228,16 @@ function ReviewQueuePage() {
     },
   });
 
+  const updateAndVerifyMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<DiscoveredVenueForReview> }) =>
+      discoveryReviewApi.updateAndVerify(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['discovered-venues-review'] });
+      queryClient.invalidateQueries({ queryKey: ['discovered-venues-stats'] });
+      setEditingVenue(null);
+    },
+  });
+
   // Handlers
   const toggleCountry = useCallback((code: string) => {
     setExpandedCountries((prev) => {
@@ -262,6 +276,23 @@ function ReviewQueuePage() {
       rejectMutation.mutate({ id: venue.id, reason });
     }
   }, [rejectMutation]);
+
+  const handleEdit = useCallback((venue: DiscoveredVenueForReview) => {
+    setEditingVenue(venue);
+  }, []);
+
+  const handleSaveEdit = useCallback((updates: Partial<DiscoveredVenueForReview>) => {
+    if (editingVenue) {
+      updateAndVerifyMutation.mutate({ id: editingVenue.id, data: updates });
+    }
+  }, [editingVenue, updateAndVerifyMutation]);
+
+  const handleRejectFromModal = useCallback((reason: string) => {
+    if (editingVenue) {
+      rejectMutation.mutate({ id: editingVenue.id, reason });
+      setEditingVenue(null);
+    }
+  }, [editingVenue, rejectMutation]);
 
   const handleBulkVerify = useCallback(() => {
     if (selectedVenues.size > 0) {
@@ -364,7 +395,8 @@ a - Select all`);
     verifyMutation.isPending ||
     rejectMutation.isPending ||
     bulkVerifyMutation.isPending ||
-    bulkRejectMutation.isPending;
+    bulkRejectMutation.isPending ||
+    updateAndVerifyMutation.isPending;
 
   const updateFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -445,6 +477,16 @@ a - Select all`);
                 disabled={isAnyLoading}
               >
                 Verify All
+              </button>
+              <button
+                className="btn btn-sm btn-secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(venue);
+                }}
+                disabled={isAnyLoading}
+              >
+                Edit & Verify
               </button>
               <button
                 className="btn btn-sm btn-danger"
@@ -991,6 +1033,13 @@ a - Select all`);
                           Verify
                         </button>
                         <button
+                          className="btn btn-sm btn-secondary"
+                          onClick={() => handleEdit(venue)}
+                          disabled={isAnyLoading}
+                        >
+                          Edit
+                        </button>
+                        <button
                           className="btn btn-sm btn-danger"
                           onClick={() => handleReject(venue)}
                           disabled={isAnyLoading}
@@ -1006,6 +1055,17 @@ a - Select all`);
           </div>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {editingVenue && (
+        <VenueEditModal
+          venue={editingVenue}
+          onSave={handleSaveEdit}
+          onReject={handleRejectFromModal}
+          onClose={() => setEditingVenue(null)}
+          isLoading={updateAndVerifyMutation.isPending || rejectMutation.isPending}
+        />
+      )}
     </>
   );
 }

@@ -152,23 +152,41 @@ export const adminSyncHandler = onRequest(functionOptions, async (req: Request, 
 
             for (const discoveredVenue of toSync) {
               try {
-                // Create production venue
+                // Create production venue with proper type mapping
                 const productionVenue = await venues.create({
+                  type: 'restaurant', // Default type for discovered venues
                   name: discoveredVenue.name,
                   chain_id: discoveredVenue.chain_id,
-                  chain_name: discoveredVenue.chain_name,
                   address: {
                     street: discoveredVenue.address.street,
                     city: discoveredVenue.address.city,
                     postal_code: discoveredVenue.address.postal_code,
                     country: discoveredVenue.address.country,
                   },
-                  coordinates: discoveredVenue.coordinates,
+                  // Map coordinates to location (GeoPoint format)
+                  location: discoveredVenue.coordinates ? {
+                    latitude: discoveredVenue.coordinates.latitude,
+                    longitude: discoveredVenue.coordinates.longitude,
+                  } : { latitude: 0, longitude: 0 },
+                  // Provide default opening hours
+                  opening_hours: {
+                    monday: { open: '11:00', close: '22:00' },
+                    tuesday: { open: '11:00', close: '22:00' },
+                    wednesday: { open: '11:00', close: '22:00' },
+                    thursday: { open: '11:00', close: '22:00' },
+                    friday: { open: '11:00', close: '22:00' },
+                    saturday: { open: '11:00', close: '22:00' },
+                    sunday: { open: '11:00', close: '22:00' },
+                  },
                   delivery_platforms: discoveredVenue.delivery_platforms.map(p => ({
                     platform: p.platform,
                     url: p.url,
                     venue_id: p.venue_id,
                   })),
+                  source: {
+                    type: 'discovered',
+                    partner_id: 'smart-discovery-agent',
+                  },
                   status: 'active',
                   last_verified: new Date(),
                 });

@@ -23,6 +23,7 @@ export {
   adminPartnersHandler as adminPartners,
   adminBatchesHandler as adminBatches,
   adminDiscoveredVenuesHandler as adminDiscoveredVenues,
+  adminFeedbackHandler as adminFeedback,
   adminMetricsHandler as adminMetrics,
   adminPlatformHealthHandler as adminPlatformHealth,
   adminCircuitBreakersHandler as adminCircuitBreakers,

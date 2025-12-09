@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import {
   initializeFirestore,
   discoveredVenues,
+  discoveredDishes,
   discoveryStrategies,
   searchFeedback,
   changeLogs,
@@ -83,7 +84,23 @@ export const adminDiscoveredVenuesHandler = onRequest(functionOptions, async (re
               authRes.status(404).json({ error: 'Not found' });
               return;
             }
-            authRes.json(venue);
+            // Fetch dishes for this venue
+            const venueDishes = await discoveredDishes.getByVenue(venueId);
+            authRes.json({
+              ...venue,
+              dishes: venueDishes.map(dish => ({
+                id: dish.id,
+                name: dish.name,
+                description: dish.description,
+                category: dish.category,
+                product: dish.planted_product, // Map to 'product' for frontend
+                confidence: dish.confidence_score, // Map to 'confidence' for frontend
+                price: dish.price_by_country ? Object.values(dish.price_by_country)[0] : undefined, // Get first price
+                price_by_country: dish.price_by_country,
+                image_url: dish.image_url,
+                status: dish.status,
+              })),
+            });
             return;
           }
 
@@ -119,7 +136,29 @@ export const adminDiscoveredVenuesHandler = onRequest(functionOptions, async (re
           // Limit results
           const limited = venues.slice(0, limit);
 
-          authRes.json({ venues: limited, total: venues.length });
+          // Fetch dishes for each venue and attach them
+          const venuesWithDishes = await Promise.all(
+            limited.map(async (venue) => {
+              const venueDishes = await discoveredDishes.getByVenue(venue.id);
+              return {
+                ...venue,
+                dishes: venueDishes.map(dish => ({
+                  id: dish.id,
+                  name: dish.name,
+                  description: dish.description,
+                  category: dish.category,
+                  product: dish.planted_product, // Map to 'product' for frontend
+                  confidence: dish.confidence_score, // Map to 'confidence' for frontend
+                  price: dish.price_by_country ? Object.values(dish.price_by_country)[0] : undefined, // Get first price
+                  price_by_country: dish.price_by_country,
+                  image_url: dish.image_url,
+                  status: dish.status,
+                })),
+              };
+            })
+          );
+
+          authRes.json({ venues: venuesWithDishes, total: venues.length });
           break;
         }
 
