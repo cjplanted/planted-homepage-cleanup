@@ -1,5 +1,5 @@
-import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth, browserLocalPersistence, setPersistence } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 /**
  * Firebase Configuration
@@ -17,66 +17,29 @@ const firebaseConfig = {
 };
 
 /**
- * Validate Firebase Configuration
+ * Validate Firebase Configuration (production only)
  */
-function validateFirebaseConfig(): void {
-  const requiredKeys = [
-    'apiKey',
-    'authDomain',
-    'projectId',
-    'storageBucket',
-    'messagingSenderId',
-    'appId',
-  ] as const;
-
-  const missingKeys = requiredKeys.filter(
-    (key) => !firebaseConfig[key]
-  );
+if (import.meta.env.PROD) {
+  const requiredKeys = ['apiKey', 'authDomain', 'projectId'] as const;
+  const missingKeys = requiredKeys.filter((key) => !firebaseConfig[key]);
 
   if (missingKeys.length > 0) {
     throw new Error(
       `Missing Firebase configuration: ${missingKeys.join(', ')}. ` +
-      'Please check your .env file and ensure all VITE_FIREBASE_* variables are set.'
+      'Please check your .env file.'
     );
   }
 }
 
-// Validate config on module load
-if (import.meta.env.PROD) {
-  validateFirebaseConfig();
-}
-
 /**
- * Initialize Firebase App
+ * Initialize Firebase
+ *
+ * Keep this simple - Firebase handles persistence and redirect
+ * processing internally. No need to manually set persistence
+ * or handle redirect results here.
  */
-let app: FirebaseApp;
-let auth: Auth;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-try {
-  console.log('Initializing Firebase with config:', {
-    authDomain: firebaseConfig.authDomain,
-    projectId: firebaseConfig.projectId,
-  });
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-
-  // Set persistence to local storage for better redirect handling
-  setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      console.log('Firebase Auth persistence set to local');
-    })
-    .catch((error) => {
-      console.error('Failed to set auth persistence:', error);
-    });
-
-  console.log('Firebase initialized successfully');
-} catch (error) {
-  console.error('Failed to initialize Firebase:', error);
-  throw error;
-}
-
-/**
- * Export Firebase instances
- */
 export { app, auth };
 export default app;

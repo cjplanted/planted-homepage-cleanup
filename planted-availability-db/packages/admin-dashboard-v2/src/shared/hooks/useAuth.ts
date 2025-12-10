@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import {
   User,
   signInWithEmailAndPassword,
   signInWithRedirect,
-  getRedirectResult,
   GoogleAuthProvider,
   signOut as firebaseSignOut,
   onAuthStateChanged,
@@ -36,144 +35,55 @@ export interface SignInCredentials {
  *
  * Provides authentication state and methods for sign in/out.
  *
+ * SIMPLE PATTERN: We only use onAuthStateChanged.
+ * Firebase internally waits for getRedirectResult to complete
+ * before firing onAuthStateChanged, so we don't need to
+ * manually coordinate them.
+ *
  * Usage:
  * const { user, loading, error, signIn, signOut } = useAuth();
  */
 export function useAuth() {
-  const [state, setState] = useState<AuthState>({
-    user: null,
-    loading: true,
-    error: null,
-  });
-  const redirectChecked = useRef(false);
-  const authStateReceived = useRef(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // SIMPLE: Just listen to auth state changes
+  // Firebase internally handles getRedirectResult before firing this callback
   useEffect(() => {
-    console.log('useAuth: Starting auth initialization');
-    let unsubscribe: (() => void) | null = null;
-
-    // Function to check if we can set loading to false
-    const maybeSetLoadingFalse = (user: User | null, error: string | null = null) => {
-      // Only set loading false after both redirect check AND initial auth state
-      if (redirectChecked.current && authStateReceived.current) {
-        console.log('useAuth: Both checks complete, setting loading false');
-        setState({
-          user,
-          loading: false,
-          error,
-        });
-      }
-    };
-
-    // Subscribe to auth state changes FIRST
-    unsubscribe = onAuthStateChanged(
+    const unsubscribe = onAuthStateChanged(
       auth,
-      (user) => {
-        console.log('useAuth: onAuthStateChanged fired', user ? `user: ${user.email}` : 'no user');
-        authStateReceived.current = true;
-
-        // If we have a user, update immediately (redirect success case)
-        if (user) {
-          setState({
-            user,
-            loading: false,
-            error: null,
-          });
-        } else {
-          // No user - wait for redirect check to complete before deciding
-          maybeSetLoadingFalse(null, null);
-        }
+      (firebaseUser) => {
+        console.log('Auth state changed:', firebaseUser ? firebaseUser.email : 'no user');
+        setUser(firebaseUser);
+        setLoading(false);
+        setError(null);
       },
-      (error) => {
-        console.error('Auth state change error:', error);
-        authStateReceived.current = true;
-        maybeSetLoadingFalse(null, error.message);
+      (authError) => {
+        console.error('Auth error:', authError);
+        setUser(null);
+        setLoading(false);
+        setError(authError.message);
       }
     );
 
-    // Then check for redirect result
-    console.log('useAuth: Checking for redirect result...');
-    getRedirectResult(auth)
-      .then((result) => {
-        redirectChecked.current = true;
-        if (result) {
-          console.log('useAuth: Redirect sign-in successful', result.user.email);
-          // onAuthStateChanged will handle the state update
-        } else {
-          console.log('useAuth: No redirect result (normal page load)');
-          // If auth state already received with no user, we can set loading false now
-          if (authStateReceived.current) {
-            setState((prev) => ({
-              ...prev,
-              loading: false,
-            }));
-          }
-        }
-      })
-      .catch((error) => {
-        console.error('useAuth: Redirect result error:', error);
-        redirectChecked.current = true;
-        const authError = error as AuthError;
-        let errorMessage = 'Failed to complete sign-in';
-
-        switch (authError.code) {
-          case 'auth/account-exists-with-different-credential':
-            errorMessage = 'An account already exists with the same email';
-            break;
-          case 'auth/credential-already-in-use':
-            errorMessage = 'This credential is already linked to another account';
-            break;
-          case 'auth/user-disabled':
-            errorMessage = 'This account has been disabled';
-            break;
-          default:
-            errorMessage = authError.message || 'Failed to complete sign-in';
-        }
-
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: errorMessage,
-        }));
-      });
-
-    // Safety timeout - if still loading after 5 seconds, something is wrong
-    const timeoutId = setTimeout(() => {
-      setState((prev) => {
-        if (prev.loading) {
-          console.warn('useAuth: Auth initialization timed out after 5 seconds');
-          return {
-            user: null,
-            loading: false,
-            error: null,
-          };
-        }
-        return prev;
-      });
-    }, 5000);
-
-    // Cleanup subscription on unmount
-    return () => {
-      console.log('useAuth: Cleaning up');
-      clearTimeout(timeoutId);
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
+    return () => unsubscribe();
   }, []);
 
   /**
-   * Sign In
+   * Sign In with Email/Password
    */
   const signIn = async (credentials: SignInCredentials): Promise<void> => {
+    setError(null);
+    setLoading(true);
+
     try {
-      setState((prev) => ({ ...prev, loading: true, error: null }));
       await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-    } catch (error) {
-      const authError = error as AuthError;
+      // onAuthStateChanged will handle the state update
+    } catch (err) {
+      const authError = err as AuthError;
       let errorMessage = 'Failed to sign in';
 
-      // Handle common auth errors
       switch (authError.code) {
         case 'auth/invalid-email':
           errorMessage = 'Invalid email address';
@@ -187,6 +97,9 @@ export function useAuth() {
         case 'auth/wrong-password':
           errorMessage = 'Incorrect password';
           break;
+        case 'auth/invalid-credential':
+          errorMessage = 'Invalid email or password';
+          break;
         case 'auth/too-many-requests':
           errorMessage = 'Too many failed attempts. Please try again later';
           break;
@@ -194,34 +107,35 @@ export function useAuth() {
           errorMessage = 'Network error. Please check your connection';
           break;
         default:
-          errorMessage = authError.message;
+          errorMessage = authError.message || 'Failed to sign in';
       }
 
-      setState((prev) => ({
-        ...prev,
-        loading: false,
-        error: errorMessage,
-      }));
+      setLoading(false);
+      setError(errorMessage);
       throw new Error(errorMessage);
     }
   };
 
   /**
-   * Sign In with Google (uses redirect for better cross-origin compatibility)
+   * Sign In with Google
+   *
+   * Uses redirect flow. After redirect:
+   * 1. Page reloads
+   * 2. Firebase processes the redirect result internally
+   * 3. onAuthStateChanged fires with the user
    */
   const signInWithGoogle = async (): Promise<void> => {
+    setError(null);
+    // Don't set loading=true here - the page will redirect away
+    // and when it returns, loading starts as true anyway
+
     try {
-      setState((prev) => ({ ...prev, loading: true, error: null }));
-      console.log('useAuth: Starting Google sign-in redirect...');
-      // This will redirect to Google, then back to the app
-      // getRedirectResult() in useEffect will handle the result
       await signInWithRedirect(auth, googleProvider);
-      // Note: Code after signInWithRedirect won't execute as the page redirects
-    } catch (error) {
-      const authError = error as AuthError;
+      // Code after this won't execute - page redirects to Google
+    } catch (err) {
+      const authError = err as AuthError;
       let errorMessage = 'Failed to sign in with Google';
 
-      // Handle common auth errors
       switch (authError.code) {
         case 'auth/account-exists-with-different-credential':
           errorMessage = 'An account already exists with the same email';
@@ -233,18 +147,13 @@ export function useAuth() {
           errorMessage = 'Google sign-in is not enabled';
           break;
         case 'auth/unauthorized-domain':
-          errorMessage = 'This domain is not authorized for OAuth. Check Firebase console.';
+          errorMessage = 'This domain is not authorized for OAuth';
           break;
         default:
           errorMessage = authError.message || 'Failed to sign in with Google';
       }
 
-      console.error('useAuth: Google sign-in error:', errorMessage);
-      setState((prev) => ({
-        ...prev,
-        loading: false,
-        error: errorMessage,
-      }));
+      setError(errorMessage);
       throw new Error(errorMessage);
     }
   };
@@ -253,16 +162,14 @@ export function useAuth() {
    * Sign Out
    */
   const signOut = async (): Promise<void> => {
+    setError(null);
+
     try {
-      setState((prev) => ({ ...prev, loading: true, error: null }));
       await firebaseSignOut(auth);
-    } catch (error) {
-      const errorMessage = (error as Error).message || 'Failed to sign out';
-      setState((prev) => ({
-        ...prev,
-        loading: false,
-        error: errorMessage,
-      }));
+      // onAuthStateChanged will handle the state update
+    } catch (err) {
+      const errorMessage = (err as Error).message || 'Failed to sign out';
+      setError(errorMessage);
       throw new Error(errorMessage);
     }
   };
@@ -271,22 +178,23 @@ export function useAuth() {
    * Get Auth Token
    */
   const getToken = async (forceRefresh = false): Promise<string | null> => {
+    if (!user) {
+      return null;
+    }
+
     try {
-      if (!state.user) {
-        return null;
-      }
-      return await state.user.getIdToken(forceRefresh);
-    } catch (error) {
-      console.error('Failed to get auth token:', error);
+      return await user.getIdToken(forceRefresh);
+    } catch (err) {
+      console.error('Failed to get auth token:', err);
       return null;
     }
   };
 
   return {
-    user: state.user,
-    loading: state.loading,
-    error: state.error,
-    isAuthenticated: !!state.user,
+    user,
+    loading,
+    error,
+    isAuthenticated: !!user,
     signIn,
     signInWithGoogle,
     signOut,
