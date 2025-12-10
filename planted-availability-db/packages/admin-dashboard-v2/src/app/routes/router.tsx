@@ -5,6 +5,7 @@ import { LoadingState } from '@/shared/components/LoadingState';
 
 // Pages
 import { LoginPage } from '@/pages/LoginPage';
+import { TestPage } from '@/pages/TestPage';
 import { ScrapeControlPage } from '@/pages/ScrapeControlPage';
 import { ReviewQueuePage } from '@/pages/ReviewQueuePage';
 import { LiveVenuesPage } from '@/pages/LiveVenuesPage';
@@ -72,6 +73,11 @@ export const router = createBrowserRouter([
         <LoginPage />
       </PublicRoute>
     ),
+  },
+  // Test page - no auth required (for debugging)
+  {
+    path: '/test',
+    element: <TestPage />,
   },
 
   // Protected Routes - Workflow Section
