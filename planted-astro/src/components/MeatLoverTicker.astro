@@ -1,0 +1,118 @@
+---
+// MeatLoverTicker.astro - Scrolling testimonials from meat lovers
+interface Props {
+    testimonials: Array<{
+        text: string;
+        author?: string;
+    }>;
+}
+
+const { testimonials } = Astro.props;
+---
+
+<div class="meat-lover-ticker">
+    <div class="ticker-track">
+        {testimonials.map((testimonial) => (
+            <div class="ticker-item">
+                <span class="ticker-quote">"{testimonial.text}"</span>
+                {testimonial.author && (
+                    <span class="ticker-author">— {testimonial.author}</span>
+                )}
+            </div>
+        ))}
+        <!-- Duplicate for seamless loop -->
+        {testimonials.map((testimonial) => (
+            <div class="ticker-item">
+                <span class="ticker-quote">"{testimonial.text}"</span>
+                {testimonial.author && (
+                    <span class="ticker-author">— {testimonial.author}</span>
+                )}
+            </div>
+        ))}
+    </div>
+</div>
+
+<style>
+    .meat-lover-ticker {
+        background: var(--planted-purple);
+        overflow: hidden;
+        padding: 1.5rem 0;
+        position: relative;
+        width: 100%;
+    }
+
+    .meat-lover-ticker::before,
+    .meat-lover-ticker::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100px;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .meat-lover-ticker::before {
+        left: 0;
+        background: linear-gradient(to right, var(--planted-purple), transparent);
+    }
+
+    .meat-lover-ticker::after {
+        right: 0;
+        background: linear-gradient(to left, var(--planted-purple), transparent);
+    }
+
+    .ticker-track {
+        display: flex;
+        gap: 4rem;
+        animation: tickerScroll 45s linear infinite;
+        will-change: transform;
+    }
+
+    @keyframes tickerScroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    .ticker-item {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        white-space: nowrap;
+        color: var(--planted-white);
+    }
+
+    .ticker-quote {
+        font-size: 1rem;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+    .ticker-author {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        font-weight: 600;
+    }
+
+    /* Pause on hover for better readability */
+    .meat-lover-ticker:hover .ticker-track {
+        animation-play-state: paused;
+    }
+
+    @media (max-width: 640px) {
+        .ticker-quote {
+            font-size: 0.9rem;
+        }
+        .ticker-author {
+            font-size: 0.8rem;
+        }
+        .ticker-track {
+            gap: 2.5rem;
+        }
+    }
+</style>

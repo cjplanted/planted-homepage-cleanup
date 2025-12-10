@@ -5,6 +5,7 @@ import { allLocales, locales, type LocaleCode, type CountryCode, getLocalizedPro
 import { getTranslations } from '../../i18n/index';
 import StoreLocator from '../../components/StoreLocator.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import MeatLoverTicker from '../../components/MeatLoverTicker.astro';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -33,53 +34,101 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 ---
 
 <Layout title={`Planted – ${t.home.hero.subtitle}`} locale={locale}>
-    <!-- Hero Section -->
+    <!-- Meat Lover Ticker -->
+    <MeatLoverTicker testimonials={t.home.ticker?.testimonials || [
+        { text: "Ich hab's meinem Vater nicht gesagt. Er hat den Unterschied nicht gemerkt.", author: "Marc, 34, Grillmeister" },
+        { text: "Okay, ich geb's zu. Es schmeckt.", author: "Fleischesser seit 1978" },
+        { text: "Mein Metzger ist jetzt sauer auf mich.", author: "Anonymous" },
+        { text: "Hab gewettet, es schmeckt nicht. Hab verloren.", author: "Thomas, widerwillig überzeugt" },
+        { text: "Wenn das pflanzlich ist, dann bin ich Vegetarier.", author: "Stefan, noch nicht ganz" }
+    ]} />
+
+    <!-- Hero Section - TV Set Design -->
     <section class="hero">
-        <div class="hero-video-wrapper">
-            <div class="hero-video-container" id="heroVideo">
-                <video class="hero-video" autoplay muted loop playsinline>
-                    <source src={`${base}/video/hero.mp4`} type="video/mp4">
-                </video>
-            </div>
-            <!-- Approved by Meat Lovers claim - bridges video and content -->
-            <div class="hero-approved-claim">
-                <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" class="approved-svg" />
-            </div>
-        </div>
+        <div class="hero-container">
+            <div class="hero-grid">
+                <!-- Left Column: Text Content -->
+                <div class="hero-text">
+                    <!-- Badge -->
+                    <div class="hero-badge">
+                        <img src={`${base}/images/b-corp-logo.svg`} alt="B Corp Certified" class="bcorp-logo" />
+                        <span>{t.home.hero.badge}</span>
+                    </div>
 
-        <div class="hero-content" id="heroContent">
-            <div class="hero-badge">
-                <img src={`${base}/images/b-corp-logo.svg`} alt="B Corp Certified" class="bcorp-logo" />
-                <span>{t.home.hero.badge}</span>
-            </div>
-            <h1>{t.home.hero.title}</h1>
-            <p class="hero-subtitle">{t.home.hero.subtitle}</p>
-            <div class="hero-buttons">
-                <a href="#locator" class="btn btn-primary">
-                    {t.nav.findUs}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                </a>
-                <a href="#products" class="btn btn-secondary">
-                    {t.home.products.viewAll}
-                </a>
-            </div>
-        </div>
+                    <!-- Headline with rotation -->
+                    <div class="hero-headline">
+                        <h1>{t.home.hero.title}</h1>
+                        <div class="hero-subtext">{t.home.mission.highlight}</div>
+                    </div>
 
-        <!-- Trust indicators -->
-        <div class="hero-trust">
-            <span class="trust-item">{t.home.trust.swissMade}</span>
-            <span class="trust-divider"></span>
-            <span class="trust-item">{t.home.trust.restaurants}</span>
-            <span class="trust-divider"></span>
-            <button class="trust-item trust-countries" id="countriesBtn" type="button">
-                {t.home.trust.countries}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="countries-icon">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
+                    <!-- Whisper box -->
+                    <div class="hero-whisper">
+                        {t.home.hero.whisper || t.home.hero.subtitle}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="hero-actions">
+                        <a href="#locator" class="btn btn-primary">
+                            {t.nav.findUs}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </a>
+                        <a href="#products" class="btn btn-secondary">
+                            {t.home.products.viewAll}
+                        </a>
+                    </div>
+
+                    <!-- Proof stats -->
+                    <div class="hero-proof">
+                        <div class="proof-item">
+                            <div class="proof-value">{t.home.trust.restaurants}</div>
+                            <div class="proof-label">{t.home.hero.proofRestaurants || 'Restaurants'}</div>
+                        </div>
+                        <div class="proof-item">
+                            <div class="proof-value">{t.home.trust.countries}</div>
+                            <div class="proof-label">{t.home.hero.proofCountries || 'Länder'}</div>
+                        </div>
+                        <div class="proof-item">
+                            <div class="proof-value">1</div>
+                            <div class="proof-label">{t.home.hero.proofChampion || 'Schwingerkönig'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: TV Set -->
+                <div class="hero-visual">
+                    <!-- TV Frame -->
+                    <div class="tv-frame">
+                        <div class="tv-screen">
+                            <video autoplay muted loop playsinline>
+                                <source src={`${base}/video/hero.mp4`} type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="tv-controls">
+                            <div class="tv-dial"></div>
+                            <div class="tv-brand">PLANTED</div>
+                            <div class="tv-dial"></div>
+                        </div>
+                    </div>
+
+                    <!-- Floating annotation card -->
+                    <div class="tv-annotation">
+                        <div class="annotation-card">
+                            <div class="annotation-text">
+                                {t.home.hero.annotationText || 'Ja, wir zeigen dir ein Video von brutzelndem Essen. Das ist quasi Manipulation. Aber es ist auch einfach die Wahrheit.'}
+                            </div>
+                            <div class="annotation-signature">{t.home.hero.annotationSignature || 'Das Marketing-Team'}</div>
+                        </div>
+                    </div>
+
+                    <!-- Approved badge -->
+                    <div class="approved-badge">
+                        <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Countries Modal -->
@@ -94,14 +143,14 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                 </button>
                 <h3>{t.countries ? 'Available in' : 'Available in'}</h3>
                 <div class="countries-grid">
-                    <div class="country-item"><span class="country-flag">🇨🇭</span><span>{t.countries?.switzerland || 'Switzerland'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇩🇪</span><span>{t.countries?.germany || 'Germany'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇦🇹</span><span>{t.countries?.austria || 'Austria'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇫🇷</span><span>{t.countries?.france || 'France'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇮🇹</span><span>{t.countries?.italy || 'Italy'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇳🇱</span><span>{t.countries?.netherlands || 'Netherlands'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇬🇧</span><span>{t.countries?.unitedKingdom || 'United Kingdom'}</span></div>
-                    <div class="country-item"><span class="country-flag">🇪🇸</span><span>{t.countries?.spain || 'Spain'}</span></div>
+                    <div class="country-item"><span class="country-flag">CH</span><span>{t.countries?.switzerland || 'Switzerland'}</span></div>
+                    <div class="country-item"><span class="country-flag">DE</span><span>{t.countries?.germany || 'Germany'}</span></div>
+                    <div class="country-item"><span class="country-flag">AT</span><span>{t.countries?.austria || 'Austria'}</span></div>
+                    <div class="country-item"><span class="country-flag">FR</span><span>{t.countries?.france || 'France'}</span></div>
+                    <div class="country-item"><span class="country-flag">IT</span><span>{t.countries?.italy || 'Italy'}</span></div>
+                    <div class="country-item"><span class="country-flag">NL</span><span>{t.countries?.netherlands || 'Netherlands'}</span></div>
+                    <div class="country-item"><span class="country-flag">GB</span><span>{t.countries?.unitedKingdom || 'United Kingdom'}</span></div>
+                    <div class="country-item"><span class="country-flag">ES</span><span>{t.countries?.spain || 'Spain'}</span></div>
                 </div>
             </div>
         </div>
@@ -118,6 +167,50 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         </div>
     </section>
 
+    <!-- Intro Section (Swiss-Made Statement) -->
+    <section class="intro">
+        <div class="intro-content">
+            <div class="intro-label reveal">
+                <span class="intro-flag">🇨🇭</span>
+                <span>Swiss-made</span>
+            </div>
+            <h2 class="reveal reveal-delay-1">
+                Wir glauben, dass Fleisch nicht von Tieren kommen muss, um gut zu schmecken.
+            </h2>
+            <p class="reveal reveal-delay-2">
+                Deshalb entwickeln wir in der Schweiz pflanzliche Alternativen, die so authentisch schmecken,
+                dass selbst eingefleischte Fleischliebhaber begeistert sind.
+            </p>
+            <div class="intro-badges reveal reveal-delay-3">
+                <div class="intro-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
+                        <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5z"/>
+                        <circle cx="12" cy="16" r="1"/>
+                    </svg>
+                    <span>100% pflanzlich</span>
+                </div>
+                <div class="intro-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+                    </svg>
+                    <span>Keine Zusatzstoffe</span>
+                </div>
+                <div class="intro-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span>High Protein</span>
+                </div>
+                <div class="intro-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span>B Corp</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Products Section -->
     <section class="products" id="products">
         <div class="products-header">
@@ -127,19 +220,19 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             </a>
         </div>
 
-        <div class="products-carousel">
-            <div class="products-scroll" id="productsScroll">
+        <div class="products-container">
+            <div class="products-grid">
                 {featuredProducts.map((product) => (
                     <a href={`${base}/${locale}/products/${product.data.slug}`} class="product-card reveal-scale" data-color={product.data.color}>
                         <div class="product-card-inner">
                             {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
-                            {product.data.images.hover && (
-                                <div class="product-hover-image">
-                                    <img src={product.data.images.hover} alt="" loading="lazy">
+                            <div class="product-image-wrapper">
+                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} class="product-pack-image" loading="lazy">
+                            </div>
+                            <div class="product-hover-overlay">
+                                <div class="product-hover-text">
+                                    Das perfekte Fleisch für alle, die Fleisch lieben
                                 </div>
-                            )}
-                            <div class="product-pack-image">
-                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="lazy">
                             </div>
                         </div>
                         <div class="product-info">
@@ -149,31 +242,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     </a>
                 ))}
             </div>
-        </div>
-
-        <!-- Simple Carousel Navigation -->
-        <div class="carousel-nav">
-            <button class="carousel-arrow carousel-prev" id="carouselPrev" aria-label="Previous">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-            </button>
-
-            <div class="carousel-dots" id="carouselDots">
-                {featuredProducts.map((_, index) => (
-                    <button 
-                        class={`carousel-dot ${index === 0 ? 'active' : ''}`} 
-                        data-index={index}
-                        aria-label={`Go to product ${index + 1}`}
-                    ></button>
-                ))}
-            </div>
-
-            <button class="carousel-arrow carousel-next" id="carouselNext" aria-label="Next">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </button>
         </div>
     </section>
 
@@ -195,18 +263,21 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <div class="impact-stat-value" data-count={settings?.data.impactCO2}>0<span class="percent">%</span></div>
                     <div class="impact-stat-label">{t.home.impact.lessCO2}</div>
                     <div class="impact-stat-compare">{t.home.impact.vsCow}</div>
+                    <div class="impact-stat-context">{t.home.impact.co2Context}</div>
                 </div>
 
                 <div class="impact-stat">
                     <div class="impact-stat-value" data-count={settings?.data.impactWater}>0<span class="percent">%</span></div>
                     <div class="impact-stat-label">{t.home.impact.lessWater}</div>
                     <div class="impact-stat-compare">{t.home.impact.vsCow}</div>
+                    <div class="impact-stat-context">{t.home.impact.waterContext}</div>
                 </div>
 
                 <div class="impact-stat special">
                     <div class="impact-stat-value" data-count={settings?.data.impactAnimals}>0</div>
                     <div class="impact-stat-label">{t.home.impact.animalsHarmed}</div>
                     <div class="impact-stat-compare">{t.home.impact.ever}</div>
+                    <div class="impact-stat-context">{t.home.impact.animalsContext}</div>
                 </div>
             </div>
 
@@ -236,66 +307,35 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     <!-- Ambassador Section - Only shows if there's an ambassador for this country -->
     {ambassador && (
         <section class="ambassador" id="ambassador">
-            <div class="ambassador-bg">
-                <div class="ambassador-gradient"></div>
-            </div>
-
-            <div class="ambassador-content">
-                <div class="ambassador-image-container reveal-scale">
-                    <div class="ambassador-image-wrapper">
-                        <img
-                            src={`${base}${ambassador.image}`}
-                            alt={ambassador.name}
-                            class="ambassador-image"
-                            loading="lazy"
-                        />
-                        <div class="ambassador-image-frame"></div>
-                    </div>
-                    <div class="ambassador-badge-container">
-                        <span class="ambassador-badge">{t.home.ambassador.badge}</span>
-                    </div>
+            <div class="ambassador-card">
+                <div class="ambassador-image">
+                    <img
+                        src={`${base}${ambassador.image}`}
+                        alt={ambassador.name}
+                        loading="lazy"
+                    />
+                    <span class="ambassador-badge">{t.home.ambassador.badge}</span>
                 </div>
-
-                <div class="ambassador-text reveal">
-                    <div class="ambassador-quote-mark">"</div>
+                <div class="ambassador-content">
+                    <div class="ambassador-surprise">
+                        Ja, wirklich. DER {ambassador.name.split(' ')[1]}.
+                    </div>
                     <blockquote class="ambassador-quote">
                         {ambassadorQuote}
                     </blockquote>
-                    <div class="ambassador-attribution">
-                        <div class="ambassador-name">{ambassador.name}</div>
-                        <div class="ambassador-title">{ambassadorTitle}</div>
-                        {ambassador.signature && (
-                            <img
-                                src={`${base}${ambassador.signature}`}
-                                alt={`${ambassador.name} signature`}
-                                class="ambassador-signature"
-                                loading="lazy"
-                            />
-                        )}
+                    <p class="ambassador-name">{ambassador.name}</p>
+                    <p class="ambassador-title">{ambassadorTitle}</p>
+                    <div class="ambassador-context">
+                        {t.home.ambassador.context}
                     </div>
-                    <div class="ambassador-actions">
-                        <span class="approved-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="approved-icon">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                <polyline points="22 4 12 14.01 9 11.01"/>
-                            </svg>
-                            {t.home.ambassador.approvedBy} {ambassador.name.split(' ')[0]}
-                        </span>
-                        {ambassador.videoUrl && (
-                            <a href={ambassador.videoUrl} target="_blank" rel="noopener" class="ambassador-video-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="video-icon">
-                                    <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/>
-                                </svg>
-                                {localeData.language === 'en' ? ambassador.videoLabelEn : ambassador.videoLabel}
-                            </a>
-                        )}
+                    <div class="ambassador-favorite">
+                        <span>{ambassador.name.split(' ')[0]}s Favorit:</span>
+                        <a href={`${base}/${locale}/products/planted-steak`} class="ambassador-favorite-product">
+                            planted.steak
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Decorative elements -->
-            <div class="ambassador-float float-a1"></div>
-            <div class="ambassador-float float-a2"></div>
         </section>
     )}
 
@@ -303,21 +343,21 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     <section class="recipes-section" id="recipes">
         <div class="recipes-header">
             <h2 class="reveal">{t.home.recipes.title}</h2>
-            <a href={`${base}/${locale}/recipes`} class="reveal">{t.home.recipes.viewAll} →</a>
+            <a href={`${base}/${locale}/recipes`} class="recipes-view-all reveal">{t.home.recipes.viewAll} →</a>
         </div>
 
-        <div class="recipes-scroll">
-            {featuredRecipes.map((recipe) => (
-                <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card">
-                    <div class="recipe-image">
-                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
-                    </div>
-                    <div class="recipe-info">
-                        <div class="recipe-title">{recipe.data.title}</div>
-                        <div class="recipe-meta">{recipe.data.cookTime} {t.recipes.time} • {t.recipes.difficulty[recipe.data.difficulty.toLowerCase() as 'easy' | 'medium' | 'hard'] || recipe.data.difficulty}</div>
-                    </div>
-                </a>
-            ))}
+        <div class="recipes-container">
+            <div class="recipes-grid">
+                {featuredRecipes.map((recipe) => (
+                    <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card reveal-scale">
+                        <img src={recipe.data.image} alt={recipe.data.title} class="recipe-image" loading="lazy">
+                        <div class="recipe-overlay">
+                            <div class="recipe-title">{recipe.data.title}</div>
+                            <div class="recipe-meta">{recipe.data.cookTime} {t.recipes.time} • {t.recipes.difficulty[recipe.data.difficulty.toLowerCase() as 'easy' | 'medium' | 'hard'] || recipe.data.difficulty}</div>
+                        </div>
+                    </a>
+                ))}
+            </div>
         </div>
     </section>
 
@@ -363,147 +403,85 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
     <!-- Business Section -->
     <section class="business" id="business">
-        <div class="business-inner">
-            <div>
-                <span class="business-badge reveal">{t.home.business.badge}</span>
-                <h2 class="reveal">{t.gastronomy.hero.title}</h2>
-                <p class="reveal reveal-delay-1">{t.gastronomy.hero.subtitle}</p>
-                <a href={`${base}/${locale}/gastronomy`} class="business-cta reveal reveal-delay-2">
-                    {t.gastronomy.cta.samples} →
+        <div class="business-card">
+            <div class="business-content">
+                <span class="business-label">{t.home.business.badge}</span>
+                <h2>{t.gastronomy.hero.title}</h2>
+                <p>{t.gastronomy.hero.subtitle}</p>
+                <div class="business-stats">
+                    <div class="business-stat">
+                        <div class="business-stat-value">{t.gastronomy.stats.restaurants}</div>
+                        <div class="business-stat-label">{t.gastronomy.stats.restaurantsLabel}</div>
+                    </div>
+                    <div class="business-stat">
+                        <div class="business-stat-value">{t.gastronomy.stats.countries}</div>
+                        <div class="business-stat-label">{t.gastronomy.stats.countriesLabel}</div>
+                    </div>
+                </div>
+                <a href={`${base}/${locale}/gastronomy`} class="btn btn-green">
+                    {t.gastronomy.cta.samples}
                 </a>
             </div>
-
-            <div class="business-stats">
-                <div class="business-stat reveal-scale">
-                    <div class="business-stat-value">{t.gastronomy.stats.restaurants}</div>
-                    <div class="business-stat-label">{t.gastronomy.stats.restaurantsLabel}</div>
-                </div>
-                <div class="business-stat reveal-scale">
-                    <div class="business-stat-value">{t.gastronomy.stats.countries}</div>
-                    <div class="business-stat-label">{t.gastronomy.stats.countriesLabel}</div>
-                </div>
+            <div class="business-image">
+                <img src="https://eatplanted.com/cdn/shop/files/DSC_2472.jpg?v=1662454073" alt="Restaurant kitchen" loading="lazy">
             </div>
         </div>
     </section>
 </Layout>
 
 <style>
-    /* Hero Section */
+    /* Hero Section - TV Set Design */
     .hero {
-        min-height: 100vh;
-        min-height: 100dvh;
+        min-height: calc(100vh - 80px);
         background: var(--planted-cream);
-        padding: 4rem 1.5rem 2rem;
         display: flex;
-        flex-direction: column;
         align-items: center;
+        padding: 4rem 0;
         position: relative;
         overflow: hidden;
     }
 
-    .hero-video-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
-    .hero-video-container {
-        position: relative;
-        width: 100%;
-        border-radius: 1.5rem;
-        overflow: hidden;
-        box-shadow: 0 25px 80px rgba(97, 38, 158, 0.15);
-        transform: rotate(-3deg) scale(0.95);
-        transition: box-shadow 0.3s ease;
-        will-change: transform;
-    }
-
-    .hero-video-container::before {
+    .hero::before {
         content: '';
-        display: block;
-        padding-top: 70%;
-    }
-
-    .hero-video {
         position: absolute;
         inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237B2D8E' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    .hero-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
     }
 
-    /* Approved by Meat Lovers claim - bridges video and content */
-    .hero-approved-claim {
-        position: absolute;
-        bottom: -3rem;
-        right: 5%;
-        width: clamp(140px, 22vw, 400px);
-        transform: rotate(8deg);
-        z-index: 20;
-        animation: approvedFloat 4s ease-in-out infinite;
-        filter: drop-shadow(0 12px 24px rgba(97, 38, 158, 0.3));
-        transition: transform 0.3s ease;
-        cursor: default;
-    }
-
-    .hero-approved-claim:hover {
-        transform: rotate(8deg) scale(1.08);
-        animation-play-state: paused;
-    }
-
-    .approved-svg {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-
-    @keyframes approvedFloat {
-        0%, 100% { 
-            transform: rotate(8deg) translateY(0); 
-        }
-        50% { 
-            transform: rotate(8deg) translateY(-10px); 
-        }
-    }
-
-    .hero-content {
+    .hero-grid {
         position: relative;
         z-index: 1;
-        max-width: 900px;
-        margin: 2.5rem auto 0;
-        text-align: center;
-        opacity: 0;
-        transform: translateY(40px);
+        display: grid;
+        grid-template-columns: 1fr 1.15fr;
+        gap: 3rem;
+        align-items: center;
     }
 
-    .hero-content.animate-in {
-        animation: fadeSlideUp 0.8s ease forwards;
-        animation-delay: 0.3s;
+    .hero-text {
+        max-width: 520px;
     }
 
-    @keyframes fadeSlideUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Hero badge */
     .hero-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: rgba(97, 38, 158, 0.1);
-        border: 1px solid rgba(97, 38, 158, 0.2);
-        color: var(--planted-purple);
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 0.4rem 1rem 0.4rem 0.5rem;
+        background: white;
+        padding: 8px 16px;
         border-radius: 100px;
-        margin-bottom: 1.25rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--planted-purple);
+        box-shadow: 0 4px 12px rgba(97, 38, 158, 0.15);
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.6s ease forwards;
     }
 
     .hero-badge .bcorp-logo {
@@ -512,95 +490,306 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         border-radius: 50%;
     }
 
-    .hero h1 {
-        font-size: clamp(2.5rem, 11vw, 5.5rem);
-        color: var(--planted-purple);
-        margin-bottom: 1rem;
+    .hero-headline {
+        animation: fadeInUp 0.6s ease 0.1s forwards;
+        opacity: 0;
+    }
+
+    .hero-headline h1 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2.75rem, 5.5vw, 4.25rem);
+        font-weight: 900;
         line-height: 0.95;
+        color: var(--planted-purple);
+        transform: rotate(-1deg);
+        margin-bottom: 12px;
     }
 
-    .hero-subtitle {
-        font-size: clamp(1rem, 3vw, 1.25rem);
-        color: var(--planted-black);
-        opacity: 0.7;
-        max-width: 480px;
-        margin: 0 auto 2rem;
-        line-height: 1.5;
+    .hero-subtext {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.4rem, 2.8vw, 2rem);
+        font-weight: 600;
+        color: var(--planted-green);
+        margin-left: 16px;
+        transform: rotate(-0.5deg);
     }
 
-    .hero-buttons {
+    .hero-whisper {
+        font-size: 0.95rem;
+        color: #6B7280;
+        max-width: 400px;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 0.75rem;
+        border-left: 3px solid var(--planted-purple);
+        animation: fadeInUp 0.6s ease 0.2s forwards;
+        opacity: 0;
+    }
+
+    .hero-actions {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        justify-content: center;
+        margin-top: 1.5rem;
+        animation: fadeInUp 0.6s ease 0.3s forwards;
+        opacity: 0;
     }
 
-    .hero-buttons .btn-icon {
+    .hero-actions .btn-icon {
         width: 18px;
         height: 18px;
         margin-left: 0.25rem;
     }
 
-    /* Trust indicators */
-    .hero-trust {
+    .hero-proof {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(97, 38, 158, 0.1);
+        animation: fadeInUp 0.6s ease 0.4s forwards;
+        opacity: 0;
+    }
+
+    .proof-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .proof-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--planted-purple);
+    }
+
+    .proof-label {
+        font-size: 0.85rem;
+        color: #6B7280;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Video Side - TV Set */
+    .hero-visual {
+        position: relative;
+        animation: fadeIn 0.8s ease 0.3s forwards;
+        opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
+    .tv-frame {
+        position: relative;
+        background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+        border-radius: 28px;
+        padding: 24px 24px 70px;
+        box-shadow:
+            0 40px 80px rgba(0,0,0,0.35),
+            0 15px 30px rgba(0,0,0,0.2),
+            inset 0 1px 0 rgba(255,255,255,0.1),
+            inset 0 -1px 0 rgba(0,0,0,0.3);
+    }
+
+    .tv-frame::before {
+        content: '';
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 10px;
+        background: radial-gradient(circle, #ff4444 0%, #cc0000 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 8px #ff4444, 0 0 20px rgba(255, 68, 68, 0.4);
+        animation: tvGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes tvGlow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .tv-frame::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 60px;
+        background: repeating-linear-gradient(to bottom, #333 0px, #333 2px, #1a1a1a 2px, #1a1a1a 4px);
+        border-radius: 2px;
+    }
+
+    .tv-screen {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #000;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    .tv-screen video {
+        width: 100%;
+        display: block;
+        border-radius: 12px;
+    }
+
+    .tv-screen::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40%;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.03) 0%, transparent 100%);
+        pointer-events: none;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .tv-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: auto;
-        padding-top: 2rem;
-        flex-wrap: wrap;
+        gap: 24px;
     }
 
-    .trust-item {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--planted-purple);
-        opacity: 0.6;
-    }
-
-    .trust-divider {
-        width: 4px;
-        height: 4px;
-        background: var(--planted-purple);
+    .tv-dial {
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(145deg, #444 0%, #222 100%);
         border-radius: 50%;
-        opacity: 0.3;
+        border: 2px solid #1a1a1a;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.3);
+        position: relative;
     }
 
-    /* Countries button */
-    .trust-countries {
-        background: rgba(97, 38, 158, 0.08);
-        border: 1px solid rgba(97, 38, 158, 0.15);
-        border-radius: 20px;
-        padding: 0.25rem 0.6rem 0.25rem 0.75rem;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-family: inherit;
-        font-size: inherit;
-        font-weight: inherit;
-        color: var(--planted-purple);
-        transition: all 0.3s ease;
+    .tv-dial::after {
+        content: '';
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 8px;
+        background: #666;
+        border-radius: 1px;
     }
 
-    .trust-countries:hover {
-        background: rgba(97, 38, 158, 0.15);
-        border-color: rgba(97, 38, 158, 0.3);
-        color: var(--planted-purple);
-        transform: translateY(-1px);
+    .tv-brand {
+        font-family: 'VC Henrietta', serif;
+        font-size: 11px;
+        font-weight: 700;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
     }
 
-    .countries-icon {
-        width: 14px;
-        height: 14px;
-        transition: transform 0.3s ease;
-        opacity: 0.7;
+    /* The Annotation Card */
+    .tv-annotation {
+        position: absolute;
+        top: -24px;
+        right: -28px;
+        z-index: 20;
+        animation: annotationFloat 4s ease-in-out infinite, fadeInDown 0.6s ease 0.8s forwards;
+        opacity: 0;
     }
 
-    .trust-countries:hover .countries-icon {
-        transform: translateY(2px);
-        opacity: 1;
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px) rotate(3deg); }
+        to { opacity: 1; transform: translateY(0) rotate(3deg); }
+    }
+
+    @keyframes annotationFloat {
+        0%, 100% { transform: translateY(0) rotate(3deg); }
+        50% { transform: translateY(-5px) rotate(4deg); }
+    }
+
+    .annotation-card {
+        position: relative;
+        background: white;
+        padding: 20px 24px;
+        border-radius: 4px 20px 20px 20px;
+        box-shadow: 0 8px 30px rgba(97, 38, 158, 0.15), 0 2px 8px rgba(0,0,0,0.08);
+        max-width: 260px;
+        transform: rotate(3deg);
+    }
+
+    .annotation-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, var(--planted-purple) 50%, transparent 50%);
+        border-radius: 4px 0 0 0;
+    }
+
+    .annotation-card::after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 20px;
+        width: 40px;
+        height: 16px;
+        background: linear-gradient(90deg, rgba(97, 38, 158, 0.8) 0%, rgba(97, 38, 158, 0.6) 100%);
+        border-radius: 2px;
+        transform: rotate(-2deg);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .annotation-text {
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #1F2937;
+    }
+
+    .annotation-signature {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed rgba(97, 38, 158, 0.2);
+        font-size: 0.8rem;
+        color: #9CA3AF;
+    }
+
+    .annotation-signature::before {
+        content: '— ';
+    }
+
+    /* Approved Badge */
+    .approved-badge {
+        position: absolute;
+        bottom: -16px;
+        left: 24px;
+        transform: rotate(-3deg);
+        z-index: 10;
+        animation: badgePop 0.5s ease 1s forwards;
+        opacity: 0;
+        filter: drop-shadow(0 10px 30px rgba(97, 38, 158, 0.35));
+    }
+
+    .approved-badge img {
+        width: 180px;
+        height: auto;
+    }
+
+    @keyframes badgePop {
+        0% { opacity: 0; transform: rotate(-3deg) scale(0.8); }
+        50% { transform: rotate(-3deg) scale(1.05); }
+        100% { opacity: 1; transform: rotate(-3deg) scale(1); }
     }
 
     /* Countries Modal */
@@ -700,8 +889,12 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     .country-flag {
-        font-size: 1.5rem;
-        line-height: 1;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--planted-purple);
+        background: rgba(97, 38, 158, 0.1);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
     }
 
     .country-item span:last-child {
@@ -710,15 +903,49 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         color: var(--planted-charcoal);
     }
 
-    @media (max-width: 640px) {
-        .hero-approved-claim {
-            bottom: -2rem;
-            right: 2%;
-            width: clamp(110px, 30vw, 150px);
+    /* Hero Responsive */
+    @media (max-width: 1024px) {
+        .hero-grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 2rem;
         }
+        .hero-text { max-width: 100%; order: 2; }
+        .hero-headline h1 { transform: none; }
+        .hero-subtext { margin-left: 0; transform: none; }
+        .hero-whisper { margin: 1.5rem auto 0; }
+        .hero-actions { justify-content: center; }
+        .hero-proof { justify-content: center; }
+        .hero-visual { order: 1; max-width: 550px; margin: 0 auto; }
+        .tv-annotation { right: -12px; top: -16px; }
+        .annotation-card { max-width: 220px; padding: 16px 20px; }
+        .annotation-text { font-size: 0.9rem; }
+    }
 
-        .hero-trust {
-            display: none;
+    @media (max-width: 640px) {
+        .hero { padding: 2rem 0; }
+        .tv-annotation {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-top: 1rem;
+            animation: none;
+            opacity: 1;
+        }
+        .annotation-card {
+            transform: none;
+            max-width: 100%;
+            border-radius: 16px;
+        }
+        .approved-badge {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .approved-badge img {
+            width: 150px;
         }
     }
 
@@ -758,10 +985,111 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         line-height: 1.6;
     }
 
+    /* Intro Section (Swiss-Made Statement) */
+    .intro {
+        background: white;
+        padding: 4rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .intro-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .intro-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-cream);
+        border: 1px solid rgba(97, 38, 158, 0.1);
+        color: var(--planted-purple);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.5rem;
+    }
+
+    .intro-flag {
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .intro h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.6rem, 5vw, 2.5rem);
+        color: var(--planted-purple);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    .intro p {
+        font-size: clamp(1rem, 2.5vw, 1.15rem);
+        color: var(--planted-charcoal);
+        opacity: 0.7;
+        max-width: 650px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+
+    .intro-badges {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .intro-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--planted-cream);
+        border: 1px solid rgba(97, 38, 158, 0.1);
+        padding: 1.25rem 1rem;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .intro-badge:hover {
+        background: rgba(97, 38, 158, 0.05);
+        border-color: rgba(97, 38, 158, 0.2);
+        transform: translateY(-4px);
+    }
+
+    .intro-badge-icon {
+        width: 32px;
+        height: 32px;
+        color: var(--planted-purple);
+    }
+
+    .intro-badge span {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--planted-purple);
+        text-align: center;
+    }
+
+    @media (max-width: 640px) {
+        .intro-badges {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     /* Products Section */
     .products {
         background: var(--planted-cream);
-        padding: 3.5rem 0 3rem;
+        padding: 3.5rem 1.5rem 3rem;
         overflow: hidden;
     }
 
@@ -769,7 +1097,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        padding: 0 1.5rem 2.5rem;
+        padding: 0 0 2.5rem;
         max-width: 1400px;
         margin: 0 auto;
     }
@@ -783,7 +1111,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     .products-header .all-products-btn {
-        display: none;
+        display: inline-flex;
         align-items: center;
         gap: 0.5rem;
         background: var(--planted-green);
@@ -803,33 +1131,27 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         box-shadow: 0 6px 20px rgba(107, 191, 89, 0.4);
     }
 
-    .products-carousel {
-        position: relative;
-        padding: 0 1.5rem;
+    .products-container {
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    .products-scroll {
-        display: flex;
-        gap: 1.25rem;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding-bottom: 1rem;
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
     }
 
-    .products-scroll::-webkit-scrollbar { display: none; }
-
-    .products-scroll .product-card {
-        flex: 0 0 260px;
-        scroll-snap-align: start;
+    .products-grid .product-card {
         text-decoration: none;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .products-scroll .product-card:hover { transform: translateY(-6px); }
+    .products-grid .product-card:hover {
+        transform: translateY(-6px);
+    }
 
-    .products-scroll .product-card-inner {
+    .products-grid .product-card-inner {
         position: relative;
         border-radius: 1.25rem;
         aspect-ratio: 1;
@@ -838,11 +1160,19 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         justify-content: center;
         overflow: hidden;
         margin-bottom: 0.75rem;
+        background: white;
     }
 
-    /* Product card color backgrounds are defined in global.css */
+    /* Product card color backgrounds - cream gradient in image area */
+    .products-grid .product-card-inner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--planted-cream) 0%, #FFF5E8 100%);
+        z-index: 0;
+    }
 
-    .products-scroll .product-badge-new {
+    .products-grid .product-badge-new {
         position: absolute;
         top: 0.75rem;
         right: 0.75rem;
@@ -856,107 +1186,84 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         z-index: 10;
     }
 
-    .products-scroll .product-hover-image {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        z-index: 1;
-    }
-
-    .products-scroll .product-hover-image img { width: 100%; height: 100%; object-fit: cover; }
-    .products-scroll .product-card:hover .product-hover-image { opacity: 1; }
-
-    .products-scroll .product-pack-image {
-        width: 100%; height: 100%;
+    .products-grid .product-image-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        position: absolute;
-        inset: 0;
         padding: 1.25rem;
-        transition: opacity 0.4s ease, transform 0.4s ease;
         z-index: 2;
     }
 
-    .products-scroll .product-card:hover .product-pack-image { opacity: 0; transform: scale(0.95); }
-    .products-scroll .product-pack-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .products-grid .product-pack-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
 
-    .products-scroll .product-info { text-align: center; padding: 0 0.25rem; }
-    .products-scroll .product-name { font-family: 'VC Henrietta', serif; font-size: 1.1rem; font-weight: 700; color: var(--planted-purple); margin-bottom: 0.1rem; }
-    .products-scroll .product-variant { color: var(--planted-purple); font-size: 0.85rem; opacity: 0.7; }
+    .products-grid .product-card:hover .product-pack-image {
+        transform: scale(1.05);
+    }
 
-    /* Simple Carousel Navigation */
-    .carousel-nav { 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 1.5rem; 
-        margin-top: 2.5rem; 
-        padding: 0 1rem; 
+    /* Hover overlay - slides up from bottom */
+    .products-grid .product-hover-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--planted-purple);
+        color: white;
+        padding: 1.5rem 1rem;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0 0 1.25rem 1.25rem;
     }
-    
-    .carousel-arrow { 
-        width: 44px; 
-        height: 44px; 
-        border-radius: 50%; 
-        background: white; 
-        border: 2px solid var(--planted-purple); 
-        color: var(--planted-purple); 
-        cursor: pointer; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        transition: all 0.3s ease; 
-        flex-shrink: 0;
+
+    .products-grid .product-card:hover .product-hover-overlay {
+        transform: translateY(0);
     }
-    
-    .carousel-arrow:hover { 
-        background: var(--planted-purple); 
-        color: white; 
-        transform: scale(1.05); 
+
+    .products-grid .product-hover-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.4;
     }
-    
-    .carousel-arrow:active { 
-        transform: scale(0.95); 
+
+    .products-grid .product-info {
+        text-align: center;
+        padding: 0 0.25rem;
     }
-    
-    .carousel-dots { 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        gap: 0.5rem; 
-        flex-wrap: wrap;
+
+    .products-grid .product-name {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--planted-purple);
+        margin-bottom: 0.1rem;
     }
-    
-    .carousel-dot { 
-        width: 10px; 
-        height: 10px; 
-        border-radius: 50%; 
-        background: var(--planted-purple); 
-        opacity: 0.3; 
-        border: none; 
-        cursor: pointer; 
-        transition: all 0.3s ease; 
-        padding: 0;
+
+    .products-grid .product-variant {
+        color: var(--planted-purple);
+        font-size: 0.85rem;
+        opacity: 0.7;
     }
-    
-    .carousel-dot:hover { 
-        opacity: 0.6; 
-        transform: scale(1.2); 
-    }
-    
-    .carousel-dot.active { 
-        opacity: 1; 
-        background: var(--planted-green); 
-        transform: scale(1.3); 
-    }
-    
+
     @media (max-width: 640px) {
-        .carousel-nav { gap: 1rem; }
-        .carousel-arrow { width: 36px; height: 36px; }
-        .carousel-arrow svg { width: 18px; height: 18px; }
-        .carousel-dot { width: 8px; height: 8px; }
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+        .products-header .all-products-btn {
+            display: none;
+        }
     }
 
     /* ============================================
@@ -1134,6 +1441,14 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         margin-top: 0.25rem;
     }
 
+    .impact-stat-context {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 0.75rem;
+        line-height: 1.5;
+        font-style: italic;
+    }
+
     /* Tagline */
     .impact-tagline {
         font-family: 'VC Henrietta', serif;
@@ -1218,15 +1533,115 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     /* Recipes Section */
-    .recipes-section { background: var(--planted-cream); padding: 4rem 0; }
-    .recipes-header { padding: 0 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
-    .recipes-header h2 { font-size: clamp(1.8rem, 7vw, 3rem); color: var(--planted-purple); text-transform: uppercase; }
-    .recipes-header a { color: var(--planted-purple); font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: opacity 0.3s; }
-    .recipes-header a:hover { opacity: 0.7; }
+    .recipes-section {
+        background: var(--planted-cream);
+        padding: 4rem 1.5rem;
+    }
 
-    .recipes-scroll { display: flex; gap: 1.25rem; overflow-x: auto; padding: 0 1.5rem 2rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .recipes-scroll::-webkit-scrollbar { display: none; }
-    .recipes-scroll .recipe-card { flex: 0 0 280px; scroll-snap-align: start; }
+    .recipes-header {
+        padding: 0 0 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .recipes-header h2 {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        color: var(--planted-purple);
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .recipes-view-all {
+        color: var(--planted-purple);
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: opacity 0.3s;
+    }
+
+    .recipes-view-all:hover {
+        opacity: 0.7;
+    }
+
+    .recipes-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .recipes-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+    }
+
+    .recipe-card {
+        position: relative;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        aspect-ratio: 3/4;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .recipe-card:hover {
+        transform: translateY(-6px);
+    }
+
+    .recipe-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .recipe-card:hover .recipe-image {
+        transform: scale(1.1);
+    }
+
+    .recipe-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.5rem;
+        color: white;
+    }
+
+    .recipe-title {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+
+    .recipe-meta {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    @media (max-width: 968px) {
+        .recipes-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .recipes-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        .recipes-header h2 {
+            font-size: clamp(1.8rem, 10vw, 2.5rem);
+        }
+    }
 
     /* Store Locator */
     .locator { background: var(--planted-purple); padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden; width: 100%; }
@@ -1277,519 +1692,322 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
     /* Responsive */
     @media (min-width: 640px) {
-        .products-scroll { gap: 1.5rem; }
-        .products-scroll .product-card { flex: 0 0 280px; }
         .hero-video-wrapper { max-width: 700px; }
-        .products-header .all-products-btn { display: inline-flex; }
     }
 
     @media (min-width: 768px) {
         .hero-video-wrapper { max-width: 780px; }
         .hero-video-container { border-radius: 2rem; }
         .hero-video-container::before { padding-top: 60%; }
+        .products { padding: 4rem 3rem; }
+        .recipes-section { padding: 4rem 3rem; }
+        .intro { padding: 4rem 3rem; }
     }
 
     @media (min-width: 1024px) {
         .hero { padding: 4.5rem 3rem 4rem; }
         .hero-video-wrapper { max-width: 850px; }
-        .products-header { padding: 0 3rem 2.5rem; }
-        .products-carousel { padding: 0 3rem; }
-        .products-scroll .product-card { flex: 0 0 300px; }
-        .recipes-scroll .recipe-card { flex: 0 0 320px; }
+        .products { padding: 4rem 3rem; }
+        .recipes-section { padding: 5rem 3rem; }
+        .intro { padding: 5rem 3rem; }
     }
 
     @media (min-width: 1440px) {
         .hero { padding: 5rem 5rem 5rem; }
         .hero-video-wrapper { max-width: 950px; }
         .hero h1 { font-size: 5.5rem; }
-        .products { padding: 4rem 0 3.5rem; }
-        .products-header { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
-        .products-carousel { padding: 0 5rem; max-width: 1600px; margin: 0 auto; }
+        .products { padding: 5rem 5rem; }
+        .products-container { max-width: 1600px; }
         .statement { padding: 5rem 5rem; }
+        .intro { padding: 5rem 5rem; }
         .impact { padding: 5rem 5rem; }
-        .recipes-section { padding: 5rem 0; }
-        .recipes-header { padding: 0 5rem 2rem; max-width: 1400px; margin: 0 auto; }
-        .recipes-scroll { padding: 0 5rem 2rem; max-width: 1600px; margin: 0 auto; }
+        .recipes-section { padding: 6rem 5rem; }
+        .recipes-container { max-width: 1600px; }
         .locator { padding: 5rem 5rem; }
         .business-inner { max-width: 1200px; gap: 4rem; }
     }
 
     /* Business Section */
     .business {
-        background: var(--planted-purple);
         padding: 4rem 1.5rem;
-        color: white;
+        background: var(--planted-cream);
         width: 100%;
     }
 
-    .business-inner {
-        max-width: 950px;
+    .business-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 1200px;
         margin: 0 auto;
+        background: white;
+        border-radius: 2rem;
+        overflow: hidden;
     }
 
-    .business-badge {
-        display: inline-block;
-        background: var(--planted-purple);
-        color: white;
-        font-size: 0.7rem;
-        font-weight: 700;
+    .business-content {
+        padding: 3rem 2rem;
+    }
+
+    .business-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--planted-green);
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        padding: 0.5rem 1rem;
-        border-radius: 100px;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
     }
 
     .business h2 {
-        font-size: clamp(1.6rem, 5vw, 2.5rem);
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(1.75rem, 3vw, 2.25rem);
+        font-weight: 800;
+        color: var(--planted-purple);
         margin-bottom: 1rem;
-        max-width: 550px;
+        line-height: 1.2;
     }
 
-    .business > .business-inner > div > p {
+    .business p {
         font-size: 1rem;
+        color: var(--planted-charcoal);
         opacity: 0.7;
+        margin-bottom: 2rem;
         line-height: 1.6;
-        margin-bottom: 1.75rem;
-        max-width: 450px;
     }
 
     .business-stats {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-        margin-bottom: 1.75rem;
-        max-width: 360px;
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
     }
 
     .business-stat {
-        padding: 1.25rem;
-        background: rgba(255,255,255,0.05);
-        border-radius: 1rem;
-        border: 1px solid rgba(255,255,255,0.1);
-        transition: background 0.3s, transform 0.3s;
-    }
-
-    .business-stat:hover {
-        background: rgba(255,255,255,0.08);
-        transform: translateY(-4px);
+        flex: 1;
+        min-width: 150px;
     }
 
     .business-stat-value {
         font-family: 'VC Henrietta', serif;
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--planted-green);
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--planted-purple);
+        line-height: 1;
+        margin-bottom: 0.5rem;
     }
 
     .business-stat-label {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        color: var(--planted-charcoal);
         opacity: 0.6;
-        margin-top: 0.15rem;
     }
 
-    .business-cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: var(--planted-purple);
-        color: white;
-        font-weight: 700;
-        padding: 1rem 1.75rem;
-        border-radius: 100px;
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: transform 0.3s, box-shadow 0.3s;
+    .business-image {
+        height: 100%;
+        min-height: 300px;
     }
 
-    .business-cta:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(97, 38, 158, 0.4);
+    .business-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    @media (min-width: 1024px) {
-        .business-inner {
-            display: grid;
+    @media (min-width: 968px) {
+        .business-card {
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
         }
 
-        .business-stats {
-            grid-column: 2;
-            grid-row: 1 / 3;
-            max-width: none;
+        .business-image {
+            min-height: 400px;
+            order: 2;
         }
     }
 
     @media (min-width: 1440px) {
-        .business { padding: 8rem 5rem; }
+        .business {
+            padding: 6rem 5rem;
+        }
+
+        .business-content {
+            padding: 4rem 3rem;
+        }
     }
 
     /* ============================================
-       AMBASSADOR SECTION - Premium Testimonial Design
+       AMBASSADOR SECTION - Card Layout
        ============================================ */
     .ambassador {
-        position: relative;
-        min-height: 80vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        padding: 4rem 1.5rem;
+        background: white;
         width: 100%;
-        padding: 6rem 1.5rem;
     }
 
-    /* Elegant cream/warm background with subtle gradient */
-    .ambassador-bg {
-        position: absolute;
-        inset: 0;
-    }
-
-    .ambassador-gradient {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            135deg,
-            var(--planted-cream) 0%,
-            #FFF5E8 25%,
-            #FFF8F0 50%,
-            #FFFAF5 75%,
-            var(--planted-cream) 100%
-        );
-    }
-
-    /* Floating decorative elements */
-    .ambassador-float {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-        animation: ambassadorFloat 25s ease-in-out infinite;
-    }
-
-    .float-a1 {
-        width: 400px;
-        height: 400px;
-        top: -10%;
-        right: -5%;
-        background: radial-gradient(circle, rgba(97, 38, 158, 0.06) 0%, transparent 70%);
-        animation-delay: 0s;
-    }
-
-    .float-a2 {
-        width: 300px;
-        height: 300px;
-        bottom: 0%;
-        left: -5%;
-        background: radial-gradient(circle, rgba(107, 191, 89, 0.08) 0%, transparent 70%);
-        animation-delay: -12s;
-    }
-
-    @keyframes ambassadorFloat {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        25% { transform: translate(30px, -20px) scale(1.05); }
-        50% { transform: translate(-15px, 15px) scale(0.98); }
-        75% { transform: translate(20px, 25px) scale(1.02); }
-    }
-
-    /* Main content layout */
-    .ambassador-content {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem;
+    .ambassador-card {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
         max-width: 1200px;
-        width: 100%;
-    }
-
-    /* Ambassador image styling */
-    .ambassador-image-container {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .ambassador-image-wrapper {
-        position: relative;
-        width: clamp(200px, 40vw, 320px);
-        height: clamp(200px, 40vw, 320px);
+        margin: 0 auto;
+        background: var(--planted-cream);
+        border-radius: 2rem;
+        overflow: hidden;
     }
 
     .ambassador-image {
+        position: relative;
+        height: 100%;
+        min-height: 400px;
+    }
+
+    .ambassador-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 50%;
-        box-shadow:
-            0 25px 60px rgba(97, 38, 158, 0.15),
-            0 10px 30px rgba(0, 0, 0, 0.08);
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .ambassador-image-wrapper:hover .ambassador-image {
-        transform: scale(1.03);
-    }
-
-    /* Elegant circular frame around image */
-    .ambassador-image-frame {
-        position: absolute;
-        inset: -8px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        background: linear-gradient(135deg, var(--planted-purple), var(--planted-green)) border-box;
-        -webkit-mask:
-            linear-gradient(#fff 0 0) padding-box,
-            linear-gradient(#fff 0 0);
-        mask:
-            linear-gradient(#fff 0 0) padding-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: destination-out;
-        mask-composite: exclude;
-        opacity: 0.6;
-        animation: frameRotate 20s linear infinite;
-    }
-
-    @keyframes frameRotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-
-    /* Ambassador badge */
-    .ambassador-badge-container {
-        margin-top: 1.5rem;
     }
 
     .ambassador-badge {
-        display: inline-block;
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
         background: var(--planted-purple);
         color: white;
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        padding: 0.6rem 1.25rem;
+        padding: 0.5rem 1rem;
         border-radius: 100px;
-        box-shadow: 0 4px 15px rgba(97, 38, 158, 0.3);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
-    /* Text content */
-    .ambassador-text {
-        text-align: center;
-        max-width: 700px;
-        position: relative;
+    .ambassador-content {
+        padding: 2rem;
     }
 
-    /* Large decorative quote mark */
-    .ambassador-quote-mark {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(4rem, 15vw, 8rem);
+    .ambassador-surprise {
+        display: inline-block;
+        background: white;
+        padding: 0.625rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
         color: var(--planted-purple);
-        opacity: 0.08;
-        line-height: 0.5;
-        position: absolute;
-        top: -2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        pointer-events: none;
     }
 
-    /* Quote styling */
     .ambassador-quote {
         font-family: 'VC Henrietta', serif;
-        font-size: clamp(1.15rem, 3.5vw, 1.6rem);
+        font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+        font-weight: 600;
         color: var(--planted-charcoal);
-        line-height: 1.6;
-        margin: 0 0 2rem;
+        line-height: 1.4;
+        margin-bottom: 1.25rem;
         position: relative;
-        font-weight: 400;
-        letter-spacing: -0.01em;
+        padding-left: 2rem;
     }
 
-    /* Attribution */
-    .ambassador-attribution {
-        margin-bottom: 1.5rem;
+    .ambassador-quote::before {
+        content: '"';
+        position: absolute;
+        left: 0;
+        top: -0.625rem;
+        font-size: 4rem;
+        color: var(--planted-purple);
+        opacity: 0.3;
+        font-family: Georgia, serif;
+        line-height: 1;
     }
 
     .ambassador-name {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(1.5rem, 4vw, 2rem);
-        color: var(--planted-purple);
         font-weight: 700;
+        color: var(--planted-purple);
+        font-size: 1.1rem;
         margin-bottom: 0.25rem;
     }
 
     .ambassador-title {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: var(--planted-charcoal);
         opacity: 0.6;
+        margin-bottom: 1.25rem;
+    }
+
+    .ambassador-context {
+        padding: 1rem;
+        background: white;
+        border-radius: 0.75rem;
+        border-left: 3px solid var(--planted-green);
+        font-size: 0.95rem;
+        color: var(--planted-charcoal);
+        opacity: 0.8;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .ambassador-favorite {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 0.75rem;
+        max-width: fit-content;
+        flex-wrap: wrap;
+    }
+
+    .ambassador-favorite > span {
+        font-size: 0.85rem;
+        color: var(--planted-charcoal);
+        opacity: 0.7;
         font-weight: 500;
     }
 
-    .ambassador-signature {
-        max-width: 150px;
-        height: auto;
-        margin-top: 1rem;
-        opacity: 0.8;
-    }
-
-    /* Ambassador actions */
-    .ambassador-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        justify-content: center;
-    }
-
-    .approved-badge {
+    .ambassador-favorite-product {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: rgba(107, 191, 89, 0.1);
-        border: 1px solid rgba(107, 191, 89, 0.25);
-        color: #4A8C3B;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 0.6rem 1.25rem;
-        border-radius: 100px;
-        transition: all 0.3s ease;
-    }
-
-    .approved-badge:hover {
-        background: rgba(107, 191, 89, 0.15);
-        transform: translateY(-2px);
-    }
-
-    .approved-icon {
-        width: 16px;
-        height: 16px;
-        stroke: var(--planted-green);
-    }
-
-    .ambassador-video-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
+        padding: 0.5rem 1rem;
         background: var(--planted-purple);
         color: white;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 0.6rem 1.25rem;
         border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.9rem;
         text-decoration: none;
         transition: all 0.3s ease;
     }
 
-    .ambassador-video-link:hover {
-        background: var(--planted-purple-dark);
+    .ambassador-favorite-product:hover {
+        background: #4A1D7A;
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(97, 38, 158, 0.3);
+        box-shadow: 0 4px 12px rgba(97, 38, 158, 0.3);
     }
 
-    .video-icon {
-        width: 14px;
-        height: 14px;
-        color: white;
-    }
+    @media (min-width: 968px) {
+        .ambassador-card {
+            grid-template-columns: 400px 1fr;
+        }
 
-    /* Responsive layout */
-    @media (min-width: 768px) {
-        .ambassador {
-            padding: 8rem 2rem;
+        .ambassador-image {
+            min-height: 500px;
         }
 
         .ambassador-content {
-            flex-direction: row;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .ambassador-image-container {
-            flex-shrink: 0;
-        }
-
-        .ambassador-text {
-            text-align: left;
-        }
-
-        .ambassador-quote-mark {
-            left: -2rem;
-            top: -1.5rem;
-            transform: none;
-        }
-
-        .ambassador-actions {
-            justify-content: flex-start;
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .ambassador {
-            min-height: 70vh;
-            padding: 8rem 3rem;
-        }
-
-        .ambassador-content {
-            gap: 5rem;
-        }
-
-        .ambassador-image-wrapper {
-            width: 350px;
-            height: 350px;
+            padding: 3rem;
         }
     }
 
     @media (min-width: 1440px) {
         .ambassador {
-            padding: 10rem 5rem;
-        }
-
-        .ambassador-image-wrapper {
-            width: 380px;
-            height: 380px;
-        }
-
-        .ambassador-text {
-            max-width: 600px;
+            padding: 6rem 5rem;
         }
     }
 </style>
 
 <script>
     function initHomePage() {
-        const heroVideo = document.getElementById('heroVideo');
-        const heroContent = document.getElementById('heroContent');
-        heroContent?.classList.add('animate-in');
-
-        let ticking = false;
-
-        function updateVideoTransform() {
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const progress = Math.min(scrollY / (windowHeight * 0.6), 1);
-            const rotation = -3 + (progress * 3);
-            const scale = 0.95 + (progress * 0.05);
-            const translateY = progress * -20;
-
-            if (heroVideo) {
-                heroVideo.style.transform = `rotate(${rotation}deg) scale(${scale}) translateY(${translateY}px)`;
-                const shadowOpacity = 0.15 + (progress * 0.1);
-                const shadowBlur = 25 + (progress * 30);
-                heroVideo.style.boxShadow = `0 ${25 + progress * 15}px ${shadowBlur}px rgba(97, 38, 158, ${shadowOpacity})`;
-            }
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateVideoTransform);
-                ticking = true;
-            }
-        });
-        updateVideoTransform();
-
         // Impact Section Animations
         const impactSection = document.getElementById('impact');
         const impactElements = document.querySelectorAll('.impact-badge, .impact-stat, .impact-tagline, .impact-source, .impact-cta');
@@ -1836,46 +2054,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                 requestAnimationFrame(updateCounter);
             });
         }
-
-        // Product Carousel
-        const productsScroll = document.getElementById('productsScroll');
-        const carouselDots = document.querySelectorAll('.carousel-dot');
-        let lastActiveIndex = 0;
-
-        function scrollProducts(direction: number) {
-            const card = productsScroll?.querySelector('.product-card');
-            if (card && productsScroll) {
-                const cardWidth = (card as HTMLElement).offsetWidth + 24;
-                productsScroll.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-            }
-        }
-
-        carouselDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                const card = productsScroll?.querySelector('.product-card');
-                if (card && productsScroll) {
-                    const cardWidth = (card as HTMLElement).offsetWidth + 24;
-                    productsScroll.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
-                }
-            });
-        });
-
-        document.getElementById('carouselPrev')?.addEventListener('click', () => scrollProducts(-1));
-        document.getElementById('carouselNext')?.addEventListener('click', () => scrollProducts(1));
-
-        productsScroll?.addEventListener('scroll', () => {
-            const card = productsScroll.querySelector('.product-card');
-            if (card) {
-                const cardWidth = (card as HTMLElement).offsetWidth + 24;
-                const activeIndex = Math.round(productsScroll.scrollLeft / cardWidth);
-                if (activeIndex !== lastActiveIndex) {
-                    carouselDots.forEach((dot, index) => {
-                        dot.classList.toggle('active', index === activeIndex);
-                    });
-                    lastActiveIndex = activeIndex;
-                }
-            }
-        });
 
         // Countries Modal
         const countriesBtn = document.getElementById('countriesBtn');
