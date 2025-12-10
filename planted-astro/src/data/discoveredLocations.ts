@@ -2,309 +2,173 @@ import type { ChainLocation } from './chainRestaurants';
 
 /**
  * Chain Restaurant Locations - Auto-generated from Firestore
- * Generated: 2025-12-08T22:30:57.497Z
- * Total locations: 100
+ * Generated: 2025-12-10T18:33:40.500Z
+ * Total locations: 125
  */
 
 // Additional chain locations discovered via Smart Discovery Agent
 export const discoveredChainLocations: ChainLocation[] = [
   // ============================================
-  // DEAN&DAVID (20 locations)
+  // BIRDIE BIRDIE CHICKEN (30 locations)
   // ============================================
   {
-    id: 'dean-david-m-nchen-p-munich-0',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München Pasinger Bahnhof Delivery',
-    city: 'Munich',
+    id: 'birdie-birdie-chicke-solingen-1',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Solingen Mitte',
+    city: 'Solingen',
     country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
+    coordinates: { lat: 52.52, lng: 13.405 },
     deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-pasinger-bahnhof/op-MSBtkXOqGEI6UI7t7Fg', displayName: 'Uber Eats' },
+      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/birdie-birdie-chicken-solingen-mitte', displayName: 'Just Eat' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-m-nchen-o-munich-2',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München Orleansplatz Delivery',
-    city: 'Munich',
+    id: 'birdie-birdie-chicke-chemnitz-2',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Schlosschemnitz',
+    city: 'Chemnitz',
     country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
+    coordinates: { lat: 52.52, lng: 13.405 },
     deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-orleansplatz/Y_zlK8gFXnyjUJUjer7Q2w', displayName: 'Uber Eats' },
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/birdie-birdie-chicken-schlosschemitz', displayName: 'Just Eat' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-berlin-b--berlin-12',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david Berlin Bülowstraße',
+    id: 'birdie-birdie-chicke-essen-3',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Essen-Stoppenberg',
+    city: 'Essen',
+    country: 'de',
+    coordinates: { lat: 51.4556, lng: 7.0116 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/birdie-birdie-chicken-essen-stoppenberg-essen-erlenkampsweg', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
+  },
+  {
+    id: 'birdie-birdie-chicke-kiel-4',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Wellsee',
+    city: 'Kiel',
+    country: 'de',
+    coordinates: { lat: 54.3233, lng: 10.1228 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/birdie-birdie-chicken-kiel-kiel-marga-faulstich-strasse', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
+  },
+  {
+    id: 'birdie-birdie-chicke-leipzig-5',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Lössnig',
+    city: 'Leipzig',
+    country: 'de',
+    coordinates: { lat: 51.3397, lng: 12.3731 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/birdie-birdie-chicken-lossnig-leipzig-bornaische-strasse', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
+  },
+  {
+    id: 'birdie-birdie-chicke-berlin-6',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Schillerkiez',
     city: 'Berlin',
     country: 'de',
     coordinates: { lat: 52.52, lng: 13.405 },
     deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-berlin-bulowstrasse/idOCsndLVaiDoMTdsK8ryQ', displayName: 'Uber Eats' },
+      { name: 'just-eat', url: 'https://www.lieferando.de/bg/menu/birdie-birdie-schillerkiez', displayName: 'Just Eat' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-hamburg-15',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david',
-    city: 'Hamburg',
+    id: 'birdie-birdie-chicke-leipzig-17',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Connewitz',
+    city: 'Leipzig',
     country: 'de',
-    coordinates: { lat: 53.5511, lng: 9.9937 },
+    coordinates: { lat: 51.3397, lng: 12.3731 },
     deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/dean-david-hamburg-stadthoefe', displayName: 'Just Eat' },
+      { name: 'wolt', url: 'https://wolt.com/de/deu/leipzig/restaurant/birdie-birdie-chicken-connewitz', displayName: 'Wolt' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-hamburg-16',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david',
-    city: 'Hamburg',
+    id: 'birdie-birdie-chicke-k-ln-20',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Höhenberg',
+    city: 'Köln',
     country: 'de',
-    coordinates: { lat: 53.5511, lng: 9.9937 },
+    coordinates: { lat: 50.9375, lng: 6.9603 },
     deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/it/menu/dean-david-hamburg-stadthoefe', displayName: 'Just Eat' },
+      { name: 'wolt', url: 'https://wolt.com/de/deu/cologne/restaurant/birdie-birdie-chicken-hoehenberg', displayName: 'Wolt' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-hamburg-17',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david',
-    city: 'Hamburg',
-    country: 'de',
-    coordinates: { lat: 53.5511, lng: 9.9937 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-georgsplatz-hamburg', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken'],
-  },
-  {
-    id: 'dean-david-m-nchen-m-nchen-23',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München',
+    id: 'birdie-birdie-chicke-m-nchen-21',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Trudering',
     city: 'München',
     country: 'de',
     coordinates: { lat: 48.1351, lng: 11.582 },
     deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/it/menu/deandavid-mnchen-pasing', displayName: 'Just Eat' },
+      { name: 'wolt', url: 'https://wolt.com/de/deu/munich/restaurant/birdie-birdie-chicken-trudering', displayName: 'Wolt' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-m-nchen-m-nchen-25',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/pl/menu/dean-david-muenchen-leopoldstrasse', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-m-nchen-m-nchen-26',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-mnchen-pasing', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-m-nchen-m-nchen-28',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/deandavid-munchen-bahnhofsplatz', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-m-nchen-m-nchen-29',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-mnchen-arnulfpark', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-berlin-berlin-33',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david Berlin',
+    id: 'birdie-birdie-chicke-berlin-22',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Friedrichshain',
     city: 'Berlin',
     country: 'de',
     coordinates: { lat: 52.52, lng: 13.405 },
     deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/deandavid-berlin-steglitz', displayName: 'Just Eat' },
+      { name: 'wolt', url: 'https://wolt.com/de/deu/berlin/restaurant/birdie-birdie-chicken-rotherstr-fhain', displayName: 'Wolt' },
     ],
-    plantedProducts: ['planted.chicken'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-berlin-berlin-43',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david Berlin',
-    city: 'Berlin',
+    id: 'birdie-birdie-chicke-hamburg-23',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Hammerbrook',
+    city: 'Hamburg',
     country: 'de',
-    coordinates: { lat: 52.52, lng: 13.405 },
+    coordinates: { lat: 53.5511, lng: 9.9937 },
     deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/dean-david-berlin-schoenhauser-allee', displayName: 'Just Eat' },
+      { name: 'just-eat', url: 'https://wolt.com/de/deu/hamburg/restaurant/birdie-birdie-chicken-hammerbrook', displayName: 'Just Eat' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-m-nchen-p-m-nchen-53',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München Parkstadt Delivery',
-    city: 'München',
+    id: 'birdie-birdie-chicke-hamburg-24',
+    chainId: 'birdie-birdie',
+    chainName: 'Birdie Birdie Chicken',
+    name: 'Birdie Birdie Chicken Hamburg-Finkenwerder',
+    city: 'Hamburg',
     country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
+    coordinates: { lat: 53.5511, lng: 9.9937 },
     deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-parkstadt/IP15Q6xWQpqN34JKCNIVKw', displayName: 'Uber Eats' },
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/birdie-birdie-hamburg-finkenwerder', displayName: 'Just Eat' },
     ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
+    plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'dean-david-m-nchen-l-m-nchen-55',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München Leopoldstr. Delivery',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-leopoldstr/4LLB__FYQnaNmGIDibRgow', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken'],
-  },
-  {
-    id: 'dean-david-m-nchen-5-m-nchen-59',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david (München 5 Höfe)',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-5-hofe/MvU4RVEbWyCg-G1lgDei-g', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-m-nchen-b-m-nchen-61',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david München Bahnhofplatz',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-bahnhofplatz/GYQEb7ooWe-Tl-q8tZp06w', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-hirscheng-bern-74',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david (Hirschengraben)',
-    city: 'Bern',
-    country: 'ch',
-    coordinates: { lat: 46.948, lng: 7.4474 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/ch-de/store/dean%26david-hirschengraben/ggs3VTYbRb6iTc6QEtrvnA', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-basel-88',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david',
-    city: 'Basel',
-    country: 'ch',
-    coordinates: { lat: 47.5596, lng: 7.5886 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/brand-city/basel-bs/dean-david', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  {
-    id: 'dean-david-z-rich-96',
-    chainId: 'dean-david',
-    chainName: 'dean&david',
-    name: 'dean&david',
-    city: 'Zürich',
-    country: 'ch',
-    coordinates: { lat: 47.3769, lng: 8.5417 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/brand-city/z%C3%BCrich-zh/dean-david', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.duck'],
-  },
-  // ============================================
-  // COTIDIANO (2 locations)
-  // ============================================
-  {
-    id: 'cotidiano-promenadep-m-nchen-1',
-    chainId: 'cotidiano',
-    chainName: 'Cotidiano',
-    name: 'Cotidiano Promenadeplatz - Frühstück, Restaurant & Bar München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/cotidiano-promenadeplatz-fruhstuck-restaurant-%26-bar-munchen/uXJoQ8HZX_ajkezUPItI4g', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken_burger', 'planted.pastrami'],
-  },
-  {
-    id: 'cotidiano-konstanz-l-stuttgart-9',
-    chainId: 'cotidiano',
-    chainName: 'Cotidiano',
-    name: 'Cotidiano Konstanz Lago',
-    city: 'Stuttgart',
-    country: 'de',
-    coordinates: { lat: 48.7758, lng: 9.1829 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/cotidiano-konstanz-lago/je3FAkE5W86lh_7El88Ccg', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken_burger'],
-  },
-  // ============================================
-  // BIRDIE BIRDIE CHICKEN (18 locations)
-  // ============================================
-  {
-    id: 'birdie-birdie-chicke-m-nchen-3',
+    id: 'birdie-birdie-chicke-m-nchen-28',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Trudering Delivery',
@@ -317,7 +181,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-10',
+    id: 'birdie-birdie-chicke-berlin-35',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Stadtmitte',
@@ -330,7 +194,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-11',
+    id: 'birdie-birdie-chicke-berlin-36',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Prenzlauer Berg',
@@ -343,7 +207,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-hamburg-19',
+    id: 'birdie-birdie-chicke-hamburg-44',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Hamburg- Altona',
@@ -356,7 +220,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-hamburg-20',
+    id: 'birdie-birdie-chicke-hamburg-45',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Hammerbrook',
@@ -369,7 +233,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'birdie-birdie-chicke-hamburg-21',
+    id: 'birdie-birdie-chicke-hamburg-46',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Hamburg Barmbek',
@@ -382,7 +246,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-m-nchen-24',
+    id: 'birdie-birdie-chicke-m-nchen-49',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Trudering München',
@@ -395,7 +259,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-m-nchen-27',
+    id: 'birdie-birdie-chicke-m-nchen-52',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Trudering München',
@@ -408,7 +272,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-39',
+    id: 'birdie-birdie-chicke-berlin-64',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Reinickendorf Berlin',
@@ -421,7 +285,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-41',
+    id: 'birdie-birdie-chicke-berlin-66',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Marienfelde Berlin',
@@ -434,7 +298,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-45',
+    id: 'birdie-birdie-chicke-berlin-70',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Rudow Berlin',
@@ -447,7 +311,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-46',
+    id: 'birdie-birdie-chicke-berlin-71',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Stadtmitte Berlin',
@@ -460,7 +324,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'birdie-birdie-chicke-hamburg-50',
+    id: 'birdie-birdie-chicke-hamburg-75',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Wellsee',
@@ -473,7 +337,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-berlin-56',
+    id: 'birdie-birdie-berlin-81',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie',
@@ -486,7 +350,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-m-nchen-62',
+    id: 'birdie-birdie-m-nchen-87',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie',
@@ -499,7 +363,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-68',
+    id: 'birdie-birdie-chicke-berlin-93',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Mahlsdorf',
@@ -512,7 +376,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-71',
+    id: 'birdie-birdie-chicke-berlin-96',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Friedrichshain (lost)',
@@ -525,7 +389,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   {
-    id: 'birdie-birdie-chicke-berlin-73',
+    id: 'birdie-birdie-chicke-berlin-98',
     chainId: 'birdie-birdie',
     chainName: 'Birdie Birdie Chicken',
     name: 'Birdie Birdie Chicken Oranienburg',
@@ -538,10 +402,448 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger', 'planted.chicken_tenders'],
   },
   // ============================================
+  // DEAN&DAVID (25 locations)
+  // ============================================
+  {
+    id: 'dean-david-basel-cen-basel-7',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Basel Centralbahnplatz',
+    city: 'Basel',
+    country: 'ch',
+    coordinates: { lat: 47.5596, lng: 7.5886 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.eat.ch/dean-david-basel-centralbahnplatz-1', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-linz-linz-9',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Linz',
+    city: 'Linz',
+    country: 'at',
+    coordinates: { lat: 52.52, lng: 13.405 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.lieferando.at/speisekarte/dean-david-linz', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-salzburg-salzburg-12',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Salzburg',
+    city: 'Salzburg',
+    country: 'at',
+    coordinates: { lat: 47.8095, lng: 13.055 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.lieferando.at/en/menu/deandavid-salzburg-1', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-basel-cen-basel-16',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Basel Centralbahnplatz',
+    city: 'Basel',
+    country: 'ch',
+    coordinates: { lat: 47.5596, lng: 7.5886 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/speisekarte/deandavid-basel-centralbahnplatz', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-k-ln-tran-k-ln-18',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Köln Trankgasse',
+    city: 'Köln',
+    country: 'de',
+    coordinates: { lat: 50.9375, lng: 6.9603 },
+    deliveryPlatforms: [
+      { name: 'wolt', url: 'https://wolt.com/de/deu/cologne/restaurant/deandavid-cologne-trankgasse', displayName: 'Wolt' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-p-munich-25',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München Pasinger Bahnhof Delivery',
+    city: 'Munich',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-pasinger-bahnhof/op-MSBtkXOqGEI6UI7t7Fg', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-o-munich-27',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München Orleansplatz Delivery',
+    city: 'Munich',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-orleansplatz/Y_zlK8gFXnyjUJUjer7Q2w', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-berlin-b--berlin-37',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Berlin Bülowstraße',
+    city: 'Berlin',
+    country: 'de',
+    coordinates: { lat: 52.52, lng: 13.405 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-berlin-bulowstrasse/idOCsndLVaiDoMTdsK8ryQ', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-hamburg-40',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david',
+    city: 'Hamburg',
+    country: 'de',
+    coordinates: { lat: 53.5511, lng: 9.9937 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/dean-david-hamburg-stadthoefe', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-hamburg-41',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david',
+    city: 'Hamburg',
+    country: 'de',
+    coordinates: { lat: 53.5511, lng: 9.9937 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/it/menu/dean-david-hamburg-stadthoefe', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-hamburg-42',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david',
+    city: 'Hamburg',
+    country: 'de',
+    coordinates: { lat: 53.5511, lng: 9.9937 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-georgsplatz-hamburg', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'dean-david-m-nchen-m-nchen-48',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/it/menu/deandavid-mnchen-pasing', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-m-nchen-50',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/pl/menu/dean-david-muenchen-leopoldstrasse', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-m-nchen-51',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-mnchen-pasing', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-m-nchen-53',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/deandavid-munchen-bahnhofsplatz', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-m-nchen-54',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/deandavid-mnchen-arnulfpark', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-berlin-berlin-58',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Berlin',
+    city: 'Berlin',
+    country: 'de',
+    coordinates: { lat: 52.52, lng: 13.405 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/deandavid-berlin-steglitz', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'dean-david-berlin-berlin-68',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david Berlin',
+    city: 'Berlin',
+    country: 'de',
+    coordinates: { lat: 52.52, lng: 13.405 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/en/menu/dean-david-berlin-schoenhauser-allee', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-p-m-nchen-78',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München Parkstadt Delivery',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-parkstadt/IP15Q6xWQpqN34JKCNIVKw', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-l-m-nchen-80',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München Leopoldstr. Delivery',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-leopoldstr/4LLB__FYQnaNmGIDibRgow', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'dean-david-m-nchen-5-m-nchen-84',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david (München 5 Höfe)',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-5-hofe/MvU4RVEbWyCg-G1lgDei-g', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-m-nchen-b-m-nchen-86',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david München Bahnhofplatz',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/dean%26david-munchen-bahnhofplatz/GYQEb7ooWe-Tl-q8tZp06w', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-hirscheng-bern-99',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david (Hirschengraben)',
+    city: 'Bern',
+    country: 'ch',
+    coordinates: { lat: 46.948, lng: 7.4474 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/ch-de/store/dean%26david-hirschengraben/ggs3VTYbRb6iTc6QEtrvnA', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-basel-113',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david',
+    city: 'Basel',
+    country: 'ch',
+    coordinates: { lat: 47.5596, lng: 7.5886 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/brand-city/basel-bs/dean-david', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  {
+    id: 'dean-david-z-rich-121',
+    chainId: 'dean-david',
+    chainName: 'dean&david',
+    name: 'dean&david',
+    city: 'Zürich',
+    country: 'ch',
+    coordinates: { lat: 47.3769, lng: 8.5417 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/brand-city/z%C3%BCrich-zh/dean-david', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.duck'],
+  },
+  // ============================================
+  // GREEN CLUB (6 locations)
+  // ============================================
+  {
+    id: 'green-club-k-ln-k-ln-19',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club Köln',
+    city: 'Köln',
+    country: 'de',
+    coordinates: { lat: 50.9375, lng: 6.9603 },
+    deliveryPlatforms: [
+      { name: 'wolt', url: 'https://wolt.com/de/deu/cologne/restaurant/green-club-kln-venloer-strae-koeln', displayName: 'Wolt' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.kebab', 'planted.pastrami'],
+  },
+  {
+    id: 'green-club-m-nchen-m-nchen-47',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/green-club-munchen-rosenheimer-strasse', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.kebab'],
+  },
+  {
+    id: 'green-club-m-nchen-m-nchen-55',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/green-club-munchen', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.kebab'],
+  },
+  {
+    id: 'green-club-m-nchen-m-nchen-56',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/da/menu/green-club-munchen', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.kebab'],
+  },
+  {
+    id: 'green-club-m-nchen-m-nchen-57',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.lieferando.de/pl/menu/green-club-munchen', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.kebab'],
+  },
+  {
+    id: 'green-club-maxvorsta-m-nchen-79',
+    chainId: 'green-club',
+    chainName: 'Green Club',
+    name: 'Green Club Maxvorstadt Delivery',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/green-club-maxvorstadt/N2nK2x1pUmuGolfR4FSEVw', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken', 'planted.pastrami', 'planted.kebab'],
+  },
+  // ============================================
+  // COTIDIANO (2 locations)
+  // ============================================
+  {
+    id: 'cotidiano-promenadep-m-nchen-26',
+    chainId: 'cotidiano',
+    chainName: 'Cotidiano',
+    name: 'Cotidiano Promenadeplatz - Frühstück, Restaurant & Bar München',
+    city: 'München',
+    country: 'de',
+    coordinates: { lat: 48.1351, lng: 11.582 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/cotidiano-promenadeplatz-fruhstuck-restaurant-%26-bar-munchen/uXJoQ8HZX_ajkezUPItI4g', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken_burger', 'planted.pastrami'],
+  },
+  {
+    id: 'cotidiano-konstanz-l-stuttgart-34',
+    chainId: 'cotidiano',
+    chainName: 'Cotidiano',
+    name: 'Cotidiano Konstanz Lago',
+    city: 'Stuttgart',
+    country: 'de',
+    coordinates: { lat: 48.7758, lng: 9.1829 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/cotidiano-konstanz-lago/je3FAkE5W86lh_7El88Ccg', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.chicken_burger'],
+  },
+  // ============================================
   // VEGANITAS (3 locations)
   // ============================================
   {
-    id: 'veganitas-bern-bern-14',
+    id: 'veganitas-bern-bern-39',
     chainId: 'veganitas',
     chainName: 'Veganitas',
     name: 'Veganitas (Bern)',
@@ -554,7 +856,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'veganitas-bern-bern-84',
+    id: 'veganitas-bern-bern-109',
     chainId: 'veganitas',
     chainName: 'Veganitas',
     name: 'Veganitas (Bern)',
@@ -567,7 +869,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'veganitas-z-rich-z-rich-89',
+    id: 'veganitas-z-rich-z-rich-114',
     chainId: 'veganitas',
     chainName: 'Veganitas',
     name: 'Veganitas (Zürich)',
@@ -583,7 +885,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // KASPAR SCHMAUSER (4 locations)
   // ============================================
   {
-    id: 'kaspar-schmauser-hamburg-18',
+    id: 'kaspar-schmauser-hamburg-43',
     chainId: 'kaspar-schmauser',
     chainName: 'Kaspar Schmauser',
     name: 'Kaspar Schmauser',
@@ -596,7 +898,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.kebab', 'planted.steak'],
   },
   {
-    id: 'kaspar-schmauser-ber-berlin-34',
+    id: 'kaspar-schmauser-ber-berlin-59',
     chainId: 'kaspar-schmauser',
     chainName: 'Kaspar Schmauser',
     name: 'Kaspar Schmauser Berlin',
@@ -609,7 +911,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab'],
   },
   {
-    id: 'kaspar-schmauser-ber-berlin-40',
+    id: 'kaspar-schmauser-ber-berlin-65',
     chainId: 'kaspar-schmauser',
     chainName: 'Kaspar Schmauser',
     name: 'Kaspar Schmauser Berlin',
@@ -622,7 +924,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'kaspar-schmauser-fri-berlin-63',
+    id: 'kaspar-schmauser-fri-berlin-88',
     chainId: 'kaspar-schmauser',
     chainName: 'Kaspar Schmauser',
     name: 'Kaspar Schmauser Friedrichstraße_LOST',
@@ -635,78 +937,10 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.pulled', 'planted.kebab'],
   },
   // ============================================
-  // GREEN CLUB (5 locations)
-  // ============================================
-  {
-    id: 'green-club-m-nchen-m-nchen-22',
-    chainId: 'green-club',
-    chainName: 'Green Club',
-    name: 'Green Club München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/green-club-munchen-rosenheimer-strasse', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.kebab'],
-  },
-  {
-    id: 'green-club-m-nchen-m-nchen-30',
-    chainId: 'green-club',
-    chainName: 'Green Club',
-    name: 'Green Club München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/speisekarte/green-club-munchen', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.kebab'],
-  },
-  {
-    id: 'green-club-m-nchen-m-nchen-31',
-    chainId: 'green-club',
-    chainName: 'Green Club',
-    name: 'Green Club München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/da/menu/green-club-munchen', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.kebab'],
-  },
-  {
-    id: 'green-club-m-nchen-m-nchen-32',
-    chainId: 'green-club',
-    chainName: 'Green Club',
-    name: 'Green Club München',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'just-eat', url: 'https://www.lieferando.de/pl/menu/green-club-munchen', displayName: 'Just Eat' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.kebab'],
-  },
-  {
-    id: 'green-club-maxvorsta-m-nchen-54',
-    chainId: 'green-club',
-    chainName: 'Green Club',
-    name: 'Green Club Maxvorstadt Delivery',
-    city: 'München',
-    country: 'de',
-    coordinates: { lat: 48.1351, lng: 11.582 },
-    deliveryPlatforms: [
-      { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/store/green-club-maxvorstadt/N2nK2x1pUmuGolfR4FSEVw', displayName: 'Uber Eats' },
-    ],
-    plantedProducts: ['planted.chicken', 'planted.pastrami', 'planted.kebab'],
-  },
-  // ============================================
   // DOEN DOEN PLANTED KEBAP (6 locations)
   // ============================================
   {
-    id: 'doen-doen-planted-ke-berlin-35',
+    id: 'doen-doen-planted-ke-berlin-60',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'doen doen planted kebap Berlin',
@@ -719,7 +953,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab', 'planted.chicken'],
   },
   {
-    id: 'consegna-da-doen-doe-berlin-36',
+    id: 'consegna-da-doen-doe-berlin-61',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'Consegna da doen doen planted kebap a Berlin',
@@ -732,7 +966,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab', 'planted.chicken'],
   },
   {
-    id: 'doen-doen-planted-ke-berlin-37',
+    id: 'doen-doen-planted-ke-berlin-62',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'doen doen planted kebap Berlin',
@@ -745,7 +979,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab', 'planted.chicken'],
   },
   {
-    id: 'doen-doen-delivery-stuttgart-47',
+    id: 'doen-doen-delivery-stuttgart-72',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'doen doen® Delivery',
@@ -758,7 +992,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab', 'planted.chicken'],
   },
   {
-    id: 'doen-doen-planted-ke-berlin-66',
+    id: 'doen-doen-planted-ke-berlin-91',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'Doen Doen Planted Kebap',
@@ -771,7 +1005,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab', 'planted.chicken'],
   },
   {
-    id: 'doen-doen-planted-ke-berlin-67',
+    id: 'doen-doen-planted-ke-berlin-92',
     chainId: 'doen-doen',
     chainName: 'Doen Doen Planted Kebap',
     name: 'Doen Doen Planted Kebap - New',
@@ -787,7 +1021,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // BEETS&ROOTS (5 locations)
   // ============================================
   {
-    id: 'beets-roots-berlin-berlin-38',
+    id: 'beets-roots-berlin-berlin-63',
     chainId: 'beets-roots',
     chainName: 'beets&roots',
     name: 'beets&roots Berlin',
@@ -800,7 +1034,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.steak'],
   },
   {
-    id: 'beets-roots-hamburg--hamburg-49',
+    id: 'beets-roots-hamburg--hamburg-74',
     chainId: 'beets-roots',
     chainName: 'beets&roots',
     name: 'beets&roots Hamburg Hauptbahnhof',
@@ -813,7 +1047,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.steak'],
   },
   {
-    id: 'beets-roots-ostbahnh-berlin-69',
+    id: 'beets-roots-ostbahnh-berlin-94',
     chainId: 'beets-roots',
     chainName: 'beets&roots',
     name: 'beets&roots Ostbahnhof',
@@ -826,7 +1060,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.duck'],
   },
   {
-    id: 'beets-roots-prinzens-berlin-70',
+    id: 'beets-roots-prinzens-berlin-95',
     chainId: 'beets-roots',
     chainName: 'beets&roots',
     name: 'beets&roots Prinzenstr.',
@@ -839,7 +1073,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.steak'],
   },
   {
-    id: 'beets-roots-potsdame-berlin-72',
+    id: 'beets-roots-potsdame-berlin-97',
     chainId: 'beets-roots',
     chainName: 'beets&roots',
     name: 'beets&roots Potsdamer Platz',
@@ -855,7 +1089,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // NOOCH ASIAN KITCHEN (4 locations)
   // ============================================
   {
-    id: 'nooch-asian-kitchen-basel-58',
+    id: 'nooch-asian-kitchen-basel-83',
     chainId: 'nooch',
     chainName: 'Nooch Asian Kitchen',
     name: 'Nooch Asian Kitchen',
@@ -868,7 +1102,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'nooch-asian-kitchen--bern-75',
+    id: 'nooch-asian-kitchen--bern-100',
     chainId: 'nooch',
     chainName: 'Nooch Asian Kitchen',
     name: 'Nooch Asian Kitchen (Viktoriaplatz)',
@@ -881,7 +1115,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'nooch-asian-kitchen--bern-80',
+    id: 'nooch-asian-kitchen--bern-105',
     chainId: 'nooch',
     chainName: 'Nooch Asian Kitchen',
     name: 'Nooch Asian Kitchen (Viktoriaplatz)',
@@ -894,7 +1128,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'nooch-asian-kitchen--basel-87',
+    id: 'nooch-asian-kitchen--basel-112',
     chainId: 'nooch',
     chainName: 'Nooch Asian Kitchen',
     name: 'Nooch Asian Kitchen (Stadthausgasse)',
@@ -910,7 +1144,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // RICE UP! (8 locations)
   // ============================================
   {
-    id: 'rice-up-bern-bern-77',
+    id: 'rice-up-bern-bern-102',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Bern)',
@@ -923,7 +1157,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-bern-bern-79',
+    id: 'rice-up-bern-bern-104',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Bern)',
@@ -936,7 +1170,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-bern-bern-83',
+    id: 'rice-up-bern-bern-108',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Bern)',
@@ -949,7 +1183,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-bern-85',
+    id: 'rice-up-bern-110',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up!',
@@ -962,7 +1196,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-hauptbahnhof-z-rich-92',
+    id: 'rice-up-hauptbahnhof-z-rich-117',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Hauptbahnhof)',
@@ -975,7 +1209,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-stadelhofen-z-rich-93',
+    id: 'rice-up-stadelhofen-z-rich-118',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Stadelhofen)',
@@ -988,7 +1222,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-z-rich-95',
+    id: 'rice-up-z-rich-120',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up!',
@@ -1001,7 +1235,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'rice-up-l-wenplatz-z-rich-97',
+    id: 'rice-up-l-wenplatz-z-rich-122',
     chainId: 'rice-up',
     chainName: 'Rice Up!',
     name: 'Rice Up! (Löwenplatz)',
@@ -1017,7 +1251,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // KAISIN. (3 locations)
   // ============================================
   {
-    id: 'kaisin-oerlikon-z-rich-90',
+    id: 'kaisin-oerlikon-z-rich-115',
     chainId: 'kaisin',
     chainName: 'kaisin.',
     name: 'kaisin. (Oerlikon)',
@@ -1030,7 +1264,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'kaisin-seefeld-z-rich-91',
+    id: 'kaisin-seefeld-z-rich-116',
     chainId: 'kaisin',
     chainName: 'kaisin.',
     name: 'kaisin. (Seefeld)',
@@ -1043,7 +1277,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'kaisin-z-rich-94',
+    id: 'kaisin-z-rich-119',
     chainId: 'kaisin',
     chainName: 'kaisin.',
     name: 'kaisin.',
@@ -1059,7 +1293,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // TIBITS (1 locations)
   // ============================================
   {
-    id: 'tibits-z-rich-z-rich-98',
+    id: 'tibits-z-rich-z-rich-123',
     chainId: 'tibits',
     chainName: 'Tibits',
     name: 'Tibits Zürich',
@@ -1075,7 +1309,7 @@ export const discoveredChainLocations: ChainLocation[] = [
   // HILTL (1 locations)
   // ============================================
   {
-    id: 'hiltl-vegetarian-res-z-rich-99',
+    id: 'hiltl-vegetarian-res-z-rich-124',
     chainId: 'hiltl',
     chainName: 'Hiltl',
     name: 'Hiltl - Vegetarian Restaurant',
@@ -1088,10 +1322,101 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   // ============================================
-  // STANDALONE VENUES (20 locations)
+  // STANDALONE VENUES (27 locations)
   // ============================================
   {
-    id: 'munchies-berlin-4',
+    id: 'union-diner-steine-basel-0',
+    chainId: 'standalone',
+    chainName: 'Union Diner (Steine)',
+    name: 'Union Diner (Steine)',
+    city: 'Basel',
+    country: 'de',
+    coordinates: { lat: 47.5596, lng: 7.5886 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.ubereats.com/ch/store/union-diner-steine/khlQZVmwRbax6VkLGVv7tA', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.pulled', 'planted.burger'],
+  },
+  {
+    id: 'fat-monk-wien-8',
+    chainId: 'standalone',
+    chainName: 'FAT MONK',
+    name: 'FAT MONK',
+    city: 'Wien',
+    country: 'at',
+    coordinates: { lat: 48.2082, lng: 16.3738 },
+    deliveryPlatforms: [
+      { name: 'uber-eats', url: 'https://www.fatmonk.com/de/restaurant/fat-monk-wien-quartier-belvedere', displayName: 'Uber Eats' },
+    ],
+    plantedProducts: ['planted.kebab'],
+  },
+  {
+    id: 'fat-monk-wien-westba-wien-10',
+    chainId: 'standalone',
+    chainName: 'Fat Monk Wien - Westbahnhof Wien',
+    name: 'Fat Monk Wien - Westbahnhof Wien',
+    city: 'Wien',
+    country: 'at',
+    coordinates: { lat: 48.2082, lng: 16.3738 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.lieferando.at/speisekarte/fat-monk-wien-westbahnhof', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'wiki-wiki-poke-wippl-wien-11',
+    chainId: 'standalone',
+    chainName: 'Wiki Wiki Poke Wipplingerstraße Wien',
+    name: 'Wiki Wiki Poke Wipplingerstraße Wien',
+    city: 'Wien',
+    country: 'at',
+    coordinates: { lat: 48.2082, lng: 16.3738 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.lieferando.at/en/menu/wiki-wiki-poke-wien', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'fat-monk-wien-schott-wien-13',
+    chainId: 'standalone',
+    chainName: 'FAT MONK Wien Schottengasse',
+    name: 'FAT MONK Wien Schottengasse',
+    city: 'Wien',
+    country: 'at',
+    coordinates: { lat: 48.2082, lng: 16.3738 },
+    deliveryPlatforms: [
+      { name: 'lieferando', url: 'https://www.lieferando.at/en/menu/fat-monk-wien-schottengasse', displayName: 'Lieferando' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'subway-lausanne-lausanne-14',
+    chainId: 'standalone',
+    chainName: 'SUBWAY Lausanne',
+    name: 'SUBWAY Lausanne',
+    city: 'Lausanne',
+    country: 'ch',
+    coordinates: { lat: 46.5197, lng: 6.6323 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/fr/menu/subway-lausanne-1', displayName: 'Just Eat' },
+    ],
+    plantedProducts: [],
+  },
+  {
+    id: 'tuktuk-thai-kitchen--basel-15',
+    chainId: 'standalone',
+    chainName: 'TukTuk Thai Kitchen Basel',
+    name: 'TukTuk Thai Kitchen Basel',
+    city: 'Basel',
+    country: 'ch',
+    coordinates: { lat: 47.5596, lng: 7.5886 },
+    deliveryPlatforms: [
+      { name: 'just-eat', url: 'https://www.just-eat.ch/it/menu/tuktuk-thai-kitchen-basel', displayName: 'Just Eat' },
+    ],
+    plantedProducts: ['planted.chicken'],
+  },
+  {
+    id: 'munchies-berlin-29',
     chainId: 'standalone',
     chainName: 'Munchies',
     name: 'Munchies',
@@ -1101,10 +1426,10 @@ export const discoveredChainLocations: ChainLocation[] = [
     deliveryPlatforms: [
       { name: 'uber-eats', url: 'https://www.ubereats.com/de-en/brand-city/berlin-be/munchies', displayName: 'Uber Eats' },
     ],
-    plantedProducts: ['planted.chicken'],
+    plantedProducts: [],
   },
   {
-    id: 'palm-bowls-mainz-mainz-5',
+    id: 'palm-bowls-mainz-mainz-30',
     chainId: 'standalone',
     chainName: 'Palm Bowls Mainz',
     name: 'Palm Bowls Mainz',
@@ -1117,7 +1442,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.pulled'],
   },
   {
-    id: 'r-bowls-berlin-6',
+    id: 'r-bowls-berlin-31',
     chainId: 'standalone',
     chainName: 'Råbowls',
     name: 'Råbowls',
@@ -1130,7 +1455,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.pulled', 'planted.duck', 'planted.chicken'],
   },
   {
-    id: 'good-bank-invalidens-berlin-7',
+    id: 'good-bank-invalidens-berlin-32',
     chainId: 'standalone',
     chainName: 'GOOD BANK - Invalidenstr.',
     name: 'GOOD BANK - Invalidenstr.',
@@ -1143,7 +1468,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'taco-gringo-berlin-8',
+    id: 'taco-gringo-berlin-33',
     chainId: 'standalone',
     chainName: 'TACO & GRINGO',
     name: 'TACO & GRINGO',
@@ -1156,7 +1481,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.pulled'],
   },
   {
-    id: 'restaurant-kesar-genf-13',
+    id: 'restaurant-kesar-genf-38',
     chainId: 'standalone',
     chainName: 'Restaurant Kesar',
     name: 'Restaurant Kesar',
@@ -1169,7 +1494,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'beets-roots-berlin-berlin-42',
+    id: 'beets-roots-berlin-berlin-67',
     chainId: 'standalone',
     chainName: 'Beets & Roots Berlin',
     name: 'Beets & Roots Berlin',
@@ -1182,7 +1507,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.steak'],
   },
   {
-    id: 'beets-roots-berlin-berlin-44',
+    id: 'beets-roots-berlin-berlin-69',
     chainId: 'standalone',
     chainName: 'Beets & Roots Berlin',
     name: 'Beets & Roots Berlin',
@@ -1195,12 +1520,12 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.steak'],
   },
   {
-    id: 'hamburg-katendrecht-rotterdam-48',
+    id: 'hamburg-katendrecht-rotterdam-73',
     chainId: 'standalone',
     chainName: 'Hamburg Katendrecht',
     name: 'Hamburg Katendrecht',
     city: 'Rotterdam',
-    country: 'nl',
+    country: 'de',
     coordinates: { lat: 51.9244, lng: 4.4777 },
     deliveryPlatforms: [
       { name: 'uber-eats', url: 'https://www.ubereats.com/nl-en/store/hamburg-katendrecht/9AOrXXGWX-W3zBpAAE96wA', displayName: 'Uber Eats' },
@@ -1208,7 +1533,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken_burger'],
   },
   {
-    id: 'r-bowls-rathaus-hamburg-51',
+    id: 'r-bowls-rathaus-hamburg-76',
     chainId: 'standalone',
     chainName: 'råbowls rathaus',
     name: 'råbowls rathaus',
@@ -1221,7 +1546,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.pulled', 'planted.duck'],
   },
   {
-    id: 'katzentempel-unknown-52',
+    id: 'katzentempel-unknown-77',
     chainId: 'standalone',
     chainName: 'Katzentempel',
     name: 'Katzentempel',
@@ -1234,7 +1559,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken', 'planted.chicken_burger', 'planted.pulled'],
   },
   {
-    id: 'okra-bern-57',
+    id: 'okra-bern-82',
     chainId: 'standalone',
     chainName: 'Okra',
     name: 'Okra',
@@ -1247,7 +1572,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'emmis-brunch-club-sc-m-nchen-60',
+    id: 'emmis-brunch-club-sc-m-nchen-85',
     chainId: 'standalone',
     chainName: 'Emmis Brunch Club Schwabing',
     name: 'Emmis Brunch Club Schwabing',
@@ -1260,12 +1585,12 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'edy-s-z-rich-64',
+    id: 'edy-s-z-rich-89',
     chainId: 'standalone',
     chainName: 'Edy\'s',
     name: 'Edy\'s',
     city: 'Zürich',
-    country: 'ch',
+    country: 'de',
     coordinates: { lat: 47.3769, lng: 8.5417 },
     deliveryPlatforms: [
       { name: 'uber-eats', url: 'https://www.ubereats.com/ch/store/edys/VCGwz-tESSeJ7ZkBvOJBQw', displayName: 'Uber Eats' },
@@ -1273,7 +1598,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab'],
   },
   {
-    id: 'boost-bowls-essen-65',
+    id: 'boost-bowls-essen-90',
     chainId: 'standalone',
     chainName: 'Boost&Bowls',
     name: 'Boost&Bowls',
@@ -1286,7 +1611,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.kebab'],
   },
   {
-    id: 'smash-bro-s-burger-m-muri-bei-b-76',
+    id: 'smash-bro-s-burger-m-muri-bei-b-101',
     chainId: 'standalone',
     chainName: 'Smash Bro\'s Burger (Muri)',
     name: 'Smash Bro\'s Burger (Muri)',
@@ -1299,7 +1624,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'smash-bro-s-burger-m-muri-bei-b-78',
+    id: 'smash-bro-s-burger-m-muri-bei-b-103',
     chainId: 'standalone',
     chainName: 'Smash Bro\'s Burger (Muri)',
     name: 'Smash Bro\'s Burger (Muri)',
@@ -1312,7 +1637,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'subway-ch-test-accou-lausanne-81',
+    id: 'subway-ch-test-accou-lausanne-106',
     chainId: 'standalone',
     chainName: 'Subway - CH Test account DE',
     name: 'Subway - CH Test account DE',
@@ -1325,7 +1650,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'subway-bern-82',
+    id: 'subway-bern-107',
     chainId: 'standalone',
     chainName: 'Subway',
     name: 'Subway',
@@ -1338,7 +1663,7 @@ export const discoveredChainLocations: ChainLocation[] = [
     plantedProducts: ['planted.chicken'],
   },
   {
-    id: 'nam-soup-bar-basel-86',
+    id: 'nam-soup-bar-basel-111',
     chainId: 'standalone',
     chainName: 'Nam Soup Bar',
     name: 'Nam Soup Bar',
