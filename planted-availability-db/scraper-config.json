@@ -1,0 +1,40 @@
+{
+  "$schema": "./scraper-config.schema.json",
+  "description": "Local scraper configuration - edit this file to control scraping runs",
+
+  "discovery": {
+    "enabled": false,
+    "mode": "explore",
+    "platforms": ["uber-eats", "just-eat", "lieferando", "wolt", "smood"],
+    "countries": ["CH", "DE", "AT"],
+    "chains": [],
+    "maxQueries": 20,
+    "searchProvider": "google",
+    "dryRun": false
+  },
+
+  "extraction": {
+    "enabled": true,
+    "mode": "enrich",
+    "target": "all",
+    "chainId": null,
+    "venueIds": [],
+    "countries": ["CH", "DE", "AT"],
+    "platforms": [],
+    "maxVenues": 50,
+    "dryRun": false,
+    "learn": false
+  },
+
+  "review": {
+    "enabled": false,
+    "type": "venues",
+    "limit": 20
+  },
+
+  "sync": {
+    "enabled": false,
+    "preview": true,
+    "execute": false
+  }
+}
