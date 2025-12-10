@@ -1,5 +1,5 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { getAuth, Auth, browserLocalPersistence, setPersistence } from 'firebase/auth';
 
 /**
  * Firebase Configuration
@@ -53,8 +53,23 @@ let app: FirebaseApp;
 let auth: Auth;
 
 try {
+  console.log('Initializing Firebase with config:', {
+    authDomain: firebaseConfig.authDomain,
+    projectId: firebaseConfig.projectId,
+  });
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
+
+  // Set persistence to local storage for better redirect handling
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log('Firebase Auth persistence set to local');
+    })
+    .catch((error) => {
+      console.error('Failed to set auth persistence:', error);
+    });
+
+  console.log('Firebase initialized successfully');
 } catch (error) {
   console.error('Failed to initialize Firebase:', error);
   throw error;

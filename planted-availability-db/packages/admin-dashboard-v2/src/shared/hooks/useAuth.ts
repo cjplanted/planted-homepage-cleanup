@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   User,
   signInWithEmailAndPassword,
@@ -45,49 +45,57 @@ export function useAuth() {
     loading: true,
     error: null,
   });
+  const redirectHandled = useRef(false);
 
   useEffect(() => {
-    // Set a timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      setState((prev) => {
-        if (prev.loading) {
-          console.warn('Auth state check timed out after 10 seconds');
-          return {
-            user: null,
-            loading: false,
-            error: null,
-          };
-        }
-        return prev;
-      });
-    }, 10000);
+    console.log('useAuth: Starting auth initialization');
 
-    // Handle redirect result (from Google sign-in redirect)
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result?.user) {
-          console.log('Redirect sign-in successful');
-          // Auth state change listener will handle the user state update
-        }
-      })
-      .catch((error) => {
-        const authError = error as AuthError;
-        console.error('Redirect result error:', authError);
-        // Only set error for actual redirect failures, not for no redirect
-        if (authError.code && authError.code !== 'auth/popup-closed-by-user') {
+    // Handle redirect result first (only once)
+    if (!redirectHandled.current) {
+      redirectHandled.current = true;
+      console.log('useAuth: Checking for redirect result...');
+
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result) {
+            console.log('useAuth: Redirect sign-in successful', result.user.email);
+            // onAuthStateChanged will handle the state update
+          } else {
+            console.log('useAuth: No redirect result (normal page load)');
+          }
+        })
+        .catch((error) => {
+          console.error('useAuth: Redirect result error:', error);
+          const authError = error as AuthError;
+          let errorMessage = 'Failed to complete sign-in';
+
+          switch (authError.code) {
+            case 'auth/account-exists-with-different-credential':
+              errorMessage = 'An account already exists with the same email';
+              break;
+            case 'auth/credential-already-in-use':
+              errorMessage = 'This credential is already linked to another account';
+              break;
+            case 'auth/user-disabled':
+              errorMessage = 'This account has been disabled';
+              break;
+            default:
+              errorMessage = authError.message || 'Failed to complete sign-in';
+          }
+
           setState((prev) => ({
             ...prev,
             loading: false,
-            error: authError.message || 'Sign-in redirect failed',
+            error: errorMessage,
           }));
-        }
-      });
+        });
+    }
 
     // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(
       auth,
       (user) => {
-        clearTimeout(timeoutId);
+        console.log('useAuth: onAuthStateChanged fired', user ? `user: ${user.email}` : 'no user');
         setState({
           user,
           loading: false,
@@ -95,7 +103,6 @@ export function useAuth() {
         });
       },
       (error) => {
-        clearTimeout(timeoutId);
         console.error('Auth state change error:', error);
         setState({
           user: null,
@@ -107,7 +114,7 @@ export function useAuth() {
 
     // Cleanup subscription on unmount
     return () => {
-      clearTimeout(timeoutId);
+      console.log('useAuth: Cleaning up');
       unsubscribe();
     };
   }, []);
@@ -157,20 +164,21 @@ export function useAuth() {
   };
 
   /**
-   * Sign In with Google (using redirect for COOP compatibility)
+   * Sign In with Google (uses redirect for better cross-origin compatibility)
    */
   const signInWithGoogle = async (): Promise<void> => {
     try {
       setState((prev) => ({ ...prev, loading: true, error: null }));
-      // Use redirect instead of popup to avoid COOP issues
-      // The redirect result is handled in useEffect on page load
+      console.log('useAuth: Starting Google sign-in redirect...');
+      // This will redirect to Google, then back to the app
+      // getRedirectResult() in useEffect will handle the result
       await signInWithRedirect(auth, googleProvider);
-      // Note: This function won't return after redirect - user will be redirected to Google
+      // Note: Code after signInWithRedirect won't execute as the page redirects
     } catch (error) {
       const authError = error as AuthError;
       let errorMessage = 'Failed to sign in with Google';
 
-      // Handle common redirect auth errors
+      // Handle common auth errors
       switch (authError.code) {
         case 'auth/account-exists-with-different-credential':
           errorMessage = 'An account already exists with the same email';
@@ -181,10 +189,14 @@ export function useAuth() {
         case 'auth/operation-not-allowed':
           errorMessage = 'Google sign-in is not enabled';
           break;
+        case 'auth/unauthorized-domain':
+          errorMessage = 'This domain is not authorized for OAuth. Check Firebase console.';
+          break;
         default:
           errorMessage = authError.message || 'Failed to sign in with Google';
       }
 
+      console.error('useAuth: Google sign-in error:', errorMessage);
       setState((prev) => ({
         ...prev,
         loading: false,
