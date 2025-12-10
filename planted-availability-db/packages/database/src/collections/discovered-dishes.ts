@@ -140,7 +140,7 @@ class DiscoveredDishesCollection extends BaseCollection<ExtractedDish> {
   }
 
   /**
-   * Get dishes by status
+   * Get dishes by status (requires composite index: status + confidence_score)
    */
   async getByStatus(status: ExtractedDishStatus, limit?: number): Promise<ExtractedDish[]> {
     let query = this.collection
@@ -152,6 +152,18 @@ class DiscoveredDishesCollection extends BaseCollection<ExtractedDish> {
     }
 
     const snapshot = await query.get();
+    return snapshot.docs.map((doc) => this.fromFirestore(doc));
+  }
+
+  /**
+   * Get dishes by status without ordering (no index required)
+   * Use this when you don't need sorted results, e.g., for counting
+   */
+  async getByStatusUnordered(status: ExtractedDishStatus): Promise<ExtractedDish[]> {
+    const snapshot = await this.collection
+      .where('status', '==', status)
+      .get();
+
     return snapshot.docs.map((doc) => this.fromFirestore(doc));
   }
 

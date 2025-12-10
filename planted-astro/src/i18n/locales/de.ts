@@ -5,7 +5,7 @@ export default {
         products: 'Produkte',
         recipes: 'Rezepte',
         about: 'Über uns',
-        findUs: 'Finde uns',
+        findUs: 'Wo gibt\'s das?',
         selectCountry: 'Land wählen',
         sustainability: 'Nachhaltigkeit',
         gastronomy: 'Gastronomie',
@@ -16,13 +16,13 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'Wir machen Fleisch.',
-            subtitle: 'Nur halt ohne das Tier.',
+            title: 'Fleisch. Aus Erbsen.',
+            subtitle: 'Klingt komisch. Schmeckt nach Poulet. Wir können\'s auch nicht erklären.',
             cta: 'Wo gibt\'s das?',
             badge: 'B Corp zertifiziert',
             whisper: '(Das klingt einfacher als es ist. Aber nach 6 Jahren Tüfteln haben es sogar Fleischliebhaber abgenommen.)',
-            proofRestaurants: 'Restaurants',
-            proofCountries: 'Länder',
+            proofRestaurants: 'haben sich getraut',
+            proofCountries: '(bisher)',
             proofChampion: 'Schwingerkönig',
             evidenceLabel: 'Beweisstück A',
             annotationText: 'Ja, wir zeigen dir ein Video von brutzelndem Essen. Das ist quasi Manipulation. Aber es ist auch einfach die Wahrheit.',
@@ -42,14 +42,14 @@ export default {
             label: 'pflanzenbasiert',
         },
         trust: {
-            swissMade: 'Made in Switzerland',
+            swissMade: 'Hergestellt in der Schweiz',
             restaurants: '8.000+ Restaurants',
             countries: '6 Länder',
         },
         mission: {
-            title: 'Wir glauben, dass Fleisch nicht von Tieren kommen muss.',
-            highlight: 'Es muss einfach unglaublich lecker schmecken.',
-            text: 'Made in Switzerland. B Corp zertifiziert. Und ehrlich? Es ist wirklich, wirklich gut.',
+            title: 'Wir machen Fleisch aus Pflanzen. Ja, das klingt wie ein Widerspruch. Aber probier mal unser Poulet und sag uns dann, dass es nicht nach Poulet schmeckt.',
+            highlight: '(Wir warten.)',
+            text: 'Hergestellt in der Schweiz. B Corp zertifiziert. Und ja—wir haben es probiert, bevor wir es verkauft haben.',
         },
         intro: {
             label: 'Swiss-made',
@@ -63,9 +63,10 @@ export default {
             },
         },
         products: {
-            title: 'Unsere Produkte',
+            title: 'Das Sortiment',
             subtitle: 'Von Chicken bis Pulled Pork – wir haben alles.',
-            viewAll: 'Alle Produkte ansehen',
+            viewAll: 'Zeig mir alles',
+            viewAllLink: '→ Alles anschauen (es wird nicht weniger)',
             scrollHint: 'Ziehen zum Entdecken',
             highlights: 'Unsere Highlights',
             allProducts: 'Alle Produkte',
@@ -94,9 +95,9 @@ export default {
             },
         },
         recipes: {
-            title: 'Was kochst du heute Abend?',
+            title: 'Ideen. Falls du keine hast.',
             subtitle: 'Keine Sorge, wir haben Ideen. Alle unter 45 Minuten.',
-            viewAll: 'Alle Rezepte ansehen',
+            viewAll: 'Mehr davon →',
             getCooking: 'Ab in die Küche',
             allRecipes: 'Alle 150+ Rezepte',
         },
@@ -113,18 +114,18 @@ export default {
             button: 'Suchen',
         },
         impact: {
-            badge: 'Okay, jetzt wird\'s kurz ernst.',
+            badge: 'Ein paar Zahlen, weil wir sie haben',
             badgeSubtitle: '(Keine Sorge, nur 30 Sekunden, dann sind wir wieder lustig.)',
             lessCO2: 'weniger CO₂',
             lessWater: 'weniger Wasser',
-            animalsHarmed: 'Tiere',
-            vsCow: 'vs. Rindfleisch',
-            ever: 'null, nada, keine',
-            tagline: 'Gleicher Geschmack. Besser für den Planeten.',
-            source: 'Quelle: Unabhängige Ökobilanz-Studie. Wir haben\'s nicht selbst erfunden.',
-            seeHow: 'Die ganze nerdy Analyse lesen',
+            animalsHarmed: 'Tiere, die dafür aufstehen mussten',
+            vsCow: 'als Rindfleisch. Die Kühe sind nicht sauer, sie wissen\'s nicht.',
+            ever: 'Null. Immer.',
+            tagline: 'Schmeckt wie Fleisch. Verursacht weniger Weltuntergang.',
+            source: 'Zahlen geprüft von Leuten, die wir nicht bezahlt haben. Also doch, aber nur fürs Prüfen.',
+            seeHow: 'Die ganze Geschichte',
             co2Context: 'Das entspricht etwa 12 Autofahrten von Zürich nach Bern. Pro Packung. Wir haben\'s nicht erfunden, das haben Wissenschaftler berechnet.',
-            waterContext: 'Genug, um 47 Mal zu duschen. Nicht dass du weniger duschen solltest. Bitte nicht.',
+            waterContext: 'Das reicht für ca. 12\'000 Duschen. Oder eine sehr lange.',
             animalsContext: 'Klingt simpel. Ist es auch. Keine versteckten Fussnoten. Versprochen.',
         },
         business: {
@@ -132,11 +133,11 @@ export default {
             getSamples: 'Muster anfordern',
         },
         ambassador: {
-            badge: 'Markenbotschafter',
-            approvedBy: 'Empfohlen von',
+            badge: 'Schwingerkönig. Fleischliebhaber. Mag planted.',
+            approvedBy: 'Was er isst:',
             surprise: 'Ja, wirklich. DER Christian Stucki.',
             context: 'Ein 150-Kilo-Schwingerkönig, der pflanzlich isst. Wenn das kein Beweis ist, wissen wir auch nicht.',
-            favoriteLabel: 'Christians Favorit:',
+            favoriteLabel: 'Was er isst:',
             favoriteProduct: 'planted.steak',
         },
         delivery: {
@@ -300,7 +301,8 @@ export default {
             button: 'Abonnieren',
         },
         copyright: '© 2025 planted. Alle Rechte vorbehalten.',
-        tagline: 'Pflanzenbasiert. Swiss-made.',
+        tagline: 'Fleisch aus Pflanzen. Made in Switzerland.',
+        aiDisclaimer: 'Diese Website wurde nicht von einer KI geschrieben. Also, nicht ganz. Ok, ein bisschen.',
     },
 
     // Common
@@ -339,8 +341,8 @@ export default {
         pageTitle: 'Gastronomie',
         badge: 'Für Unternehmen',
         hero: {
-            title: 'Pflanzenbasiertes Fleisch für Profiküchen',
-            subtitle: 'Bereichere dein Menü mit planted',
+            title: 'Für Küchen, die\'s ernst meinen',
+            subtitle: 'Deine Gäste fragen nach pflanzlich? Wir haben, was du brauchst.',
         },
         stats: {
             restaurants: '8.000+',
@@ -351,7 +353,7 @@ export default {
         trusted: 'Vertraut von den Besten',
         builtFor: 'Gemacht für Küchen',
         cta: {
-            samples: 'Muster anfordern',
+            samples: 'Probierpaket bestellen →',
             contact: 'Kontaktiere uns',
         },
     },
@@ -507,8 +509,8 @@ export default {
 
     // Store Locator component
     storeLocator: {
-        title: 'Finde uns',
-        subtitle: 'Entdecke, wo du planted bekommst.',
+        title: 'Wo kriegst du das?',
+        subtitle: 'Gib deine PLZ ein. Wir sagen dir, wo\'s planted gibt.',
         detecting: 'Standort wird ermittelt...',
         showingResults: 'Ergebnisse für',
         change: 'Ändern',
@@ -520,7 +522,11 @@ export default {
             retail: 'Keine Einzelhandelspartner in deiner Nähe gefunden.',
             foodservice: 'Noch keine Restaurant-Partner. Bleib dran!',
         },
-        foodserviceIntro: 'Wir sind stolz darauf, mit Restaurants und Gastronomiepartnern zusammenzuarbeiten, die unsere Leidenschaft für leckeres, nachhaltiges Essen teilen.',
+        emptyState: {
+            title: 'Noch keine PLZ eingegeben?',
+            text: 'Such oben. Wir finden was.',
+        },
+        foodserviceIntro: 'Diese Küchen kochen mit planted. Manche haben Sterne. Alle haben Geschmack.',
         availableProducts: 'Verfügbare Produkte:',
         online: {
             badge: 'Keinen Laden gefunden?',
@@ -531,9 +537,9 @@ export default {
 
     // Cookie Consent component
     cookieConsent: {
-        title: 'Wir verwenden Cookies',
-        description: 'Wir verwenden Cookies, um dein Erlebnis zu verbessern und den Website-Traffic zu analysieren. Durch Klicken auf "Alle akzeptieren" stimmst du unserer Cookie-Nutzung zu.',
-        acceptAll: 'Alle akzeptieren',
+        title: 'Cookies. (Die digitalen.)',
+        description: 'Wir nutzen Cookies, damit die Seite funktioniert und wir wissen, was gut ankommt. Die essbaren Cookies machen wir leider nicht.',
+        acceptAll: 'Alles klar',
         necessaryOnly: 'Nur notwendige',
         settings: 'Einstellungen',
         saveSettings: 'Einstellungen speichern',
@@ -550,11 +556,11 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Newsletter',
+        title: 'Newsletter. (Wir spammen nicht. Versprochen.)',
         subtitle: 'Okay, hier kommt die Newsletter-Anmeldung.',
-        description: 'Du weisst wie das funktioniert. Wir fragen nach deiner E-Mail. Du überlegst ob wir dich zuspammen werden.',
+        description: 'Rezepte. Neuigkeiten. Ab und zu ein Angebot. Keine 47 E-Mails pro Woche.',
         placeholder: 'deine@email.ch',
-        button: 'Ich bin dabei',
+        button: 'Ja, will ich',
         consent: 'Ich stimme zu, Marketing-E-Mails zu erhalten.',
         success: 'Willkommen an Bord! Wir freuen uns.',
         promiseTitle: 'Unser Versprechen:',

@@ -376,9 +376,20 @@ export class PuppeteerFetcher {
     }
 
     let page: Page | null = null;
+    let cdpClient: Awaited<ReturnType<Page['createCDPSession']>> | null = null;
 
     try {
       page = await this.browser!.newPage();
+
+      // Clear browser state to prevent cross-contamination between venues
+      // This is critical for platforms like Lieferando that cache menu data in JS state
+      cdpClient = await page.createCDPSession();
+      await cdpClient.send('Network.clearBrowserCache');
+      await cdpClient.send('Network.clearBrowserCookies');
+      await cdpClient.send('Storage.clearDataForOrigin', {
+        origin: new URL(url).origin,
+        storageTypes: 'all',
+      });
 
       // Set viewport
       await page.setViewport(this.config.viewport);
@@ -480,6 +491,14 @@ export class PuppeteerFetcher {
         retryable,
       };
     } finally {
+      // Disconnect CDP client first
+      if (cdpClient) {
+        try {
+          await cdpClient.detach();
+        } catch {
+          // Ignore detach errors
+        }
+      }
       if (page) {
         try {
           await page.close();

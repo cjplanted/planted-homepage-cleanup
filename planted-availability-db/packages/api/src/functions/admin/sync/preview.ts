@@ -63,11 +63,13 @@ interface DishUpdate {
 export const adminSyncPreviewHandler = createAdminHandler(
   async (req, res) => {
     // Get all verified discovered venues (not yet promoted)
+    // Note: discoveredVenues.getByStatus doesn't require a composite index
     const verifiedVenues = await discoveredVenues.getByStatus('verified');
     const toAddVenues = verifiedVenues.filter(v => !v.production_venue_id && !v.promoted_at);
 
     // Get verified discovered dishes (not yet promoted)
-    const verifiedDishes = await discoveredDishes.getByStatus('verified');
+    // Use unordered query to avoid requiring composite index (status + confidence_score)
+    const verifiedDishes = await discoveredDishes.getByStatusUnordered('verified');
     const toAddDishes = verifiedDishes.filter(d => !d.production_dish_id && !d.promoted_at);
 
     // Count dishes per venue efficiently using the dishes we already fetched
