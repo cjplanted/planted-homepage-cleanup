@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Get Inspired',
-            subtitle: 'Discover delicious recipes created with planted.',
+            title: 'What\'s for dinner tonight?',
+            subtitle: 'Don\'t worry, we\'ve got ideas. All under 45 minutes.',
             viewAll: 'View All Recipes',
             getCooking: 'Get cooking',
             allRecipes: 'All 150+ recipes',

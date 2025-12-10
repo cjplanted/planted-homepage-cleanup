@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Inspírate',
-            subtitle: 'Descubre deliciosas recetas creadas con planted.',
+            title: '¿Qué cocinas esta noche?',
+            subtitle: 'No te preocupes, tenemos ideas. Todas en menos de 45 minutos.',
             viewAll: 'Ver todas las recetas',
             getCooking: 'A cocinar',
             allRecipes: 'Todas las 150+ recetas',

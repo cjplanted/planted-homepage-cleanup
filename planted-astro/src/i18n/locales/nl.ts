@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Laat je inspireren',
-            subtitle: 'Ontdek heerlijke recepten met planted.',
+            title: 'Wat eten we vanavond?',
+            subtitle: 'Geen zorgen, we hebben ideeën. Allemaal onder de 45 minuten.',
             viewAll: 'Bekijk alle recepten',
             getCooking: 'Aan de slag',
             allRecipes: 'Alle 150+ recepten',

@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Lasciati ispirare',
-            subtitle: 'Scopri deliziose ricette create con planted.',
+            title: 'Cosa cucini stasera?',
+            subtitle: 'Tranquillo, abbiamo qualche idea. Tutte sotto i 45 minuti.',
             viewAll: 'Vedi tutte le ricette',
             getCooking: 'Ai fornelli',
             allRecipes: 'Tutte le 150+ ricette',

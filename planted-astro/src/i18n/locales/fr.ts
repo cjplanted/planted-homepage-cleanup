@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Inspirez-vous',
-            subtitle: 'Découvrez de délicieuses recettes créées avec planted.',
+            title: 'Qu\'est-ce qu\'on mange ce soir ?',
+            subtitle: 'Pas de panique, on a des idées. Toutes en moins de 45 minutes.',
             viewAll: 'Voir toutes les recettes',
             getCooking: 'En cuisine',
             allRecipes: 'Toutes les 150+ recettes',

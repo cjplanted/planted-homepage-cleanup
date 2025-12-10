@@ -93,8 +93,8 @@ export default {
             },
         },
         recipes: {
-            title: 'Lass dich inspirieren',
-            subtitle: 'Entdecke köstliche Rezepte mit planted.',
+            title: 'Was kochst du heute Abend?',
+            subtitle: 'Keine Sorge, wir haben Ideen. Alle unter 45 Minuten.',
             viewAll: 'Alle Rezepte ansehen',
             getCooking: 'Ab in die Küche',
             allRecipes: 'Alle 150+ Rezepte',
