@@ -21,7 +21,7 @@
     }
   ],
   "hosting": {
-    "public": "packages/admin-dashboard/dist",
+    "public": "packages/admin-dashboard-v2/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
