@@ -25,7 +25,7 @@ export interface DiscoveryConfig {
   countries: Country[];
   platforms: Platform[];
   mode: DiscoveryMode;
-  chain?: string;
+  chainId?: string;
   maxQueries: number;
   dryRun: boolean;
 }
@@ -35,7 +35,7 @@ export interface DiscoveryConfig {
  */
 export interface ExtractionConfig {
   target: ExtractionTarget;
-  chain?: string;
+  chainId?: string;
   venueId?: string;
   maxVenues: number;
   mode: ExtractionMode;

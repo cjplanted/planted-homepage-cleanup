@@ -65,6 +65,11 @@ interface ReviewVenue {
   status: DiscoveredVenueStatus;
   createdAt: Date;
   dishes: ReviewDish[];
+  deliveryPlatforms: {
+    platform: string;
+    url: string;
+    active: boolean;
+  }[];
 }
 
 interface ReviewDish {
@@ -177,6 +182,11 @@ export const adminReviewQueueHandler = createAdminHandler(
         status: venue.status,
         createdAt: venue.created_at,
         dishes: reviewDishes,
+        deliveryPlatforms: venue.delivery_platforms?.map(dp => ({
+          platform: dp.platform,
+          url: dp.url,
+          active: dp.active ?? true,
+        })) || [],
       };
 
       return reviewVenue;

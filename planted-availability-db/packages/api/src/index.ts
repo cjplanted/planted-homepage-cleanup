@@ -17,6 +17,7 @@ export {
   adminDishesHandler as adminDishes,
   adminPromotionsHandler as adminPromotions,
   adminChainsHandler as adminChains,
+  adminAssignChainHandler as adminAssignChain,
   adminFlaggedHandler as adminFlagged,
   adminChangelogHandler as adminChangelog,
   adminScraperStatusHandler as adminScraperStatus,

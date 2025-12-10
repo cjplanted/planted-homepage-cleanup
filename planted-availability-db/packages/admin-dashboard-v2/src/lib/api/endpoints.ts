@@ -57,6 +57,10 @@ export const API_ENDPOINTS = {
   VENUES: '/adminVenues',
   DISHES: '/adminDishes',
   DISCOVERED_VENUES: '/adminDiscoveredVenues',
+
+  // Chain management
+  ASSIGN_CHAIN: '/adminAssignChain',
+  LIST_CHAINS: '/adminChains',
 } as const;
 
 /**

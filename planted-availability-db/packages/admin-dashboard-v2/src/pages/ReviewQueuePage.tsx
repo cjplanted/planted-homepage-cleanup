@@ -42,6 +42,7 @@ import { FeedbackForm } from '@/features/review/components/FeedbackForm';
 import { BulkActionsBar } from '@/features/review/components/BulkActionsBar';
 import { FilterBar } from '@/features/review/components/FilterBar';
 import { StatsBar } from '@/features/review/components/StatsBar';
+import { ChainAssignmentDialog } from '@/features/review/components/ChainAssignmentDialog';
 import { ReviewQueueFilters } from '@/features/review/types';
 
 const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -61,6 +62,7 @@ export function ReviewQueuePage() {
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [showHelpDialog, setShowHelpDialog] = useState(false);
   const [showBulkRejectDialog, setShowBulkRejectDialog] = useState(false);
+  const [showChainDialog, setShowChainDialog] = useState(false);
 
   // Fetch review queue
   const { data, isLoading, error, refetch } = useReviewQueue(filters, {
@@ -341,7 +343,10 @@ export function ReviewQueuePage() {
           {selectedVenue ? (
             <>
               {/* Venue Details */}
-              <VenueDetailPanel venue={selectedVenue} />
+              <VenueDetailPanel
+                venue={selectedVenue}
+                onAssignChain={() => setShowChainDialog(true)}
+              />
 
               {/* Dishes */}
               <Card className="p-6">
@@ -483,6 +488,16 @@ export function ReviewQueuePage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Chain Assignment Dialog */}
+      {selectedVenueId && (
+        <ChainAssignmentDialog
+          open={showChainDialog}
+          onOpenChange={setShowChainDialog}
+          venueIds={[selectedVenueId]}
+          onSuccess={() => refetch()}
+        />
+      )}
     </div>
   );
 }

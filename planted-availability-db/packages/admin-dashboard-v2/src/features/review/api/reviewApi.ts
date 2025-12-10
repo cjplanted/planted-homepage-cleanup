@@ -34,6 +34,11 @@ interface BackendReviewVenue {
   status: string;
   createdAt: string;
   dishes: BackendReviewDish[];
+  deliveryPlatforms?: Array<{
+    platform: string;
+    url: string;
+    active: boolean;
+  }>;
 }
 
 interface BackendReviewDish {
@@ -98,6 +103,7 @@ interface BackendResponse {
  * Transform backend venue to frontend venue
  */
 function transformVenue(backendVenue: BackendReviewVenue): ReviewVenue {
+  const primaryPlatform = backendVenue.deliveryPlatforms?.[0];
   return {
     id: backendVenue.id,
     name: backendVenue.name,
@@ -107,13 +113,14 @@ function transformVenue(backendVenue: BackendReviewVenue): ReviewVenue {
     city: backendVenue.address.city,
     country: backendVenue.address.country,
     countryCode: backendVenue.address.country,
-    platform: 'other', // Default, backend doesn't provide this
-    platformUrl: '',
+    platform: (primaryPlatform?.platform as ReviewVenue['platform']) || 'other',
+    platformUrl: primaryPlatform?.url || '',
     confidence: backendVenue.confidenceScore / 100, // Normalize to 0-1
     confidenceFactors: [],
     dishes: backendVenue.dishes.map(transformDish),
     status: backendVenue.status === 'discovered' ? 'pending' : backendVenue.status as 'pending' | 'verified' | 'rejected',
     scrapedAt: backendVenue.createdAt,
+    deliveryPlatforms: backendVenue.deliveryPlatforms || [],
   };
 }
 
@@ -383,4 +390,27 @@ export async function getVenueById(venueId: string): Promise<ReviewVenue> {
     return response.items[0];
   }
   throw new Error('Venue not found');
+}
+
+/**
+ * Chain Management
+ */
+export interface Chain {
+  id: string;
+  name: string;
+  type: string;
+  markets: string[];
+}
+
+export async function getChains(): Promise<Chain[]> {
+  const response = await apiClient.get<{ chains: Chain[]; total: number }>(API_ENDPOINTS.LIST_CHAINS);
+  return response.chains || [];
+}
+
+export async function assignChain(params: {
+  venueIds: string[];
+  chainId?: string;
+  newChainName?: string;
+}): Promise<{ chainId: string; chainName: string; updatedCount: number }> {
+  return apiClient.post(API_ENDPOINTS.ASSIGN_CHAIN, params);
 }

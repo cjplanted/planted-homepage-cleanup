@@ -3,6 +3,7 @@ export {
   adminDishesHandler,
   adminPromotionsHandler,
   adminChainsHandler,
+  adminAssignChainHandler,
 } from './crud.js';
 
 export {

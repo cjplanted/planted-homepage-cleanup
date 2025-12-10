@@ -73,6 +73,11 @@ export interface ReviewVenue {
   };
   platform: DeliveryPlatform;
   platformUrl: string;
+  deliveryPlatforms?: Array<{
+    platform: string;
+    url: string;
+    active: boolean;
+  }>;
   confidence: number;
   confidenceFactors: ConfidenceFactor[];
   dishes: ReviewDish[];

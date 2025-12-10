@@ -5,6 +5,7 @@
  */
 
 import { get } from '@/lib/api/client';
+import { API_ENDPOINTS } from '@/lib/api/endpoints';
 import { BrowserResponse, BrowserFilters, BrowserVenue } from '../types';
 
 /**
@@ -44,24 +45,28 @@ function buildQueryString(filters: BrowserFilters): string {
 
 /**
  * Get all venues for browsing
+ * Uses adminDiscoveredVenues endpoint for discovered venues
  */
 export async function getVenues(filters: BrowserFilters = {}): Promise<BrowserResponse> {
   const queryString = buildQueryString(filters);
-  return get<BrowserResponse>(`/admin/venues${queryString}`);
+  return get<BrowserResponse>(`${API_ENDPOINTS.DISCOVERED_VENUES}${queryString}`);
 }
 
 /**
  * Get a single venue by ID
  */
 export async function getVenue(venueId: string): Promise<BrowserVenue> {
-  return get<BrowserVenue>(`/admin/venues/${venueId}`);
+  return get<BrowserVenue>(`${API_ENDPOINTS.DISCOVERED_VENUES}?venueId=${encodeURIComponent(venueId)}`);
 }
 
 /**
  * Get dishes for a specific venue
+ * Note: Dishes are embedded in discovered_venues.dishes[], use venue query
  */
 export async function getVenueDishes(venueId: string) {
-  return get(`/admin/venues/${venueId}/dishes`);
+  // Dishes are embedded in the venue document
+  const venue = await getVenue(venueId);
+  return venue.dishes || [];
 }
 
 /**
@@ -69,7 +74,7 @@ export async function getVenueDishes(venueId: string) {
  */
 export async function exportVenuesToCSV(filters: BrowserFilters = {}): Promise<Blob> {
   const queryString = buildQueryString(filters);
-  const response = await fetch(`/admin/venues/export${queryString}`, {
+  const response = await fetch(`${API_ENDPOINTS.DISCOVERED_VENUES}${queryString}&format=csv`, {
     method: 'GET',
     headers: {
       'Accept': 'text/csv',

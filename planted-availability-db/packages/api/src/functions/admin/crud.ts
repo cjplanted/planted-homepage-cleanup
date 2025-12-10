@@ -7,6 +7,7 @@ import {
   promotions,
   chains,
   changeLogs,
+  discoveredVenues,
 } from '@pad/database';
 import {
   createVenueInputSchema,
@@ -483,6 +484,120 @@ export const adminChainsHandler = onRequest(functionOptions, async (req: Request
       }
     } catch (error) {
       console.error('Admin chains error:', error);
+      authRes.status(500).json({ error: 'Internal server error' });
+    }
+  });
+});
+
+/**
+ * Admin Assign Chain to Venues
+ * POST /adminAssignChain
+ * Assigns discovered venues to an existing chain or creates a new chain
+ */
+export const adminAssignChainHandler = onRequest(functionOptions, async (req: Request, res: Response) => {
+  await withAdminAuth(req, res, async (authReq, authRes) => {
+    if (authReq.method !== 'POST') {
+      authRes.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    try {
+      const { venueIds, chainId, newChainName } = authReq.body;
+
+      // Validation
+      if (!venueIds || !Array.isArray(venueIds) || venueIds.length === 0) {
+        authRes.status(400).json({ error: 'venueIds array is required' });
+        return;
+      }
+
+      if (!chainId && !newChainName) {
+        authRes.status(400).json({ error: 'Either chainId or newChainName must be provided' });
+        return;
+      }
+
+      let targetChainId: string;
+      let targetChainName: string;
+
+      // Either use existing chain or create new one
+      if (chainId) {
+        const existingChain = await chains.getById(chainId);
+        if (!existingChain) {
+          authRes.status(404).json({ error: 'Chain not found' });
+          return;
+        }
+        targetChainId = chainId;
+        targetChainName = existingChain.name;
+      } else {
+        // Create new chain
+        const newChain = await chains.create({
+          name: newChainName,
+          type: 'restaurant',
+          markets: [],
+        });
+        targetChainId = newChain.id;
+        targetChainName = newChainName;
+
+        await changeLogs.log({
+          action: 'created',
+          collection: 'chains',
+          document_id: newChain.id,
+          changes: [{ field: '*', before: null, after: newChain }],
+          source: { type: 'manual', user_id: authReq.user?.uid },
+          reason: 'Admin created chain via chain assignment',
+        });
+      }
+
+      // Update all venues with chain info
+      let updatedCount = 0;
+      const errors: Array<{ venueId: string; error: string }> = [];
+
+      for (const venueId of venueIds) {
+        try {
+          const venue = await discoveredVenues.getById(venueId);
+          if (!venue) {
+            errors.push({ venueId, error: 'Venue not found' });
+            continue;
+          }
+
+          await discoveredVenues.update(venueId, {
+            chain_id: targetChainId,
+            chain_name: targetChainName,
+            is_chain: true,
+          });
+
+          await changeLogs.log({
+            action: 'updated',
+            collection: 'discovered_venues',
+            document_id: venueId,
+            changes: [
+              { field: 'chain_id', before: venue.chain_id, after: targetChainId },
+              { field: 'chain_name', before: venue.chain_name, after: targetChainName },
+              { field: 'is_chain', before: venue.is_chain, after: true },
+            ],
+            source: { type: 'manual', user_id: authReq.user?.uid },
+            reason: `Admin assigned venue to chain: ${targetChainName}`,
+          });
+
+          updatedCount++;
+        } catch (error) {
+          console.error(`Failed to update venue ${venueId}:`, error);
+          errors.push({
+            venueId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+        }
+      }
+
+      authRes.json({
+        success: true,
+        chainId: targetChainId,
+        chainName: targetChainName,
+        updatedCount,
+        totalRequested: venueIds.length,
+        errors: errors.length > 0 ? errors : undefined,
+      });
+    } catch (error) {
+      console.error('Admin assign chain error:', error);
       authRes.status(500).json({ error: 'Internal server error' });
     }
   });

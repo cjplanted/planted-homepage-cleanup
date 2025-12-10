@@ -80,7 +80,7 @@ export function ExtractionConfigDialog({
   const handleStart = () => {
     const config: ExtractionConfig = {
       target,
-      chain: target === 'chain' ? chain : undefined,
+      chainId: target === 'chain' ? chain : undefined,
       venueId: target === 'venue' ? venueId : undefined,
       maxVenues,
       mode,

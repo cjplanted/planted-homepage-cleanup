@@ -55,6 +55,8 @@ export function ScrapeControlPage() {
     },
     onError: (error) => {
       console.error('Discovery error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Discovery Failed: ${errorMessage}\n\nCheck console for details.`);
     },
   });
 
@@ -66,6 +68,8 @@ export function ScrapeControlPage() {
     },
     onError: (error) => {
       console.error('Extraction error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Extraction Failed: ${errorMessage}\n\nCheck console for details.`);
     },
   });
 

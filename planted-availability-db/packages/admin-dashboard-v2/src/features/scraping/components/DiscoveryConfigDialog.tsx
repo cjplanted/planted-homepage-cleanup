@@ -84,7 +84,7 @@ export function DiscoveryConfigDialog({
       countries,
       platforms: platforms.length > 0 ? platforms : PLATFORMS, // Default to all if none selected
       mode,
-      chain: mode === 'enumerate' ? chain : undefined,
+      chainId: mode === 'enumerate' ? chain : undefined,
       maxQueries,
       dryRun,
     };

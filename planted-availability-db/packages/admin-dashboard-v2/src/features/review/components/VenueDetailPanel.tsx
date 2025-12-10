@@ -5,15 +5,17 @@
  * confidence scores, location, and platform links.
  */
 
-import { ExternalLink, MapPin, Clock } from 'lucide-react';
+import { ExternalLink, MapPin, Clock, Link2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
 import { Badge } from '@/shared/ui/Badge';
+import { Button } from '@/shared/ui/Button';
 import { cn } from '@/lib/utils';
 import { ReviewVenue, PLATFORM_LABELS, VENUE_TYPE_LABELS, COUNTRY_EMOJIS } from '../types';
 
 interface VenueDetailPanelProps {
   venue: ReviewVenue;
   className?: string;
+  onAssignChain?: () => void;
 }
 
 /**
@@ -46,7 +48,7 @@ function ConfidenceBar({ confidence }: { confidence: number }) {
 /**
  * VenueDetailPanel Component
  */
-export function VenueDetailPanel({ venue, className }: VenueDetailPanelProps) {
+export function VenueDetailPanel({ venue, className, onAssignChain }: VenueDetailPanelProps) {
   const formattedDate = new Date(venue.scrapedAt).toLocaleString();
   const mapUrl = venue.coordinates
     ? `https://www.google.com/maps?q=${venue.coordinates.lat},${venue.coordinates.lng}`
@@ -79,6 +81,18 @@ export function VenueDetailPanel({ venue, className }: VenueDetailPanelProps) {
                 {venue.status.toUpperCase()}
               </Badge>
             </div>
+            {/* Assign Chain Button - only show if venue has no chain */}
+            {!venue.chain && venue.status === 'pending' && onAssignChain && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onAssignChain}
+                className="mt-2"
+              >
+                <Link2 className="h-4 w-4 mr-2" />
+                Assign Chain
+              </Button>
+            )}
           </div>
         </div>
       </CardHeader>
