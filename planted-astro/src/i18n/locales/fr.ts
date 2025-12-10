@@ -66,6 +66,7 @@ export default {
             title: 'Nos Produits',
             subtitle: 'Du poulet au porc effiloché, nous avons tout ce qu\'il vous faut.',
             viewAll: 'Voir tous les produits',
+            scrollHint: 'Glisser pour découvrir',
             highlights: 'Nos incontournables',
             allProducts: 'Tous les produits',
             hoverText: {

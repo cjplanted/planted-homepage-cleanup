@@ -66,6 +66,7 @@ export default {
             title: 'I Nostri Prodotti',
             subtitle: 'Dal pollo al pulled pork, abbiamo tutto ciò di cui hai bisogno.',
             viewAll: 'Vedi tutti i prodotti',
+            scrollHint: 'Trascina per scoprire',
             highlights: 'I nostri preferiti',
             allProducts: 'Tutti i prodotti',
             hoverText: {

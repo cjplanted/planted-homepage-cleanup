@@ -66,6 +66,7 @@ export default {
             title: 'Unsere Produkte',
             subtitle: 'Von Chicken bis Pulled Pork – wir haben alles.',
             viewAll: 'Alle Produkte ansehen',
+            scrollHint: 'Ziehen zum Entdecken',
             highlights: 'Unsere Highlights',
             allProducts: 'Alle Produkte',
             hoverText: {

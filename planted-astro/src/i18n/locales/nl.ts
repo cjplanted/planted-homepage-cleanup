@@ -66,6 +66,7 @@ export default {
             title: 'Onze Producten',
             subtitle: 'Van kip tot pulled pork, we hebben het allemaal.',
             viewAll: 'Bekijk alle producten',
+            scrollHint: 'Sleep om te ontdekken',
             highlights: 'Onze favorieten',
             allProducts: 'Alle producten',
             hoverText: {

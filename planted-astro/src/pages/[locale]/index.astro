@@ -221,36 +221,46 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     <section class="products" id="products">
         <div class="products-header">
             <h2 class="reveal">{t.home.products.title}</h2>
-            <a href={`${base}/${locale}/products`} class="all-products-btn reveal">
-                → {t.home.products.viewAll}
+            <a href={`${base}/${locale}/products`} class="view-all-link reveal">
+                {t.home.products.viewAll} <span class="view-all-arrow">→</span>
             </a>
         </div>
 
-        <div class="products-container">
-            <div class="products-grid">
+        <div class="products-carousel-wrapper" id="productsCarouselWrapper">
+            <div class="products-grid" id="productsGrid">
                 {featuredProducts.map((product) => {
                     const hoverText = t.home.products.hoverText?.[product.data.slug] || 'Pflanzlich. Und verdammt lecker.';
                     return (
-                    <a href={`${base}/${locale}/products/${product.data.slug}`} class="product-card reveal-scale" data-color={product.data.color}>
-                        <div class="product-card-inner">
-                            {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
-                            <div class="product-image-wrapper">
-                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} class="product-pack-image" loading="lazy">
-                            </div>
-                            <div class="product-hover-overlay">
-                                <div class="product-hover-text">
-                                    {hoverText}
-                                </div>
-                            </div>
+                    <a href={`${base}/${locale}/products/${product.data.slug}`} class="product-card" data-color={product.data.color}>
+                        <div class="product-image">
+                            {product.data.isNew && <span class="product-badge">{t.common.new}</span>}
+                            <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} class="product-pack-image" loading="lazy">
                         </div>
                         <div class="product-info">
-                            <div class="product-name">{getLocalizedProductName(product.data.name, locale)}</div>
-                            <div class="product-variant">{product.data.variant}</div>
+                            <span class="product-category">{getLocalizedProductName(product.data.name, locale)}</span>
+                            <h3 class="product-name">{product.data.variant}</h3>
                         </div>
+                        <div class="product-hover-text">{hoverText}</div>
                     </a>
                     );
                 })}
             </div>
+
+            <!-- Scroll hint (desktop only) -->
+            <div class="scroll-hint">
+                <span>{t.home.products.scrollHint || 'Ziehen zum Entdecken'}</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Progress dots -->
+        <div class="scroll-progress" id="scrollProgress">
+            <div class="scroll-progress-dot active"></div>
+            <div class="scroll-progress-dot"></div>
+            <div class="scroll-progress-dot"></div>
+            <div class="scroll-progress-dot"></div>
         </div>
     </section>
 
@@ -1138,211 +1148,329 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         }
     }
 
-    /* Products Section */
+    /* ================================================
+       PRODUCTS SECTION - Carousel with Fade Edges
+       ================================================ */
     .products {
-        background: var(--planted-cream);
-        padding: 3.5rem 1.5rem 3rem;
+        padding: 80px 0;
         overflow: hidden;
+        background: var(--planted-cream);
     }
 
+    /* Header */
     .products-header {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 48px;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        padding: 0 0 2.5rem;
-        max-width: 1400px;
-        margin: 0 auto;
+        align-items: flex-end;
+        margin-bottom: 32px;
     }
 
     .products-header h2 {
         font-family: 'VC Henrietta', serif;
-        font-size: clamp(2.5rem, 8vw, 4.5rem);
-        color: var(--planted-purple);
+        font-size: clamp(2rem, 6vw, 2.5rem);
         font-weight: 700;
-        line-height: 1;
+        color: var(--planted-purple);
     }
 
-    .products-header .all-products-btn {
+    .view-all-link {
+        color: var(--planted-purple);
+        font-weight: 600;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        background: var(--planted-green);
-        color: var(--planted-black);
-        font-weight: 700;
+        gap: 6px;
+        transition: gap 0.2s ease;
+    }
+
+    .view-all-link:hover {
+        gap: 12px;
+    }
+
+    .view-all-arrow {
+        transition: transform 0.2s ease;
+    }
+
+    .view-all-link:hover .view-all-arrow {
+        transform: translateX(4px);
+    }
+
+    /* ================================================
+       CAROUSEL WRAPPER WITH FADE EDGES
+       ================================================ */
+    .products-carousel-wrapper {
+        position: relative;
+    }
+
+    /* Fade edges */
+    .products-carousel-wrapper::before,
+    .products-carousel-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100px;
+        z-index: 10;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .products-carousel-wrapper::before {
+        left: 0;
+        background: linear-gradient(to right, var(--planted-cream) 0%, transparent 100%);
+        opacity: 0;
+    }
+
+    .products-carousel-wrapper::after {
+        right: 0;
+        background: linear-gradient(to left, var(--planted-cream) 0%, transparent 100%);
+    }
+
+    .products-carousel-wrapper.scrolled::before {
+        opacity: 1;
+    }
+
+    .products-carousel-wrapper.at-end::after {
+        opacity: 0;
+    }
+
+    /* ================================================
+       SCROLL HINT
+       ================================================ */
+    .scroll-hint {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--planted-purple);
         font-size: 0.85rem;
-        padding: 0.9rem 1.5rem;
-        border-radius: 0.75rem;
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        transition: transform 0.3s, box-shadow 0.3s;
+        opacity: 0.7;
+        z-index: 20;
+        pointer-events: none;
+        animation: hintFadeOut 3s ease-in-out forwards;
+        animation-delay: 2s;
     }
 
-    .products-header .all-products-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(107, 191, 89, 0.4);
+    .scroll-hint svg {
+        animation: hintSlide 1.5s ease-in-out infinite;
     }
 
-    .products-container {
-        max-width: 1400px;
-        margin: 0 auto;
+    @keyframes hintSlide {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(8px); }
     }
 
+    @keyframes hintFadeOut {
+        0% { opacity: 0.7; }
+        100% { opacity: 0; visibility: hidden; }
+    }
+
+    /* ================================================
+       PRODUCTS GRID - Scrollable Carousel
+       ================================================ */
     .products-grid {
         display: flex;
-        flex-direction: row;
         gap: 24px;
         overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding: 20px 0 40px;
-        margin: 0 -24px;
-        padding-left: 24px;
-        padding-right: 24px;
-        scrollbar-width: thin;
-        scrollbar-color: var(--planted-purple) #f0f0f0;
+        scroll-behavior: smooth;
+        scroll-snap-type: x proximity;
+        padding: 24px 48px 60px;
+        /* Hide scrollbar */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        /* Drag cursor */
+        cursor: grab;
+        /* Peek animation */
+        animation: peekAnimation 0.8s ease-out;
+        animation-delay: 0.3s;
+        animation-fill-mode: backwards;
     }
 
     .products-grid::-webkit-scrollbar {
-        height: 6px;
+        display: none;
     }
 
-    .products-grid::-webkit-scrollbar-track {
-        background: #f0f0f0;
-        border-radius: 3px;
+    .products-grid:active {
+        cursor: grabbing;
     }
 
-    .products-grid::-webkit-scrollbar-thumb {
-        background: var(--planted-purple);
-        border-radius: 3px;
+    .products-grid.dragging {
+        cursor: grabbing;
+        scroll-behavior: auto;
     }
 
-    .products-grid .product-card {
+    @keyframes peekAnimation {
+        0% { transform: translateX(30px); opacity: 0.5; }
+        100% { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ================================================
+       PRODUCT CARD
+       ================================================ */
+    .product-card {
         flex: 0 0 auto;
         width: 240px;
-        min-width: 240px;
         scroll-snap-align: start;
-        text-decoration: none;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .products-grid .product-card:hover {
-        transform: translateY(-6px);
-    }
-
-    .products-grid .product-card-inner {
-        position: relative;
-        border-radius: 1.25rem;
-        aspect-ratio: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: white;
+        border-radius: 20px;
         overflow: hidden;
-        margin-bottom: 0.75rem;
+        text-decoration: none;
+        display: block;
+        position: relative;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.4s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 24px 48px rgba(97, 38, 158, 0.18);
+    }
+
+    /* Product Image */
+    .product-image {
+        position: relative;
+        padding: 28px;
+        background: linear-gradient(145deg, var(--planted-cream) 0%, white 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .product-pack-image {
+        max-height: 150px;
+        width: auto;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card:hover .product-pack-image {
+        transform: scale(1.1) rotate(-3deg);
+    }
+
+    /* NEW Badge */
+    .product-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--planted-purple);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 5px 10px;
+        border-radius: 20px;
+        z-index: 5;
+    }
+
+    /* Product Info */
+    .product-info {
+        padding: 20px;
+        position: relative;
+        z-index: 2;
         background: white;
     }
 
-    /* Product card color backgrounds - cream gradient in image area */
-    .products-grid .product-card-inner::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, var(--planted-cream) 0%, #FFF5E8 100%);
-        z-index: 0;
+    .product-category {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--planted-green);
     }
 
-    .products-grid .product-badge-new {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        background: var(--planted-green);
-        color: var(--planted-black);
-        font-size: 0.6rem;
+    .product-name {
+        font-family: 'VC Henrietta', serif;
+        font-size: 1.15rem;
         font-weight: 700;
-        text-transform: uppercase;
-        padding: 0.3rem 0.6rem;
-        border-radius: 100px;
-        z-index: 10;
+        color: var(--planted-purple);
+        margin-top: 2px;
     }
 
-    .products-grid .product-image-wrapper {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.25rem;
-        z-index: 2;
-    }
-
-    .products-grid .product-pack-image {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        transition: transform 0.4s ease;
-    }
-
-    .products-grid .product-card:hover .product-pack-image {
-        transform: scale(1.05);
-    }
-
-    /* Hover overlay - slides up from bottom */
-    .products-grid .product-hover-overlay {
+    /* ================================================
+       HOVER TEXT - Schoolcraft Personality
+       ================================================ */
+    .product-hover-text {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         background: var(--planted-purple);
         color: white;
-        padding: 1.5rem 1rem;
+        padding: 16px 20px;
+        font-family: 'VC Henrietta', serif;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
         transform: translateY(100%);
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0 0 1.25rem 1.25rem;
     }
 
-    .products-grid .product-card:hover .product-hover-overlay {
+    .product-card:hover .product-hover-text {
         transform: translateY(0);
     }
 
-    .products-grid .product-hover-text {
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-align: center;
-        line-height: 1.4;
+    /* ================================================
+       PROGRESS DOTS
+       ================================================ */
+    .scroll-progress {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: -20px;
+        padding-bottom: 20px;
     }
 
-    .products-grid .product-info {
-        text-align: center;
-        padding: 0 0.25rem;
+    .scroll-progress-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #D1D5DB;
+        transition: all 0.3s ease;
     }
 
-    .products-grid .product-name {
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--planted-purple);
-        margin-bottom: 0.1rem;
+    .scroll-progress-dot.active {
+        width: 20px;
+        border-radius: 3px;
+        background: var(--planted-purple);
     }
 
-    .products-grid .product-variant {
-        color: var(--planted-purple);
-        font-size: 0.85rem;
-        opacity: 0.7;
-    }
-
-    @media (max-width: 640px) {
-        .products-grid {
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.25rem;
+    /* ================================================
+       RESPONSIVE - Products
+       ================================================ */
+    @media (max-width: 768px) {
+        .products-header {
+            padding: 0 24px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
         }
-        .products-header .all-products-btn {
-            display: none;
+
+        .products-header h2 {
+            font-size: 1.75rem;
+        }
+
+        .products-grid {
+            padding: 20px 24px 50px;
+            gap: 16px;
+        }
+
+        .product-card {
+            width: 200px;
+        }
+
+        .products-carousel-wrapper::before,
+        .products-carousel-wrapper::after {
+            width: 50px;
+        }
+
+        .scroll-hint {
+            display: none; /* Touch devices don't need this */
         }
     }
 
@@ -2147,6 +2275,84 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
 <script>
     function initHomePage() {
+        // ================================================
+        // PRODUCTS CAROUSEL - Drag to Scroll & Progress
+        // ================================================
+        const wrapper = document.getElementById('productsCarouselWrapper');
+        const grid = document.getElementById('productsGrid');
+        const progressDots = document.querySelectorAll('.scroll-progress-dot');
+
+        if (wrapper && grid) {
+            // Update scroll state for fade edges
+            function updateScrollState() {
+                const scrollLeft = grid.scrollLeft;
+                const maxScroll = grid.scrollWidth - grid.clientWidth;
+
+                wrapper.classList.toggle('scrolled', scrollLeft > 20);
+                wrapper.classList.toggle('at-end', scrollLeft >= maxScroll - 20);
+
+                // Update progress dots
+                if (progressDots.length > 0 && maxScroll > 0) {
+                    const progress = scrollLeft / maxScroll;
+                    const activeIndex = Math.min(
+                        Math.floor(progress * progressDots.length),
+                        progressDots.length - 1
+                    );
+
+                    progressDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === activeIndex);
+                    });
+                }
+            }
+
+            grid.addEventListener('scroll', updateScrollState);
+            updateScrollState();
+
+            // Drag to scroll functionality
+            let isDown = false;
+            let startX: number;
+            let scrollLeftStart: number;
+
+            grid.addEventListener('mousedown', (e: MouseEvent) => {
+                isDown = true;
+                grid.classList.add('dragging');
+                startX = e.pageX - grid.offsetLeft;
+                scrollLeftStart = grid.scrollLeft;
+            });
+
+            grid.addEventListener('mouseleave', () => {
+                isDown = false;
+                grid.classList.remove('dragging');
+            });
+
+            grid.addEventListener('mouseup', () => {
+                isDown = false;
+                grid.classList.remove('dragging');
+            });
+
+            grid.addEventListener('mousemove', (e: MouseEvent) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - grid.offsetLeft;
+                const walk = (x - startX) * 1.5; // Scroll speed multiplier
+                grid.scrollLeft = scrollLeftStart - walk;
+            });
+
+            // Prevent click after drag
+            let dragMoved = false;
+            grid.addEventListener('mousedown', () => { dragMoved = false; });
+            grid.addEventListener('mousemove', () => { if (isDown) dragMoved = true; });
+            grid.addEventListener('click', (e: MouseEvent) => {
+                if (dragMoved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
+        }
+
+        // ================================================
+        // IMPACT SECTION ANIMATIONS
+        // ================================================
         // Impact Section Animations
         const impactSection = document.getElementById('impact');
         const impactElements = document.querySelectorAll('.impact-intro, .impact-badge, .impact-stat, .impact-tagline, .impact-source, .impact-cta');
