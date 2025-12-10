@@ -70,25 +70,36 @@ export const adminSyncPreviewHandler = createAdminHandler(
     const verifiedDishes = await discoveredDishes.getByStatus('verified');
     const toAddDishes = verifiedDishes.filter(d => !d.production_dish_id && !d.promoted_at);
 
-    // Build venue previews with dish counts
-    const venueAdditions: VenuePreview[] = await Promise.all(
-      toAddVenues.map(async (venue) => {
-        const venueDishes = await discoveredDishes.getByVenue(venue.id);
-        const verifiedDishCount = venueDishes.filter(d => d.status === 'verified').length;
+    // Count dishes per venue efficiently using the dishes we already fetched
+    const dishCountByVenue = new Map<string, number>();
+    for (const dish of verifiedDishes) {
+      const count = dishCountByVenue.get(dish.venue_id) || 0;
+      dishCountByVenue.set(dish.venue_id, count + 1);
+    }
 
-        return {
-          id: venue.id,
-          name: venue.name,
-          chainId: venue.chain_id,
-          chainName: venue.chain_name,
-          city: venue.address.city,
-          country: venue.address.country,
-          confidenceScore: venue.confidence_score,
-          dishCount: verifiedDishCount,
-          verifiedAt: venue.verified_at || venue.created_at,
-        };
-      })
-    );
+    // Also count embedded dishes from venues
+    for (const venue of toAddVenues) {
+      if (venue.dishes && venue.dishes.length > 0) {
+        const existingCount = dishCountByVenue.get(venue.id) || 0;
+        // Use embedded dish count if no separate dish documents exist
+        if (existingCount === 0) {
+          dishCountByVenue.set(venue.id, venue.dishes.length);
+        }
+      }
+    }
+
+    // Build venue previews (no N+1 query - use pre-computed counts)
+    const venueAdditions: VenuePreview[] = toAddVenues.map((venue) => ({
+      id: venue.id,
+      name: venue.name,
+      chainId: venue.chain_id,
+      chainName: venue.chain_name,
+      city: venue.address.city,
+      country: venue.address.country,
+      confidenceScore: venue.confidence_score,
+      dishCount: dishCountByVenue.get(venue.id) || 0,
+      verifiedAt: venue.verified_at || venue.created_at,
+    }));
 
     // Build dish previews
     const dishAdditions: DishPreview[] = toAddDishes.map(dish => ({
@@ -108,15 +119,29 @@ export const adminSyncPreviewHandler = createAdminHandler(
     const dishUpdates: DishUpdate[] = [];
 
     // Get stale production venues for potential removal
-    const staleVenues = await venues.getStaleVenues(30, 50);
-    const staleVenuePreviews = staleVenues.map(v => ({
-      id: v.id,
-      name: v.name,
-      city: v.address.city,
-      country: v.address.country,
-      lastVerified: v.last_verified,
-      daysSinceVerification: Math.floor((Date.now() - v.last_verified.getTime()) / (1000 * 60 * 60 * 24)),
-    }));
+    // Wrap in try-catch to prevent failure if index doesn't exist
+    let staleVenuePreviews: Array<{
+      id: string;
+      name: string;
+      city: string;
+      country: string;
+      lastVerified: Date;
+      daysSinceVerification: number;
+    }> = [];
+
+    try {
+      const staleVenues = await venues.getStaleVenues(30, 50);
+      staleVenuePreviews = staleVenues.map(v => ({
+        id: v.id,
+        name: v.name,
+        city: v.address.city,
+        country: v.address.country,
+        lastVerified: v.last_verified,
+        daysSinceVerification: Math.floor((Date.now() - v.last_verified.getTime()) / (1000 * 60 * 60 * 24)),
+      }));
+    } catch (error) {
+      console.warn('Could not fetch stale venues (index may be missing):', error);
+    }
 
     // Calculate stats
     const stats = {
