@@ -16,9 +16,9 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'El Futuro de la Carne',
-            subtitle: 'A base de plantas. Swiss-made. Increíblemente delicioso.',
-            cta: 'Descubrir productos',
+            title: 'Hacemos carne.',
+            subtitle: 'Solo sin el animal.',
+            cta: 'Donde la encuentro?',
             badge: 'Certificado B Corp',
             whisper: '(Suena fácil. Pero después de 6 años de perfeccionamiento, incluso los carnívoros lo aprobaron.)',
             proofRestaurants: 'Restaurantes',
@@ -112,18 +112,19 @@ export default {
             button: 'Buscar',
         },
         impact: {
-            badge: 'Los números no mienten',
-            lessCO2: 'Menos CO₂',
-            lessWater: 'Menos agua',
-            animalsHarmed: 'Animales dañados',
+            badge: 'Vale, un momento serio.',
+            badgeSubtitle: '(No te preocupes, solo 30 segundos, luego volvemos a ser graciosos.)',
+            lessCO2: 'menos CO₂',
+            lessWater: 'menos agua',
+            animalsHarmed: 'Animales',
             vsCow: 'vs. ternera',
-            ever: 'nunca',
+            ever: 'cero, nada, ninguno',
             tagline: 'Mismo sabor. Mejor para el planeta.',
-            source: 'Análisis del ciclo de vida verificado por investigadores independientes',
-            seeHow: 'Descubre cómo',
-            co2Context: 'Eso equivale a unos 12 viajes en coche de Zúrich a Berna. Por paquete.',
-            waterContext: 'Suficiente para ducharte 47 veces. No es que debas ducharte menos.',
-            animalsContext: 'Suena simple. Lo es. Sin notas al pie ocultas.',
+            source: 'Fuente: Análisis del ciclo de vida independiente. No nos lo inventamos.',
+            seeHow: 'Lee el análisis completo',
+            co2Context: 'Eso equivale a unos 12 viajes en coche de Zúrich a Berna. Por paquete. Lo calcularon científicos, no nosotros.',
+            waterContext: 'Suficiente para ducharte 47 veces. No es que debas ducharte menos. Por favor.',
+            animalsContext: 'Suena simple. Lo es. Sin notas ocultas. Prometido.',
         },
         business: {
             badge: 'Para empresas',
@@ -432,13 +433,19 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Mantente informado',
-        subtitle: '¿Con hambre de más?',
-        description: 'Recibe recetas, novedades de productos y ofertas exclusivas. Prometemos ser sabrosos, no spam.',
-        placeholder: 'Tu dirección de email',
-        button: 'Suscribirse',
+        title: 'Newsletter',
+        subtitle: 'Vale, aquí viene la suscripción al newsletter.',
+        description: 'Ya sabes cómo funciona. Te pedimos tu email. Tú te preguntas si te vamos a spamear.',
+        placeholder: 'tu@email.es',
+        button: 'Me apunto',
         consent: 'Acepto recibir emails de marketing.',
-        success: '¡Gracias por suscribirte!',
+        success: 'Bienvenido a bordo! Estamos contentos.',
+        promiseTitle: 'Nuestra promesa:',
+        promiseRecipes: 'Recetas que realmente funcionan',
+        promiseProducts: 'Nuevos productos antes que nadie',
+        promiseJokes: 'De vez en cuando un chiste malo',
+        promiseNoSpam: 'Nada de emails diarios. Tenemos otras cosas que hacer.',
+        finePrint: 'Puedes darte de baja en cualquier momento. Lloraremos en silencio, pero te dejaremos en paz.',
     },
 
     // Countries (for dropdowns and localization)

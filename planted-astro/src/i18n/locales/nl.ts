@@ -16,9 +16,9 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'De Toekomst van Vlees',
-            subtitle: 'Plantaardig. Swiss-made. Ongelofelijk lekker.',
-            cta: 'Ontdek producten',
+            title: 'Wij maken vlees.',
+            subtitle: 'Gewoon zonder het dier.',
+            cta: 'Waar vind ik het?',
             badge: 'B Corp gecertificeerd',
             whisper: '(Klinkt makkelijk. Maar na 6 jaar sleutelen hebben zelfs vleesliefhebbers het goedgekeurd.)',
             proofRestaurants: 'Restaurants',
@@ -112,18 +112,19 @@ export default {
             button: 'Zoeken',
         },
         impact: {
-            badge: 'De cijfers liegen niet',
-            lessCO2: 'Minder CO₂',
-            lessWater: 'Minder water',
-            animalsHarmed: 'Dieren geschaad',
+            badge: 'Oké, even serieus.',
+            badgeSubtitle: '(Geen zorgen, maar 30 seconden, dan zijn we weer grappig.)',
+            lessCO2: 'minder CO₂',
+            lessWater: 'minder water',
+            animalsHarmed: 'Dieren',
             vsCow: 'vs. rundvlees',
-            ever: 'ooit',
+            ever: 'nul, nada, geen',
             tagline: 'Dezelfde smaak. Beter voor de planeet.',
-            source: 'Levenscyclusanalyse geverifieerd door onafhankelijke onderzoekers',
-            seeHow: 'Ontdek hoe',
-            co2Context: 'Dat is ongeveer 12 autoritten van Zürich naar Bern. Per verpakking.',
-            waterContext: 'Genoeg om 47 keer te douchen. Niet dat je minder zou moeten douchen.',
-            animalsContext: 'Klinkt simpel. Is het ook. Geen verborgen voetnoten.',
+            source: 'Bron: Onafhankelijke levenscyclusanalyse. We hebben dit niet verzonnen.',
+            seeHow: 'Lees de hele nerdy analyse',
+            co2Context: 'Dat is ongeveer 12 autoritten van Zürich naar Bern. Per verpakking. Wetenschappers hebben dit berekend, niet wij.',
+            waterContext: 'Genoeg om 47 keer te douchen. Niet dat je minder zou moeten douchen. Alsjeblieft niet.',
+            animalsContext: 'Klinkt simpel. Is het ook. Geen verborgen voetnoten. Beloofd.',
         },
         business: {
             badge: 'Voor bedrijven',
@@ -432,13 +433,19 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Blijf op de hoogte',
-        subtitle: 'Honger naar meer?',
-        description: 'Ontvang recepten, productnieuws en exclusieve aanbiedingen. We beloven lekker te zijn, niet spammy.',
-        placeholder: 'Je e-mailadres',
-        button: 'Aanmelden',
+        title: 'Nieuwsbrief',
+        subtitle: 'Oké, hier komt de nieuwsbrief-aanmelding.',
+        description: 'Je weet hoe dit werkt. We vragen je e-mail. Jij vraagt je af of we je gaan spammen.',
+        placeholder: 'jouw@email.nl',
+        button: 'Ik doe mee',
         consent: 'Ik ga akkoord met het ontvangen van marketing e-mails.',
-        success: 'Bedankt voor je aanmelding!',
+        success: 'Welkom aan boord! We zijn blij.',
+        promiseTitle: 'Onze belofte:',
+        promiseRecipes: 'Recepten die echt werken',
+        promiseProducts: 'Nieuwe producten voor ze in de winkel liggen',
+        promiseJokes: 'Af en toe een slechte grap',
+        promiseNoSpam: 'Geen dagelijkse e-mails. We hebben ook andere dingen te doen.',
+        finePrint: 'Je kunt je altijd afmelden. We zullen stilletjes huilen, maar we laten je met rust.',
     },
 
     // Countries (for dropdowns and localization)

@@ -16,9 +16,9 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'The Future of Meat',
-            subtitle: 'Plant-based. Swiss-made. Incredibly delicious.',
-            cta: 'Explore Products',
+            title: 'We make meat.',
+            subtitle: 'Just without the animal.',
+            cta: 'Where can I get it?',
             badge: 'B Corp Certified',
             whisper: '(Sounds easy. But after 6 years of tinkering, even meat lovers approved.)',
             proofRestaurants: 'Restaurants',
@@ -112,18 +112,19 @@ export default {
             button: 'Search',
         },
         impact: {
-            badge: 'The numbers don\'t lie',
-            lessCO2: 'Less CO₂',
-            lessWater: 'Less Water',
-            animalsHarmed: 'Animals Harmed',
+            badge: 'Okay, time to get serious for a moment.',
+            badgeSubtitle: '(Don\'t worry, just 30 seconds, then we\'ll be funny again.)',
+            lessCO2: 'less CO₂',
+            lessWater: 'less water',
+            animalsHarmed: 'Animals',
             vsCow: 'vs. beef',
-            ever: 'ever',
+            ever: 'zero, zilch, none',
             tagline: 'Same taste. Better for the planet.',
-            source: 'Life Cycle Assessment verified by independent researchers',
-            seeHow: 'See how we do it',
-            co2Context: 'That\'s about 12 car trips from Zurich to Bern. Per package.',
-            waterContext: 'Enough to shower 47 times. Not that you should shower less.',
-            animalsContext: 'Sounds simple. It is. No hidden footnotes.',
+            source: 'Source: Independent Life Cycle Assessment. We didn\'t make this up.',
+            seeHow: 'Read the whole nerdy analysis',
+            co2Context: 'That\'s about 12 car trips from Zurich to Bern. Per package. Scientists calculated this, not us.',
+            waterContext: 'Enough to shower 47 times. Not that you should shower less. Please don\'t.',
+            animalsContext: 'Sounds simple. It is. No hidden footnotes. Promise.',
         },
         business: {
             badge: 'For Business',
@@ -548,13 +549,19 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Stay in the loop',
-        subtitle: 'Hungry for more?',
-        description: 'Get recipes, product news, and exclusive offers. We promise to keep it tasty, not spammy.',
-        placeholder: 'Your email address',
-        button: 'Subscribe',
+        title: 'Newsletter',
+        subtitle: 'Okay, here comes the newsletter signup.',
+        description: 'You know how this works. We ask for your email. You wonder if we\'ll spam you.',
+        placeholder: 'your@email.com',
+        button: 'I\'m in',
         consent: 'I agree to receive marketing emails.',
-        success: 'Thanks for subscribing!',
+        success: 'Welcome aboard! We\'re excited.',
+        promiseTitle: 'Our promise:',
+        promiseRecipes: 'Recipes that actually work',
+        promiseProducts: 'New products before they hit the shelves',
+        promiseJokes: 'Occasional bad jokes',
+        promiseNoSpam: 'No daily emails. We have other things to do.',
+        finePrint: 'You can unsubscribe anytime. We\'ll cry quietly, but we\'ll leave you alone.',
     },
 
     // Countries (for dropdowns and localization)

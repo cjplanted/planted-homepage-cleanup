@@ -16,9 +16,9 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'Il Futuro della Carne',
-            subtitle: 'A base vegetale. Swiss-made. Incredibilmente delizioso.',
-            cta: 'Scopri i prodotti',
+            title: 'Facciamo carne.',
+            subtitle: 'Solo senza l\'animale.',
+            cta: 'Dove la trovo?',
             badge: 'Certificato B Corp',
             whisper: '(Sembra facile. Ma dopo 6 anni di perfezionamento, anche i carnivori hanno approvato.)',
             proofRestaurants: 'Ristoranti',
@@ -112,18 +112,19 @@ export default {
             button: 'Cerca',
         },
         impact: {
-            badge: 'I numeri non mentono',
-            lessCO2: 'Meno CO₂',
-            lessWater: 'Meno acqua',
-            animalsHarmed: 'Animali feriti',
+            badge: 'OK, diventiamo seri per un momento.',
+            badgeSubtitle: '(Tranquilli, solo 30 secondi, poi torniamo simpatici.)',
+            lessCO2: 'di CO₂ in meno',
+            lessWater: 'di acqua in meno',
+            animalsHarmed: 'Animali',
             vsCow: 'vs. manzo',
-            ever: 'mai',
+            ever: 'zero, niente, nada',
             tagline: 'Stesso gusto. Meglio per il pianeta.',
-            source: 'Analisi del ciclo di vita verificata da ricercatori indipendenti',
-            seeHow: 'Scopri come',
-            co2Context: 'Equivale a circa 12 viaggi in auto da Zurigo a Berna. Per confezione.',
-            waterContext: 'Abbastanza per 47 docce. Non che tu debba fare meno docce.',
-            animalsContext: 'Sembra semplice. Lo è. Nessuna nota nascosta.',
+            source: 'Fonte: Analisi del ciclo di vita indipendente. Non l\'abbiamo inventata noi.',
+            seeHow: 'Leggi l\'analisi completa',
+            co2Context: 'Equivale a circa 12 viaggi in auto da Zurigo a Berna. Per confezione. L\'hanno calcolato gli scienziati, non noi.',
+            waterContext: 'Abbastanza per 47 docce. Non che tu debba fare meno docce. Per favore.',
+            animalsContext: 'Sembra semplice. Lo è. Nessuna nota nascosta. Promesso.',
         },
         business: {
             badge: 'Per le aziende',
@@ -432,13 +433,19 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Resta aggiornato',
-        subtitle: 'Vuoi saperne di più?',
-        description: 'Ricevi ricette, novità sui prodotti e offerte esclusive. Promettiamo di essere gustosi, non spam.',
-        placeholder: 'Il tuo indirizzo email',
-        button: 'Iscriviti',
+        title: 'Newsletter',
+        subtitle: 'OK, ecco l\'iscrizione alla newsletter.',
+        description: 'Sai come funziona. Ti chiediamo l\'email. Tu ti chiedi se ti spammeremo.',
+        placeholder: 'la@tua.email.it',
+        button: 'Ci sto',
         consent: 'Accetto di ricevere email di marketing.',
-        success: 'Grazie per l\'iscrizione!',
+        success: 'Benvenuto a bordo! Siamo felici.',
+        promiseTitle: 'La nostra promessa:',
+        promiseRecipes: 'Ricette che funzionano davvero',
+        promiseProducts: 'Nuovi prodotti prima di tutti',
+        promiseJokes: 'Ogni tanto una battuta pessima',
+        promiseNoSpam: 'Niente email quotidiane. Abbiamo altro da fare.',
+        finePrint: 'Puoi cancellarti in qualsiasi momento. Piangeremo in silenzio, ma ti lasceremo in pace.',
     },
 
     // Countries (for dropdowns and localization)

@@ -16,9 +16,9 @@ export default {
     // Home page
     home: {
         hero: {
-            title: 'Le Futur de la Viande',
-            subtitle: 'À base de plantes. Swiss-made. Incroyablement délicieux.',
-            cta: 'Découvrir nos produits',
+            title: 'On fait de la viande.',
+            subtitle: 'Juste sans l\'animal.',
+            cta: 'Où la trouver ?',
             badge: 'Certifié B Corp',
             whisper: '(Ça semble simple. Mais après 6 ans de perfectionnement, même les carnivores ont approuvé.)',
             proofRestaurants: 'Restaurants',
@@ -112,18 +112,19 @@ export default {
             button: 'Rechercher',
         },
         impact: {
-            badge: 'Les chiffres ne mentent pas',
-            lessCO2: 'Moins de CO₂',
-            lessWater: 'Moins d\'eau',
-            animalsHarmed: 'Animaux blessés',
+            badge: 'OK, on devient sérieux un instant.',
+            badgeSubtitle: '(Pas d\'inquiétude, juste 30 secondes, et on redevient drôles.)',
+            lessCO2: 'de CO₂ en moins',
+            lessWater: 'd\'eau en moins',
+            animalsHarmed: 'Animaux',
             vsCow: 'vs. bœuf',
-            ever: 'jamais',
+            ever: 'zéro, nada, aucun',
             tagline: 'Même goût. Meilleur pour la planète.',
-            source: 'Analyse du cycle de vie vérifiée par des chercheurs indépendants',
-            seeHow: 'Découvrez comment',
-            co2Context: 'Cela équivaut à environ 12 trajets en voiture de Zurich à Berne. Par paquet.',
-            waterContext: 'Assez pour prendre 47 douches. Pas que vous devriez moins vous doucher.',
-            animalsContext: 'Ça semble simple. Ça l\'est. Pas de notes de bas de page cachées.',
+            source: 'Source : Analyse du cycle de vie indépendante. On n\'a pas inventé ça.',
+            seeHow: 'Lire l\'analyse complète',
+            co2Context: 'Cela équivaut à environ 12 trajets en voiture de Zurich à Berne. Par paquet. Des scientifiques l\'ont calculé, pas nous.',
+            waterContext: 'Assez pour prendre 47 douches. Pas que vous devriez moins vous doucher. S\'il vous plaît.',
+            animalsContext: 'Ça semble simple. Ça l\'est. Pas de notes cachées. Promis.',
         },
         business: {
             badge: 'Pour les entreprises',
@@ -432,13 +433,19 @@ export default {
 
     // Newsletter Signup component
     newsletter: {
-        title: 'Restez informé',
-        subtitle: 'Envie d\'en savoir plus ?',
-        description: 'Recevez des recettes, des nouveautés produits et des offres exclusives. Promis, on reste gourmand, pas spammeur.',
-        placeholder: 'Votre adresse e-mail',
-        button: 'S\'abonner',
+        title: 'Newsletter',
+        subtitle: 'OK, voici l\'inscription à la newsletter.',
+        description: 'Vous connaissez le principe. On demande votre e-mail. Vous vous demandez si on va vous spammer.',
+        placeholder: 'votre@email.fr',
+        button: 'J\'en suis',
         consent: 'J\'accepte de recevoir des e-mails marketing.',
-        success: 'Merci pour votre inscription !',
+        success: 'Bienvenue à bord ! On est ravis.',
+        promiseTitle: 'Notre promesse :',
+        promiseRecipes: 'Des recettes qui marchent vraiment',
+        promiseProducts: 'Les nouveaux produits avant tout le monde',
+        promiseJokes: 'De temps en temps une blague nulle',
+        promiseNoSpam: 'Pas d\'e-mails quotidiens. On a autre chose à faire.',
+        finePrint: 'Vous pouvez vous désabonner à tout moment. On pleurera en silence, mais on vous laissera tranquille.',
     },
 
     // Countries (for dropdowns and localization)
