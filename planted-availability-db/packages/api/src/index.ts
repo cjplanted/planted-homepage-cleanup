@@ -29,6 +29,34 @@ export {
   adminCircuitBreakersHandler as adminCircuitBreakers,
   adminScrapersHandler as adminScrapers,
   adminSyncHandler as adminSync,
+  // Health check (no auth - for testing)
+  adminHealthCheckHandler as adminHealthCheck,
+  // Review workflow endpoints
+  adminReviewQueueHandler as adminReviewQueue,
+  adminApproveVenueHandler as adminApproveVenue,
+  adminPartialApproveVenueHandler as adminPartialApproveVenue,
+  adminRejectVenueHandler as adminRejectVenue,
+  adminBulkApproveHandler as adminBulkApprove,
+  adminBulkRejectHandler as adminBulkReject,
+  // Feedback endpoints
+  adminFeedbackSubmitHandler as adminFeedbackSubmit,
+  adminFeedbackProcessHandler as adminFeedbackProcess,
+  // Scraper control endpoints
+  adminStartDiscoveryHandler as adminStartDiscovery,
+  adminStartExtractionHandler as adminStartExtraction,
+  adminScraperStreamHandler as adminScraperStream,
+  adminCancelScraperHandler as adminCancelScraper,
+  adminAvailableScrapersHandler as adminAvailableScrapers,
+  // Sync endpoints
+  adminSyncPreviewHandler as adminSyncPreview,
+  adminSyncExecuteHandler as adminSyncExecute,
+  adminSyncHistoryHandler as adminSyncHistory,
+  // Analytics endpoints
+  adminAnalyticsKpisHandler as adminAnalyticsKpis,
+  adminAnalyticsCostsHandler as adminAnalyticsCosts,
+  adminAnalyticsRejectionsHandler as adminAnalyticsRejections,
+  // Budget endpoints
+  adminBudgetStatusHandler as adminBudgetStatus,
 } from './functions/admin/index.js';
 
 // Partner API endpoints

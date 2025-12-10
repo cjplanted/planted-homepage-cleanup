@@ -4,3 +4,4 @@ export * from './rateLimit.js';
 export * from './withRateLimit.js';
 export * from './auth.js';
 export * from './partnerAuth.js';
+export * from './adminHandler.js';
