@@ -55,9 +55,11 @@ export const adminSyncExecuteHandler = createAdminHandler(
     if (syncAll) {
       // Get all verified entities not yet promoted
       const allVerifiedVenues = await discoveredVenues.getByStatus('verified');
+      console.log(`[Sync] Found ${allVerifiedVenues.length} verified venues`);
       venuesToSync = allVerifiedVenues.filter(v => !v.production_venue_id && !v.promoted_at);
+      console.log(`[Sync] ${venuesToSync.length} venues to sync after filtering`);
 
-      const allVerifiedDishes = await discoveredDishes.getByStatus('verified');
+      const allVerifiedDishes = await discoveredDishes.getByStatusUnordered('verified');
       dishesToSync = allVerifiedDishes.filter(d => !d.production_dish_id && !d.promoted_at);
     } else {
       // Get specific entities
