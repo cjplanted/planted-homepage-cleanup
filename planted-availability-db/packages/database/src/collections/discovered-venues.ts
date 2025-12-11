@@ -357,6 +357,23 @@ class DiscoveredVenuesCollection extends BaseCollection<DiscoveredVenueDoc> {
   }
 
   /**
+   * Update venue country
+   */
+  async updateCountry(venueId: string, country: SupportedCountry): Promise<DiscoveredVenueDoc> {
+    const venue = await this.getById(venueId);
+    if (!venue) {
+      throw new Error(`Venue ${venueId} not found`);
+    }
+
+    return this.update(venueId, {
+      address: {
+        ...venue.address,
+        country,
+      },
+    });
+  }
+
+  /**
    * Get venues flagged for a specific purpose, sorted by priority
    */
   async getFlaggedVenues(flagType?: VenueFlagType): Promise<DiscoveredVenueDoc[]> {

@@ -44,6 +44,8 @@ export {
   adminFlagVenueHandler as adminFlagVenue,
   adminClearVenueFlagHandler as adminClearVenueFlag,
   adminFlaggedVenuesHandler as adminFlaggedVenues,
+  // Venue edit endpoints
+  adminUpdateVenueCountryHandler as adminUpdateVenueCountry,
   // Feedback endpoints
   adminFeedbackSubmitHandler as adminFeedbackSubmit,
   adminFeedbackProcessHandler as adminFeedbackProcess,

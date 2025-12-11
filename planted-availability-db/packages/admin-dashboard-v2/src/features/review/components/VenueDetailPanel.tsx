@@ -5,7 +5,8 @@
  * confidence scores, location, and platform links.
  */
 
-import { ExternalLink, MapPin, Clock, Link2 } from 'lucide-react';
+import { useState } from 'react';
+import { ExternalLink, MapPin, Clock, Link2, Pencil, Check, X, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/Card';
 import { Badge } from '@/shared/ui/Badge';
 import { Button } from '@/shared/ui/Button';
@@ -16,7 +17,25 @@ interface VenueDetailPanelProps {
   venue: ReviewVenue;
   className?: string;
   onAssignChain?: () => void;
+  onUpdateCountry?: (venueId: string, country: string) => Promise<void>;
+  isUpdatingCountry?: boolean;
 }
+
+/**
+ * Country options for the selector
+ */
+const COUNTRY_OPTIONS = [
+  { code: 'CH', name: 'Switzerland', emoji: '🇨🇭' },
+  { code: 'DE', name: 'Germany', emoji: '🇩🇪' },
+  { code: 'AT', name: 'Austria', emoji: '🇦🇹' },
+  { code: 'UK', name: 'United Kingdom', emoji: '🇬🇧' },
+  { code: 'FR', name: 'France', emoji: '🇫🇷' },
+  { code: 'IT', name: 'Italy', emoji: '🇮🇹' },
+  { code: 'ES', name: 'Spain', emoji: '🇪🇸' },
+  { code: 'NL', name: 'Netherlands', emoji: '🇳🇱' },
+  { code: 'BE', name: 'Belgium', emoji: '🇧🇪' },
+  { code: 'PL', name: 'Poland', emoji: '🇵🇱' },
+] as const;
 
 /**
  * ConfidenceBar Component
@@ -48,11 +67,34 @@ function ConfidenceBar({ confidence }: { confidence: number }) {
 /**
  * VenueDetailPanel Component
  */
-export function VenueDetailPanel({ venue, className, onAssignChain }: VenueDetailPanelProps) {
+export function VenueDetailPanel({
+  venue,
+  className,
+  onAssignChain,
+  onUpdateCountry,
+  isUpdatingCountry,
+}: VenueDetailPanelProps) {
+  const [isEditingCountry, setIsEditingCountry] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(venue.countryCode);
+
   const formattedDate = new Date(venue.scrapedAt).toLocaleString();
   const mapUrl = venue.coordinates
     ? `https://www.google.com/maps?q=${venue.coordinates.lat},${venue.coordinates.lng}`
     : null;
+
+  const handleCountryChange = async () => {
+    if (!onUpdateCountry || selectedCountry === venue.countryCode) {
+      setIsEditingCountry(false);
+      return;
+    }
+    await onUpdateCountry(venue.id, selectedCountry);
+    setIsEditingCountry(false);
+  };
+
+  const handleCancelEdit = () => {
+    setSelectedCountry(venue.countryCode);
+    setIsEditingCountry(false);
+  };
 
   return (
     <Card className={className}>
@@ -106,9 +148,65 @@ export function VenueDetailPanel({ venue, className, onAssignChain }: VenueDetai
               <span>{venue.address}</span>
             </div>
             <div className="flex items-center gap-2 ml-6">
-              <span>
-                {venue.city}, {COUNTRY_EMOJIS[venue.countryCode] || ''} {venue.country}
-              </span>
+              <span>{venue.city},</span>
+              {isEditingCountry ? (
+                <div className="flex items-center gap-1">
+                  <select
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className={cn(
+                      'h-7 rounded-md border border-input bg-background px-2 py-0.5 text-sm',
+                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                    )}
+                    disabled={isUpdatingCountry}
+                  >
+                    {COUNTRY_OPTIONS.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.emoji} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={handleCountryChange}
+                    disabled={isUpdatingCountry}
+                  >
+                    {isUpdatingCountry ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Check className="h-4 w-4 text-green-600" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={handleCancelEdit}
+                    disabled={isUpdatingCountry}
+                  >
+                    <X className="h-4 w-4 text-red-600" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <span>
+                    {COUNTRY_EMOJIS[venue.countryCode] || ''} {venue.country}
+                  </span>
+                  {onUpdateCountry && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 ml-1"
+                      onClick={() => setIsEditingCountry(true)}
+                      title="Change country"
+                    >
+                      <Pencil className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
             {venue.coordinates && mapUrl && (
               <a

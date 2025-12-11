@@ -3,15 +3,17 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@/test/test-utils';
+import { render, screen, waitFor } from '@/test/test-utils';
 import { VenueDetailPanel } from '../VenueDetailPanel';
 import { mockVenues } from '@/test/mocks/data/venues';
 
 describe('VenueDetailPanel', () => {
   const mockOnAssignChain = vi.fn();
+  const mockOnUpdateCountry = vi.fn();
 
   beforeEach(() => {
     mockOnAssignChain.mockClear();
+    mockOnUpdateCountry.mockClear();
   });
 
   describe('Rendering', () => {
@@ -27,8 +29,9 @@ describe('VenueDetailPanel', () => {
 
     it('should render city and country', () => {
       render(<VenueDetailPanel venue={mockVenues[0]} />);
-      // Look for the specific combined city/country text in location section
-      expect(screen.getByText(/Zurich, 🇨🇭 Switzerland/)).toBeInTheDocument();
+      // City is now separate from country due to editable country feature
+      expect(screen.getByText(/Zurich,/)).toBeInTheDocument();
+      expect(screen.getByText(/🇨🇭 Switzerland/)).toBeInTheDocument();
     });
 
     it('should render venue type badge', () => {
@@ -190,6 +193,131 @@ describe('VenueDetailPanel', () => {
 
       expect(screen.getByText('Rejection Reason')).toBeInTheDocument();
       expect(screen.getByText('Not a planted venue')).toBeInTheDocument();
+    });
+  });
+
+  describe('Country Editing', () => {
+    it('should show edit button when onUpdateCountry is provided', () => {
+      render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+        />
+      );
+
+      // Look for the edit/pencil button
+      const editButton = screen.getByTitle('Change country');
+      expect(editButton).toBeInTheDocument();
+    });
+
+    it('should not show edit button when onUpdateCountry is not provided', () => {
+      render(<VenueDetailPanel venue={mockVenues[0]} />);
+
+      expect(screen.queryByTitle('Change country')).not.toBeInTheDocument();
+    });
+
+    it('should show country selector when edit button is clicked', async () => {
+      const { user } = render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+        />
+      );
+
+      await user.click(screen.getByTitle('Change country'));
+
+      // Country selector should appear
+      const countrySelect = screen.getByRole('combobox');
+      expect(countrySelect).toBeInTheDocument();
+    });
+
+    it('should show confirm and cancel buttons when editing', async () => {
+      const { user } = render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+        />
+      );
+
+      await user.click(screen.getByTitle('Change country'));
+
+      // Should have confirm (check) and cancel (X) buttons
+      expect(screen.getAllByRole('button').length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should call onUpdateCountry when country is changed and confirmed', async () => {
+      mockOnUpdateCountry.mockResolvedValue(undefined);
+
+      const { user } = render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+        />
+      );
+
+      // Click edit button
+      await user.click(screen.getByTitle('Change country'));
+
+      // Change country selection
+      const select = screen.getByRole('combobox');
+      await user.selectOptions(select, 'DE');
+
+      // Click confirm button (the check mark)
+      const buttons = screen.getAllByRole('button');
+      const confirmButton = buttons.find(btn =>
+        btn.querySelector('svg.lucide-check') || btn.querySelector('[class*="text-green"]')
+      );
+      if (confirmButton) {
+        await user.click(confirmButton);
+      }
+
+      await waitFor(() => {
+        expect(mockOnUpdateCountry).toHaveBeenCalledWith(mockVenues[0].id, 'DE');
+      });
+    });
+
+    it('should close selector when cancel button is clicked', async () => {
+      const { user } = render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+        />
+      );
+
+      // Click edit button
+      await user.click(screen.getByTitle('Change country'));
+
+      // Selector should be visible
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
+
+      // Find and click cancel button (the X mark)
+      const buttons = screen.getAllByRole('button');
+      const cancelButton = buttons.find(btn =>
+        btn.querySelector('svg.lucide-x') || btn.querySelector('[class*="text-red"]')
+      );
+      if (cancelButton) {
+        await user.click(cancelButton);
+      }
+
+      // Selector should be hidden
+      expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    });
+
+    it('should show loading state when isUpdatingCountry is true', async () => {
+      const { user } = render(
+        <VenueDetailPanel
+          venue={mockVenues[0]}
+          onUpdateCountry={mockOnUpdateCountry}
+          isUpdatingCountry={true}
+        />
+      );
+
+      // Click edit button to show the selector
+      await user.click(screen.getByTitle('Change country'));
+
+      // Select should be disabled
+      const select = screen.getByRole('combobox');
+      expect(select).toBeDisabled();
     });
   });
 });

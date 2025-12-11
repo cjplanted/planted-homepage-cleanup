@@ -375,3 +375,13 @@ export async function assignChain(params: {
 }): Promise<{ chainId: string; chainName: string; updatedCount: number }> {
   return apiClient.post(API_ENDPOINTS.ASSIGN_CHAIN, params);
 }
+
+/**
+ * Update Venue Country
+ */
+export async function updateVenueCountry(
+  venueId: string,
+  country: string
+): Promise<{ success: boolean; venue: { id: string; name: string; previousCountry: string; country: string } }> {
+  return apiClient.post(API_ENDPOINTS.UPDATE_VENUE_COUNTRY, { venueId, country });
+}

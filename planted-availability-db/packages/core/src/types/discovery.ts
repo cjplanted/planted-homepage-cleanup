@@ -20,6 +20,8 @@ export type DeliveryPlatform =
 
 export type SupportedCountry = 'CH' | 'DE' | 'AT' | 'NL' | 'UK' | 'FR' | 'ES' | 'IT' | 'BE' | 'PL';
 
+export const SUPPORTED_COUNTRIES: readonly SupportedCountry[] = ['CH', 'DE', 'AT', 'NL', 'UK', 'FR', 'ES', 'IT', 'BE', 'PL'] as const;
+
 export const PLATFORM_COUNTRIES: Record<DeliveryPlatform, SupportedCountry[]> = {
   'uber-eats': ['CH', 'DE', 'AT', 'NL', 'UK', 'FR', 'ES', 'IT', 'BE', 'PL'],
   'just-eat': ['CH', 'NL', 'UK', 'FR', 'ES', 'IT', 'BE', 'PL'],

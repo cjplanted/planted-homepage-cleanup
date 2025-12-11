@@ -249,4 +249,49 @@ export const reviewHandlers = [
       updatedCount: body.venueIds.length,
     });
   }),
+
+  // Update venue country
+  http.post('*/adminUpdateVenueCountry', async ({ request }) => {
+    const body = await request.json() as { venueId: string; country: string };
+    const validCountries = ['CH', 'DE', 'AT', 'NL', 'UK', 'FR', 'ES', 'IT', 'BE', 'PL'];
+
+    // Validate venue ID
+    if (!body.venueId || body.venueId.trim() === '') {
+      return new HttpResponse(
+        JSON.stringify({ error: 'Invalid request body', details: [{ message: 'venueId is required' }] }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate country
+    if (!validCountries.includes(body.country)) {
+      return new HttpResponse(
+        JSON.stringify({ error: 'Invalid request body', details: [{ message: 'Invalid country code' }] }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Find venue to get previous country
+    const venue = mockVenues.find(v => v.id === body.venueId);
+    const previousCountry = venue?.country || 'CH';
+
+    // Simulate "country unchanged" error
+    if (previousCountry === body.country) {
+      return new HttpResponse(
+        JSON.stringify({ error: 'Country unchanged', message: 'The venue already has this country' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    return HttpResponse.json({
+      success: true,
+      message: 'Venue country updated successfully',
+      venue: {
+        id: body.venueId,
+        name: venue?.name || 'Test Venue',
+        previousCountry,
+        country: body.country,
+      },
+    });
+  }),
 ];

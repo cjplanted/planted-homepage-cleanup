@@ -61,6 +61,9 @@ export const API_ENDPOINTS = {
   // Chain management
   ASSIGN_CHAIN: '/adminAssignChain',
   LIST_CHAINS: '/adminChains',
+
+  // Venue edit
+  UPDATE_VENUE_COUNTRY: '/adminUpdateVenueCountry',
 } as const;
 
 /**

@@ -15,6 +15,7 @@ import {
   bulkRejectVenues,
   getChains,
   assignChain,
+  updateVenueCountry,
 } from '../reviewApi';
 
 // Mock firebase auth
@@ -230,6 +231,32 @@ describe('Review API', () => {
       response.items.forEach(item => {
         expect(['pending', 'verified', 'rejected']).toContain(item.status);
       });
+    });
+  });
+
+  describe('updateVenueCountry', () => {
+    it('should update venue country successfully', async () => {
+      const result = await updateVenueCountry('venue-1', 'DE');
+
+      expect(result).toBeDefined();
+      expect(result.success).toBe(true);
+      expect(result.venue.id).toBe('venue-1');
+      expect(result.venue.country).toBe('DE');
+    });
+
+    it('should return previous and new country', async () => {
+      const result = await updateVenueCountry('venue-1', 'AT');
+
+      expect(result.venue.previousCountry).toBeDefined();
+      expect(result.venue.country).toBe('AT');
+    });
+
+    it('should reject invalid country codes', async () => {
+      await expect(updateVenueCountry('venue-1', 'INVALID')).rejects.toThrow();
+    });
+
+    it('should reject empty venue ID', async () => {
+      await expect(updateVenueCountry('', 'DE')).rejects.toThrow();
     });
   });
 });

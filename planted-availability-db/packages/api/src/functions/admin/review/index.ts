@@ -8,3 +8,4 @@ export {
   adminClearVenueFlagHandler,
   adminFlaggedVenuesHandler,
 } from './flag.js';
+export { adminUpdateVenueCountryHandler } from './updateCountry.js';

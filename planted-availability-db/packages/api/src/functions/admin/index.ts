@@ -55,6 +55,7 @@ export {
   adminFlagVenueHandler,
   adminClearVenueFlagHandler,
   adminFlaggedVenuesHandler,
+  adminUpdateVenueCountryHandler,
 } from './review/index.js';
 
 export {
