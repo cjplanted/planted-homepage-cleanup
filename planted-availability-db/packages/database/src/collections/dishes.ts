@@ -14,32 +14,85 @@ export interface DishQueryOptions extends QueryOptions {
 export class DishesCollection extends BaseCollection<Dish> {
   protected collectionName = 'dishes';
 
+  /**
+   * Parse price from various formats (legacy string or object)
+   */
+  private parsePrice(price: unknown): { amount: number; currency: string } {
+    // Already an object with correct shape
+    if (price && typeof price === 'object' && 'amount' in price && 'currency' in price) {
+      return price as { amount: number; currency: string };
+    }
+
+    // Legacy string format: "CHF 18.90" or "18.90"
+    if (typeof price === 'string') {
+      const match = price.match(/([A-Z]{3}|[€$£])?\s*(\d+(?:[.,]\d+)?)/);
+      if (match) {
+        const amount = parseFloat(match[2].replace(',', '.'));
+        let currency = 'CHF';
+        if (match[1]) {
+          const symbolMap: Record<string, string> = { '€': 'EUR', '$': 'USD', '£': 'GBP' };
+          currency = symbolMap[match[1]] || match[1];
+        }
+        return { amount: isNaN(amount) ? 0 : amount, currency };
+      }
+    }
+
+    // Fallback
+    return { amount: 0, currency: 'CHF' };
+  }
+
   protected fromFirestore(doc: QueryDocumentSnapshot): Dish {
     const data = doc.data();
+
+    // Handle both old (product_sku) and new (planted_products) schemas
+    let plantedProducts: string[] = [];
+    if (data.planted_products && Array.isArray(data.planted_products)) {
+      plantedProducts = data.planted_products;
+    } else if (data.product_sku) {
+      // Legacy single product_sku field
+      plantedProducts = [data.product_sku];
+    }
+
+    // Handle availability with sensible default
+    const availability = data.availability || { type: 'permanent' as const };
+
+    // Handle source with default
+    const source = data.source || { type: 'discovered' as const, partner_id: 'unknown' };
+
+    // Handle last_verified - may be missing in legacy data
+    let lastVerified: Date;
+    if (data.last_verified) {
+      lastVerified = timestampToDate(data.last_verified);
+    } else if (data.created_at) {
+      lastVerified = timestampToDate(data.created_at);
+    } else {
+      lastVerified = new Date();
+    }
+
     return {
       id: doc.id,
       venue_id: data.venue_id,
-      name: data.name,
+      name: data.name || '',
       name_localized: data.name_localized,
-      description: data.description,
+      description: data.description || '',
       description_localized: data.description_localized,
-      planted_products: data.planted_products,
-      price: data.price,
+      planted_products: plantedProducts,
+      price: this.parsePrice(data.price),
       image_url: data.image_url,
       image_source: data.image_source,
       dietary_tags: data.dietary_tags || [],
-      cuisine_type: data.cuisine_type,
+      cuisine_type: data.cuisine_type || data.category, // Support legacy 'category' field
       availability: {
-        ...data.availability,
-        start_date: data.availability?.start_date ? timestampToDate(data.availability.start_date) : undefined,
-        end_date: data.availability?.end_date ? timestampToDate(data.availability.end_date) : undefined,
+        ...availability,
+        start_date: availability?.start_date ? timestampToDate(availability.start_date) : undefined,
+        end_date: availability?.end_date ? timestampToDate(availability.end_date) : undefined,
       },
       delivery_partners: data.delivery_partners,
-      source: data.source,
-      last_verified: timestampToDate(data.last_verified),
-      status: data.status,
-      created_at: timestampToDate(data.created_at),
-      updated_at: timestampToDate(data.updated_at),
+      source: source,
+      last_verified: lastVerified,
+      status: data.status || 'active',
+      created_at: data.created_at ? timestampToDate(data.created_at) : new Date(),
+      updated_at: data.updated_at ? timestampToDate(data.updated_at) : new Date(),
     };
   }
 

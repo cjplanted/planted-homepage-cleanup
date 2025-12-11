@@ -69,6 +69,10 @@ export {
   adminStrategyStatsHandler as adminStrategyStats,
   // Budget endpoints
   adminBudgetStatusHandler as adminBudgetStatus,
+  // Live venues browser endpoints
+  adminLiveVenuesHandler as adminLiveVenues,
+  adminUpdateVenueStatusHandler as adminUpdateVenueStatus,
+  adminVenueDishesHandler as adminVenueDishes,
 } from './functions/admin/index.js';
 
 // Partner API endpoints

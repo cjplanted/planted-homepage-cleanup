@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/app/providers/AuthProvider';
 import { cn } from '@/lib/utils';
-import { LogOut, CheckCircle, Globe, BarChart3 } from 'lucide-react';
+import { LogOut, CheckCircle, Globe, BarChart3, MapPin } from 'lucide-react';
 import { Button } from '@/shared/ui/Button';
 
 interface MainLayoutProps {
@@ -11,7 +11,8 @@ interface MainLayoutProps {
 
 const tabs = [
   { path: '/', label: 'Approve Queue', icon: CheckCircle },
-  { path: '/live', label: 'Live Website', icon: Globe },
+  { path: '/live-venues', label: 'Live Venues', icon: MapPin },
+  { path: '/live', label: 'Sync', icon: Globe },
   { path: '/stats', label: 'Stats', icon: BarChart3 },
 ];
 

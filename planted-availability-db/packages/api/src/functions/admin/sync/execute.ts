@@ -24,6 +24,44 @@ import type { SyncErrorRecord } from '@pad/database';
 // Initialize Firestore
 initializeFirestore();
 
+/**
+ * Parse price string to Price object
+ * Handles formats: "CHF 18.90", "18.90", "€15.99"
+ */
+function parsePrice(priceStr: string | undefined, currency: string | undefined): { amount: number; currency: string } {
+  if (!priceStr) return { amount: 0, currency: currency || 'CHF' };
+
+  // Handle already-number prices
+  if (typeof priceStr === 'number') {
+    return { amount: priceStr, currency: currency || 'CHF' };
+  }
+
+  // Parse "CHF 18.90" or "18.90" or "€15.99" format
+  const match = priceStr.match(/([A-Z]{3}|[€$£])?\s*(\d+(?:[.,]\d+)?)/);
+  if (match) {
+    const amount = parseFloat(match[2].replace(',', '.'));
+    let curr = currency || 'CHF';
+    if (match[1]) {
+      // Map symbols to currency codes
+      const symbolMap: Record<string, string> = { '€': 'EUR', '$': 'USD', '£': 'GBP' };
+      curr = symbolMap[match[1]] || match[1];
+    }
+    return { amount: isNaN(amount) ? 0 : amount, currency: curr };
+  }
+  return { amount: 0, currency: currency || 'CHF' };
+}
+
+/**
+ * Parse price from country price map
+ */
+function parsePriceFromCountryMap(priceByCountry: Record<string, string> | undefined): { amount: number; currency: string } {
+  if (!priceByCountry || Object.keys(priceByCountry).length === 0) {
+    return { amount: 0, currency: 'CHF' };
+  }
+  const firstPrice = Object.values(priceByCountry)[0];
+  return parsePrice(firstPrice, undefined);
+}
+
 // Validation schema for execute request body
 const executeBodySchema = z.object({
   venueIds: z.array(z.string()).optional(),
@@ -148,21 +186,23 @@ export const adminSyncExecuteHandler = createAdminHandler(
           if (discoveredVenue.dishes && discoveredVenue.dishes.length > 0) {
             for (const embeddedDish of discoveredVenue.dishes) {
               const dishRef = db.collection('dishes').doc();
+              // Use correct Dish schema with planted_products array and price object
               const productionDish = {
                 venue_id: venueRef.id,
                 name: embeddedDish.name,
                 description: embeddedDish.description || '',
-                category: embeddedDish.category || 'main',
-                product_sku: embeddedDish.planted_product || embeddedDish.product_sku || '',
-                is_vegan: embeddedDish.is_vegan ?? true,
+                planted_products: [embeddedDish.planted_product || embeddedDish.product_sku || 'planted.chicken'],
+                price: parsePrice(embeddedDish.price, embeddedDish.currency),
                 dietary_tags: embeddedDish.dietary_tags || [],
-                price: embeddedDish.price || '',
-                image_url: embeddedDish.image_url || '',
+                cuisine_type: embeddedDish.category || undefined,
+                availability: { type: 'permanent' as const },
+                image_url: embeddedDish.image_url || undefined,
                 source: {
                   type: 'discovered' as const,
                   partner_id: 'smart-discovery-agent',
                 },
                 status: 'active' as const,
+                last_verified: new Date(),
                 created_at: new Date(),
                 updated_at: new Date(),
               };
@@ -197,28 +237,44 @@ export const adminSyncExecuteHandler = createAdminHandler(
       }
     }
 
-    // Sync dishes
+    // Sync dishes - need to look up production venue ID for each dish
     for (const discoveredDish of dishesToSync) {
       try {
+        // Look up the discovered venue to get the production venue ID
+        const discoveredVenue = await discoveredVenues.getById(discoveredDish.venue_id);
+        const productionVenueId = discoveredVenue?.production_venue_id;
+
+        if (!productionVenueId) {
+          // Skip dish - its venue hasn't been promoted yet
+          errors.push({
+            entityId: discoveredDish.id,
+            entityType: 'dish',
+            error: `Venue ${discoveredDish.venue_id} not yet promoted to production`,
+          });
+          console.warn(`Skipping dish ${discoveredDish.name}: venue not yet promoted`);
+          continue;
+        }
+
         // Use a transaction to ensure atomicity
         await db.runTransaction(async (transaction) => {
-          // Create production dish
+          // Create production dish with correct schema
           const dishRef = db.collection('dishes').doc();
           const productionDish = {
-            venue_id: discoveredDish.production_dish_id || discoveredDish.venue_id,
+            venue_id: productionVenueId,  // Use production venue ID, not discovered venue ID
             name: discoveredDish.name,
-            description: discoveredDish.description,
-            category: discoveredDish.category,
-            product_sku: discoveredDish.planted_product,
-            is_vegan: discoveredDish.is_vegan,
-            dietary_tags: discoveredDish.dietary_tags,
-            price: Object.values(discoveredDish.price_by_country)[0] || '',
-            image_url: discoveredDish.image_url,
+            description: discoveredDish.description || '',
+            planted_products: [discoveredDish.planted_product || 'planted.chicken'],
+            price: parsePriceFromCountryMap(discoveredDish.price_by_country),
+            dietary_tags: discoveredDish.dietary_tags || [],
+            cuisine_type: discoveredDish.category || undefined,
+            availability: { type: 'permanent' as const },
+            image_url: discoveredDish.image_url || undefined,
             source: {
               type: 'discovered' as const,
               partner_id: 'smart-discovery-agent',
             },
             status: 'active' as const,
+            last_verified: new Date(),
             created_at: new Date(),
             updated_at: new Date(),
           };

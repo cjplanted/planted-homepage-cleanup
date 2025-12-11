@@ -7,6 +7,7 @@ import { LoadingState } from '@/shared/components/LoadingState';
 import { LoginPage } from '@/pages/LoginPage';
 import { ReviewQueuePage } from '@/pages/ReviewQueuePage';
 import { LiveWebsitePage } from '@/pages/LiveWebsitePage';
+import { LiveVenuesPage } from '@/pages/LiveVenuesPage';
 import { StatsPage } from '@/pages/StatsPage';
 
 /**
@@ -83,6 +84,16 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <LiveWebsitePage />
+      </ProtectedRoute>
+    ),
+  },
+
+  // Live Venues Browser
+  {
+    path: '/live-venues',
+    element: (
+      <ProtectedRoute>
+        <LiveVenuesPage />
       </ProtectedRoute>
     ),
   },

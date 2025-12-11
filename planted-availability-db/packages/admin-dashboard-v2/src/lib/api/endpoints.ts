@@ -68,6 +68,11 @@ export const API_ENDPOINTS = {
 
   // Dish status
   UPDATE_DISH_STATUS: '/adminUpdateDishStatus',
+
+  // Live venues browser
+  LIVE_VENUES: '/adminLiveVenues',
+  UPDATE_VENUE_STATUS: '/adminUpdateVenueStatus',
+  VENUE_DISHES: '/adminVenueDishes',
 } as const;
 
 /**

@@ -2,3 +2,4 @@
 export * from './venues';
 export * from './sync';
 export * from './scraping';
+export * from './liveVenues';

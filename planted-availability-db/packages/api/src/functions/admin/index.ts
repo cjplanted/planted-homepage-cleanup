@@ -79,3 +79,10 @@ export { adminBudgetStatusHandler } from './budget/index.js';
 
 // Health check (no auth required - for testing/monitoring)
 export { adminHealthCheckHandler } from './healthCheck.js';
+
+// Live venues browser endpoints
+export {
+  adminLiveVenuesHandler,
+  adminUpdateVenueStatusHandler,
+  adminVenueDishesHandler,
+} from './live-venues/index.js';
