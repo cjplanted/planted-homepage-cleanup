@@ -1059,7 +1059,7 @@ planted-availability-db/
 │   │   │       └── monitor.ts
 │   │   └── package.json
 │   │
-│   ├── admin-dashboard/           # React admin UI
+│   ├── admin-dashboard-v2/        # React admin UI
 │   │   ├── src/
 │   │   │   ├── components/
 │   │   │   ├── pages/
@@ -1272,7 +1272,7 @@ firebase init
 # Region: europe-west6 (Zurich)
 
 # Create packages
-mkdir -p packages/{core,database,api,scrapers,admin-dashboard,client-sdk}
+mkdir -p packages/{core,database,api,scrapers,admin-dashboard-v2,client-sdk}
 
 # Initialize core package
 cd packages/core
@@ -1302,7 +1302,7 @@ When working with Claude Code, structure prompts by phase and component:
 ```
 
 ```
-"Build the admin dashboard in packages/admin-dashboard using React + Vite + Tailwind. Create pages for: VenueList, VenueForm, DishList, DishForm. Use Firebase Auth for login."
+"Build the admin dashboard in packages/admin-dashboard-v2 using React + Vite + Tailwind. Create pages for: VenueList, VenueForm, DishList, DishForm. Use Firebase Auth for login."
 ```
 
 #### Phase 2 Prompts

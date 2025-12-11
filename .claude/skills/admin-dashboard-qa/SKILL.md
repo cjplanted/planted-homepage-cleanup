@@ -1,6 +1,6 @@
 ---
 name: admin-dashboard-qa
-description: Use this skill when implementing, modifying, or fixing ANY admin dashboard in this project (admin-dashboard, admin-dashboard-v2, or any future version). Triggers for tasks involving dashboard UI, components, pages, features, hooks, or API integration. Orchestrates a rigorous QA workflow with PM review, use case writing, testing, and bug fixing cycles.
+description: Use this skill when implementing, modifying, or fixing the admin dashboard (admin-dashboard-v2). Triggers for tasks involving dashboard UI, components, pages, features, hooks, or API integration. Orchestrates a rigorous QA workflow with PM review, use case writing, testing, and bug fixing cycles.
 ---
 
 # Admin Dashboard QA Workflow
@@ -16,7 +16,6 @@ When this skill activates, first determine which dashboard you're working on:
 3. **Default to active version** - Currently `admin-dashboard-v2`
 
 **Dashboard Packages:**
-- `packages/admin-dashboard` - Legacy v1 (deprecated)
 - `packages/admin-dashboard-v2` - Current production version
 - Any future `packages/admin-dashboard-*` directories
 

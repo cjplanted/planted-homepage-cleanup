@@ -53,8 +53,7 @@ This is a monorepo with the following packages:
 - `packages/database` - Firestore collections
 - `packages/api` - Firebase Cloud Functions
 - `packages/scrapers` - Discovery agents
-- `packages/admin-dashboard` - Legacy admin UI (v1)
-- `packages/admin-dashboard-v2` - New workflow-focused admin UI (deployed at https://get-planted-db.web.app)
+- `packages/admin-dashboard-v2` - Workflow-focused admin UI (deployed at https://get-planted-db.web.app)
 - `packages/client-sdk` - Public SDK
 
 ## Key Architecture Notes

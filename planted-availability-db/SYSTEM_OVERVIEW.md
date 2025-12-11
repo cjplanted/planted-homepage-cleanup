@@ -57,7 +57,7 @@ The **Planted Availability Database (PAD)** is a comprehensive system for tracki
 | `@pad/database` | Firestore CRUD operations | ✅ Working | 100% |
 | `@pad/api` | REST API endpoints | ✅ Working | 90% |
 | `@pad/scrapers` | Data collection | ⚠️ Partial | 70% |
-| `@pad/admin-dashboard` | Management UI | ⚠️ Partial | 40% |
+| `@pad/admin-dashboard-v2` | Management UI | ✅ Working | 85% |
 | `@pad/client-sdk` | Website integration | ✅ Working | 100% |
 
 ---

@@ -62,15 +62,11 @@ The website is automatically deployed to GitHub Pages on push to `main` branch.
 
 ## 2. Running the Admin Dashboard
 
-There are two versions of the admin dashboard available:
-- **v1 (Legacy)**: Original dashboard at port 5173
-- **v2 (New)**: Modern workflow-focused dashboard at port 5175
+The admin dashboard provides a workflow-first experience with enhanced stability.
 
-### Admin Dashboard v2 (Recommended)
+**Production URL:** `https://get-planted-db.web.app`
 
-The new dashboard provides a workflow-first experience with enhanced stability.
-
-#### Development Mode
+### Development Mode
 
 ```bash
 cd planted-availability-db/packages/admin-dashboard-v2
@@ -78,17 +74,17 @@ pnpm install
 pnpm dev
 ```
 
-The v2 dashboard will be available at `http://localhost:5175`
+The dashboard will be available at `http://localhost:5173`
 
-#### Login
+### Login
 
-1. Navigate to `http://localhost:5175/login`
+1. Navigate to `http://localhost:5173/login` (or `https://get-planted-db.web.app/login` for production)
 2. Sign in with your Firebase-authenticated account
 3. Your account must have admin claims set in Firebase
 
-#### Navigation Sections
+### Navigation Sections
 
-The v2 dashboard is organized into workflow sections:
+The dashboard is organized into workflow sections:
 
 **Workflow Section** - Main operational flow:
 | Page | URL | Description |
@@ -109,7 +105,7 @@ The v2 dashboard is organized into workflow sections:
 |------|-----|-------------|
 | Cost Monitor | `/costs` | Track API costs and budget |
 
-#### Key Features
+### Key Features
 
 1. **Workflow Pipeline** - Visual pipeline showing: Scraping → Extraction → Review → Website Sync
 2. **Hierarchical Review** - Venues organized by Country → Chain → Location
@@ -119,7 +115,7 @@ The v2 dashboard is organized into workflow sections:
 6. **Error Recovery** - Automatic retries with exponential backoff
 7. **Budget Tracking** - Monitor daily/monthly API costs
 
-#### Keyboard Shortcuts (Review Queue)
+### Keyboard Shortcuts (Review Queue)
 
 | Key | Action |
 |-----|--------|
@@ -130,43 +126,6 @@ The v2 dashboard is organized into workflow sections:
 | `p` | Partial approve |
 | `?` | Show help |
 
----
-
-### Admin Dashboard v1 (Legacy)
-
-The original dashboard is still available for specific operations.
-
-#### Development Mode
-
-```bash
-cd planted-availability-db/packages/admin-dashboard
-npm install
-npm run dev
-```
-
-The v1 dashboard will be available at `http://localhost:5173`
-
-#### Login
-
-1. Navigate to `http://localhost:5173/login`
-2. Sign in with your Firebase-authenticated account
-3. Your account must have admin claims set in Firebase
-
-#### Available Pages (v1)
-
-| Page | URL | Description |
-|------|-----|-------------|
-| Dashboard | `/` | Overview stats and metrics |
-| Venues | `/venues` | Manage restaurant/retail locations |
-| Dishes | `/dishes` | Manage menu items |
-| Scrapers | `/scrapers` | Monitor scraper status |
-| Promotions | `/promotions` | Manage promotions |
-| Moderation | `/moderation` | Review flagged items |
-| Partners | `/partners` | Manage partner integrations |
-| Discovery Review | `/discovery-review` | Review AI-discovered venues |
-| Budget | `/budget` | Monitor query costs and budget |
-| Analytics | `/analytics` | View analytics dashboard |
-| Import | `/import` | Batch data import |
 
 ---
 
@@ -373,11 +332,11 @@ pnpm run review-dishes --batch 20
 | `q` / `quit` | Exit review session |
 | `?` / `help` | Show help |
 
-### Admin Dashboard v2 Review (Recommended)
+### Admin Dashboard Review
 
-Use the Review Queue page in Admin Dashboard v2 for a modern visual interface:
+Use the Review Queue page in the Admin Dashboard for a modern visual interface:
 
-1. Navigate to `https://get-planted-db.web.app/review-queue` (production) or `http://localhost:5175/review-queue` (dev)
+1. Navigate to `https://get-planted-db.web.app/review-queue` (production) or `http://localhost:5173/review-queue` (dev)
 2. **Filter**: Use sidebar filters for country, confidence, status
 3. **Browse**: Navigate the hierarchical tree (Country → Chain → Venue)
 4. **Review**: View venue details, delivery platforms, and **dishes with product types**
@@ -397,16 +356,6 @@ Use the Review Queue page in Admin Dashboard v2 for a modern visual interface:
 ```
 DISCOVERED → VERIFIED/REJECTED → READY FOR SYNC → LIVE ON WEBSITE
 ```
-
-### Admin Dashboard v1 Review (Legacy)
-
-Use the Discovery Review page in the v1 admin dashboard:
-
-1. Navigate to `http://localhost:5173/discovery-review`
-2. Filter by country, confidence, or platform
-3. Click "Verify All" to approve venue + dishes
-4. Click "Edit & Verify" to correct data before approving
-5. Click "Reject" to mark as false positive
 
 ---
 
@@ -590,7 +539,7 @@ Check console output when running CLI tools with `--verbose` flag.
 
 ## 9. Daily Operations
 
-### Recommended Workflow (Dashboard v2)
+### Recommended Workflow
 
 1. **Morning:** Open Dashboard (`https://get-planted-db.web.app`) - check pipeline status and overnight discoveries
 2. **Review:** Navigate to Review Queue - process pending venues with bulk actions
@@ -599,13 +548,6 @@ Check console output when running CLI tools with `--verbose` flag.
 3. **Monitor:** Check Cost Monitor for budget usage and API costs
 4. **Sync:** Use Sync to Website page to push approved venues live
 5. **Verify:** Check Live on Website to confirm data is published
-
-### Recommended Workflow (Dashboard v1 - Legacy)
-
-1. **Morning:** Check admin dashboard for overnight discoveries
-2. **Review:** Process pending venues in Discovery Review
-3. **Monitor:** Check scraper status and budget usage
-4. **Export:** After reviews, export data to website
 
 ### Scheduled Tasks
 
@@ -618,7 +560,7 @@ The system runs automated tasks:
 
 ### Budget Monitoring
 
-- Check `/budget` page in admin dashboard
+- Check `/costs` page in admin dashboard
 - Monitor free quota usage daily
 - Review paid query costs weekly
 - Use `pnpm run search-pool stats` for CLI monitoring
@@ -671,19 +613,19 @@ const venue = await client.getVenue('venue-id');
 
 ```
 packages/
-├── core/           # Shared types (modify types here)
-├── database/       # Firestore operations (add new collections here)
-├── api/            # Cloud Functions (add API endpoints here)
-├── scrapers/       # Discovery agents (modify extraction logic here)
-├── admin-dashboard/# Admin UI (add new pages here)
-└── client-sdk/     # Public SDK (update for new endpoints)
+├── core/              # Shared types (modify types here)
+├── database/          # Firestore operations (add new collections here)
+├── api/               # Cloud Functions (add API endpoints here)
+├── scrapers/          # Discovery agents (modify extraction logic here)
+├── admin-dashboard-v2/# Admin UI (add new pages here)
+└── client-sdk/        # Public SDK (update for new endpoints)
 ```
 
 ### Adding a New Page to Admin
 
-1. Create page component in `packages/admin-dashboard/src/pages/`
-2. Add route in `packages/admin-dashboard/src/App.tsx`
-3. Add navigation link in `packages/admin-dashboard/src/components/Layout.tsx`
+1. Create page component in `packages/admin-dashboard-v2/src/pages/`
+2. Add route in `packages/admin-dashboard-v2/src/App.tsx`
+3. Add navigation link in `packages/admin-dashboard-v2/src/components/Layout.tsx`
 
 ### Adding a New Collection
 
@@ -702,7 +644,7 @@ pnpm --filter @pad/core build
 pnpm --filter @pad/scrapers build
 
 # Watch mode
-pnpm --filter @pad/admin-dashboard dev
+pnpm --filter @pad/admin-dashboard-v2 dev
 ```
 
 ---
@@ -741,24 +683,15 @@ pnpm run review --sequential --batch 20
 pnpm run review-dishes --chain dean-david --batch 15
 ```
 
-### Admin Dashboard v2 Shortcuts
+### Admin Dashboard Shortcuts
 
 | Page | URL | Purpose |
 |------|-----|---------|
-| Dashboard | `http://localhost:5175/` | Pipeline overview |
-| Review Queue | `http://localhost:5175/review-queue` | Process discoveries |
-| Sync | `http://localhost:5175/sync` | Push to website |
-| Cost Monitor | `http://localhost:5175/costs` | Track API costs |
-| Venue Browser | `http://localhost:5175/venues` | Browse all data |
-
-### Admin Dashboard v1 Shortcuts (Legacy)
-
-| Page | URL | Purpose |
-|------|-----|---------|
-| Quick Stats | `http://localhost:5173/` | Daily overview |
-| Review Queue | `http://localhost:5173/discovery-review` | Process discoveries |
-| Cost Monitor | `http://localhost:5173/budget` | Track query costs |
-| Data Import | `http://localhost:5173/import` | Bulk data upload |
+| Dashboard | `http://localhost:5173/` | Pipeline overview |
+| Review Queue | `http://localhost:5173/review-queue` | Process discoveries |
+| Sync | `http://localhost:5173/sync` | Push to website |
+| Cost Monitor | `http://localhost:5173/costs` | Track API costs |
+| Venue Browser | `http://localhost:5173/venues` | Browse all data |
 
 ---
 

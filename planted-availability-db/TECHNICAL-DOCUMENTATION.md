@@ -112,7 +112,7 @@ planted-availability-db/
 │   ├── database/                  # Firestore collections
 │   ├── api/                       # Cloud Functions
 │   ├── scrapers/                  # Discovery agents & CLI tools
-│   ├── admin-dashboard/           # React admin UI
+│   ├── admin-dashboard-v2/        # React admin UI
 │   └── client-sdk/                # JavaScript SDK
 ├── firebase.json                  # Firebase configuration
 ├── firestore.indexes.json         # Database indexes
@@ -265,8 +265,8 @@ pnpm run review-dishes --batch 10 --chain dean-david
 pnpm run search-pool stats
 ```
 
-#### @pad/admin-dashboard-v2 (Minimal Dashboard)
-Lightweight, focused admin dashboard for approval workflow and reinforcement learning optimization.
+#### @pad/admin-dashboard-v2 (Admin Dashboard)
+Workflow-focused admin dashboard for venue discovery approval, review, and website sync.
 
 **Technology Stack:**
 | Component | Technology | Version |
@@ -1073,21 +1073,12 @@ firebase deploy --only firestore:rules
 firebase deploy
 ```
 
-### 6.3 Admin Dashboard (Legacy v1)
-
-```bash
-cd packages/admin-dashboard
-npm install
-npm run dev       # Development at http://localhost:5173
-npm run build     # Production build
-```
-
-### 6.4 Admin Dashboard v2 (New)
+### 6.3 Admin Dashboard
 
 ```bash
 cd packages/admin-dashboard-v2
 pnpm install
-pnpm dev          # Development at http://localhost:5175
+pnpm dev          # Development at http://localhost:5173
 pnpm build        # Production build
 pnpm preview      # Preview production build
 pnpm typecheck    # Run TypeScript type checking
@@ -1102,10 +1093,6 @@ pnpm typecheck    # Run TypeScript type checking
    VITE_FIREBASE_PROJECT_ID=your-project-id
    VITE_API_URL=http://localhost:3000
    ```
-
-**Port Assignment:**
-- v1 Dashboard: Port 5173/5174
-- v2 Dashboard: Port 5175 (prevents conflicts)
 
 ---
 
@@ -1210,7 +1197,7 @@ Key metrics to monitor:
 
 ## Part 9: Testing Infrastructure
 
-### 9.1 Admin Dashboard v2 Testing
+### 9.1 Admin Dashboard Testing
 
 The admin dashboard uses a comprehensive testing setup with Vitest, React Testing Library, and MSW for API mocking.
 
@@ -1255,7 +1242,7 @@ packages/admin-dashboard-v2/
 
 ```bash
 # Navigate to admin dashboard
-cd packages/admin-dashboard-v2
+cd packages/admin-dashboard
 
 # Run all tests
 pnpm test
