@@ -2135,6 +2135,37 @@ body.locator-results-active {
   transform: translateY(-2px);
 }
 
+.v3-load-more-count {
+  font-weight: 600;
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   V3 PROGRESSIVE LOADING
+   ============================================ */
+
+/* Hidden cards - initially collapsed */
+.v3-venue-card.v3-card-hidden {
+  display: none;
+}
+
+/* Revealing animation */
+.v3-venue-card.v3-card-revealing {
+  animation: v3CardReveal 0.4s ease-out forwards;
+}
+
+@keyframes v3CardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* ============================================
    V3 NO RESULTS
    ============================================ */

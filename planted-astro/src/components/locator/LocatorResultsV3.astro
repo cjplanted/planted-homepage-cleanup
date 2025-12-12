@@ -127,7 +127,7 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
     {venues.length > 0 ? (
       <>
         <div class="v3-card-grid" id="v3CardGrid">
-          {venues.map((venue) => (
+          {venues.map((venue, index) => (
             <VenueCardV3
               venue={venue}
               translations={{
@@ -135,15 +135,22 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
                 dishes: translations.dishes,
                 vegan: translations.vegan,
               }}
+              data-index={index}
+              data-initially-hidden={index >= 3 ? "true" : "false"}
             />
           ))}
         </div>
 
-        <div class="v3-load-more" id="v3LoadMore" style="display: none;">
-          <button class="v3-load-more-btn" type="button">
-            {translations.loadMore}
-          </button>
-        </div>
+        {venues.length > 3 && (
+          <div class="v3-load-more" id="v3LoadMore">
+            <button class="v3-load-more-btn" type="button" id="v3LoadMoreBtn">
+              {translations.loadMore}
+              <span class="v3-load-more-count" id="v3LoadMoreCount">
+                (+{venues.length - 3} mehr)
+              </span>
+            </button>
+          </div>
+        )}
       </>
     ) : (
       <div class="v3-no-results">
@@ -174,15 +181,24 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
 </script>
 
 <script>
-  // Filter and interaction controller
+  // Filter and interaction controller with progressive loading
   class V3LocatorController {
     private filterChips: NodeListOf<HTMLElement>;
     private cardGrid: HTMLElement | null;
+    private loadMoreBtn: HTMLElement | null;
+    private loadMoreContainer: HTMLElement | null;
+    private loadMoreCount: HTMLElement | null;
     private allVenues: any[];
+    private visibleCount: number = 3;
+    private batchSize: number = 3;
+    private isLoading: boolean = false;
 
     constructor() {
       this.filterChips = document.querySelectorAll('.v3-filter-chip');
       this.cardGrid = document.getElementById('v3CardGrid');
+      this.loadMoreBtn = document.getElementById('v3LoadMoreBtn');
+      this.loadMoreContainer = document.getElementById('v3LoadMore');
+      this.loadMoreCount = document.getElementById('v3LoadMoreCount');
       this.allVenues = (window as any).__v3Venues || [];
 
       this.init();
@@ -197,6 +213,104 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
       // Back button
       const backBtn = document.getElementById('v3BackBtn');
       backBtn?.addEventListener('click', () => this.handleBack());
+
+      // Load more button click
+      this.loadMoreBtn?.addEventListener('click', () => this.loadMore());
+
+      // Infinite scroll - load more when approaching bottom
+      this.setupInfiniteScroll();
+
+      // Update initial count display
+      this.updateLoadMoreCount();
+    }
+
+    private setupInfiniteScroll() {
+      // Only enable infinite scroll after first user scroll
+      let hasScrolled = false;
+      let scrollTimeout: number;
+
+      const enableInfiniteScroll = () => {
+        if (hasScrolled) return;
+        hasScrolled = true;
+
+        // Small delay to ensure smooth experience
+        scrollTimeout = window.setTimeout(() => {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && !this.isLoading) {
+                  this.loadMore();
+                }
+              });
+            },
+            { rootMargin: '100px' }
+          );
+
+          if (this.loadMoreContainer) {
+            observer.observe(this.loadMoreContainer);
+          }
+        }, 300);
+      };
+
+      // Listen for scroll to enable infinite scroll
+      window.addEventListener('scroll', enableInfiniteScroll, { once: true, passive: true });
+    }
+
+    private loadMore() {
+      if (this.isLoading || !this.cardGrid) return;
+
+      const hiddenCards = this.cardGrid.querySelectorAll('.v3-venue-card.v3-card-hidden');
+      if (hiddenCards.length === 0) {
+        // All cards visible, hide the load more button
+        if (this.loadMoreContainer) {
+          this.loadMoreContainer.style.display = 'none';
+        }
+        return;
+      }
+
+      this.isLoading = true;
+
+      // Reveal next batch of cards with staggered animation
+      const cardsToReveal = Array.from(hiddenCards).slice(0, this.batchSize);
+
+      cardsToReveal.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.remove('v3-card-hidden');
+          card.classList.add('v3-card-revealing');
+
+          // Remove the revealing class after animation completes
+          setTimeout(() => {
+            card.classList.remove('v3-card-revealing');
+          }, 400);
+        }, index * 100); // Stagger by 100ms
+      });
+
+      this.visibleCount += cardsToReveal.length;
+
+      // Update count and check if more to load
+      setTimeout(() => {
+        this.updateLoadMoreCount();
+        this.isLoading = false;
+
+        // Check if all cards are now visible
+        const stillHidden = this.cardGrid?.querySelectorAll('.v3-venue-card.v3-card-hidden');
+        if (stillHidden?.length === 0 && this.loadMoreContainer) {
+          this.loadMoreContainer.style.display = 'none';
+        }
+      }, cardsToReveal.length * 100 + 100);
+    }
+
+    private updateLoadMoreCount() {
+      if (!this.loadMoreCount || !this.cardGrid) return;
+
+      const hiddenCards = this.cardGrid.querySelectorAll('.v3-venue-card.v3-card-hidden');
+      const remaining = hiddenCards.length;
+
+      if (remaining > 0) {
+        this.loadMoreCount.textContent = `(+${remaining} mehr)`;
+      } else {
+        this.loadMoreCount.textContent = '';
+      }
     }
 
     private handleFilterClick(chip: HTMLElement) {
@@ -212,6 +326,16 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
       if (!this.cardGrid) return;
 
       const cards = this.cardGrid.querySelectorAll('.v3-venue-card');
+
+      // First, reveal all cards (remove hidden class) so filter can work properly
+      cards.forEach(card => {
+        card.classList.remove('v3-card-hidden');
+      });
+
+      // Hide load more when filtering
+      if (this.loadMoreContainer) {
+        this.loadMoreContainer.style.display = 'none';
+      }
 
       cards.forEach((card) => {
         const venueId = card.getAttribute('data-venue-id');

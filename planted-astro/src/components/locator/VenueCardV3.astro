@@ -43,9 +43,11 @@ export interface Props {
     dishes: string;
     vegan: string;
   };
+  'data-index'?: number;
+  'data-initially-hidden'?: string;
 }
 
-const { venue, translations } = Astro.props;
+const { venue, translations, 'data-index': dataIndex, 'data-initially-hidden': initiallyHidden } = Astro.props;
 
 // Limit dishes shown in preview to 2
 const previewDishes = venue.dishes.slice(0, 2);
@@ -53,7 +55,11 @@ const dishCount = venue.dishes.length;
 const iconType = venue.iconType || 'restaurant';
 ---
 
-<article class="v3-venue-card" data-venue-id={venue.id}>
+<article
+  class:list={["v3-venue-card", { "v3-card-hidden": initiallyHidden === "true" }]}
+  data-venue-id={venue.id}
+  data-index={dataIndex}
+>
   <div class="v3-card-header">
     <div class="v3-venue-icon">
       <IconsV3 name={iconType} />
