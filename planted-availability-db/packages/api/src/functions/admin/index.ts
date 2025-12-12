@@ -85,4 +85,6 @@ export {
   adminLiveVenuesHandler,
   adminUpdateVenueStatusHandler,
   adminVenueDishesHandler,
+  adminFindDuplicateVenuesHandler,
+  adminDeleteDuplicateVenuesHandler,
 } from './live-venues/index.js';

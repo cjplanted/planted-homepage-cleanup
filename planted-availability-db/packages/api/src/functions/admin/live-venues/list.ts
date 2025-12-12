@@ -13,6 +13,7 @@ import {
   initializeFirestore,
   venues,
   chains,
+  dishes,
 } from '@pad/database';
 import { createAdminHandler } from '../../../middleware/adminHandler.js';
 import type { VenueStatus, VenueType, Chain, Venue } from '@pad/core';
@@ -142,6 +143,14 @@ export const adminLiveVenuesHandler = createAdminHandler(
     // Calculate total before pagination
     const total = venueList.length;
 
+    // Build dish count map - fetch all active dishes and count by venue_id
+    const dishCountMap = new Map<string, number>();
+    const allDishes = await dishes.query({ status: 'active' });
+    for (const dish of allDishes) {
+      const currentCount = dishCountMap.get(dish.venue_id) || 0;
+      dishCountMap.set(dish.venue_id, currentCount + 1);
+    }
+
     // Build hierarchy from ALL filtered venues (before pagination)
     // This ensures the tree shows all venues, not just the current page
     const allLiveVenues: LiveVenue[] = venueList.map(venue => {
@@ -170,7 +179,7 @@ export const adminLiveVenuesHandler = createAdminHandler(
           url: dp.url,
           active: dp.active,
         })) || [],
-        dishCount: 0,
+        dishCount: dishCountMap.get(venue.id) || 0,
       };
     });
 

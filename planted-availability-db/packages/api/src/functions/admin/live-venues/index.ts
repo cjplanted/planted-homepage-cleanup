@@ -8,3 +8,4 @@
 export { adminLiveVenuesHandler } from './list.js';
 export { adminUpdateVenueStatusHandler } from './updateStatus.js';
 export { adminVenueDishesHandler } from './dishes.js';
+export { adminFindDuplicateVenuesHandler, adminDeleteDuplicateVenuesHandler } from './duplicates.js';

@@ -73,6 +73,9 @@ export {
   adminLiveVenuesHandler as adminLiveVenues,
   adminUpdateVenueStatusHandler as adminUpdateVenueStatus,
   adminVenueDishesHandler as adminVenueDishes,
+  // Duplicate detection endpoints
+  adminFindDuplicateVenuesHandler as adminFindDuplicateVenues,
+  adminDeleteDuplicateVenuesHandler as adminDeleteDuplicateVenues,
 } from './functions/admin/index.js';
 
 // Partner API endpoints
