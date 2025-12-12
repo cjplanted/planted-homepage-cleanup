@@ -124,43 +124,40 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
       <div class="v3-results-count">{dishesFoundText}</div>
     </div>
 
-    {venues.length > 0 ? (
-      <>
-        <div class="v3-card-grid" id="v3CardGrid">
-          {venues.map((venue, index) => (
-            <VenueCardV3
-              venue={venue}
-              translations={{
-                viewAllDishes: translations.viewAllDishes,
-                dishes: translations.dishes,
-                vegan: translations.vegan,
-              }}
-              data-index={index}
-              data-initially-hidden={index >= 3 ? "true" : "false"}
-            />
-          ))}
-        </div>
+    <!-- Card grid - always rendered for client-side population -->
+    <div class="v3-card-grid" id="v3CardGrid">
+      {venues.map((venue, index) => (
+        <VenueCardV3
+          venue={venue}
+          translations={{
+            viewAllDishes: translations.viewAllDishes,
+            dishes: translations.dishes,
+            vegan: translations.vegan,
+          }}
+          data-index={index}
+          data-initially-hidden={index >= 3 ? "true" : "false"}
+        />
+      ))}
+    </div>
 
-        {venues.length > 3 && (
-          <div class="v3-load-more" id="v3LoadMore">
-            <button class="v3-load-more-btn" type="button" id="v3LoadMoreBtn">
-              {translations.loadMore}
-              <span class="v3-load-more-count" id="v3LoadMoreCount">
-                (+{venues.length - 3} mehr)
-              </span>
-            </button>
-          </div>
-        )}
-      </>
-    ) : (
-      <div class="v3-no-results">
-        <div class="v3-no-results-icon">
-          <IconsV3 name="restaurant" />
-        </div>
-        <h3>{translations.noResults}</h3>
-        <p>{translations.noResultsMessage}</p>
+    <!-- Load more button - always rendered for client-side control -->
+    <div class="v3-load-more" id="v3LoadMore" style={venues.length <= 3 ? "display: none;" : ""}>
+      <button class="v3-load-more-btn" type="button" id="v3LoadMoreBtn">
+        {translations.loadMore}
+        <span class="v3-load-more-count" id="v3LoadMoreCount">
+          (+{Math.max(0, venues.length - 3)} mehr)
+        </span>
+      </button>
+    </div>
+
+    <!-- No results message - shown when no venues found after API call -->
+    <div class="v3-no-results" id="v3NoResults" style={venues.length > 0 ? "display: none;" : ""}>
+      <div class="v3-no-results-icon">
+        <IconsV3 name="restaurant" />
       </div>
-    )}
+      <h3>{translations.noResults}</h3>
+      <p>{translations.noResultsMessage}</p>
+    </div>
   </main>
 
   <!-- Detail Panel Overlay -->
@@ -182,6 +179,8 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
 
 <script>
   // Filter and interaction controller with progressive loading
+  // NOTE: This controller is only for SSR-rendered venues (static pages)
+  // When API loading is active (locator-v3.astro), that script handles everything
   class V3LocatorController {
     private filterChips: NodeListOf<HTMLElement>;
     private cardGrid: HTMLElement | null;
@@ -192,8 +191,20 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
     private visibleCount: number = 3;
     private batchSize: number = 3;
     private isLoading: boolean = false;
+    private disabled: boolean = false;
 
     constructor() {
+      // Always set up back button (needed for all modes)
+      const backBtn = document.getElementById('v3BackBtn');
+      backBtn?.addEventListener('click', () => this.handleBack());
+
+      // Skip the rest if API loader is active (locator-v3.astro handles card loading)
+      if ((window as any).__v3Config) {
+        console.log('[V3Controller] Card handling disabled - API loader is active');
+        this.disabled = true;
+        return;
+      }
+
       this.filterChips = document.querySelectorAll('.v3-filter-chip');
       this.cardGrid = document.getElementById('v3CardGrid');
       this.loadMoreBtn = document.getElementById('v3LoadMoreBtn');
@@ -205,14 +216,14 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
     }
 
     private init() {
+      if (this.disabled) return;
+
       // Filter chip clicks
       this.filterChips.forEach(chip => {
         chip.addEventListener('click', () => this.handleFilterClick(chip));
       });
 
-      // Back button
-      const backBtn = document.getElementById('v3BackBtn');
-      backBtn?.addEventListener('click', () => this.handleBack());
+      // Note: Back button handler is set up in constructor (works for all modes)
 
       // Load more button click
       this.loadMoreBtn?.addEventListener('click', () => this.loadMore());
@@ -390,10 +401,17 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
 
     private handleBack() {
       // Navigate back to homepage locator section
-      // Get locale from URL path (e.g., /planted-website/ch-de/locator-v3 -> ch-de)
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const locale = pathParts[1] || 'ch-de'; // Index 1 after base path
-      const basePath = '/planted-website'; // GitHub Pages base
+      // Detect base path dynamically from current URL
+      const pathname = window.location.pathname;
+
+      // Find the locale segment (e.g., ch-de, de, at)
+      // URL could be: /planted-website/ch-de/locator-v3 or /ch-de/locator-v3
+      const localeMatch = pathname.match(/\/([a-z]{2}(?:-[a-z]{2})?)\//i);
+      const locale = localeMatch ? localeMatch[1] : 'ch-de';
+
+      // Get base path (everything before the locale)
+      const localeIndex = pathname.indexOf(`/${locale}/`);
+      const basePath = localeIndex > 0 ? pathname.substring(0, localeIndex) : '';
 
       // Navigate to homepage with locator anchor
       window.location.href = `${basePath}/${locale}/#locator`;

@@ -2,7 +2,7 @@
 /**
  * Locator V3 Results Page
  * Displays restaurant results in cream-themed card layout
- * Receives search parameters from V2 locator via URL query params
+ * Fetches real venue data from the Planted API
  */
 import Layout from '../../layouts/Layout.astro';
 import LocatorResultsV3 from '../../components/locator/LocatorResultsV3.astro';
@@ -20,12 +20,13 @@ export async function getStaticPaths() {
 const { locale } = Astro.props as { locale: LocaleCode };
 const t = getTranslations(locale);
 
-// Parse URL query parameters from V2 redirect
+// Parse URL parameters for location
 const searchParams = Astro.url.searchParams;
-const zip = searchParams.get('zip') || '8001';
+const zip = searchParams.get('zip') || '';
+const lat = searchParams.get('lat') || '';
+const lng = searchParams.get('lng') || '';
 const countryCode = searchParams.get('country') || 'ch';
-const lat = searchParams.get('lat');
-const lng = searchParams.get('lng');
+const cityParam = searchParams.get('city') || '';
 
 // Map country codes to display names
 const countryNames: Record<string, string> = {
@@ -38,142 +39,11 @@ const countryNames: Record<string, string> = {
   'it': 'Italia',
   'es': 'España'
 };
-const countryName = countryNames[countryCode] || 'Schweiz';
 
-// Determine city name (for now use ZIP, in future could reverse geocode)
-const cityName = zip;
+const countryName = countryNames[countryCode] || countryCode.toUpperCase();
 
-// Sample dish images (placeholder URLs)
-const dishImages = [
-  'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&h=400&fit=crop',
-];
-
-// Sample venues based on HTML prototype
-const sampleVenues: VenueV3[] = [
-  {
-    id: '1',
-    name: 'dean&david',
-    location: 'Zürich',
-    category: 'Healthy Bowls',
-    rating: 4.4,
-    reviewCount: 118,
-    distance: '468 m',
-    distanceMeters: 468,
-    products: ['planted.chicken', 'planted.duck'],
-    dishes: [
-      { name: 'Tuscany Chicken Salad', price: 'CHF 16.90', isVegan: true, description: 'planted.chicken mit italienischen Aromen, getrockneten Tomaten, Pinienkernen', image: dishImages[0] },
-      { name: 'Planted Power Bowl', price: 'CHF 18.50', isVegan: true, description: 'Jasminreis, planted.chicken, Edamame, Avocado, Sesam-Dressing', image: dishImages[1] },
-      { name: 'Asian Fusion Bowl', price: 'CHF 17.90', isVegan: true, description: 'planted.duck mit Pak Choi, Shiitake, Teriyaki-Glasur', image: dishImages[2] }
-    ],
-    iconType: 'bowl',
-    deliveryPartners: [
-      { name: 'Uber Eats', url: 'https://www.ubereats.com/ch/store/dean-david-zurich', icon: 'uber-eats' },
-      { name: 'eat.ch', url: 'https://www.eat.ch/dean-david-zurich', icon: 'eat-ch' }
-    ]
-  },
-  {
-    id: '2',
-    name: 'Veganitas',
-    location: 'Zürich',
-    category: 'Vegan Fine Dining',
-    rating: 4.8,
-    reviewCount: 67,
-    distance: '468 m',
-    distanceMeters: 468,
-    products: ['planted.steak'],
-    dishes: [
-      { name: 'planted.steak Classic', price: 'CHF 38.00', isVegan: true, description: 'Trüffelrahmsauce, confierte Champignons, Selleriepüree', image: dishImages[3] },
-      { name: 'Steak Chimichurri', price: 'CHF 36.00', isVegan: true, description: 'Argentinische Chimichurri-Sauce, gegrilltes Gemüse', image: dishImages[4] }
-    ],
-    iconType: 'restaurant',
-    deliveryPartners: [
-      { name: 'Website', url: 'https://veganitas.ch/reservation', icon: 'website' }
-    ]
-  },
-  {
-    id: '3',
-    name: 'Rice Up!',
-    location: 'Zürich',
-    category: 'Asian Bowls',
-    rating: 4.2,
-    reviewCount: 234,
-    distance: '520 m',
-    distanceMeters: 520,
-    products: ['planted.chicken'],
-    dishes: [
-      { name: 'Teriyaki Bowl', price: 'CHF 15.90', isVegan: true, description: 'planted.chicken Teriyaki, Jasminreis, Edamame', image: dishImages[0] },
-      { name: 'Spicy Thai Bowl', price: 'CHF 16.50', isVegan: true, description: 'planted.chicken mit Thai-Curry, Kokosmilch, Gemüse', image: dishImages[1] }
-    ],
-    iconType: 'bowl',
-    deliveryPartners: [
-      { name: 'Uber Eats', url: 'https://www.ubereats.com/ch/store/rice-up-zurich', icon: 'uber-eats' },
-      { name: 'eat.ch', url: 'https://www.eat.ch/rice-up-zurich', icon: 'eat-ch' },
-      { name: 'Wolt', url: 'https://wolt.com/en/che/zurich/restaurant/rice-up', icon: 'wolt' }
-    ]
-  },
-  {
-    id: '4',
-    name: 'Hiltl',
-    location: 'Zürich',
-    category: 'Vegetarisches Restaurant',
-    rating: 4.6,
-    reviewCount: 512,
-    distance: '750 m',
-    distanceMeters: 750,
-    products: ['planted.chicken', 'planted.pulled'],
-    dishes: [
-      { name: 'Planted Schnitzel', price: 'CHF 28.00', isVegan: true, description: 'Paniertes planted.chicken, Zitrone, Kartoffelsalat', image: dishImages[2] },
-      { name: 'Pulled Sandwich', price: 'CHF 19.00', isVegan: true, description: 'planted.pulled BBQ, Coleslaw, hausgemachte Brioche', image: dishImages[3] },
-      { name: 'Buddha Bowl Deluxe', price: 'CHF 24.00', isVegan: true, description: 'planted.chicken, Quinoa, Hummus, Gemüse der Saison', image: dishImages[4] }
-    ],
-    iconType: 'restaurant',
-    deliveryPartners: [
-      { name: 'Uber Eats', url: 'https://www.ubereats.com/ch/store/hiltl', icon: 'uber-eats' },
-      { name: 'eat.ch', url: 'https://www.eat.ch/hiltl', icon: 'eat-ch' },
-      { name: 'Website', url: 'https://hiltl.ch/lieferung', icon: 'website' }
-    ]
-  },
-  {
-    id: '5',
-    name: 'doen doen kebap',
-    location: 'Zürich',
-    category: 'Vegan Kebab',
-    rating: 4.7,
-    reviewCount: 156,
-    distance: '1.2 km',
-    distanceMeters: 1200,
-    products: ['planted.kebab'],
-    dishes: [
-      { name: 'Planted Kebap Döner', price: 'CHF 8.90', isVegan: true, description: 'Veganer Döner mit planted.kebab, frischem Salat, gegrilltem Gemüse', image: dishImages[0] },
-      { name: 'Planted Kebap Dürüm', price: 'CHF 9.50', isVegan: true, description: 'Wrap mit planted.kebab, Salatmix, Joghurt-Sauce', image: dishImages[1] }
-    ],
-    iconType: 'kebab',
-    deliveryPartners: [
-      { name: 'Wolt', url: 'https://wolt.com/en/che/zurich/restaurant/doen-doen-kebap', icon: 'wolt' }
-    ]
-  },
-  {
-    id: '6',
-    name: 'Tibits',
-    location: 'Zürich HB',
-    category: 'Vegetarisches Buffet',
-    rating: 4.3,
-    reviewCount: 389,
-    distance: '1.4 km',
-    distanceMeters: 1400,
-    products: ['planted.chicken', 'planted.kebab'],
-    dishes: [
-      { name: 'Planted Curry', price: 'nach Gewicht', isVegan: true, description: 'planted.chicken in hausgemachter Curry-Sauce', image: dishImages[2] },
-      { name: 'Kebab Teller', price: 'nach Gewicht', isVegan: true, description: 'planted.kebab mit Reis und Salat', image: dishImages[3] }
-    ],
-    iconType: 'restaurant'
-    // No delivery partners - will show "Direkt im Restaurant verfügbar"
-  }
-];
+// API configuration
+const API_BASE_URL = 'https://europe-west6-get-planted-db.cloudfunctions.net';
 
 // V3-specific translations
 const v3Translations = {
@@ -194,16 +64,21 @@ const v3Translations = {
   close: 'Schliessen',
   noResults: 'Keine Ergebnisse',
   noResultsMessage: 'Keine Restaurants in deiner Nähe gefunden.',
+  loading: 'Restaurants werden geladen...',
+  errorLoading: 'Fehler beim Laden der Restaurants',
 };
+
+// Pass empty venues - will be populated client-side from API
+const initialVenues: VenueV3[] = [];
 ---
 
 <Layout title="Restaurants - planted." locale={locale}>
   <LocatorResultsV3
     locale={locale}
     country={countryName}
-    city={cityName}
+    city={cityParam}
     postalCode={zip}
-    venues={sampleVenues}
+    venues={initialVenues}
     translations={v3Translations}
   />
 </Layout>
@@ -227,4 +102,641 @@ const v3Translations = {
   .v3-filters-bar {
     top: 156px; /* Below navbar + v3-header (80 + 76) */
   }
+
+  /* Loading state */
+  .v3-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #666;
+  }
+
+  .v3-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid #E8E0D5;
+    border-top-color: #2D5A27;
+    border-radius: 50%;
+    animation: v3Spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes v3Spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .v3-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #c00;
+  }
+
+  .v3-error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
 </style>
+
+<script define:vars={{ API_BASE_URL, v3Translations }}>
+  // Store config for client-side access - read URL params at runtime
+  const urlParams = new URLSearchParams(window.location.search);
+  window.__v3Config = {
+    lat: urlParams.get('lat') || '',
+    lng: urlParams.get('lng') || '',
+    zip: urlParams.get('zip') || '',
+    countryCode: urlParams.get('country') || 'ch',
+    apiBaseUrl: API_BASE_URL,
+    translations: v3Translations
+  };
+  console.log('[V3] Config from URL:', window.__v3Config);
+</script>
+
+<script>
+  /**
+   * V3 API Loader - Fetches real venue data from the Planted API
+   */
+  interface ApiPrice {
+    amount: number;
+    currency: string;
+  }
+
+  interface ApiDish {
+    id: string;
+    name: string;
+    description?: string;
+    price: ApiPrice;
+    image_url?: string;
+    dietary_tags?: string[];
+    planted_products: string[];
+    cuisine_type?: string;
+  }
+
+  interface ApiDeliveryPlatform {
+    partner: string;
+    url: string;
+    active: boolean;
+  }
+
+  interface ApiVenue {
+    id: string;
+    name: string;
+    type: string;
+    address: {
+      street: string;
+      city: string;
+      postal_code: string;
+      country: string;
+    };
+    location: { latitude: number; longitude: number };
+    delivery_platforms?: ApiDeliveryPlatform[];
+    distance_km: number;
+  }
+
+  interface NearbyResult {
+    venue: ApiVenue;
+    dishes: ApiDish[];
+    is_open: boolean;
+    next_open: string | null;
+    today_hours: string;
+  }
+
+  interface NearbyResponse {
+    results: NearbyResult[];
+    total: number;
+    has_more: boolean;
+  }
+
+  interface VenueV3 {
+    id: string;
+    name: string;
+    location: string;
+    category: string;
+    distance: string;
+    distanceMeters?: number;
+    products: string[];
+    dishes: Array<{
+      name: string;
+      price: string;
+      description?: string;
+      image?: string;
+      isVegan?: boolean;
+      plantedProduct?: string;
+    }>;
+    iconType?: 'restaurant' | 'bowl' | 'burger' | 'kebab';
+    heroImage?: string;
+    deliveryPartners?: Array<{
+      name: string;
+      url: string;
+      icon?: string;
+    }>;
+  }
+
+  // Platform icon mapping
+  const platformIcons: Record<string, string> = {
+    'uber_eats': 'uber-eats',
+    'ubereats': 'uber-eats',
+    'just_eat': 'just-eat',
+    'justeat': 'just-eat',
+    'lieferando': 'lieferando',
+    'wolt': 'wolt',
+    'doordash': 'doordash',
+    'deliveroo': 'deliveroo',
+    'eat_ch': 'eat-ch',
+    'eatch': 'eat-ch',
+  };
+
+  // Map API response to VenueV3 format
+  function mapToVenueV3(result: NearbyResult): VenueV3 {
+    const venue = result.venue;
+    const dishes = result.dishes || [];
+
+    // Get unique planted products from dishes
+    const products = [...new Set(
+      dishes
+        .flatMap(d => d.planted_products || [])
+        .filter(Boolean)
+    )].slice(0, 4);
+
+    // Format distance
+    const distanceKm = venue.distance_km || 0;
+    const distanceStr = distanceKm < 1
+      ? `${Math.round(distanceKm * 1000)}m`
+      : `${distanceKm.toFixed(1)}km`;
+
+    // Determine icon type based on venue type and dish cuisines
+    const cuisines = dishes.map(d => d.cuisine_type).filter(Boolean) as string[];
+    let iconType: VenueV3['iconType'] = 'restaurant';
+    if (cuisines.some(c => /burger/i.test(c))) iconType = 'burger';
+    else if (cuisines.some(c => /bowl|poke|asian/i.test(c))) iconType = 'bowl';
+    else if (cuisines.some(c => /kebab|döner|turkish/i.test(c))) iconType = 'kebab';
+
+    // Map delivery partners (only active ones)
+    const deliveryPartners = (venue.delivery_platforms || [])
+      .filter(p => p.active)
+      .map(p => ({
+        name: p.partner.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        url: p.url,
+        icon: platformIcons[p.partner.toLowerCase()] || 'website'
+      }));
+
+    // Find hero image from dishes
+    const heroImage = dishes.find(d => d.image_url)?.image_url;
+
+    // Get first cuisine type from dishes
+    const category = cuisines[0] || (venue.type === 'delivery_kitchen' ? 'Lieferküche' : 'Restaurant');
+
+    return {
+      id: venue.id,
+      name: venue.name,
+      location: venue.address?.city || '',
+      category,
+      distance: distanceStr,
+      distanceMeters: Math.round(distanceKm * 1000),
+      products: products.length > 0 ? products : ['planted.chicken'],
+      dishes: dishes.map(d => ({
+        name: d.name,
+        price: d.price ? `${d.price.currency} ${d.price.amount.toFixed(2)}` : '',
+        description: d.description,
+        image: d.image_url,
+        isVegan: d.dietary_tags?.includes('vegan'),
+        plantedProduct: d.planted_products?.[0]
+      })),
+      iconType,
+      heroImage,
+      deliveryPartners
+    };
+  }
+
+  // Render a venue card HTML
+  function renderVenueCard(venue: VenueV3, index: number, translations: any): string {
+    const previewDishes = venue.dishes.slice(0, 2);
+    const isHidden = index >= 3;
+
+    return `
+      <article class="v3-venue-card ${isHidden ? 'v3-card-hidden' : ''}" data-venue-id="${venue.id}" data-index="${index}">
+        <div class="v3-card-header">
+          <div class="v3-venue-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+              <path d="M7 2v20"/>
+              <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
+            </svg>
+          </div>
+          <div class="v3-venue-info">
+            <h3 class="v3-venue-name">${venue.name}</h3>
+            <div class="v3-venue-meta">
+              <span>${venue.location}</span>
+              <span>${venue.category}</span>
+            </div>
+          </div>
+          <span class="v3-venue-distance">${venue.distance}</span>
+        </div>
+
+        <div class="v3-product-tags">
+          ${venue.products.map(p => `<span class="v3-product-tag">${p}</span>`).join('')}
+        </div>
+
+        <div class="v3-dishes-list">
+          ${previewDishes.map(dish => `
+            <div class="v3-dish-item">
+              <span class="v3-dish-name">
+                ${dish.name}
+                ${dish.isVegan ? `<span class="v3-dish-badge">${translations.vegan}</span>` : ''}
+              </span>
+              <span class="v3-dish-price">${dish.price}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <footer class="v3-card-footer">
+          <button class="v3-view-details-btn" type="button">
+            ${translations.viewAllDishes}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <span class="v3-dish-count">${venue.dishes.length} ${translations.dishes}</span>
+        </footer>
+      </article>
+    `;
+  }
+
+  // Main loader function
+  async function loadVenues() {
+    const config = (window as any).__v3Config;
+    if (!config) return;
+
+    const cardGrid = document.getElementById('v3CardGrid');
+    const mainContent = document.querySelector('.v3-main-content');
+    const headerTitle = document.querySelector('.v3-header-title');
+    const resultsCount = document.querySelector('.v3-results-count');
+    const loadMoreContainer = document.getElementById('v3LoadMore');
+    const loadMoreCount = document.getElementById('v3LoadMoreCount');
+
+    // Show loading state
+    if (mainContent) {
+      const existingGrid = cardGrid;
+      const loadingEl = document.createElement('div');
+      loadingEl.className = 'v3-loading';
+      loadingEl.id = 'v3Loading';
+      loadingEl.innerHTML = `
+        <div class="v3-loading-spinner"></div>
+        <p>${config.translations.loading}</p>
+      `;
+
+      // Insert loading before grid
+      if (existingGrid) {
+        existingGrid.style.display = 'none';
+      }
+      mainContent.insertBefore(loadingEl, mainContent.firstChild?.nextSibling || null);
+    }
+
+    try {
+      // Build API URL
+      const { lat, lng, apiBaseUrl } = config;
+
+      if (!lat || !lng) {
+        throw new Error('Missing coordinates');
+      }
+
+      const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=10&type=restaurant&limit=50`;
+      console.log('[V3] Fetching venues from:', apiUrl);
+
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data: NearbyResponse = await response.json();
+      console.log('[V3] Received', data.total, 'venues');
+
+      // Map to VenueV3 format
+      const venues = data.results.map(mapToVenueV3);
+
+      // Store in state management
+      allVenues = venues;
+      filteredVenues = [...venues];
+      (window as any).__v3Venues = venues;
+
+      // Remove loading state
+      const loadingEl = document.getElementById('v3Loading');
+      if (loadingEl) loadingEl.remove();
+
+      // Update header
+      if (headerTitle) {
+        headerTitle.textContent = config.translations.headerTitle.replace('{count}', String(venues.length));
+      }
+
+      // Update dish count
+      const totalDishes = venues.reduce((sum, v) => sum + v.dishes.length, 0);
+      if (resultsCount) {
+        resultsCount.textContent = config.translations.dishesFound.replace('{count}', String(totalDishes));
+      }
+
+      // Render initial batch of cards (uses new state management)
+      renderInitialCards();
+
+    } catch (error) {
+      console.error('[V3] Error loading venues:', error);
+
+      // Remove loading, show error
+      const loadingEl = document.getElementById('v3Loading');
+      if (loadingEl) {
+        loadingEl.className = 'v3-error';
+        loadingEl.innerHTML = `
+          <div class="v3-error-icon">⚠️</div>
+          <p>${config.translations.errorLoading}</p>
+          <p style="font-size: 0.875rem; color: #999; margin-top: 0.5rem;">${(error as Error).message}</p>
+        `;
+      }
+    }
+  }
+
+  // Re-attach click handlers after dynamic render
+  function initCardClickHandlers() {
+    const cards = document.querySelectorAll('.v3-venue-card');
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Don't trigger on button click (let button handle it)
+        if ((e.target as HTMLElement).closest('.v3-view-details-btn')) return;
+
+        const venueId = card.getAttribute('data-venue-id');
+        if (venueId) {
+          openDetailPanel(venueId);
+        }
+      });
+
+      // Also handle button click
+      const btn = card.querySelector('.v3-view-details-btn');
+      btn?.addEventListener('click', () => {
+        const venueId = card.getAttribute('data-venue-id');
+        if (venueId) {
+          openDetailPanel(venueId);
+        }
+      });
+    });
+  }
+
+  // NOTE: Detail panel is fully handled by VenueDetailPanelV3.astro's V3DetailPanel class
+  // It listens for card clicks globally and manages the panel display/hide
+
+  // ========================================
+  // STATE MANAGEMENT - Single source of truth
+  // ========================================
+  let allVenues: VenueV3[] = [];
+  let filteredVenues: VenueV3[] = [];
+  let visibleCount = 0;
+  const BATCH_SIZE = 3;
+  let currentFilter = 'all';
+  let isLoading = false;
+  let scrollDebounceTimer: number | null = null;
+
+  // ========================================
+  // LOAD MORE - Proper progressive loading
+  // ========================================
+  function loadMore() {
+    if (isLoading) return;
+
+    const remaining = filteredVenues.length - visibleCount;
+    if (remaining <= 0) return;
+
+    isLoading = true;
+    const config = (window as any).__v3Config;
+    const cardGrid = document.getElementById('v3CardGrid');
+
+    if (!cardGrid) {
+      isLoading = false;
+      return;
+    }
+
+    // Get next batch
+    const nextBatch = filteredVenues.slice(visibleCount, visibleCount + BATCH_SIZE);
+
+    // Append cards with staggered animation
+    nextBatch.forEach((venue, i) => {
+      const cardHtml = renderVenueCard(venue, visibleCount + i, config.translations);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = cardHtml.trim();
+      const card = tempDiv.firstElementChild as HTMLElement;
+
+      // Start hidden for animation
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.classList.remove('v3-card-hidden');
+
+      cardGrid.appendChild(card);
+
+      // Animate in with stagger
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 100);
+
+      // Add click handler
+      attachCardClickHandler(card);
+    });
+
+    visibleCount += nextBatch.length;
+    updateLoadMoreButton();
+
+    // Allow more loads after animation
+    setTimeout(() => {
+      isLoading = false;
+    }, nextBatch.length * 100 + 100);
+  }
+
+  // ========================================
+  // UPDATE LOAD MORE BUTTON
+  // ========================================
+  function updateLoadMoreButton() {
+    const loadMoreContainer = document.getElementById('v3LoadMore');
+    const loadMoreCount = document.getElementById('v3LoadMoreCount');
+    const loadMoreBtn = document.getElementById('v3LoadMoreBtn');
+
+    if (!loadMoreContainer || !loadMoreCount) return;
+
+    const remaining = filteredVenues.length - visibleCount;
+
+    if (remaining > 0) {
+      loadMoreContainer.style.display = '';
+      loadMoreCount.textContent = `(+${remaining} mehr)`;
+    } else {
+      loadMoreContainer.style.display = 'none';
+    }
+  }
+
+  // ========================================
+  // FILTER HANDLING
+  // ========================================
+  function applyFilter(filter: string) {
+    currentFilter = filter;
+    const config = (window as any).__v3Config;
+
+    // Filter venues based on criteria
+    switch (filter) {
+      case 'all':
+        filteredVenues = [...allVenues];
+        break;
+      case 'distance-500':
+        filteredVenues = allVenues.filter(v => (v.distanceMeters || 0) <= 500);
+        break;
+      case 'distance-1000':
+        filteredVenues = allVenues.filter(v => (v.distanceMeters || 0) <= 1000);
+        break;
+      case 'top-rated':
+        // No rating data from API currently, show all
+        filteredVenues = [...allVenues];
+        break;
+      default:
+        if (filter.startsWith('product-')) {
+          const product = filter.replace('product-', '');
+          filteredVenues = allVenues.filter(v => v.products.includes(product));
+        } else {
+          filteredVenues = [...allVenues];
+        }
+    }
+
+    // Reset to initial view
+    visibleCount = 0;
+    renderInitialCards();
+  }
+
+  // ========================================
+  // RENDER INITIAL CARDS (first 3)
+  // ========================================
+  function renderInitialCards() {
+    const config = (window as any).__v3Config;
+    const cardGrid = document.getElementById('v3CardGrid');
+    const noResultsEl = document.getElementById('v3NoResults');
+
+    if (!cardGrid || !config) return;
+
+    // Clear existing cards
+    cardGrid.innerHTML = '';
+
+    if (filteredVenues.length === 0) {
+      cardGrid.style.display = 'none';
+      if (noResultsEl) noResultsEl.style.display = '';
+      updateLoadMoreButton();
+      return;
+    }
+
+    cardGrid.style.display = '';
+    if (noResultsEl) noResultsEl.style.display = 'none';
+
+    // Render first batch (no hidden class needed)
+    const initialBatch = filteredVenues.slice(0, BATCH_SIZE);
+    initialBatch.forEach((venue, i) => {
+      const cardHtml = renderVenueCard(venue, i, config.translations);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = cardHtml.trim();
+      const card = tempDiv.firstElementChild as HTMLElement;
+      card.classList.remove('v3-card-hidden');
+
+      // Animation delay for stagger effect
+      card.style.animationDelay = `${0.05 * (i + 1)}s`;
+
+      cardGrid.appendChild(card);
+      attachCardClickHandler(card);
+    });
+
+    visibleCount = initialBatch.length;
+    updateLoadMoreButton();
+  }
+
+  // ========================================
+  // ATTACH CARD CLICK HANDLER
+  // ========================================
+  // NOTE: Card clicks are handled by VenueDetailPanelV3.astro's global listener
+  // No need for individual handlers here - the panel controller handles everything
+  function attachCardClickHandler(card: HTMLElement) {
+    // No-op: VenueDetailPanelV3.astro handles all card clicks globally
+  }
+
+  // ========================================
+  // INFINITE SCROLL WITH DEBOUNCE
+  // ========================================
+  function setupInfiniteScroll() {
+    let hasUserScrolled = false;
+
+    const handleScroll = () => {
+      if (!hasUserScrolled) {
+        hasUserScrolled = true;
+      }
+
+      // Debounce scroll handling
+      if (scrollDebounceTimer) {
+        clearTimeout(scrollDebounceTimer);
+      }
+
+      scrollDebounceTimer = window.setTimeout(() => {
+        const loadMoreContainer = document.getElementById('v3LoadMore');
+        if (!loadMoreContainer || loadMoreContainer.style.display === 'none') return;
+
+        const rect = loadMoreContainer.getBoundingClientRect();
+        const isNearBottom = rect.top < window.innerHeight + 200;
+
+        if (isNearBottom && !isLoading) {
+          loadMore();
+        }
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  }
+
+  // ========================================
+  // SETUP FILTER CHIPS
+  // ========================================
+  function setupFilterChips() {
+    const filterChips = document.querySelectorAll('.v3-filter-chip');
+
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        // Update active state
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const filter = chip.getAttribute('data-filter') || 'all';
+        applyFilter(filter);
+      });
+    });
+  }
+
+  // ========================================
+  // SETUP LOAD MORE BUTTON
+  // ========================================
+  function setupLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('v3LoadMoreBtn');
+    loadMoreBtn?.addEventListener('click', () => {
+      loadMore();
+    });
+  }
+
+  // ========================================
+  // INITIALIZE ON PAGE LOAD
+  // ========================================
+  let initialized = false;
+
+  function initialize() {
+    if (initialized) return;
+    initialized = true;
+
+    loadVenues();
+    setupFilterChips();
+    setupLoadMoreButton();
+    setupInfiniteScroll();
+  }
+
+  document.addEventListener('DOMContentLoaded', initialize);
+  document.addEventListener('astro:page-load', () => {
+    initialized = false;
+    initialize();
+  });
+</script>
