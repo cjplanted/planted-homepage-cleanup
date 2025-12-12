@@ -42,6 +42,12 @@ interface Translations {
   // Results count
   restaurantsInZip: string;
   storesAndOnline: string;
+  // Show more
+  showMore: string;
+  moreResults: string;
+  loading: string;
+  noResults: string;
+  noResultsSubtitle: string;
 }
 
 interface Props {
@@ -85,6 +91,12 @@ const defaultTranslations: Translations = {
   // Results count
   restaurantsInZip: 'Restaurants in',
   storesAndOnline: 'Läden & Online-Shops',
+  // Show more
+  showMore: 'Mehr anzeigen',
+  moreResults: 'weitere',
+  loading: 'Suche Restaurants...',
+  noResults: 'Keine Restaurants gefunden',
+  noResultsSubtitle: 'Probiere eine andere PLZ oder einen anderen Standort',
 };
 
 const t: Translations = { ...defaultTranslations, ...customTranslations };
@@ -173,7 +185,10 @@ const translationsJson = JSON.stringify(t);
       path: null,
       zip: '',
       coordinates: null,
-      tab: 'restaurants'
+      detectedCountry: null,
+      tab: 'restaurants',
+      allFilteredLocations: [],
+      visibleCount: 6
     };
 
     // DOM Elements
@@ -193,6 +208,175 @@ const translationsJson = JSON.stringify(t);
 
     // Check for reduced motion
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ==========================================
+    // HELPER FUNCTIONS
+    // ==========================================
+
+    // Country name mapping
+    var countryNames = {
+      'ch': 'Schweiz',
+      'de': 'Deutschland',
+      'at': 'Österreich',
+      'uk': 'United Kingdom',
+      'nl': 'Nederland',
+      'lu': 'Luxembourg',
+      'fr': 'France',
+      'it': 'Italia',
+      'es': 'España'
+    };
+
+    /**
+     * Detect country from ZIP code format
+     */
+    function detectCountryFromZip(zip) {
+      if (!zip) return { code: 'de', name: 'Deutschland' };
+      var trimmed = zip.trim().toUpperCase();
+
+      // Germany: 5 digits (most common)
+      if (/^[0-9]{5}$/.test(trimmed)) {
+        return { code: 'de', name: 'Deutschland' };
+      }
+
+      // UK: Alphanumeric pattern (SW1A 1AA, EC1A 1BB, etc.)
+      if (/^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$/i.test(trimmed) ||
+          /^[A-Z]{1,2}[0-9]{1,2}$/i.test(trimmed)) {
+        return { code: 'uk', name: 'United Kingdom' };
+      }
+
+      // Netherlands: 4 digits + 2 letters (1011 AB)
+      if (/^[1-9][0-9]{3}\s?[A-Z]{2}$/i.test(trimmed)) {
+        return { code: 'nl', name: 'Nederland' };
+      }
+
+      // 4 digits - distinguish between CH, AT, LU
+      if (/^[1-9][0-9]{3}$/.test(trimmed)) {
+        var num = parseInt(trimmed, 10);
+        // Austrian Vienna range (1010-1239 is very specific to Vienna)
+        if (num >= 1010 && num <= 1239) {
+          return { code: 'at', name: 'Österreich' };
+        }
+        // Swiss ZIP codes: 1000-9658
+        if (num >= 1000 && num <= 9658) {
+          return { code: 'ch', name: 'Schweiz' };
+        }
+        // Default 4-digit to Switzerland (main market)
+        return { code: 'ch', name: 'Schweiz' };
+      }
+
+      // Default to Germany
+      return { code: 'de', name: 'Deutschland' };
+    }
+
+    /**
+     * Calculate distance using Haversine formula
+     */
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+      var R = 6371; // Earth's radius in km
+      var dLat = toRad(lat2 - lat1);
+      var dLng = toRad(lng2 - lng1);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function toRad(deg) {
+      return deg * (Math.PI / 180);
+    }
+
+    /**
+     * Format distance for display
+     */
+    function formatDistance(km) {
+      if (km < 1) {
+        return Math.round(km * 1000) + ' m';
+      }
+      if (km < 10) {
+        return km.toFixed(1) + ' km';
+      }
+      return Math.round(km) + ' km';
+    }
+
+    /**
+     * Geocode ZIP code to coordinates using Nominatim
+     */
+    async function geocodeZip(zip, countryCode) {
+      // Check localStorage cache first
+      var cacheKey = 'geo_' + zip + '_' + countryCode;
+      try {
+        var cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          var data = JSON.parse(cached);
+          // Cache valid for 7 days
+          if (Date.now() - data.timestamp < 7 * 24 * 60 * 60 * 1000) {
+            return data.coords;
+          }
+        }
+      } catch (e) { /* ignore cache errors */ }
+
+      try {
+        var url = 'https://nominatim.openstreetmap.org/search?' +
+          'postalcode=' + encodeURIComponent(zip) +
+          '&country=' + countryCode +
+          '&format=json&limit=1';
+
+        var response = await fetch(url, {
+          headers: { 'User-Agent': 'PlantedWebsite/1.0' }
+        });
+
+        if (!response.ok) return null;
+
+        var data = await response.json();
+        if (data.length === 0) return null;
+
+        var coords = {
+          lat: parseFloat(data[0].lat),
+          lng: parseFloat(data[0].lon),
+          displayName: data[0].display_name.split(',')[0]
+        };
+
+        // Cache result
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify({
+            coords: coords,
+            timestamp: Date.now()
+          }));
+        } catch (e) { /* ignore cache errors */ }
+
+        return coords;
+      } catch (error) {
+        console.error('Geocoding error:', error);
+        return null;
+      }
+    }
+
+    /**
+     * Reverse geocode coordinates to get ZIP and country
+     */
+    async function reverseGeocode(lat, lng) {
+      try {
+        var response = await fetch(
+          'https://nominatim.openstreetmap.org/reverse?lat=' + lat +
+          '&lon=' + lng + '&format=json',
+          { headers: { 'User-Agent': 'PlantedWebsite/1.0' } }
+        );
+        var data = await response.json();
+
+        if (data.address) {
+          return {
+            postcode: data.address.postcode || null,
+            countryCode: (data.address.country_code || 'de').toLowerCase(),
+            city: data.address.city || data.address.town || data.address.village || null
+          };
+        }
+        return null;
+      } catch (error) {
+        console.error('Reverse geocoding failed:', error);
+        return null;
+      }
+    }
 
     // ==========================================
     // TRANSITIONS
@@ -515,17 +699,76 @@ const translationsJson = JSON.stringify(t);
       }
     }
 
-    function renderRestaurants() {
+    async function renderRestaurants() {
       if (!resultsGrid || !resultsCount || !resultsLocationText) return;
 
-      var filteredLocations = chainLocations.slice(0, 8);
+      // Show loading state
+      resultsGrid.innerHTML = '<div class="loading-state"><span class="spinner"></span> ' + translations.loading + '</div>';
 
-      resultsLocationText.textContent = 'Deutschland · ' + state.zip;
+      // 1. Detect country from ZIP
+      var countryInfo = state.detectedCountry
+        ? { code: state.detectedCountry, name: countryNames[state.detectedCountry] || state.detectedCountry }
+        : detectCountryFromZip(state.zip);
+      var countryCode = countryInfo.code;
+      var countryName = countryInfo.name;
+
+      // 2. Get coordinates (from geolocation or geocode ZIP)
+      var coords = state.coordinates;
+      if (!coords) {
+        coords = await geocodeZip(state.zip, countryCode);
+      }
+
+      // 3. Filter and sort locations
+      var filteredLocations;
+      if (coords) {
+        // Calculate distances and sort
+        filteredLocations = chainLocations
+          .filter(function(loc) { return loc.country === countryCode; })
+          .map(function(loc) {
+            var distance = calculateDistance(
+              coords.lat, coords.lng,
+              loc.coordinates.lat, loc.coordinates.lng
+            );
+            return Object.assign({}, loc, { calculatedDistance: distance });
+          })
+          .sort(function(a, b) { return a.calculatedDistance - b.calculatedDistance; });
+      } else {
+        // Fallback: filter by country only, no distance sorting
+        filteredLocations = chainLocations
+          .filter(function(loc) { return loc.country === countryCode; })
+          .map(function(loc) {
+            return Object.assign({}, loc, { calculatedDistance: null });
+          });
+      }
+
+      // Store for "show more" functionality
+      state.allFilteredLocations = filteredLocations;
+      state.visibleCount = 6;
+
+      // 4. Update header text
+      var cityName = coords && coords.displayName ? coords.displayName : state.zip;
+      resultsLocationText.textContent = countryName + ' · ' + cityName;
       resultsCount.textContent = filteredLocations.length + ' ' + translations.restaurantsInZip + ' ' + state.zip;
+
+      // 5. Render cards
+      renderRestaurantCards(filteredLocations.slice(0, state.visibleCount), filteredLocations.length);
+    }
+
+    function renderRestaurantCards(locations, totalCount) {
+      if (!resultsGrid) return;
+
+      // Handle no results
+      if (locations.length === 0) {
+        resultsGrid.innerHTML = '<div class="no-results">' +
+          '<h3>' + translations.noResults + '</h3>' +
+          '<p>' + translations.noResultsSubtitle + '</p>' +
+          '</div>';
+        return;
+      }
 
       var html = '<p class="results-subtitle">' + translations.restaurantsSubtitle + '</p><div class="cards-grid">';
 
-      filteredLocations.forEach(function(r) {
+      locations.forEach(function(r) {
         html += '<article class="card"><div class="card-header"><div>';
         html += '<h3 class="card-name">' + (r.chainName || r.name);
         if (r.rating) {
@@ -537,7 +780,12 @@ const translationsJson = JSON.stringify(t);
           html += '<span class="card-category">' + r.category + '</span>';
         }
         html += '</div></div>';
-        html += '<span class="card-distance">' + (r.distance || '1.4 km') + '</span></div>';
+
+        // Distance badge (only show if calculated)
+        if (r.calculatedDistance !== null) {
+          html += '<span class="card-distance">' + formatDistance(r.calculatedDistance) + '</span>';
+        }
+        html += '</div>';
 
         if (r.dishes && r.dishes.length > 0) {
           html += '<div class="card-dishes">';
@@ -583,7 +831,76 @@ const translationsJson = JSON.stringify(t);
       });
 
       html += '</div>';
+
+      // "Show More" button (Apple-style progressive disclosure)
+      if (totalCount > state.visibleCount) {
+        var remaining = totalCount - state.visibleCount;
+        html += '<div class="show-more-container">';
+        html += '<button class="show-more-btn" id="showMoreBtn" type="button">';
+        html += '<span class="show-more-text">' + translations.showMore + '</span>';
+        html += '<span class="show-more-count">(' + remaining + ' ' + translations.moreResults + ')</span>';
+        html += '</button>';
+        html += '</div>';
+      }
+
       resultsGrid.innerHTML = html;
+
+      // Attach show more handler
+      var showMoreBtn = document.getElementById('showMoreBtn');
+      if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', handleShowMore);
+      }
+
+      // Animate distance badges
+      if (!prefersReducedMotion && typeof gsap !== 'undefined') {
+        gsap.fromTo('#resultsView .card-distance',
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.4, stagger: 0.08, delay: 0.3, ease: 'back.out(1.7)' }
+        );
+      }
+    }
+
+    function handleShowMore() {
+      if (!state.allFilteredLocations) return;
+
+      var currentVisible = state.visibleCount;
+      state.visibleCount = Math.min(state.visibleCount + 12, state.allFilteredLocations.length);
+
+      // Re-render cards
+      renderRestaurantCards(
+        state.allFilteredLocations.slice(0, state.visibleCount),
+        state.allFilteredLocations.length
+      );
+
+      // GSAP stagger animation for new cards
+      if (!prefersReducedMotion && typeof gsap !== 'undefined') {
+        var allCards = document.querySelectorAll('#resultsView .card');
+        var newCards = [];
+        allCards.forEach(function(card, i) {
+          if (i >= currentVisible) {
+            newCards.push(card);
+          }
+        });
+
+        if (newCards.length > 0) {
+          gsap.fromTo(newCards,
+            { y: 40, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.5,
+              stagger: 0.08,
+              ease: 'power3.out',
+              onComplete: function() {
+                // Smooth scroll to first new card
+                if (newCards[0]) {
+                  newCards[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+              }
+            }
+          );
+        }
+      }
     }
 
     function renderDelivery() {
@@ -882,6 +1199,9 @@ const translationsJson = JSON.stringify(t);
     // ZIP events
     document.addEventListener('zip-submit', function(e) {
       state.zip = e.detail.zip;
+      // Reset detected country so ZIP-based detection is used
+      state.detectedCountry = null;
+      state.coordinates = null;
       transitionToResults();
     });
 
@@ -889,10 +1209,23 @@ const translationsJson = JSON.stringify(t);
       transitionToSplit();
     });
 
-    document.addEventListener('zip-geolocation', function(e) {
+    document.addEventListener('zip-geolocation', async function(e) {
       state.coordinates = { lat: e.detail.lat, lng: e.detail.lng };
-      state.zip = '10115';
-      if (zipInput) zipInput.value = state.zip;
+
+      // Reverse geocode to get actual ZIP and country
+      var geoData = await reverseGeocode(e.detail.lat, e.detail.lng);
+
+      if (geoData) {
+        state.zip = geoData.postcode || (geoData.city || 'Mein Standort');
+        state.detectedCountry = geoData.countryCode;
+        if (zipInput) zipInput.value = state.zip;
+      } else {
+        // Fallback if reverse geocoding fails
+        state.zip = 'Mein Standort';
+        state.detectedCountry = null;
+        if (zipInput) zipInput.value = state.zip;
+      }
+
       transitionToResults();
     });
 
