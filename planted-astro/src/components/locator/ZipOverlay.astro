@@ -12,10 +12,11 @@ interface Props {
     useLocation: string;
     detecting: string;
   };
+  locale?: string;
   zipPlaceholders?: Record<string, string>;
 }
 
-const { translations, zipPlaceholders = {
+const { translations, locale = 'de', zipPlaceholders = {
   'Switzerland': '8001',
   'Germany': '10115',
   'Austria': '1010',
@@ -26,6 +27,25 @@ const { translations, zipPlaceholders = {
   'United Kingdom': 'SW1A',
   'Spain': '28001',
 }} = Astro.props;
+
+// Map locale to country for placeholder lookup
+const localeToCountry: Record<string, string> = {
+  'ch-de': 'Switzerland',
+  'ch-fr': 'Switzerland',
+  'ch-it': 'Switzerland',
+  'de': 'Germany',
+  'at': 'Austria',
+  'lu': 'Luxembourg',
+  'it': 'Italy',
+  'fr': 'France',
+  'nl': 'Netherlands',
+  'uk': 'United Kingdom',
+  'es': 'Spain',
+};
+
+// Get the appropriate placeholder based on locale
+const country = localeToCountry[locale] || 'Germany';
+const defaultPlaceholder = zipPlaceholders[country] || '10115';
 ---
 
 <div class="zip-overlay" id="zipView" aria-hidden="true">
@@ -56,7 +76,7 @@ const { translations, zipPlaceholders = {
         type="text"
         class="zip-input"
         id="zipInput"
-        placeholder={zipPlaceholders['Germany'] || '10115'}
+        placeholder={defaultPlaceholder}
         maxlength="8"
         inputmode="text"
         autocomplete="postal-code"

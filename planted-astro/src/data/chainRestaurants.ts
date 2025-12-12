@@ -477,6 +477,10 @@ export const chainLocations: ChainLocation[] = [
       { name: 'uber-eats', url: 'https://www.ubereats.com/ch/store/dean-david-zurich-hb', displayName: 'Uber Eats' },
     ],
     plantedProducts: ['planted.chicken'],
+    dishes: [
+      { name: 'Tuscany Chicken Salad', description: 'planted.chicken with Italian flavors, sun-dried tomatoes, pine nuts', priceByCountry: { de: '€12.90', at: '€13.50', ch: 'CHF 18.90', lu: '€13.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Planted Chicken Kebab Bowl', description: 'Jasmine rice, planted chicken, pomegranate, harissa', priceByCountry: { de: '€13.90', at: '€14.50', ch: 'CHF 19.90', lu: '€14.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+    ],
   },
   {
     id: 'dd-luzern',
@@ -492,6 +496,10 @@ export const chainLocations: ChainLocation[] = [
       { name: 'uber-eats', url: 'https://www.ubereats.com/ch/store/dean-david-luzern', displayName: 'Uber Eats' },
     ],
     plantedProducts: ['planted.chicken'],
+    dishes: [
+      { name: 'Tuscany Chicken Salad', description: 'planted.chicken with Italian flavors, sun-dried tomatoes, pine nuts', priceByCountry: { de: '€12.90', at: '€13.50', ch: 'CHF 18.90', lu: '€13.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+      { name: 'Planted Chicken Kebab Bowl', description: 'Jasmine rice, planted chicken, pomegranate, harissa', priceByCountry: { de: '€13.90', at: '€14.50', ch: 'CHF 19.90', lu: '€14.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+    ],
   },
   {
     id: 'dd-luxembourg',
@@ -663,6 +671,9 @@ export const chainLocations: ChainLocation[] = [
       { name: 'smood', url: 'https://www.smood.ch/de/restaurants/kaimug-glattzentrum', displayName: 'Smood' },
     ],
     plantedProducts: ['planted.chicken'],
+    dishes: [
+      { name: 'Thai-Gericht mit planted.chicken', description: 'planted chicken with broccoli, bamboo, carrots, mushrooms in soy sauce, jasmine rice', priceByCountry: { ch: 'CHF 22.90', de: '€16.90' }, plantedProduct: 'planted.chicken', isVegan: true },
+    ],
   },
   {
     id: 'kaimug-munich',

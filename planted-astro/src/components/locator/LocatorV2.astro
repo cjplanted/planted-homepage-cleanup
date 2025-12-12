@@ -134,15 +134,17 @@ const translationsJson = JSON.stringify(t);
     findStores: t.findStores,
   }} />
 
-  <ZipOverlay translations={{
-    whereAreYou: t.whereAreYou,
-    restaurantZipSubtitle: t.restaurantZipSubtitle,
-    retailZipSubtitle: t.retailZipSubtitle,
-    enterZip: t.enterZip,
-    or: t.or,
-    useLocation: t.useLocation,
-    detecting: t.detecting,
-  }} />
+  <ZipOverlay
+    locale={locale}
+    translations={{
+      whereAreYou: t.whereAreYou,
+      restaurantZipSubtitle: t.restaurantZipSubtitle,
+      retailZipSubtitle: t.retailZipSubtitle,
+      enterZip: t.enterZip,
+      or: t.or,
+      useLocation: t.useLocation,
+      detecting: t.detecting,
+    }} />
 
   <ResultsView translations={{
     changeZip: t.changeZip,
@@ -316,10 +318,67 @@ const translationsJson = JSON.stringify(t);
         }
       } catch (e) { /* ignore cache errors */ }
 
+      // Map country codes to full names for geocoding
+      var countryNames = {
+        'ch': 'Switzerland',
+        'de': 'Germany',
+        'at': 'Austria',
+        'lu': 'Luxembourg',
+        'it': 'Italy',
+        'fr': 'France',
+        'nl': 'Netherlands',
+        'uk': 'United Kingdom',
+        'es': 'Spain'
+      };
+      var countryName = countryNames[countryCode] || countryCode;
+
+      // Local lookup for common ZIP codes (Nominatim often fails on Swiss ZIPs)
+      var knownZipCoords = {
+        // Switzerland
+        '8000': { lat: 47.3769, lng: 8.5417, displayName: 'Zürich' },
+        '8001': { lat: 47.3686, lng: 8.5391, displayName: 'Zürich' },
+        '8004': { lat: 47.3776, lng: 8.5244, displayName: 'Zürich' },
+        '8005': { lat: 47.3904, lng: 8.5182, displayName: 'Zürich' },
+        '8008': { lat: 47.3531, lng: 8.5570, displayName: 'Zürich' },
+        '8048': { lat: 47.3842, lng: 8.4831, displayName: 'Zürich' },
+        '8304': { lat: 47.4150, lng: 8.5950, displayName: 'Wallisellen' },
+        '6000': { lat: 47.0502, lng: 8.3093, displayName: 'Luzern' },
+        '6003': { lat: 47.0502, lng: 8.3093, displayName: 'Luzern' },
+        '3000': { lat: 46.9480, lng: 7.4474, displayName: 'Bern' },
+        '4000': { lat: 47.5596, lng: 7.5886, displayName: 'Basel' },
+        '1000': { lat: 46.5197, lng: 6.6323, displayName: 'Lausanne' },
+        '1200': { lat: 46.2044, lng: 6.1432, displayName: 'Genève' },
+        // Germany
+        '10115': { lat: 52.5200, lng: 13.4050, displayName: 'Berlin' },
+        '10117': { lat: 52.5170, lng: 13.3889, displayName: 'Berlin' },
+        '80331': { lat: 48.1351, lng: 11.5820, displayName: 'München' },
+        '80335': { lat: 48.1392, lng: 11.5651, displayName: 'München' },
+        '20095': { lat: 53.5511, lng: 9.9937, displayName: 'Hamburg' },
+        '50667': { lat: 50.9375, lng: 6.9603, displayName: 'Köln' },
+        '60311': { lat: 50.1109, lng: 8.6821, displayName: 'Frankfurt' },
+        // Austria
+        '1010': { lat: 48.2082, lng: 16.3738, displayName: 'Wien' },
+        '1020': { lat: 48.2167, lng: 16.4000, displayName: 'Wien' }
+      };
+
+      // Check local lookup first
+      if (knownZipCoords[zip]) {
+        var localCoords = knownZipCoords[zip];
+        // Cache it
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify({
+            coords: localCoords,
+            timestamp: Date.now()
+          }));
+        } catch (e) {}
+        return localCoords;
+      }
+
       try {
+        // Try postalcode query first
         var url = 'https://nominatim.openstreetmap.org/search?' +
           'postalcode=' + encodeURIComponent(zip) +
-          '&country=' + countryCode +
+          '&country=' + encodeURIComponent(countryName) +
           '&format=json&limit=1';
 
         var response = await fetch(url, {
@@ -329,6 +388,22 @@ const translationsJson = JSON.stringify(t);
         if (!response.ok) return null;
 
         var data = await response.json();
+
+        // Fallback to structured query if postalcode query returns no results
+        if (data.length === 0) {
+          var fallbackUrl = 'https://nominatim.openstreetmap.org/search?' +
+            'q=' + encodeURIComponent(zip) +
+            '&countrycodes=' + countryCode +
+            '&format=json&limit=1';
+
+          response = await fetch(fallbackUrl, {
+            headers: { 'User-Agent': 'PlantedWebsite/1.0' }
+          });
+
+          if (!response.ok) return null;
+          data = await response.json();
+        }
+
         if (data.length === 0) return null;
 
         var coords = {
@@ -719,9 +794,10 @@ const translationsJson = JSON.stringify(t);
       }
 
       // 3. Filter and sort locations
+      var MAX_DISTANCE_KM = 50; // Maximum distance in kilometers
       var filteredLocations;
       if (coords) {
-        // Calculate distances and sort
+        // Calculate distances, filter by max distance, and sort
         filteredLocations = chainLocations
           .filter(function(loc) { return loc.country === countryCode; })
           .map(function(loc) {
@@ -731,6 +807,7 @@ const translationsJson = JSON.stringify(t);
             );
             return Object.assign({}, loc, { calculatedDistance: distance });
           })
+          .filter(function(loc) { return loc.calculatedDistance <= MAX_DISTANCE_KM; })
           .sort(function(a, b) { return a.calculatedDistance - b.calculatedDistance; });
       } else {
         // Fallback: filter by country only, no distance sorting
