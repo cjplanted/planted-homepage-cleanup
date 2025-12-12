@@ -1,7 +1,8 @@
 ---
 /**
- * Locator V3 Test Page
- * Demonstrates the cream-themed V3 locator results view
+ * Locator V3 Results Page
+ * Displays restaurant results in cream-themed card layout
+ * Receives search parameters from V2 locator via URL query params
  */
 import Layout from '../../layouts/Layout.astro';
 import LocatorResultsV3 from '../../components/locator/LocatorResultsV3.astro';
@@ -18,6 +19,29 @@ export async function getStaticPaths() {
 
 const { locale } = Astro.props as { locale: LocaleCode };
 const t = getTranslations(locale);
+
+// Parse URL query parameters from V2 redirect
+const searchParams = Astro.url.searchParams;
+const zip = searchParams.get('zip') || '8001';
+const countryCode = searchParams.get('country') || 'ch';
+const lat = searchParams.get('lat');
+const lng = searchParams.get('lng');
+
+// Map country codes to display names
+const countryNames: Record<string, string> = {
+  'ch': 'Schweiz',
+  'de': 'Deutschland',
+  'at': 'Österreich',
+  'uk': 'United Kingdom',
+  'nl': 'Nederland',
+  'fr': 'France',
+  'it': 'Italia',
+  'es': 'España'
+};
+const countryName = countryNames[countryCode] || 'Schweiz';
+
+// Determine city name (for now use ZIP, in future could reverse geocode)
+const cityName = zip;
 
 // Sample dish images (placeholder URLs)
 const dishImages = [
@@ -173,12 +197,12 @@ const v3Translations = {
 };
 ---
 
-<Layout title="Locator V3 - planted." locale={locale}>
+<Layout title="Restaurants - planted." locale={locale}>
   <LocatorResultsV3
     locale={locale}
-    country="Schweiz"
-    city="Zürich"
-    postalCode="8001"
+    country={countryName}
+    city={cityName}
+    postalCode={zip}
     venues={sampleVenues}
     translations={v3Translations}
   />
@@ -190,9 +214,17 @@ const v3Translations = {
     background: #FDF9F4;
   }
 
-  /* Hide header/footer for standalone locator test */
-  header.site-header,
-  footer.site-footer {
-    display: none;
+  /* Adjust V3 locator to account for navbar */
+  .locator-v3 {
+    padding-top: 80px; /* Space for fixed navbar */
+  }
+
+  /* Adjust header position for fixed navbar */
+  .v3-header {
+    top: 80px; /* Below navbar */
+  }
+
+  .v3-filters-bar {
+    top: 156px; /* Below navbar + v3-header (80 + 76) */
   }
 </style>

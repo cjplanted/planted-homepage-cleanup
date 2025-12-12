@@ -265,14 +265,14 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
     }
 
     private handleBack() {
-      // Dispatch custom event for parent component to handle
-      const event = new CustomEvent('v3-locator-back', { bubbles: true });
-      document.dispatchEvent(event);
+      // Navigate back to homepage locator section
+      // Get locale from URL path (e.g., /planted-website/ch-de/locator-v3 -> ch-de)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const locale = pathParts[1] || 'ch-de'; // Index 1 after base path
+      const basePath = '/planted-website'; // GitHub Pages base
 
-      // If no handler, try to navigate back in history
-      if (window.history.length > 1) {
-        window.history.back();
-      }
+      // Navigate to homepage with locator anchor
+      window.location.href = `${basePath}/${locale}/#locator`;
     }
   }
 

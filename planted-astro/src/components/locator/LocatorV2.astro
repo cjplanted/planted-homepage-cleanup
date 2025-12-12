@@ -651,18 +651,40 @@ const translationsJson = JSON.stringify(t);
     function transitionToResults() {
       if (!zipView || !resultsView) return;
 
-      // Lock body scroll
-      document.body.classList.add('locator-results-active');
-
-      // Configure results
+      // For restaurant searches, redirect to V3 results page
       var isRestaurant = state.path === 'restaurant';
       if (isRestaurant) {
-        resultsView.classList.remove('green');
-        if (resultsTabs) resultsTabs.style.display = 'flex';
-      } else {
-        resultsView.classList.add('green');
-        if (resultsTabs) resultsTabs.style.display = 'none';
+        // Get locale from URL path (e.g., /planted-website/ch-de/ -> ch-de)
+        var pathParts = window.location.pathname.split('/').filter(Boolean);
+        var locale = pathParts[1] || 'ch-de'; // Index 1 after base path
+
+        // Detect country from ZIP
+        var countryInfo = state.detectedCountry
+          ? { code: state.detectedCountry }
+          : detectCountryFromZip(state.zip);
+
+        // Build V3 URL with query parameters
+        var params = new URLSearchParams();
+        params.set('zip', state.zip || '');
+        params.set('country', countryInfo.code || 'ch');
+        if (state.coordinates) {
+          params.set('lat', String(state.coordinates.lat));
+          params.set('lng', String(state.coordinates.lng));
+        }
+
+        // Redirect to V3 results page
+        var basePath = '/planted-website'; // GitHub Pages base
+        var v3Url = basePath + '/' + locale + '/locator-v3?' + params.toString();
+        window.location.href = v3Url;
+        return;
       }
+
+      // Lock body scroll (only for retail path which stays on V2)
+      document.body.classList.add('locator-results-active');
+
+      // Configure results for retail
+      resultsView.classList.add('green');
+      if (resultsTabs) resultsTabs.style.display = 'none';
 
       // Immediately update state classes for test reliability
       zipView.classList.remove('active');
