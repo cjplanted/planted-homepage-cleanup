@@ -524,7 +524,8 @@ export class SmartDishFinderAgent {
             last_seen: new Date(),
           };
 
-          const key = dish.name.toLowerCase();
+          // Use normalized name as key for consistent deduplication
+          const key = this.normalizeDishName(dish.name);
           if (!pricesByDish.has(key)) {
             pricesByDish.set(key, []);
           }
@@ -567,6 +568,62 @@ export class SmartDishFinderAgent {
   
 
   /**
+   * Normalize dish name for deduplication
+   * Handles variations in whitespace, punctuation, and common suffixes
+   */
+  private normalizeDishName(name: string): string {
+    return name
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ')                    // Normalize whitespace
+      .replace(/['"]/g, '')                    // Remove quotes
+      .replace(/\s*\(.*?\)\s*/g, '')           // Remove parenthetical content
+      .replace(/\s*-\s*klein\s*$/i, '')        // Remove size suffixes (German)
+      .replace(/\s*-\s*gross\s*$/i, '')
+      .replace(/\s*-\s*small\s*$/i, '')        // Remove size suffixes (English)
+      .replace(/\s*-\s*large\s*$/i, '')
+      .replace(/\s*-\s*regular\s*$/i, '')
+      .replace(/\s*mit\s+extra\s+.*$/i, '')    // Remove "mit extra ..." (German)
+      .replace(/\s*with\s+extra\s+.*$/i, '')   // Remove "with extra ..." (English)
+      .replace(/planted\s*/gi, '')              // Remove "planted" prefix for grouping
+      .trim();
+  }
+
+  /**
+   * Calculate a quality score for a dish to determine which duplicate to keep
+   * Higher score = better quality
+   */
+  private calculateDishQualityScore(dish: ExtractedDishFromPage): number {
+    let score = 0;
+
+    // Confidence is a major factor
+    score += dish.product_confidence || 0;
+
+    // Having an image is valuable
+    if (dish.image_url && dish.image_url.length > 0) {
+      score += 30;
+    }
+
+    // Having a description is valuable
+    if (dish.description && dish.description.length > 20) {
+      score += 20;
+    }
+
+    // Having a valid price is valuable
+    const price = parseFloat(dish.price);
+    if (!isNaN(price) && price > 5 && price < 100) {
+      score += 15;
+    }
+
+    // Having dietary info is nice
+    if (dish.dietary_tags && dish.dietary_tags.length > 0) {
+      score += 5;
+    }
+
+    return score;
+  }
+
+  /**
    * Store extracted dishes
    */
   private async storeDishes(
@@ -574,19 +631,41 @@ export class SmartDishFinderAgent {
     dishes: ExtractedDishFromPage[],
     pricesByDish: Map<string, PriceEntry[]>
   ): Promise<void> {
-    // Deduplicate by name
+    // Deduplicate by normalized name, keeping best quality version
     const uniqueDishes = new Map<string, ExtractedDishFromPage>();
     for (const dish of dishes) {
-      const key = dish.name.toLowerCase();
+      const key = this.normalizeDishName(dish.name);
+
+      // Skip if key is too short (likely parsing error)
+      if (key.length < 3) continue;
+
       const existing = uniqueDishes.get(key);
 
-      // Keep the one with higher confidence
-      if (!existing || dish.product_confidence > existing.product_confidence) {
+      if (!existing) {
         uniqueDishes.set(key, dish);
+      } else {
+        // Compare quality scores and keep the better one
+        const existingScore = this.calculateDishQualityScore(existing);
+        const newScore = this.calculateDishQualityScore(dish);
+
+        if (newScore > existingScore) {
+          uniqueDishes.set(key, dish);
+        } else if (newScore === existingScore) {
+          // Merge data from both if scores are equal
+          const merged: ExtractedDishFromPage = {
+            ...existing,
+            image_url: existing.image_url || dish.image_url,
+            description: existing.description || dish.description,
+            category: existing.category || dish.category,
+            dietary_tags: [...new Set([...(existing.dietary_tags || []), ...(dish.dietary_tags || [])])],
+          };
+          uniqueDishes.set(key, merged);
+        }
+        // If new score is lower, keep existing (no action needed)
       }
     }
 
-    this.log(`Storing ${uniqueDishes.size} unique dishes for ${venue.name}`);
+    this.log(`Storing ${uniqueDishes.size} unique dishes for ${venue.name} (from ${dishes.length} total)`);
 
     // If no dishes were found, flag venue for manual review
     if (uniqueDishes.size === 0 && !this.config.dryRun) {

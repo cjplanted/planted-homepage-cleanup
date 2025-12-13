@@ -38,6 +38,19 @@ export interface FetchResult {
   retryable?: boolean;
 }
 
+/**
+ * Structured menu item extracted directly from DOM
+ * More reliable than AI extraction for image-dish correlation
+ */
+export interface ExtractedMenuItem {
+  name: string;
+  price: string;
+  currency: string;
+  description?: string;
+  imageUrl?: string;
+  category?: string;
+}
+
 export interface FetchOptions {
   waitForSelector?: string;
   scrollToBottom?: boolean;
@@ -466,11 +479,37 @@ export class PuppeteerFetcher {
         jsonData = await this.extractJsonData(page, platform);
       }
 
-      // Combine JSON data with extracted images for AI to use
+      // For Uber Eats, scroll to trigger lazy loading BEFORE extracting menu items
+      // This ensures all menu items and images are loaded
+      let structuredMenuItems: ExtractedMenuItem[] = [];
+      let relevantMenuHtml = '';
+
+      if (platform === 'uber-eats') {
+        // Always scroll for Uber Eats to trigger lazy loading
+        console.log(`[PuppeteerFetcher] Scrolling Uber Eats page to load all menu items...`);
+        await this.scrollToBottom(page);
+        await new Promise((r) => setTimeout(r, 2000)); // Wait for images to load
+
+        // Now extract structured menu items
+        structuredMenuItems = await this.extractUberEatsMenuItems(page);
+        console.log(`[PuppeteerFetcher] Extracted ${structuredMenuItems.length} structured menu items from Uber Eats`);
+
+        // Also extract relevant menu HTML for AI fallback
+        if (structuredMenuItems.length === 0) {
+          console.log(`[PuppeteerFetcher] No structured items found, extracting relevant HTML for AI...`);
+          relevantMenuHtml = await this.extractRelevantMenuHtml(page);
+          console.log(`[PuppeteerFetcher] Extracted ${relevantMenuHtml.length} chars of relevant menu HTML`);
+        }
+      }
+
+      // Combine JSON data with extracted images and structured items for AI to use
       const enrichedJsonData = {
         ...(jsonData && typeof jsonData === 'object' ? jsonData : {}),
         _extracted_images: extractedImages,
         _image_count: extractedImages.length,
+        _structured_menu_items: structuredMenuItems,
+        _structured_items_count: structuredMenuItems.length,
+        _relevant_menu_html: relevantMenuHtml || undefined,
       };
 
       return {
@@ -609,6 +648,294 @@ export class PuppeteerFetcher {
 
     // Wait a bit for content to load
     await new Promise((r) => setTimeout(r, 1000));
+  }
+
+  /**
+   * Extract structured menu items from Uber Eats page DOM
+   * Uses multiple selector strategies for robustness
+   * More reliable than AI extraction for image-dish correlation
+   */
+  private async extractUberEatsMenuItems(page: Page): Promise<ExtractedMenuItem[]> {
+    try {
+      // First, check if this is a brand page (list of stores) vs store page (menu)
+      const isBrandPage = await page.evaluate(() => {
+        // Brand pages have store listings, not menu items
+        const storeLinks = document.querySelectorAll('a[href*="/store/"]');
+        const menuItems = document.querySelectorAll('a[href*="?mod=quickView"]');
+
+        // If we have store links and no menu items, it's likely a brand page
+        if (storeLinks.length > 3 && menuItems.length === 0) {
+          return true;
+        }
+
+        // Check for brand page indicators in text
+        const pageText = document.body.innerText.toLowerCase();
+        if (pageText.includes('standorte in deiner nähe') ||
+            pageText.includes('locations near you') ||
+            pageText.includes('lieferung oder abholung')) {
+          return storeLinks.length > 0;
+        }
+
+        return false;
+      });
+
+      if (isBrandPage) {
+        console.log(`[PuppeteerFetcher] Detected brand page (list of stores), not a store page`);
+        // Return empty - the agent should handle store selection
+        return [];
+      }
+
+      return await page.evaluate(() => {
+        const items = [];
+        const seenNames = new Set();
+
+        // Strategy 1: quickView links (most common on store pages)
+        const menuLinks = document.querySelectorAll('a[href*="?mod=quickView"]');
+
+        // Strategy 2: data-testid menu items (fallback)
+        const testIdItems = document.querySelectorAll('[data-testid="menu-item"], [data-testid="store-item"]');
+
+        // Strategy 3: Menu section containers (generic fallback)
+        const menuContainers = document.querySelectorAll('[class*="menu"] li, [class*="Menu"] li, [role="listitem"]');
+
+        // Combine all potential menu elements
+        const allElements: Element[] = [
+          ...Array.from(menuLinks),
+          ...Array.from(testIdItems),
+          ...Array.from(menuContainers)
+        ];
+
+        console.log('[DOM] Found: ' + menuLinks.length + ' quickView links, ' + testIdItems.length + ' testid items, ' + menuContainers.length + ' containers');
+
+        // Track category by finding headings
+        const headings = document.querySelectorAll('h2, h3, [data-testid="category-header"]');
+        const categoryPositions = [];
+        for (let h = 0; h < headings.length; h++) {
+          const heading = headings[h];
+          const rect = heading.getBoundingClientRect();
+          const text = heading.textContent ? heading.textContent.trim() : '';
+          if (text && text.length > 2 && text.length < 50) {
+            categoryPositions.push({
+              name: text,
+              top: rect.top + window.scrollY
+            });
+          }
+        }
+
+        // Inline helper - extract price and currency from text
+        // Note: No type annotations allowed inside page.evaluate (causes __name issue)
+        const extractPriceFromText = function(text) {
+          const patterns = [
+            /(CHF|EUR|€|£|USD|\$)\s*([\d.,]+)/i,
+            /([\d.,]+)\s*(CHF|EUR|€|£|USD|\$)/i,
+          ];
+
+          for (let k = 0; k < patterns.length; k++) {
+            const match = text.match(patterns[k]);
+            if (match) {
+              let currency = match[1];
+              let price = match[2] || match[1];
+
+              if (/[\d.,]/.test(currency)) {
+                const temp = currency;
+                currency = price;
+                price = temp;
+              }
+
+              price = price.replace(',', '.');
+              currency = currency.toUpperCase();
+              if (currency === '€') currency = 'EUR';
+              if (currency === '£') currency = 'GBP';
+              if (currency === '$') currency = 'USD';
+
+              return { price: price, currency: currency };
+            }
+          }
+
+          return { price: '', currency: 'CHF' };
+        };
+
+        // Inline helper - clean dish name
+        const cleanDishName = function(text) {
+          return text
+            .replace(/CHF\s*[\d.,]+/gi, '')
+            .replace(/€\s*[\d.,]+/gi, '')
+            .replace(/EUR\s*[\d.,]+/gi, '')
+            .replace(/•\s*\d+%\s*\(\d+\)/g, '')
+            .replace(/#\d+\s+most\s+liked/gi, '')
+            .replace(/Quick\s*Add/gi, '')
+            .replace(/Plus\s*small/gi, '')
+            .replace(/Popular/gi, '')
+            .replace(/Gesponsert/gi, '')
+            .replace(/Sponsored/gi, '')
+            .replace(/Allergene.*$/gi, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        };
+
+        // Inline helper - find image in element or ancestors
+        const findImageUrl = function(element) {
+          let img = element.querySelector('img[src*="tb-static.uber.com"], img[src*="uber-eats"], img[data-src*="uber"]');
+          if (img) {
+            return img.getAttribute('src') || img.getAttribute('data-src') || undefined;
+          }
+
+          let parent = element.parentElement;
+          for (let i = 0; i < 5 && parent; i++) {
+            img = parent.querySelector('img[src*="tb-static.uber.com"], img[src*="uber-eats"]');
+            if (img) {
+              return img.getAttribute('src') || img.getAttribute('data-src') || undefined;
+            }
+            parent = parent.parentElement;
+          }
+
+          const siblings = element.parentElement ? element.parentElement.children : [];
+          for (let j = 0; j < siblings.length; j++) {
+            img = siblings[j].querySelector('img[src*="tb-static.uber.com"]');
+            if (img) {
+              return img.getAttribute('src') || img.getAttribute('data-src') || undefined;
+            }
+          }
+
+          return undefined;
+        };
+
+        // Process each element
+        for (const element of allElements) {
+          const text = element.textContent || '';
+          const lines = text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+
+          if (lines.length === 0) continue;
+
+          // First non-empty line is usually the name
+          let name = cleanDishName(lines[0]);
+
+          // Skip if name is too short or too long
+          if (!name || name.length < 3 || name.length > 100) continue;
+
+          // Skip duplicates (already processed)
+          const normalizedName = name.toLowerCase();
+          if (seenNames.has(normalizedName)) continue;
+          seenNames.add(normalizedName);
+
+          // Extract price
+          const priceResult = extractPriceFromText(text);
+          const price = priceResult.price;
+          const currency = priceResult.currency;
+
+          // Extract description (longer line that's not the name or price)
+          let description = '';
+          for (let i = 1; i < lines.length && i < 5; i++) {
+            const line = lines[i];
+            if (line.length > 15 &&
+                !line.match(/^CHF|^€|^EUR|^Quick Add|^Plus|^Popular|^Allergene|^\d+%/i)) {
+              description = line;
+              break;
+            }
+          }
+
+          // Find image
+          const imageUrl = findImageUrl(element);
+
+          // Determine category
+          let category = '';
+          const rect = element.getBoundingClientRect();
+          const elementTop = rect.top + window.scrollY;
+          for (let i = categoryPositions.length - 1; i >= 0; i--) {
+            if (categoryPositions[i].top < elementTop) {
+              category = categoryPositions[i].name;
+              break;
+            }
+          }
+
+          items.push({
+            name,
+            price,
+            currency,
+            description: description || undefined,
+            imageUrl,
+            category: category || undefined,
+          });
+        }
+
+        return items;
+      });
+    } catch (error) {
+      console.warn(`Failed to extract Uber Eats menu items: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Extract only menu-relevant HTML to avoid truncation issues
+   * Preserves "planted" content while removing navigation, scripts, etc.
+   */
+  async extractRelevantMenuHtml(page: Page): Promise<string> {
+    try {
+      return await page.evaluate(() => {
+        const relevantParts = [];
+
+        // Use querySelectorAll instead of TreeWalker to avoid function serialization issues
+        // Find all elements and filter for those containing "planted"
+        const allElements = document.body.querySelectorAll('*');
+        const plantedElements = [];
+
+        for (let i = 0; i < allElements.length; i++) {
+          const el = allElements[i];
+          const tag = el.tagName.toLowerCase();
+          // Skip script, style, nav elements
+          if (tag === 'script' || tag === 'style' || tag === 'nav' || tag === 'header' || tag === 'footer' || tag === 'noscript') {
+            continue;
+          }
+          const text = el.textContent ? el.textContent.toLowerCase() : '';
+          if (text.includes('planted')) {
+            plantedElements.push(el);
+          }
+        }
+
+        // Get outerHTML of planted elements and their context
+        for (let j = 0; j < plantedElements.length; j++) {
+          const el = plantedElements[j];
+          // Go up to find the menu item container
+          let container = el;
+          for (let k = 0; k < 5 && container; k++) {
+            if (container.matches && container.matches('li, [role="listitem"], article, [data-testid]')) {
+              break;
+            }
+            container = container.parentElement;
+          }
+
+          if (container && container.outerHTML && container.outerHTML.length < 5000) {
+            relevantParts.push(container.outerHTML);
+          } else if (el.outerHTML && el.outerHTML.length < 3000) {
+            relevantParts.push(el.outerHTML);
+          }
+        }
+
+        // Also include menu section headers
+        const headers = document.querySelectorAll('h2, h3, [data-testid*="category"]');
+        for (let m = 0; m < headers.length; m++) {
+          const h = headers[m];
+          if (h.outerHTML && h.outerHTML.length < 500) {
+            relevantParts.push(h.outerHTML);
+          }
+        }
+
+        // Deduplicate and join
+        const seen = {};
+        const uniqueParts = [];
+        for (let n = 0; n < relevantParts.length; n++) {
+          if (!seen[relevantParts[n]]) {
+            seen[relevantParts[n]] = true;
+            uniqueParts.push(relevantParts[n]);
+          }
+        }
+        return uniqueParts.join('\n\n');
+      });
+    } catch (error) {
+      console.warn(`Failed to extract relevant menu HTML: ${error}`);
+      return '';
+    }
   }
 
   /**

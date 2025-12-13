@@ -102,6 +102,80 @@ function validateVenueAddress(venue: { name: string; address: { street?: string;
 }
 
 /**
+ * Normalize address for matching
+ */
+function normalizeAddressKey(address: { street?: string; city: string; postal_code?: string; country: string }): string {
+  const street = (address.street || '').toLowerCase().trim();
+  const postal = (address.postal_code || '').toLowerCase().trim();
+  const city = address.city.toLowerCase().trim();
+  const country = address.country.toLowerCase().trim();
+  return `${street}|${postal}|${city}|${country}`;
+}
+
+/**
+ * Find existing production venue that matches the discovered venue
+ * Uses: delivery platform URL match, address match, or chain_id + city match
+ */
+async function findExistingProductionVenue(
+  db: FirebaseFirestore.Firestore,
+  discoveredVenue: {
+    name: string;
+    chain_id?: string;
+    address: { street?: string; city: string; postal_code?: string; country: string };
+    delivery_platforms: Array<{ platform: string; url: string; venue_id?: string }>;
+  }
+): Promise<{ id: string; needsUpdate: boolean } | null> {
+  // Get all venues to check (we need to check multiple criteria)
+  const venuesSnapshot = await db.collection('venues').get();
+  const normalizedDiscoveredAddress = normalizeAddressKey(discoveredVenue.address);
+
+  // Build set of discovered platform URLs
+  const discoveredUrls = new Set(
+    discoveredVenue.delivery_platforms.map(p => p.url.toLowerCase())
+  );
+
+  for (const doc of venuesSnapshot.docs) {
+    const existingVenue = doc.data() as {
+      chain_id?: string;
+      address: { street?: string; city: string; postal_code?: string; country: string };
+      delivery_platforms?: Array<{ platform: string; url: string }>;
+    };
+
+    // Check 1: Matching delivery platform URL (strongest signal)
+    if (existingVenue.delivery_platforms) {
+      for (const platform of existingVenue.delivery_platforms) {
+        if (discoveredUrls.has(platform.url.toLowerCase())) {
+          return { id: doc.id, needsUpdate: true };
+        }
+      }
+    }
+
+    // Check 2: Exact address match
+    const normalizedExistingAddress = normalizeAddressKey(existingVenue.address);
+    if (normalizedDiscoveredAddress === normalizedExistingAddress) {
+      return { id: doc.id, needsUpdate: true };
+    }
+
+    // Check 3: Same chain + same city + same country (likely same venue)
+    if (
+      discoveredVenue.chain_id &&
+      existingVenue.chain_id === discoveredVenue.chain_id &&
+      existingVenue.address.city.toLowerCase() === discoveredVenue.address.city.toLowerCase() &&
+      existingVenue.address.country.toLowerCase() === discoveredVenue.address.country.toLowerCase()
+    ) {
+      // Also check street similarity to avoid matching different locations of same chain
+      const existingStreet = (existingVenue.address.street || '').toLowerCase();
+      const discoveredStreet = (discoveredVenue.address.street || '').toLowerCase();
+      if (existingStreet === discoveredStreet || !existingStreet || !discoveredStreet) {
+        return { id: doc.id, needsUpdate: true };
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
  * Handler for POST /admin/sync/execute
  */
 export const adminSyncExecuteHandler = createAdminHandler(
@@ -164,6 +238,7 @@ export const adminSyncExecuteHandler = createAdminHandler(
     const syncedVenueIds: string[] = [];
     const syncedDishIds: string[] = [];
     let venuesAdded = 0;
+    let venuesUpdated = 0;
     let dishesAdded = 0;
 
     // Sync venues (including their embedded dishes)
@@ -186,56 +261,127 @@ export const adminSyncExecuteHandler = createAdminHandler(
       }
 
       try {
+        // Check if venue already exists in production
+        const existingVenue = await findExistingProductionVenue(db, discoveredVenue);
+
         // Use a transaction to ensure atomicity
-        const embeddedDishCount = await db.runTransaction(async (transaction) => {
-          // Create production venue
-          const venueRef = db.collection('venues').doc();
-          const productionVenue = {
-            type: 'restaurant' as const,
-            name: discoveredVenue.name,
-            chain_id: discoveredVenue.chain_id,
-            address: {
-              street: discoveredVenue.address.street,
-              city: discoveredVenue.address.city,
-              postal_code: discoveredVenue.address.postal_code,
-              country: discoveredVenue.address.country,
-            },
-            location: discoveredVenue.coordinates ? {
-              latitude: discoveredVenue.coordinates.latitude,
-              longitude: discoveredVenue.coordinates.longitude,
-            } : { latitude: 0, longitude: 0 },
-            opening_hours: {
-              monday: { open: '11:00', close: '22:00' },
-              tuesday: { open: '11:00', close: '22:00' },
-              wednesday: { open: '11:00', close: '22:00' },
-              thursday: { open: '11:00', close: '22:00' },
-              friday: { open: '11:00', close: '22:00' },
-              saturday: { open: '11:00', close: '22:00' },
-              sunday: { open: '11:00', close: '22:00' },
-            },
-            delivery_platforms: discoveredVenue.delivery_platforms.map(p => ({
-              platform: p.platform,
-              url: p.url,
-              venue_id: p.venue_id,
-            })),
-            source: {
-              type: 'discovered' as const,
-              partner_id: 'smart-discovery-agent',
-            },
-            status: 'active' as const,
-            last_verified: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-          };
+        const result = await db.runTransaction(async (transaction) => {
+          let venueRef: FirebaseFirestore.DocumentReference;
+          let isUpdate = false;
 
-          transaction.set(venueRef, productionVenue);
+          if (existingVenue) {
+            // Update existing venue
+            venueRef = db.collection('venues').doc(existingVenue.id);
+            isUpdate = true;
 
-          // Also create production dishes from embedded dishes array
+            // Merge delivery platforms (keep existing + add new)
+            const existingDoc = await transaction.get(venueRef);
+            const existingData = existingDoc.data() as {
+              delivery_platforms?: Array<{ platform: string; url: string }>;
+            } | undefined;
+
+            const existingUrls = new Set(
+              (existingData?.delivery_platforms || []).map(p => p.url.toLowerCase())
+            );
+
+            const mergedPlatforms = [
+              ...(existingData?.delivery_platforms || []),
+              ...discoveredVenue.delivery_platforms
+                .filter(p => !existingUrls.has(p.url.toLowerCase()))
+                .map(p => ({
+                  platform: p.platform,
+                  url: p.url,
+                  venue_id: p.venue_id,
+                })),
+            ];
+
+            transaction.update(venueRef, {
+              name: discoveredVenue.name,
+              chain_id: discoveredVenue.chain_id || null,
+              address: {
+                street: discoveredVenue.address.street,
+                city: discoveredVenue.address.city,
+                postal_code: discoveredVenue.address.postal_code,
+                country: discoveredVenue.address.country,
+              },
+              location: discoveredVenue.coordinates ? {
+                latitude: discoveredVenue.coordinates.latitude,
+                longitude: discoveredVenue.coordinates.longitude,
+              } : undefined,
+              delivery_platforms: mergedPlatforms,
+              last_verified: new Date(),
+              updated_at: new Date(),
+            });
+
+            console.log(`[Sync] Updated existing venue: ${discoveredVenue.name} (${venueRef.id})`);
+          } else {
+            // Create new production venue
+            venueRef = db.collection('venues').doc();
+            const productionVenue = {
+              type: 'restaurant' as const,
+              name: discoveredVenue.name,
+              chain_id: discoveredVenue.chain_id,
+              address: {
+                street: discoveredVenue.address.street,
+                city: discoveredVenue.address.city,
+                postal_code: discoveredVenue.address.postal_code,
+                country: discoveredVenue.address.country,
+              },
+              location: discoveredVenue.coordinates ? {
+                latitude: discoveredVenue.coordinates.latitude,
+                longitude: discoveredVenue.coordinates.longitude,
+              } : { latitude: 0, longitude: 0 },
+              opening_hours: {
+                monday: { open: '11:00', close: '22:00' },
+                tuesday: { open: '11:00', close: '22:00' },
+                wednesday: { open: '11:00', close: '22:00' },
+                thursday: { open: '11:00', close: '22:00' },
+                friday: { open: '11:00', close: '22:00' },
+                saturday: { open: '11:00', close: '22:00' },
+                sunday: { open: '11:00', close: '22:00' },
+              },
+              delivery_platforms: discoveredVenue.delivery_platforms.map(p => ({
+                platform: p.platform,
+                url: p.url,
+                venue_id: p.venue_id,
+              })),
+              source: {
+                type: 'discovered' as const,
+                partner_id: 'smart-discovery-agent',
+              },
+              status: 'active' as const,
+              last_verified: new Date(),
+              created_at: new Date(),
+              updated_at: new Date(),
+            };
+
+            transaction.set(venueRef, productionVenue);
+            console.log(`[Sync] Created new venue: ${discoveredVenue.name} (${venueRef.id})`);
+          }
+
+          // Get existing dishes for this venue to avoid duplicates
+          const existingDishesSnapshot = await db
+            .collection('dishes')
+            .where('venue_id', '==', venueRef.id)
+            .get();
+          const existingDishNames = new Set(
+            existingDishesSnapshot.docs.map(d =>
+              (d.data().name as string || '').toLowerCase().trim()
+            )
+          );
+
+          // Create production dishes from embedded dishes array (skip duplicates)
           let embeddedDishesCreated = 0;
           if (discoveredVenue.dishes && discoveredVenue.dishes.length > 0) {
             for (const embeddedDish of discoveredVenue.dishes) {
+              const normalizedName = embeddedDish.name.toLowerCase().trim();
+
+              // Skip if dish already exists
+              if (existingDishNames.has(normalizedName)) {
+                continue;
+              }
+
               const dishRef = db.collection('dishes').doc();
-              // Use correct Dish schema with planted_products array and price object
               const productionDish = {
                 venue_id: venueRef.id,
                 name: embeddedDish.name,
@@ -256,6 +402,7 @@ export const adminSyncExecuteHandler = createAdminHandler(
                 updated_at: new Date(),
               };
               transaction.set(dishRef, productionDish);
+              existingDishNames.add(normalizedName);
               embeddedDishesCreated++;
             }
           }
@@ -269,12 +416,16 @@ export const adminSyncExecuteHandler = createAdminHandler(
             updated_at: new Date(),
           });
 
-          return embeddedDishesCreated;
+          return { embeddedDishesCreated, isUpdate };
         });
 
         syncedVenueIds.push(discoveredVenue.id);
-        venuesAdded++;
-        dishesAdded += embeddedDishCount;
+        if (result.isUpdate) {
+          venuesUpdated++;
+        } else {
+          venuesAdded++;
+        }
+        dishesAdded += result.embeddedDishesCreated;
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         errors.push({
@@ -361,7 +512,7 @@ export const adminSyncExecuteHandler = createAdminHandler(
       syncedDishIds,
       {
         venuesAdded,
-        venuesUpdated: 0,
+        venuesUpdated,
         dishesAdded,
         dishesUpdated: 0,
         errors: errors.length,
@@ -396,9 +547,11 @@ export const adminSyncExecuteHandler = createAdminHandler(
 
     res.json({
       success: true,
-      message: `Successfully synced ${venuesAdded} venues and ${dishesAdded} dishes`,
+      message: `Successfully synced ${venuesAdded + venuesUpdated} venues (${venuesAdded} new, ${venuesUpdated} updated) and ${dishesAdded} dishes`,
       synced: {
-        venues: venuesAdded,
+        venues: venuesAdded + venuesUpdated,
+        venuesAdded,
+        venuesUpdated,
         dishes: dishesAdded,
       },
       errors: errors.length > 0 ? errors : undefined,
@@ -408,11 +561,13 @@ export const adminSyncExecuteHandler = createAdminHandler(
           dishes: dishesToSync.length,
         },
         successful: {
-          venues: venuesAdded,
+          venues: venuesAdded + venuesUpdated,
+          venuesAdded,
+          venuesUpdated,
           dishes: dishesAdded,
         },
         failed: {
-          venues: venuesToSync.length - venuesAdded,
+          venues: venuesToSync.length - venuesAdded - venuesUpdated,
           dishes: dishesToSync.length - dishesAdded,
         },
         skippedForValidation,

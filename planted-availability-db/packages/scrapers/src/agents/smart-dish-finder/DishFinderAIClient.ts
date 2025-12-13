@@ -234,9 +234,83 @@ export class DishFinderAIClient {
    * Extract dishes from a venue page
    */
   async extractDishes(page: VenuePage): Promise<PageExtractionResult> {
+    // Check for structured menu items from Uber Eats DOM extraction
+    // This is more reliable than AI extraction for image-dish correlation
+    const jsonData = page.json_data as Record<string, unknown> | undefined;
+    const structuredItems = jsonData?._structured_menu_items as Array<{
+      name: string;
+      price: string;
+      currency: string;
+      description?: string;
+      imageUrl?: string;
+      category?: string;
+    }> | undefined;
+
+    if (structuredItems && structuredItems.length > 0) {
+      // Filter for planted dishes
+      const plantedItems = structuredItems.filter(item => {
+        const text = `${item.name} ${item.description || ''}`.toLowerCase();
+        return text.includes('planted');
+      });
+
+      if (plantedItems.length > 0) {
+        console.log(`   Using structured extraction: ${plantedItems.length} planted dishes from ${structuredItems.length} total items`);
+
+        // Convert to ExtractedDishFromPage format
+        const dishes = plantedItems.map(item => ({
+          name: item.name,
+          description: item.description || '',
+          category: item.category || '',
+          image_url: item.imageUrl || '',
+          price: item.price || '0',
+          currency: item.currency || 'CHF',
+          planted_product_guess: this.guessPlantedProduct(item.name, item.description),
+          product_confidence: 90, // High confidence from structured extraction
+          is_vegan: this.isLikelyVegan(item.name, item.description),
+          dietary_tags: [] as string[],
+          reasoning: 'Extracted from structured DOM data with accurate image correlation',
+        }));
+
+        return {
+          dishes,
+          page_quality: {
+            menu_found: true,
+            prices_visible: dishes.every(d => d.price !== '0'),
+            descriptions_available: dishes.some(d => d.description.length > 0),
+            images_available: dishes.some(d => d.image_url.length > 0),
+          },
+          extraction_notes: `Structured extraction: ${dishes.length} planted dishes with ${dishes.filter(d => d.image_url).length} images`,
+        };
+      }
+    }
+
+    // Check if this is a brand page (no menu items, just store listings)
+    if (structuredItems && structuredItems.length === 0) {
+      // If we got 0 structured items, check if there's a brand page indicator
+      const relevantHtml = jsonData?._relevant_menu_html as string | undefined;
+      if (!relevantHtml || relevantHtml.length === 0) {
+        // No planted content found - might be a brand page or no dishes
+        console.log(`   No planted content found on page - may be brand page or no planted dishes`);
+        return {
+          dishes: [],
+          page_quality: {
+            menu_found: false,
+            prices_visible: false,
+            descriptions_available: false,
+            images_available: false,
+          },
+          extraction_notes: 'No planted dishes found. Page may be a brand listing page instead of a store menu.',
+        };
+      }
+    }
+
+    // Fall back to AI extraction
     // Prepare content for extraction
     let content: string;
     let useJsonPrompt = false;
+
+    // Check for relevant menu HTML (smart truncation result)
+    const relevantMenuHtml = jsonData?._relevant_menu_html as string | undefined;
 
     // Only use JSON if it contains actual menu data, not just restaurant metadata
     if (page.json_data && this.hasMenuData(page.json_data)) {
@@ -244,6 +318,11 @@ export class DishFinderAIClient {
       content = JSON.stringify(page.json_data, null, 2);
       content = truncateContent(content, 15000); // JSON can be larger
       useJsonPrompt = true;
+    } else if (relevantMenuHtml && relevantMenuHtml.length > 100) {
+      // Use smart-truncated HTML that preserves "planted" content
+      console.log(`   Using relevant menu HTML (${relevantMenuHtml.length} chars) for AI extraction`);
+      content = relevantMenuHtml;
+      content = truncateContent(content, 12000); // Can be larger since it's pre-filtered
     } else if (page.html) {
       // Clean and truncate HTML
       content = cleanHtmlForExtraction(page.html);
@@ -295,6 +374,72 @@ export class DishFinderAIClient {
         extraction_notes: `Error: ${error}`,
       };
     }
+  }
+
+  /**
+   * Guess the planted product from dish name/description
+   */
+  private guessPlantedProduct(name: string, description?: string): string {
+    const text = `${name} ${description || ''}`.toLowerCase();
+
+    // Check for specific product mentions
+    if (text.includes('kebab') || text.includes('kebap') || text.includes('döner')) {
+      return 'planted.kebab';
+    }
+    if (text.includes('schnitzel') || text.includes('wiener')) {
+      return 'planted.schnitzel';
+    }
+    if (text.includes('pulled')) {
+      return 'planted.pulled';
+    }
+    if (text.includes('burger') && !text.includes('chicken')) {
+      return 'planted.burger';
+    }
+    if (text.includes('steak')) {
+      return 'planted.steak';
+    }
+    if (text.includes('tender') || text.includes('strips')) {
+      return 'planted.chicken_tenders';
+    }
+    if (text.includes('duck')) {
+      return 'planted.duck';
+    }
+
+    // Default to chicken (most common)
+    return 'planted.chicken';
+  }
+
+  /**
+   * Check if dish is likely vegan based on name/description
+   */
+  private isLikelyVegan(name: string, description?: string): boolean {
+    const text = `${name} ${description || ''}`.toLowerCase();
+
+    // Non-vegan indicators
+    const nonVeganIndicators = [
+      'käse', 'cheese', 'mozzarella', 'parmesan', 'halloumi', 'schafskäse', 'ziegenkäse',
+      'ei', 'egg', 'freilandei',
+      'milch', 'milk', 'cream', 'sahne',
+      'honig', 'honey',
+      'lachs', 'salmon', 'fish', 'fisch',
+      'poulet', 'chicken', 'huhn', 'beef', 'rind', 'schwein', 'pork',
+    ];
+
+    // Vegan indicators
+    const veganIndicators = ['vegan', 'pflanzlich'];
+
+    // If explicitly vegan, it's vegan
+    if (veganIndicators.some(v => text.includes(v))) {
+      return true;
+    }
+
+    // If contains non-vegan ingredients, it's not vegan
+    if (nonVeganIndicators.some(nv => text.includes(nv))) {
+      return false;
+    }
+
+    // Default to assuming vegan (since it's a planted dish)
+    return true;
   }
 
   /**
