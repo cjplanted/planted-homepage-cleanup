@@ -696,6 +696,7 @@ export class SmartDishFinderAgent {
           is_vegan: dish.is_vegan,
           confidence: dish.product_confidence || 50,
           status: 'discovered' as const,
+          image_url: dish.image_url || undefined,
         };
       });
 
