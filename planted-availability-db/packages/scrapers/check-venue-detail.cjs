@@ -19,20 +19,25 @@ async function checkVenue() {
     const venuesSnap = await db.collection('venues').get();
 
     const matches = [];
-    venuesSnap.docs.forEach(doc => {
+    for (const doc of venuesSnap.docs) {
       const data = doc.data();
       const name = (data.name || '').toLowerCase();
       if (name.includes(searchTerm)) {
+        // Count dishes from separate dishes collection
+        const dishCountSnap = await db.collection('dishes')
+          .where('venue_id', '==', doc.id)
+          .count()
+          .get();
         matches.push({
           id: doc.id,
           name: data.name,
           city: data.address?.city,
           country: data.address?.country,
           status: data.status,
-          dishCount: (data.dishes || []).length
+          dishCount: dishCountSnap.data().count
         });
       }
-    });
+    }
 
     console.log('Found ' + matches.length + ' production venues:\n');
     matches.forEach(m => {
