@@ -97,20 +97,64 @@ scripts\chrome-debug.bat
 
 ## Task Queue
 
-| ID | Type | Target | Agent | Priority | Status |
-|----|------|--------|-------|----------|--------|
-| T001 | duplicate | ALL duplicates | VENUE-AGENT | HIGH | DONE (324 deleted) |
-| T002 | duplicate | Rice Up! Bern (8 venues) | VENUE-AGENT | HIGH | DONE (merged into T001) |
-| T003 | country-fix | 18 venues (FR/ES/UK misclassified) | VENUE-AGENT | MEDIUM | DONE |
-| T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | PENDING |
-| T005 | extract | CH promoted venues | DISH-AGENT | HIGH | PENDING |
-| T006 | verify-venue | Random spot-check | QA-AGENT | LOW | PENDING |
-| T007 | discover | 124 chain venues (enumerate mode) | DISH-AGENT | HIGH | IN PROGRESS |
-| T008 | discover | 118 indie venues (explore mode) | DISH-AGENT | MEDIUM | PENDING |
+| ID | Type | Target | Agent | Priority | Status | Complexity |
+|----|------|--------|-------|----------|--------|------------|
+| T001 | duplicate | ALL duplicates | VENUE-AGENT | HIGH | DONE (324 deleted) | MEDIUM |
+| T002 | duplicate | Rice Up! Bern (8 venues) | VENUE-AGENT | HIGH | DONE (merged into T001) | MEDIUM |
+| T003 | country-fix | 18 venues (FR/ES/UK misclassified) | VENUE-AGENT | MEDIUM | DONE | MEDIUM |
+| T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | PENDING | MEDIUM |
+| T005 | extract | CH promoted venues | DISH-AGENT | HIGH | PENDING | MEDIUM |
+| T006 | verify-website | /nearby API data flow | QA-AGENT | CRITICAL | PENDING | HIGH |
+| T007 | discover | 124 chain venues (enumerate mode) | DISH-AGENT | HIGH | IN PROGRESS | HIGH |
+| T008 | discover | 118 indie venues (explore mode) | DISH-AGENT | MEDIUM | PENDING | HIGH |
+| T009 | coordinate-fix | 249 venues with 0,0 coords | VENUE-AGENT | CRITICAL | PENDING | MEDIUM |
+| T010 | chain-discovery | CAP (44), Barburrito (12), Vapiano (5), NENI (5) | DISH-AGENT | HIGH | IN PROGRESS | MEDIUM |
 
 ---
 
 ## Session Log
+
+### 2025-12-14T15:30 | REVIEW-SESSION | Attack Zero Task Prioritization
+
+**Status:** Analyzed remaining work and updated task queue with complexity assessments.
+
+**Key Findings:**
+
+1. **T009 (Coordinate Fix) - CRITICAL BLOCKER**
+   - 249 of 264 venues with dishes have invalid 0,0 coordinates
+   - Root cause: Discovery venues have dishes but no location data; Salesforce venues have coords but no dishes
+   - Complexity: MEDIUM (fix-venue-coordinates.cjs created, uses name+city matching to copy coords from SF venues)
+   - Approach: Strategy is sound - match discovery venues to Salesforce venues by name+city, copy GeoPoint
+   - Blocker: None known; ready to execute with `node fix-venue-coordinates.cjs --execute`
+   - Impact: Without this, /nearby API returns venues without dishes (data flow broken)
+
+2. **T006 (Website Verification) - CRITICAL PRIORITY**
+   - Need to verify data flows to website after T009 fix
+   - Complexity: HIGH (requires Chrome DevTools, admin dashboard inspection, /nearby API testing)
+   - Dependency: Depends on T009 completion
+   - Approach: (1) Run T009 coordinate fix, (2) Check dashboard shows 264 venues with valid coords, (3) Test /nearby API returns venues with dishes
+   - Blocker: Requires Chrome debug mode (scripts\chrome-debug.bat)
+
+3. **T007 + T010 (Chain Discovery) - HIGH PRIORITY**
+   - T007: 124 chain venues in enumerate mode (IN PROGRESS)
+   - T010: 4 remaining chains (CAP 44, Barburrito 12, Vapiano 5, NENI 5) - no source dishes yet
+   - Complexity: MEDIUM (copy-chain-dishes.cjs created, works generically)
+   - Blocker: T010 blocked on discovering source dishes for the 4 chains
+   - Approach: For T010, run dish discovery agents on known chain restaurant URLs, extract dishes, then copy to chain venues
+
+**Execution Sequence:**
+1. **IMMEDIATE:** Execute T009 (coordinate fix) - unblocked, critical for data flow
+2. **THEN:** Execute T006 (website verification) - confirm fix worked
+3. **PARALLEL:** Continue T007 chain discovery + T010 with new chain discovery attempts
+4. **DEFERRED:** T004/T005 (extraction) - lower priority, depend on chain discovery progress
+
+**Session Notes:**
+- fix-venue-coordinates.cjs is ready and well-designed (name+city normalization handles most cases)
+- Current progress: 264/458 venues with dishes (57.6%), up from 216 after chain copy
+- Estimated venue target: 400+ venues achievable with T009 + T010 completion
+- Data integrity risk mitigated by dry-run pattern in all scripts
+
+---
 
 ### 18:00 | MASTER-AGENT | Critical Data Flow Issue Found
 - **ISSUE:** 249 of 264 venues with dishes have INVALID coordinates (0,0)
