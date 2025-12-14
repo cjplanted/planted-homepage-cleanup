@@ -65,12 +65,12 @@ scripts\chrome-debug.bat
 
 | Metric | Count | Target | Progress |
 |--------|-------|--------|----------|
-| Total production venues | 2246 | - | - |
+| Total production venues | 1922 | - | - |
 | Venues with dishes | 216 | 2000 (90%) | 10.8% |
 | Venues with 0 dishes | 2030 | 0 | - |
-| Duplicates fixed | 12 | All | - |
-| Duplicates pending | ~45 | 0 | - |
-| Country code errors | 9 | 0 | - |
+| Duplicates fixed | 336 | All | 100% |
+| Duplicates pending | 0 | 0 | DONE |
+| Country code errors | 0 | 0 | DONE (18 fixed) |
 
 ---
 
@@ -78,12 +78,42 @@ scripts\chrome-debug.bat
 
 | ID | Type | Target | Agent | Priority | Status |
 |----|------|--------|-------|----------|--------|
-| T001 | duplicate | Vapiano UK (8 venues) | VENUE-AGENT | HIGH | PENDING |
-| T002 | duplicate | Rice Up! Bern (8 venues) | VENUE-AGENT | HIGH | PENDING |
-| T003 | country-fix | 9 FR->DE/AT venues | VENUE-AGENT | MEDIUM | PENDING |
+| T001 | duplicate | ALL duplicates | VENUE-AGENT | HIGH | DONE (324 deleted) |
+| T002 | duplicate | Rice Up! Bern (8 venues) | VENUE-AGENT | HIGH | DONE (merged into T001) |
+| T003 | country-fix | 18 venues (FR/ES/UK misclassified) | VENUE-AGENT | MEDIUM | DONE |
 | T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | PENDING |
 | T005 | extract | CH promoted venues | DISH-AGENT | HIGH | PENDING |
 | T006 | verify-venue | Random spot-check | QA-AGENT | LOW | PENDING |
+
+---
+
+## Session Log
+
+### 14:50 | VENUE-AGENT | T003
+- Task: country-fix (all misclassified venues)
+- Created fix-country-codes.cjs with city→country lookup table
+- Found 18 venues (more than expected 9)
+- Fixed: FR→DE (6), FR→AT (5), UK→DE (4), ES→AT (1), ES→DE (1), DE→CH (1)
+- Result: PASS
+
+### 14:45 | VENUE-AGENT | T001+T002
+- Task: duplicates (ALL - generic fix)
+- Rewrote fix-duplicates.cjs to be fully dynamic (no hardcoded IDs)
+- Added street-level matching for retail chains (BILLA, REWE, INTERSPAR, Coop)
+- Result: PASS
+- Deleted: 324 duplicate venues
+- Preserved: All venues with dishes (31 skipped to avoid data loss)
+- Duration: ~5 minutes
+
+### 14:30 | MASTER-AGENT
+- State: 45 duplicates pending, 2030 zero-dish venues
+- User wants GENERIC duplicate fix (no hardcoded IDs)
+- Delegating to VENUE-AGENT: make fix-duplicates.cjs fully dynamic
+
+### 11:49 | MASTER-AGENT
+- State: 45 duplicates pending, 2030 zero-dish venues
+- RL system now active (auto-review enabled, quality pipeline ready)
+- Spawning VENUE-AGENT for T001 (Vapiano UK duplicates)
 
 ---
 

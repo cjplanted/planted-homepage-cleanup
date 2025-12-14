@@ -1,11 +1,15 @@
+#!/usr/bin/env node
 /**
- * Fix Duplicate Venues
+ * Fix Duplicate Venues - DYNAMIC VERSION
  *
- * Safely delete production venues with 0 dishes that are clear duplicates.
+ * Automatically finds all duplicate venues (same name+city) and safely deletes
+ * those with fewer dishes, keeping the primary with most dishes.
  *
  * Usage:
  *   node fix-duplicates.cjs                    # Dry run - show what would be deleted
  *   node fix-duplicates.cjs --execute          # Actually delete
+ *   node fix-duplicates.cjs --chain="Vapiano"  # Filter by chain name
+ *   node fix-duplicates.cjs --country=UK       # Filter by country
  */
 
 const { initializeApp, cert } = require('firebase-admin/app');
@@ -17,96 +21,167 @@ initializeApp({
 });
 const db = getFirestore();
 
-// Define clear duplicate pairs: [toDelete (0 dishes), primary (has dishes)]
-const CLEAR_DUPLICATES = [
-  // dean&david
-  { delete: 'YJGxUkQ8dqA9Gf7ECy2l', primary: 'nvNIawnFkxCU9Jjhh9Kz', reason: 'dean&david Basel Centralbahnplatz duplicate (0 vs 13 dishes)' },
-  { delete: '27bEiDVALQQE2A8oZMmO', primary: 'jPOIPDjSdw0O0K1rFv1N', reason: 'dean&david (Hirschengraben) Bern duplicate (0 vs 3 dishes)' },
-  { delete: 'lRaMnnk8McbHJDTtTNzr', primary: '11A5GdRpDPQX6yIIoTlX', reason: 'dean&david Berlin Bülowstraße duplicate (0 vs 4 dishes)' },
-  { delete: 'B7LqEnoJKw91iTGW6pfV', primary: '1pf5c3fCYVPqBnYywoRK', reason: 'dean&david München Pasinger Bahnhof duplicate (0 vs 5 dishes)' },
-  { delete: 'YxyQS1SBE6FqyzXGRQwi', primary: 'P2EQ4vkfHMoLYga2vjD8', reason: 'dean&david München Orleansplatz duplicate (0 vs 3 dishes)' },
-  { delete: 'rnCEVwzdUqNx5fdUIkS7', primary: 'g8UbXqyMLYa4KSnsDZwq', reason: 'dean&david München Parkstadt duplicate (0 vs 3 dishes)' },
-  { delete: 'sKOHFldYyanZmJllbUrZ', primary: 'owJT10kiJoT9XJn9G7sV', reason: 'dean&david München Leopoldstr duplicate (0 vs 5 dishes)' },
-  { delete: 'mtCGkpGEHFDsL7eRrxsD', primary: 'c74C0zDD27bzUmjB2R51', reason: 'dean&david München Werksviertel duplicate (0 vs 5 dishes)' },
-  { delete: 'CjCQRAHLfm5QkCt8ZLcH', primary: 'lJ6zEvFpfwtjSL1T1ZdW', reason: 'dean&david München 5 Höfe duplicate (0 vs 5 dishes)' },
-  { delete: 'FwcPvgn5UDliDqjOsVVM', primary: 'SodzG6vHUv7BxdNgMFU1', reason: 'dean&david München Bahnhofplatz duplicate (0 vs 4 dishes)' },
-  { delete: 'U0KFXdBtnGNK92HvM379', primary: 'fJhIMIptUIAOzBZYqvDI', reason: 'dean&david Georgsplatz duplicate (0 vs 3 dishes)' },
+function normalizeKey(name, city, street) {
+  // Normalize: lowercase, remove special chars, trim
+  const normName = (name || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+  const normCity = (city || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
 
-  // KAIMUG
-  { delete: '3D5POGbXfe60Re9uCT2w', primary: '3OnKGnneXCY9MIRL2lxx', reason: 'KAIMUG Zürich duplicate (0 vs 1 dish)' },
-];
+  // For retail chains (BILLA, REWE, INTERSPAR, Coop, Brezelkönig), include street
+  // to avoid false positives (same name in same city but different locations)
+  const retailChains = ['billa', 'rewe', 'interspar', 'coop', 'brezelkonig', 'brezelkoenig'];
+  const isRetail = retailChains.some(chain => normName.includes(chain));
 
-async function fixDuplicates(execute) {
+  if (isRetail && street) {
+    const normStreet = (street || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim();
+    return `${normName}:${normCity}:${normStreet}`;
+  }
+
+  return `${normName}:${normCity}`;
+}
+
+function parseArgs() {
+  const args = process.argv.slice(2);
+  return {
+    execute: args.includes('--execute'),
+    chain: args.find(a => a.startsWith('--chain='))?.split('=')[1],
+    country: args.find(a => a.startsWith('--country='))?.split('=')[1],
+  };
+}
+
+async function findAllDuplicates(filterChain, filterCountry) {
+  console.log('Scanning for duplicate venues...\n');
+
+  // Get all venues
+  const venuesSnap = await db.collection('venues').get();
+  console.log(`Total venues in database: ${venuesSnap.size}\n`);
+
+  // Group by normalized name+city
+  const groups = {};
+  let processed = 0;
+
+  for (const doc of venuesSnap.docs) {
+    const v = doc.data();
+    const city = v.address?.city || v.city || '';
+    const country = v.address?.country || v.country || '';
+
+    // Apply filters
+    if (filterChain && !v.name?.toLowerCase().includes(filterChain.toLowerCase())) {
+      continue;
+    }
+    if (filterCountry && country.toUpperCase() !== filterCountry.toUpperCase()) {
+      continue;
+    }
+
+    const street = v.address?.street || v.street || '';
+    const key = normalizeKey(v.name, city, street);
+    if (!groups[key]) groups[key] = [];
+
+    // Get dish count
+    const dishSnap = await db.collection('dishes')
+      .where('venue_id', '==', doc.id)
+      .count()
+      .get();
+
+    groups[key].push({
+      id: doc.id,
+      name: v.name,
+      city: city,
+      country: country,
+      dishes: dishSnap.data().count,
+    });
+
+    processed++;
+    if (processed % 100 === 0) {
+      process.stdout.write(`\rProcessed ${processed} venues...`);
+    }
+  }
+  console.log(`\rProcessed ${processed} venues total.`);
+
+  // Find groups with duplicates
+  return Object.entries(groups)
+    .filter(([key, venues]) => venues.length > 1)
+    .sort((a, b) => b[1].length - a[1].length);
+}
+
+async function fixDuplicates() {
+  const { execute, chain, country } = parseArgs();
+
   console.log(`\n${'='.repeat(60)}`);
   console.log(execute ? '🚀 EXECUTING DUPLICATE FIX' : '🔍 DRY RUN - No changes will be made');
+  if (chain) console.log(`   Filtering by chain: ${chain}`);
+  if (country) console.log(`   Filtering by country: ${country}`);
   console.log(`${'='.repeat(60)}\n`);
+
+  const duplicates = await findAllDuplicates(chain, country);
+
+  if (duplicates.length === 0) {
+    console.log('✓ No duplicates found!');
+    return { deleted: 0, skipped: 0, errors: 0, wouldLoseData: 0 };
+  }
+
+  console.log(`\nFound ${duplicates.length} groups with duplicates:\n`);
 
   let deleted = 0;
   let skipped = 0;
   let errors = 0;
+  let wouldLoseData = 0;
 
-  for (const dup of CLEAR_DUPLICATES) {
-    console.log(`\n📍 ${dup.reason}`);
+  for (const [key, venues] of duplicates) {
+    // Sort by dishes (keep the one with most dishes)
+    venues.sort((a, b) => b.dishes - a.dishes);
 
-    // Verify the venue to delete exists and has 0 dishes
-    const toDeleteDoc = await db.collection('venues').doc(dup.delete).get();
-    if (!toDeleteDoc.exists) {
-      console.log(`   ⚠️ Venue ${dup.delete} not found - already deleted?`);
-      skipped++;
-      continue;
-    }
+    const primary = venues[0];
+    const duplicatesToDelete = venues.slice(1);
 
-    const toDeleteData = toDeleteDoc.data();
-    console.log(`   To delete: ${toDeleteData.name} [${dup.delete}]`);
+    console.log(`\n📍 ${primary.name} - ${primary.city} (${primary.country})`);
+    console.log(`   ✓ Keep: ${primary.id} (${primary.dishes} dishes)`);
 
-    // Count dishes for safety
-    const dishCount = await db.collection('dishes')
-      .where('venue_id', '==', dup.delete)
-      .count()
-      .get();
+    for (const dup of duplicatesToDelete) {
+      if (dup.dishes > 0) {
+        // SAFETY: Never delete venues with dishes
+        console.log(`   ⚠️ SKIP: ${dup.id} (${dup.dishes} dishes) - would lose data!`);
+        wouldLoseData++;
+        continue;
+      }
 
-    const count = dishCount.data().count;
-    if (count > 0) {
-      console.log(`   ❌ SKIPPING - venue has ${count} dishes! Would lose data.`);
-      errors++;
-      continue;
-    }
-
-    // Verify primary exists
-    const primaryDoc = await db.collection('venues').doc(dup.primary).get();
-    if (!primaryDoc.exists) {
-      console.log(`   ❌ SKIPPING - primary venue ${dup.primary} not found!`);
-      errors++;
-      continue;
-    }
-
-    const primaryData = primaryDoc.data();
-    const primaryDishCount = await db.collection('dishes')
-      .where('venue_id', '==', dup.primary)
-      .count()
-      .get();
-
-    console.log(`   Primary: ${primaryData.name} [${dup.primary}] (${primaryDishCount.data().count} dishes)`);
-
-    if (execute) {
-      await db.collection('venues').doc(dup.delete).delete();
-      console.log(`   ✅ Deleted`);
-      deleted++;
-    } else {
-      console.log(`   📝 Would delete`);
-      deleted++;
+      if (execute) {
+        try {
+          await db.collection('venues').doc(dup.id).delete();
+          console.log(`   ✅ Deleted: ${dup.id}`);
+          deleted++;
+        } catch (e) {
+          console.log(`   ❌ Error deleting ${dup.id}: ${e.message}`);
+          errors++;
+        }
+      } else {
+        console.log(`   📝 Would delete: ${dup.id}`);
+        deleted++;
+      }
     }
   }
 
   console.log(`\n${'='.repeat(60)}`);
   console.log('SUMMARY');
-  console.log(`${'='.repeat(60)}`);
+  console.log('='.repeat(60));
+  console.log(`Duplicate groups found: ${duplicates.length}`);
   console.log(`${execute ? 'Deleted' : 'Would delete'}: ${deleted}`);
-  console.log(`Skipped (already done): ${skipped}`);
-  console.log(`Errors (would lose data): ${errors}`);
+  console.log(`Skipped (would lose data): ${wouldLoseData}`);
+  console.log(`Errors: ${errors}`);
+
+  if (!execute && deleted > 0) {
+    console.log(`\n💡 To actually delete, run:`);
+    console.log(`   node fix-duplicates.cjs --execute`);
+  }
+
+  return { deleted, skipped, errors, wouldLoseData };
 }
 
-const execute = process.argv.includes('--execute');
-fixDuplicates(execute)
-  .then(() => process.exit(0))
-  .catch(e => { console.error(e); process.exit(1); });
+fixDuplicates()
+  .then(result => {
+    console.log('\n✓ Done');
+    process.exit(result.errors > 0 ? 1 : 0);
+  })
+  .catch(e => {
+    console.error('\n❌ Fatal error:', e);
+    process.exit(1);
+  });
