@@ -114,6 +114,24 @@ scripts\chrome-debug.bat
 
 ## Session Log
 
+### 2025-12-14T22:15 | API-FIX | /nearby API Opening Hours Bug Fixed
+- **ISSUE:** /nearby API throwing "Cannot read properties of undefined (reading 'sunday')" error
+- **ROOT CAUSE:** Some venues in database have undefined/null opening_hours data
+- **LOCATION:** @pad/core utility functions (isVenueOpen, getNextOpeningTime, getTodayHoursString)
+- **FIX APPLIED:**
+  - Updated all 3 functions to accept `OpeningHours | undefined | null` parameter type
+  - Added null checks before accessing opening_hours.regular or opening_hours.exceptions
+  - Returns safe defaults: false for isVenueOpen, null for getNextOpeningTime, "Hours not available" for getTodayHoursString
+- **FILES MODIFIED:**
+  - planted-availability-db/packages/core/src/utils/time.ts (3 functions updated)
+- **DEPLOYMENT:**
+  - Built core + API packages successfully
+  - Deployed to Firebase: `firebase deploy --only functions:api:nearby`
+  - Function URL: https://nearby-yixurbympq-oa.a.run.app
+- **IMPACT:** Also fixes venues.ts and realtime.ts which use the same utility functions
+- **STATUS:** RESOLVED - API now handles malformed opening_hours gracefully
+- **COMMIT:** fix(api): Handle undefined opening_hours in nearby endpoint (33303d7a)
+
 ### 2025-12-14T21:35 | VENUE-AGENT | T009 Coordinate Fix EXECUTED
 - **ACTION:** Executed fix-venue-coordinates-v2.cjs --execute
 - **RESULTS:** Fixed 116 of 249 venues (47% success rate)
