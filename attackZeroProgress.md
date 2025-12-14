@@ -208,13 +208,55 @@
 2. **No cross-source deduplication**: Same venue imported from different sources
 3. **City mapping issues**: France set as default country for some imports
 
+#### Duplicates Fixed (2025-12-13)
+
+**12 venues deleted:**
+| Deleted Venue | Primary Kept | Dishes Preserved |
+|---------------|--------------|------------------|
+| dean&david Basel Centralbahnplatz | nvNIawnFkxCU9Jjhh9Kz | 13 |
+| dean&david (Hirschengraben) Bern | jPOIPDjSdw0O0K1rFv1N | 3 |
+| dean&david Berlin Bülowstraße | 11A5GdRpDPQX6yIIoTlX | 4 |
+| dean&david München Pasinger Bahnhof | 1pf5c3fCYVPqBnYywoRK | 5 |
+| dean&david München Orleansplatz | P2EQ4vkfHMoLYga2vjD8 | 3 |
+| dean&david München Parkstadt | g8UbXqyMLYa4KSnsDZwq | 3 |
+| dean&david München Leopoldstr | owJT10kiJoT9XJn9G7sV | 5 |
+| dean&david München Werksviertel | c74C0zDD27bzUmjB2R51 | 5 |
+| dean&david München 5 Höfe | lJ6zEvFpfwtjSL1T1ZdW | 5 |
+| dean&david München Bahnhofplatz | SodzG6vHUv7BxdNgMFU1 | 4 |
+| dean&david Georgsplatz | fJhIMIptUIAOzBZYqvDI | 3 |
+| KAIMUG Zürich | 3OnKGnneXCY9MIRL2lxx | 1 |
+
+**Result:** 0 data loss, all duplicates had 0 dishes
+
 ---
 
 ### Step 6: Final Verification
 
+**Status:** PARTIAL COMPLETE
+
 #### Comparison with Baseline
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
-| Venues with 0 dishes | 15+ | TBD | TBD |
-| Duplicate venue groups | 5+ | TBD | TBD |
-| Chain assignments missing | ~20 | TBD | TBD |
+| Total production venues | 2258 | 2246 | -12 duplicates |
+| Venues with dishes | 209 | 216 | +7 venues |
+| Venues with 0 dishes | 2049 | 2030 | -19 |
+| CH venues with 0 dishes | 303 | 296 | -7 |
+
+#### Session Summary (2025-12-13)
+
+**Completed:**
+1. Extracted and synced 18 dishes to 7 venues
+2. Deleted 12 clear duplicate venues (0 data loss)
+3. Documented all data quality issues
+
+**Remaining Work:**
+1. ~2030 venues still have 0 dishes (many are retail stores)
+2. Many more duplicates need investigation
+3. Country code misclassification needs fixing
+4. Visual assessment needs Chrome debug mode
+
+#### Next Steps
+1. Start Chrome debug mode (`scripts\chrome-debug.bat`)
+2. Run visual assessment of Admin Dashboard and Locator
+3. Continue dish extraction for remaining venues
+4. Investigate and fix remaining duplicates
