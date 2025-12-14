@@ -66,13 +66,32 @@ scripts\chrome-debug.bat
 | Metric | Count | Target | Progress |
 |--------|-------|--------|----------|
 | Total production venues | 1922 | - | - |
-| Venues with dishes | 216 | 2000 (90%) | 11.2% |
-| Venues with 0 dishes | 1706 | 0 | - |
-| - Retail (no dishes expected) | ~1250 | - | BILLA/INTERSPAR/Cadoro |
-| - Restaurants (need extraction) | ~456 | 0 | Priority target |
+| Venues with dishes | 264 | 458 | 57.6% |
+| Venues with 0 dishes | 1658 | 0 | - |
+| - Retail (no dishes expected) | 1464 | - | BILLA/INTERSPAR/Coop/Cadoro |
+| - Restaurants (need extraction) | 194 | 0 | Priority target |
 | Duplicates fixed | 336 | All | 100% |
 | Duplicates pending | 0 | 0 | DONE |
 | Country code errors | 0 | 0 | DONE (18 fixed) |
+| Chain dishes copied | 376 | - | +48 venues |
+
+### Chains Still Needing Discovery (No Source Dishes)
+| Chain | Venues | Status |
+|-------|--------|--------|
+| CAP | 44 | Need discovery |
+| Barburrito | 12 | Need discovery |
+| Vapiano | 5 | Need discovery |
+| NENI | 5 | Need discovery |
+
+### Chains Completed (Dishes Copied)
+- dean&david: 16 venues, 13 dishes each
+- birdie birdie: 12 venues, 7 dishes each
+- rice up: 4 venues, 3 dishes each
+- doen doen: 5 venues, 3 dishes each
+- subway: 3 venues, 4 dishes each
+- kebhouze: 3 venues, 8 dishes each
+- chidoba: 3 venues, 5 dishes each
+- kaisin: 2 venues, 3 dishes each
 
 ---
 
@@ -86,10 +105,26 @@ scripts\chrome-debug.bat
 | T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | PENDING |
 | T005 | extract | CH promoted venues | DISH-AGENT | HIGH | PENDING |
 | T006 | verify-venue | Random spot-check | QA-AGENT | LOW | PENDING |
+| T007 | discover | 124 chain venues (enumerate mode) | DISH-AGENT | HIGH | IN PROGRESS |
+| T008 | discover | 118 indie venues (explore mode) | DISH-AGENT | MEDIUM | PENDING |
 
 ---
 
 ## Session Log
+
+### 17:00 | DISH-AGENT | Chain Dish Copy
+- **Created:** copy-chain-dishes.cjs (generic script for any chain)
+- **Executed:** 8 chains processed (dean&david, birdie birdie, rice up, doen doen, subway, kebhouze, chidoba, kaisin)
+- **Result:** 376 dishes copied to 48 venues
+- **Coverage:** 216 → 264 venues with dishes (+48, +22%)
+- **Remaining:** 4 chains need discovery (CAP, Barburrito, Vapiano, NENI - no source dishes)
+
+### 16:30 | MASTER-AGENT | Session Summary (post-verification)
+- **VERIFIED:** 1922 total venues, 216 with dishes, 1706 without
+- **BREAKDOWN:** 1513 retail (no dishes expected), 193 restaurants (need extraction)
+- **ISSUE:** All 193 zero-dish restaurants have NO platform URLs
+- **ROOT CAUSE:** Venues imported without delivery platform info
+- **SOLUTION:** Copy dishes from chain venues with dishes (same chain = same menu)
 
 ### 15:00 | MASTER-AGENT | Session Summary (pre-compact)
 - **DONE:** T001+T002 (duplicates) - 324 deleted, 0 data loss
