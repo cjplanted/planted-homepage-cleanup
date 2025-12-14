@@ -112,6 +112,14 @@ scripts\chrome-debug.bat
 
 ## Session Log
 
+### 18:00 | MASTER-AGENT | Critical Data Flow Issue Found
+- **ISSUE:** 249 of 264 venues with dishes have INVALID coordinates (0,0)
+- **IMPACT:** Website /nearby API returns venues without dishes (have coords but no dishes)
+- **ROOT CAUSE:** Discovery venues have dishes but 0,0 coords; Salesforce venues have coords but no dishes
+- **SOLUTION NEEDED:** Geocode addresses to get valid coordinates
+- **Created:** fix-venue-coordinates.cjs (needs geocoding API integration)
+- **NEXT:** Need Google Geocoding API or manual coordinate lookup
+
 ### 17:00 | DISH-AGENT | Chain Dish Copy
 - **Created:** copy-chain-dishes.cjs (generic script for any chain)
 - **Executed:** 8 chains processed (dean&david, birdie birdie, rice up, doen doen, subway, kebhouze, chidoba, kaisin)
