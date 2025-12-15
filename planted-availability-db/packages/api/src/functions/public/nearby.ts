@@ -67,8 +67,9 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
     const venueIds = nearbyVenues.map(v => v.id);
     const dishesMap = await dishes.getByVenues(venueIds);
 
-    // Build results
+    // Build results - if deduping chains, track which chain_ids we've seen
     const results: NearbyResult[] = [];
+    const seenChainIds = new Set<string>();
 
     for (const venue of nearbyVenues) {
       const is_open = isVenueOpen(venue.opening_hours);
@@ -76,6 +77,15 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
       // Skip closed venues if open_now filter is set
       if (params.open_now && !is_open) {
         continue;
+      }
+
+      // Chain deduplication: skip if we already have a venue from this chain
+      // (venues are sorted by distance, so we keep the closest)
+      if (params.dedupe_chains && venue.chain_id) {
+        if (seenChainIds.has(venue.chain_id)) {
+          continue;
+        }
+        seenChainIds.add(venue.chain_id);
       }
 
       // Get dishes for this venue from the batch result

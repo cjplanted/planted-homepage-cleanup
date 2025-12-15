@@ -75,6 +75,8 @@ scripts\chrome-debug.bat
 | Country code errors | 0 | 0 | DONE (18 fixed) |
 | Chain dishes copied | 530 | - | +136 venues (32 chains complete) |
 | Total chains analyzed | 38 | - | 32 complete, 5 need discovery |
+| **CH Locator-ready** | 104 | - | 77→104 (+35%, T018) |
+| Chain deduplication | ✅ | - | API dedupes by chain_id (T019) |
 
 ### Chains Needing Discovery (3 chains, 3 venues - No Platform URLs)
 | Chain | Venues | Status | Notes |
@@ -131,10 +133,51 @@ scripts\chrome-debug.bat
 | T015 | redirect-fix | 404 on homepage search (slash normalization) | QA-AGENT | HIGH | DONE | LOW |
 | T016 | platform-links | Missing delivery platform links in venue cards | QA-AGENT | MEDIUM | DONE | MEDIUM |
 | T017 | performance | Locator-v3 slow load time optimization | QA-AGENT | HIGH | DONE | MEDIUM |
+| T018 | coord-fix | 27 CH venues with dishes but 0,0 coordinates | VENUE-AGENT | HIGH | DONE (27 fixed) | MEDIUM |
+| T019 | chain-dedupe | Chain deduplication in /nearby API | QA-AGENT | HIGH | DONE | MEDIUM |
 
 ---
 
 ## Session Log
+
+### 2025-12-15T21:30 | VENUE-AGENT & QA-AGENT | T018-T019 Locator Improvements COMPLETE
+
+**T018: CH Venue Coordinate Fix**
+- **ISSUE:** Only 3-4 venues showing on Zurich locator (8001)
+- **ROOT CAUSE:** 27 CH venues had dishes but 0,0 coordinates (not discoverable by /nearby API)
+- **FIX:** Created `fix-ch-venue-coords.cjs` with hardcoded coordinates by venue ID
+- **VENUES FIXED:** 27 venues including:
+  - Hiltl (12 dishes) → 47.3724, 8.5382
+  - dean&david Zürich (10 dishes) → 47.3773, 8.5393
+  - kaisin. Zürich (3 dishes) → 47.3781, 8.5386
+  - Rice Up! Zürich, Bern (3 dishes each)
+  - Multiple Basel venues (TukTuk, CHOI, Burgermeister, Nooch)
+- **IMPACT:** CH locator-ready venues: 77 → 104 (+35%)
+- **STATUS:** T018 DONE
+
+**T019: Chain Deduplication in /nearby API**
+- **ISSUE:** Multiple venues from same chain showing (e.g., 3 kaisin. venues)
+- **ROOT CAUSE:** No chain deduplication logic + missing chain_ids on 28 venues
+- **FIX 1:** Added `dedupe_chains` parameter to nearbyQuerySchema (default: true)
+- **FIX 2:** Added deduplication logic - only show closest venue per chain_id
+- **FIX 3:** Created `fix-missing-chain-ids.cjs` to assign chain_ids to 28 venues:
+  - kaisin. (3 venues) → chain_id: "kaisin"
+  - dean&david (10 venues) → chain_id: "dean-david"
+  - TukTuk Thai Kitchen (4 venues) → chain_id: "tuktuk"
+  - Subway (3 venues) → chain_id: "subway"
+  - Union Diner, CHOI, Zekis World, Veganitas
+- **API DEPLOYED:** `firebase deploy --only functions:api:nearby`
+- **IMPACT:** Zurich results: 7 venues → 5 unique (chain deduped)
+- **STATUS:** T019 DONE
+
+**Scripts Created:**
+- `diagnose-ch-venues.cjs` - Analyze CH venue status (coords, dishes, locator-ready)
+- `fix-ch-venue-coords.cjs` - Fix coordinates for venues with 0,0
+- `fix-missing-chain-ids.cjs` - Assign chain_ids to pattern-matched venues
+
+**COMMITS:** Pending (API deployed, scripts created)
+
+---
 
 ### 2025-12-15T19:40 | QA-AGENT | T015-T017 Bug Fixes COMPLETE
 **T015: Homepage Search 404 Fix**

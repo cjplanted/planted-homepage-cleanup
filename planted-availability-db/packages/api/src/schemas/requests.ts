@@ -81,6 +81,10 @@ export const nearbyQuerySchema = z
       .optional()
       .transform((v) => v === 'true'),
     product_sku: z.string().optional(),
+    dedupe_chains: z
+      .string()
+      .optional()
+      .transform((v) => v !== 'false'), // Default true - only show closest venue per chain
     ...paginationSchema.shape,
   })
   .refine((data) => data.lat !== undefined && data.lng !== undefined, {
