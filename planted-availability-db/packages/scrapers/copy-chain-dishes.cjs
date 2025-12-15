@@ -34,8 +34,8 @@ const CHAIN_PATTERNS = [
   'barburrito',
   'vapiano',
   'neni',
-  'beets & roots',
-  'yuícery',
+  'beets',  // matches both 'beets & roots' and 'beets&roots'
+  'yuicery',  // matches both 'yuícery' and 'yuicery'
   'stadtsalat',
   'cotidiano',
   '60 seconds',
