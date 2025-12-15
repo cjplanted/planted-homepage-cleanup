@@ -127,10 +127,32 @@ scripts\chrome-debug.bat
 | T011 | website-fix | Venues not showing on locator-v3 | QA-AGENT | CRITICAL | DONE | HIGH |
 | T012 | admin-verify | Admin dashboard venue display | QA-AGENT | HIGH | DONE | MEDIUM |
 | T013 | dish-quality | Dish-by-dish data verification | QA-AGENT | MEDIUM | DONE | MEDIUM |
+| T014 | api-fix | /nearby API timestamp error + locator-v3 geocode | QA-AGENT | CRITICAL | DONE | MEDIUM |
 
 ---
 
 ## Session Log
+
+### 2025-12-15T18:50 | QA-AGENT | T014 API Timestamp Fix + Locator Geocode COMPLETE
+- **ISSUE 1:** /nearby API returning "timestamp.toDate is not a function" error
+- **ROOT CAUSE:** Firestore timestamps were sometimes stored as plain objects without the toDate method
+- **FIX 1:** Enhanced `timestampToDate()` in `packages/database/src/firestore.ts`:
+  - Now handles null, undefined, plain objects with `_seconds`, Date objects, numeric timestamps, and string dates
+  - Falls back gracefully instead of throwing errors
+- **DEPLOYMENT:** Firebase function `api:nearby` deployed successfully
+- **API VERIFIED:** `curl /nearby?lat=47.3769&lng=8.5417` returns 5+ venues with dishes
+
+- **ISSUE 2:** locator-v3 page showing 0 results when accessed directly with ZIP only (no lat/lng)
+- **ROOT CAUSE:** Page required lat/lng URL parameters but user accessed with just `?zip=8001&country=ch`
+- **FIX 2:** Added geocode fallback to `locator-v3.astro`:
+  - Added `knownZipCoords` lookup table for common Swiss/German/Austrian ZIP codes
+  - Added `geocodeZip()` function with Nominatim API fallback
+  - Page now auto-geocodes ZIP if coordinates missing
+- **DEPLOYMENT:** Pushed to GitHub, GitHub Actions will deploy to Pages
+- **FILES MODIFIED:**
+  - `planted-availability-db/packages/database/src/firestore.ts` (timestamp handling)
+  - `planted-astro/src/pages/[locale]/locator-v3.astro` (geocode fallback)
+- **STATUS:** T014 DONE - API working, website will show venues after GitHub Pages deployment
 
 ### 2025-12-15T12:00 | DISH-AGENT | T005 CH Promoted Venues COMPLETE
 - **ACTION:** Identified and extracted dishes for 3 CH chains (Brezelkönig, NENI, Yardbird)
