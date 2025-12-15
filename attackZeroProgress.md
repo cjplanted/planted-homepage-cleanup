@@ -110,12 +110,62 @@ scripts\chrome-debug.bat
 | T009 | coordinate-fix | 249 venues with 0,0 coords | VENUE-AGENT | CRITICAL | DONE (116 fixed) | MEDIUM |
 | T010 | chain-discovery | CAP (44), Barburrito (12), Vapiano (5), NENI (5) | DISH-AGENT | HIGH | DONE | MEDIUM |
 | T011 | website-fix | Venues not showing on locator-v3 | QA-AGENT | CRITICAL | DONE | HIGH |
-| T012 | admin-verify | Admin dashboard venue display | QA-AGENT | HIGH | PENDING | MEDIUM |
-| T013 | dish-quality | Dish-by-dish data verification | QA-AGENT | MEDIUM | PENDING | MEDIUM |
+| T012 | admin-verify | Admin dashboard venue display | QA-AGENT | HIGH | DONE | MEDIUM |
+| T013 | dish-quality | Dish-by-dish data verification | QA-AGENT | MEDIUM | DONE | MEDIUM |
 
 ---
 
 ## Session Log
+
+### 2025-12-15T08:30 | QA-AGENT | T013 Dish Quality Verification COMPLETE
+- **ACTION:** Created and ran comprehensive dish data quality check script
+- **SCRIPT CREATED:** `check-dish-quality.cjs` - validates all dish fields against schema
+- **TOTAL DISHES ANALYZED:** 1,205 dishes across 284 venues
+- **DATA QUALITY SCORE:** 92.2% clean (1,111/1,205 dishes)
+- **CRITICAL ISSUES FOUND & FIXED:**
+  1. **Missing status fields:** 3 dishes → set to 'active'
+  2. **Invalid status values:** Fixed 3 dishes
+  3. **Missing availability:** 3 dishes → set to permanent
+  4. **Price schema mismatch:** 3 dishes had old schema (price as number + currency field) → migrated to new schema (price object)
+  5. **Missing planted_products:** 3 dishes had old field name 'planted_product' (singular) → migrated to 'planted_products' array
+- **NON-CRITICAL ISSUES (NOT FIXED):**
+  - 27 dishes with price=0: Valid data (customizable dishes like "Build Your Bowl")
+  - 74 dishes with empty descriptions: Cosmetic issue, not blocking
+- **FIXES APPLIED:**
+  - Script 1: `check-dish-quality.cjs --fix` - auto-fixed status/availability
+  - Script 2: `fix-price-schema.cjs --execute` - migrated 3 dishes to correct price schema
+  - Script 3: `migrate-planted-products.cjs` - migrated 3 dishes to planted_products array
+- **SCRIPTS FOR FUTURE USE:**
+  - `check-dish-quality.cjs` - reusable quality checker (can filter by venue_id)
+  - `fix-price-schema.cjs` - detects and fixes price schema mismatches
+- **RESULT:** Zero orphaned dishes, zero missing required fields, all critical data issues resolved
+- **STATUS:** T013 DONE - Dish data quality verified at 92.2% clean
+
+### 2025-12-15T06:50 | QA-AGENT | T012 Admin Dashboard Verification COMPLETE
+- **ACTION:** Verified admin dashboard displays venues correctly at https://get-planted-db.web.app
+- **API ENDPOINTS VERIFIED:**
+  - `/adminLiveVenues` - Returns hierarchical venue data (Country > Type > Chain > Venue)
+  - `/adminVenueDishes?venueId=xxx` - Returns dishes for a specific venue
+  - `/adminUpdateVenueStatus` - Updates venue status (active/stale/archived)
+- **FRONTEND COMPONENTS VERIFIED:**
+  - LiveVenuesPage: Split-view with tree navigation + detail panel
+  - LiveVenueTree: Hierarchical display with keyboard navigation (arrows/hjkl)
+  - LiveVenueDetail: Shows venue info, address, platforms, dishes, verification dates
+  - LiveVenueStats: Displays active/stale/archived counts with avg days since verification
+  - LiveVenueFilters: Country, status, venue type, search filters
+- **DATA FIELDS DISPLAYED:**
+  - Venue: name, type, chain, status, address, coordinates, dish count
+  - Dishes: name, description, planted products, price, dietary tags, status
+  - Platforms: delivery partner URLs and active status
+  - Dates: last verified, created at (with days ago calculation)
+- **API CONFIGURATION:**
+  - Base URL: https://europe-west6-get-planted-db.cloudfunctions.net
+  - Auth: Firebase Auth with Bearer token (required for all admin endpoints)
+  - CORS: Properly configured (access-control-allow-origin: *)
+  - Error handling: ApiError/NetworkError classes with retry logic (3 attempts, exponential backoff)
+- **ROUTING:** `/live-venues` page accessible via protected route (requires auth)
+- **STATUS:** T012 DONE - Admin dashboard correctly configured and displays all venue data
+- **NO ISSUES FOUND:** All endpoints functional, CORS working, auth properly integrated
 
 ### 2025-12-14T23:45 | DISH-AGENT | T010 Chain Discovery COMPLETE
 - **ACTION:** Discovered dishes for 3 chains that had NO source dishes
