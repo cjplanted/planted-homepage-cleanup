@@ -36,6 +36,7 @@ export class VenuesCollection extends BaseCollection<Venue> {
       opening_hours: data.opening_hours,
       delivery_zones: data.delivery_zones,
       contact: data.contact,
+      delivery_platforms: data.delivery_platforms,
       source: data.source,
       last_verified: timestampToDate(data.last_verified),
       status: data.status,

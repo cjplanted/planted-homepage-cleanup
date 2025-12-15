@@ -179,9 +179,9 @@ const initialVenues: VenueV3[] = [];
   }
 
   interface ApiDeliveryPlatform {
-    partner: string;
+    platform: string;
     url: string;
-    active: boolean;
+    active?: boolean;
   }
 
   interface ApiVenue {
@@ -241,14 +241,17 @@ const initialVenues: VenueV3[] = [];
   // Platform icon mapping
   const platformIcons: Record<string, string> = {
     'uber_eats': 'uber-eats',
+    'uber-eats': 'uber-eats',
     'ubereats': 'uber-eats',
     'just_eat': 'just-eat',
+    'just-eat': 'just-eat',
     'justeat': 'just-eat',
     'lieferando': 'lieferando',
     'wolt': 'wolt',
     'doordash': 'doordash',
     'deliveroo': 'deliveroo',
     'eat_ch': 'eat-ch',
+    'eat-ch': 'eat-ch',
     'eatch': 'eat-ch',
   };
 
@@ -277,13 +280,13 @@ const initialVenues: VenueV3[] = [];
     else if (cuisines.some(c => /bowl|poke|asian/i.test(c))) iconType = 'bowl';
     else if (cuisines.some(c => /kebab|döner|turkish/i.test(c))) iconType = 'kebab';
 
-    // Map delivery partners (only active ones)
+    // Map delivery partners (only active ones, or all if active field is missing)
     const deliveryPartners = (venue.delivery_platforms || [])
-      .filter(p => p.active)
+      .filter(p => p.active !== false)
       .map(p => ({
-        name: p.partner.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        name: p.platform.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         url: p.url,
-        icon: platformIcons[p.partner.toLowerCase()] || 'website'
+        icon: platformIcons[p.platform.toLowerCase()] || 'website'
       }));
 
     // Find hero image from dishes
