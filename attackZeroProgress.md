@@ -102,7 +102,7 @@ scripts\chrome-debug.bat
 | T001 | duplicate | ALL duplicates | VENUE-AGENT | HIGH | DONE (324 deleted) | MEDIUM |
 | T002 | duplicate | Rice Up! Bern (8 venues) | VENUE-AGENT | HIGH | DONE (merged into T001) | MEDIUM |
 | T003 | country-fix | 18 venues (FR/ES/UK misclassified) | VENUE-AGENT | MEDIUM | DONE | MEDIUM |
-| T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | PENDING | MEDIUM |
+| T004 | extract | dean&david DE (0-dish) | DISH-AGENT | HIGH | DONE (already complete) | MEDIUM |
 | T005 | extract | CH promoted venues | DISH-AGENT | HIGH | PENDING | MEDIUM |
 | T006 | verify-website | /nearby API data flow | QA-AGENT | CRITICAL | DONE | HIGH |
 | T007 | discover | 124 chain venues (enumerate mode) | DISH-AGENT | HIGH | IN PROGRESS | HIGH |
@@ -116,6 +116,27 @@ scripts\chrome-debug.bat
 ---
 
 ## Session Log
+
+### 2025-12-15T09:00 | DISH-AGENT | T004 dean&david DE Verification COMPLETE
+- **ACTION:** Verified all dean&david German venues have dishes
+- **QUERY:** Filtered venues by chain pattern "dean&david" and country "DE"
+- **RESULTS:**
+  - Total dean&david venues (all countries): 63
+  - German (DE) venues: 50
+  - Venues with dishes: 50 (100%)
+  - Venues without dishes: 0
+- **DISH DISTRIBUTION:**
+  - 13 dishes per venue: 17 venues (most common)
+  - 5 dishes per venue: 15 venues
+  - 4 dishes per venue: 10 venues
+  - 3 dishes per venue: 6 venues
+  - 2 dishes per venue: 2 venues
+- **ROOT CAUSE:** All dishes were already copied in previous session (2025-12-14T17:00)
+  - Source: copy-chain-dishes.cjs execution
+  - dean&david was processed with 7 other chains (birdie birdie, rice up, etc.)
+  - 16 dean&david venues received 13 dishes each from source venue
+- **VERIFICATION SCRIPT:** Created check-dean-david.cjs for detailed analysis
+- **STATUS:** T004 DONE - No action needed, all 50 German dean&david venues already have dishes
 
 ### 2025-12-15T08:30 | QA-AGENT | T013 Dish Quality Verification COMPLETE
 - **ACTION:** Created and ran comprehensive dish data quality check script
