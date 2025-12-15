@@ -38,6 +38,13 @@ const CHAIN_PATTERNS = [
   'yuícery',
   'stadtsalat',
   'cotidiano',
+  '60 seconds',
+  'fat monk',
+  'immergrün',
+  'tibits',
+  'brezelkönig',
+  'nooch',
+  'green club',
 ];
 
 function parseArgs() {
