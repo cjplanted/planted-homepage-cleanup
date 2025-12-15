@@ -77,9 +77,34 @@ export function createTimestamp(date?: Date): Timestamp {
 
 /**
  * Convert Firestore Timestamp to Date
+ * Handles null, undefined, and plain objects without toDate method
  */
-export function timestampToDate(timestamp: Timestamp): Date {
-  return timestamp.toDate();
+export function timestampToDate(timestamp: Timestamp | null | undefined | unknown): Date {
+  if (!timestamp) {
+    return new Date(); // Return current date if timestamp is null/undefined
+  }
+  // Check if it's a proper Firestore Timestamp with toDate method
+  if (typeof (timestamp as Timestamp).toDate === 'function') {
+    return (timestamp as Timestamp).toDate();
+  }
+  // Handle plain object with _seconds (serialized Timestamp)
+  if (typeof timestamp === 'object' && '_seconds' in (timestamp as object)) {
+    return new Date((timestamp as { _seconds: number })._seconds * 1000);
+  }
+  // Handle Date object
+  if (timestamp instanceof Date) {
+    return timestamp;
+  }
+  // Handle numeric timestamp (milliseconds)
+  if (typeof timestamp === 'number') {
+    return new Date(timestamp);
+  }
+  // Handle string date
+  if (typeof timestamp === 'string') {
+    return new Date(timestamp);
+  }
+  // Fallback to current date
+  return new Date();
 }
 
 /**

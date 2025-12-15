@@ -366,6 +366,66 @@ const initialVenues: VenueV3[] = [];
     `;
   }
 
+  // Known ZIP coordinates fallback (for direct page access)
+  const knownZipCoords: Record<string, { lat: number; lng: number }> = {
+    // Switzerland
+    '8000': { lat: 47.3769, lng: 8.5417 },
+    '8001': { lat: 47.3686, lng: 8.5391 },
+    '8004': { lat: 47.3776, lng: 8.5244 },
+    '8005': { lat: 47.3904, lng: 8.5182 },
+    '8008': { lat: 47.3531, lng: 8.5570 },
+    '8048': { lat: 47.3842, lng: 8.4831 },
+    '8304': { lat: 47.4150, lng: 8.5950 },
+    '6000': { lat: 47.0502, lng: 8.3093 },
+    '3000': { lat: 46.9480, lng: 7.4474 },
+    '4000': { lat: 47.5596, lng: 7.5886 },
+    '1000': { lat: 46.5197, lng: 6.6323 },
+    '1200': { lat: 46.2044, lng: 6.1432 },
+    // Germany
+    '10115': { lat: 52.5200, lng: 13.4050 },
+    '10117': { lat: 52.5170, lng: 13.3889 },
+    '80331': { lat: 48.1351, lng: 11.5820 },
+    '80335': { lat: 48.1392, lng: 11.5651 },
+    '20095': { lat: 53.5511, lng: 9.9937 },
+    '50667': { lat: 50.9375, lng: 6.9603 },
+    '60311': { lat: 50.1109, lng: 8.6821 },
+    // Austria
+    '1010': { lat: 48.2082, lng: 16.3738 },
+    '1020': { lat: 48.2167, lng: 16.4000 }
+  };
+
+  // Geocode ZIP code using Nominatim API
+  async function geocodeZip(zip: string, countryCode: string): Promise<{ lat: number; lng: number } | null> {
+    // Check local lookup first
+    if (knownZipCoords[zip]) {
+      return knownZipCoords[zip];
+    }
+
+    // Country code to name mapping
+    const countryNames: Record<string, string> = {
+      'ch': 'Switzerland',
+      'de': 'Germany',
+      'at': 'Austria',
+      'uk': 'United Kingdom',
+      'nl': 'Netherlands',
+      'fr': 'France',
+      'it': 'Italy',
+      'es': 'Spain'
+    };
+    const countryName = countryNames[countryCode] || countryCode;
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(zip)}&country=${encodeURIComponent(countryName)}&format=json&limit=1`;
+      const response = await fetch(url, { headers: { 'User-Agent': 'PlantedWebsite/1.0' } });
+      if (!response.ok) return null;
+      const data = await response.json();
+      if (data.length === 0) return null;
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    } catch {
+      return null;
+    }
+  }
+
   // Main loader function
   async function loadVenues() {
     const config = (window as any).__v3Config;
@@ -397,11 +457,22 @@ const initialVenues: VenueV3[] = [];
     }
 
     try {
-      // Build API URL
-      const { lat, lng, apiBaseUrl } = config;
+      // Build API URL - geocode ZIP if coordinates missing
+      let { lat, lng, apiBaseUrl, zip, countryCode } = config;
+
+      // If coordinates missing but ZIP present, geocode the ZIP
+      if ((!lat || !lng) && zip) {
+        console.log('[V3] Missing coordinates, geocoding ZIP:', zip);
+        const coords = await geocodeZip(zip, countryCode || 'ch');
+        if (coords) {
+          lat = String(coords.lat);
+          lng = String(coords.lng);
+          console.log('[V3] Geocoded to:', lat, lng);
+        }
+      }
 
       if (!lat || !lng) {
-        throw new Error('Missing coordinates');
+        throw new Error('Missing coordinates - could not geocode ZIP');
       }
 
       const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=10&type=restaurant&limit=50`;
