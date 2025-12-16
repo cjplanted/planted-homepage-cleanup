@@ -290,6 +290,7 @@ const schemaOrg = {
     <script>
         import { initSmoothScroll, destroySmoothScroll, gsap, ScrollTrigger } from '../scripts/smooth-scroll';
         import { initHeroAnimations, initHeroEntrance } from '../scripts/animations/hero';
+        import { initTransformationAnimations } from '../scripts/animations/transformation';
 
         let lenisInstance: ReturnType<typeof initSmoothScroll> | null = null;
 
@@ -300,6 +301,9 @@ const schemaOrg = {
             // Initialize hero section animations
             initHeroAnimations();
             initHeroEntrance();
+
+            // Initialize transformation section animations
+            initTransformationAnimations();
 
             // Initialize data-animate elements with ScrollTrigger
             const animatedElements = document.querySelectorAll('[data-animate]');
