@@ -9,22 +9,17 @@
  *   node fetch-berlin-dish-images.cjs --venue=<id>      # Process specific venue only
  */
 
-const admin = require('firebase-admin');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 const path = require('path');
 const https = require('https');
 const http = require('http');
 
 // Initialize Firebase Admin
-const serviceAccountPath = path.join(__dirname, '..', '..', 'service-account.json');
-const serviceAccount = require(serviceAccountPath);
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
-
-const db = admin.firestore();
+initializeApp({
+  credential: cert(path.resolve(__dirname, '../../service-account.json'))
+});
+const db = getFirestore();
 
 const EXECUTE = process.argv.includes('--execute');
 const venueArg = process.argv.find(a => a.startsWith('--venue='));
@@ -258,7 +253,7 @@ async function fetchBerlinDishImages() {
   let berlinVenues = allVenues.filter(v => {
     const lat = v.location?.latitude || v.location?._latitude || 0;
     const lng = v.location?.longitude || v.location?._longitude || 0;
-    return lat > 52.3 && lat < 52.7 && lng > 13.2 && lng < 13.6;
+    return lat > 52.42 && lat < 52.76 && lng > 13.25 && lng < 13.62;
   });
 
   if (SPECIFIC_VENUE) {
@@ -277,16 +272,22 @@ async function fetchBerlinDishImages() {
     if (venueDishes.length === 0) continue;
 
     const platforms = venue.delivery_platforms || [];
-    if (platforms.length === 0) {
-      console.log(`\n⚠️  ${venue.name} - No delivery platforms, skipping`);
+    // Filter to scrapable platforms (not Lieferando which is JS-rendered)
+    const scrapablePlatforms = platforms.filter(p =>
+      p.url && (p.platform === 'uber-eats' || p.platform === 'wolt')
+    );
+
+    if (scrapablePlatforms.length === 0) {
+      console.log(`\n⚠️  ${venue.name} - No scrapable platforms (${venueDishes.length} dishes), skipping`);
+      totalFailed += venueDishes.length;
       continue;
     }
 
     console.log(`\n📍 ${venue.name} (${venueDishes.length} dishes need images)`);
 
     // Try each platform
-    for (const platform of platforms) {
-      if (!platform.url) continue;
+    let imagesFound = false;
+    for (const platform of scrapablePlatforms) {
 
       console.log(`   Trying ${platform.platform}: ${platform.url}`);
 
@@ -299,19 +300,6 @@ async function fetchBerlinDishImages() {
           images = extractUberEatsImages(html, dishNames);
         } else if (platform.platform === 'wolt') {
           images = extractWoltImages(html, dishNames);
-        } else if (platform.platform === 'just-eat') {
-          images = extractJustEatImages(html, dishNames);
-        } else {
-          // Generic extraction
-          const imgPattern = /https:\/\/[^"'\s]*\.(?:jpg|jpeg|png|webp)[^"'\s]*/gi;
-          const allImages = [...new Set(html.match(imgPattern) || [])].slice(0, 10);
-          let i = 0;
-          for (const name of dishNames) {
-            if (i < allImages.length) {
-              images.set(name, allImages[i]);
-              i++;
-            }
-          }
         }
 
         if (images.size > 0) {
@@ -334,6 +322,7 @@ async function fetchBerlinDishImages() {
             }
           }
 
+          imagesFound = true;
           break; // Got images from this platform, no need to try others
         } else {
           console.log(`   No images found on ${platform.platform}`);
@@ -344,6 +333,10 @@ async function fetchBerlinDishImages() {
 
       // Rate limit
       await new Promise(r => setTimeout(r, 1000));
+    }
+
+    if (!imagesFound) {
+      totalFailed += venueDishes.length;
     }
   }
 
