@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import '../styles/global.css';
+import '../styles/animations.css';
 import { locales, defaultLocale, allLocales, type LocaleCode } from '../i18n/config';
 
 interface Props {
@@ -283,6 +284,66 @@ const schemaOrg = {
 
         // Re-run after View Transitions navigation
         document.addEventListener('astro:page-load', initAnimations);
+    </script>
+
+    <!-- Smooth Scroll with GSAP + Lenis -->
+    <script>
+        import { initSmoothScroll, destroySmoothScroll, gsap, ScrollTrigger } from '../scripts/smooth-scroll';
+
+        let lenisInstance: ReturnType<typeof initSmoothScroll> | null = null;
+
+        function initScrollAnimations() {
+            // Initialize Lenis smooth scroll
+            lenisInstance = initSmoothScroll();
+
+            // Initialize data-animate elements with ScrollTrigger
+            const animatedElements = document.querySelectorAll('[data-animate]');
+
+            animatedElements.forEach((el) => {
+                const delay = parseFloat(el.getAttribute('data-delay') || '0');
+
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: 'top 85%',
+                    once: true,
+                    onEnter: () => {
+                        setTimeout(() => {
+                            el.classList.add('is-visible');
+                        }, delay * 1000);
+                    },
+                });
+            });
+
+            // Parallax elements
+            document.querySelectorAll('[data-parallax]').forEach((el) => {
+                const speed = parseFloat(el.getAttribute('data-speed') || '0.3');
+
+                gsap.to(el, {
+                    yPercent: -20 * speed,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: el.closest('section') || el,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1,
+                    },
+                });
+            });
+        }
+
+        function cleanupScrollAnimations() {
+            // Kill all ScrollTriggers
+            ScrollTrigger.getAll().forEach((st) => st.kill());
+            // Destroy Lenis
+            destroySmoothScroll();
+        }
+
+        // Initial load
+        initScrollAnimations();
+
+        // Handle View Transitions
+        document.addEventListener('astro:before-swap', cleanupScrollAnimations);
+        document.addEventListener('astro:page-load', initScrollAnimations);
     </script>
 
     <style>
