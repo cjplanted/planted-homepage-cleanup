@@ -140,10 +140,64 @@ scripts\chrome-debug.bat
 | T022 | dish-images | Fetch dish images for Vienna restaurants | DISH-AGENT | MEDIUM | DONE (8 images) | MEDIUM |
 | T023 | dish-images | Fetch dish images for Munich restaurants | DISH-AGENT | MEDIUM | DONE (66 images) | MEDIUM |
 | T024 | platform-urls | 4 CH/DE/AT chains without platform URLs | DISH-AGENT | MEDIUM | DONE (research) | LOW |
+| T025 | dish-images-http | HTTP-based dish image scraping (all cities) | DISH-AGENT | MEDIUM | DONE (192 images) | MEDIUM |
+| T026 | dish-images-puppeteer | Puppeteer scraping for JS-rendered pages | DISH-AGENT | MEDIUM | IN PROGRESS | HIGH |
 
 ---
 
 ## Session Log
+
+### 2025-12-16T16:00 | DISH-AGENT | T026 Puppeteer Dish Scraper IN PROGRESS
+
+**T026: Puppeteer-Based Dish Image Scraping for JS-Rendered Pages**
+- **ISSUE:** 128 venues with Lieferando/Just Eat platforms unable to be scraped via HTTP (T020-T023)
+- **ROOT CAUSE:** These platforms use React/JS rendering - menu items not in initial HTML
+- **APPROACH:** Created Puppeteer-based scraper with headless browser automation
+- **INFRASTRUCTURE BUILT:**
+  - `puppeteer-dish-scraper.cjs` - Main scraper with platform-specific extractors
+  - `analyze-puppeteer-targets.cjs` - Analysis tool to identify 128 target venues
+  - Lieferando extractor: Waits 5s for React, scrolls, extracts articles/buttons/li elements
+  - Just Eat extractor: Similar approach with broad selectors for menu items
+  - Intelligent keyword matching: Matches "Planted Chicken Bowl" to "Planted.Chicken Monk (big)"
+  - User-agent rotation: 4 different browsers to avoid detection
+  - Rate limiting: 2-3 seconds between requests
+  - Error handling: Try/finally to ensure browser cleanup
+- **MATCHING ALGORITHM:**
+  - Strategy 1: Direct substring match (normalized)
+  - Strategy 2: Keyword matching - matches 2+ words or 1 word if dish name has only 1 keyword
+  - Handles variations: "planted.chicken" matches "Planted Chicken Bowl"
+- **TEST RESULTS:**
+  - Single venue test (FAT MONK Wien): 2/4 dishes matched and images extracted
+  - Successfully updated Firestore with image URLs
+  - Matched "Create your own Bowl - Planted Chicken" → "Planted.Chicken Monk (big)"
+  - Matched "Planted Chicken Bowl" → "Planted.Chicken Monk (big)"
+- **TARGET BREAKDOWN (128 venues):**
+  - Vienna (AT): 22 venues, ~100 dishes (Lieferando, Just Eat)
+  - Munich (DE): 18 venues, ~70 dishes (Lieferando, Just Eat)
+  - Berlin (DE): 17 venues, ~65 dishes (Lieferando, Just Eat)
+  - Hamburg (DE): 15 venues, ~55 dishes (Lieferando, Wolt hybrid)
+  - Zurich (CH): 9 venues, ~30 dishes (Just Eat)
+  - Other cities: 47 venues, ~150 dishes
+- **EXECUTION STATUS:**
+  - Lieferando scraping: IN PROGRESS (running in background)
+  - Just Eat scraping: PENDING
+  - Estimated completion: 30-60 minutes for all 128 venues
+- **SCRIPTS CREATED:**
+  - `puppeteer-dish-scraper.cjs` - Production scraper (supports --execute, --venue, --platform flags)
+  - `analyze-puppeteer-targets.cjs` - Diagnostic tool for targeting
+- **NEXT STEPS:**
+  1. Monitor Lieferando scraping completion
+  2. Run Just Eat scraping with `--platform=just-eat --execute`
+  3. Analyze success rates by platform
+  4. Update attackZeroProgress.md with final counts
+  5. Commit all scripts and progress
+- **EXPECTED IMPACT:**
+  - Current: ~32 dishes missing images (T023 remainder)
+  - Expected: 50-100+ dish images extracted (depending on menu availability)
+  - Some dishes may not match due to menu changes or different naming conventions
+- **STATUS:** T026 IN PROGRESS (awaiting Lieferando + Just Eat scraping completion)
+
+---
 
 ### 2025-12-16T10:00 | DISH-AGENT | T024 Platform URLs Research COMPLETE
 
