@@ -49,22 +49,25 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             <div class="hero-grid">
                 <!-- Left Column: Text Content -->
                 <div class="hero-text">
-                    <!-- Badge -->
-                    <div class="hero-badge">
-                        <img src={`${base}/images/b-corp-logo.svg`} alt="B Corp Certified" class="bcorp-logo" />
+                    <!-- Badge - Green checkmark style -->
+                    <div class="hero-badge hero-badge--green">
+                        <span class="b-corp-checkmark">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
                         <span>{t.home.hero.badge}</span>
                     </div>
 
-                    <!-- Headline with rotation -->
+                    <!-- Headline -->
                     <div class="hero-headline">
                         <h1>{t.home.hero.title}</h1>
-                        <div class="hero-subtext">{t.home.hero.subtitle}</div>
                     </div>
 
-                    <!-- Whisper box -->
-                    <div class="hero-whisper">
-                        {t.home.hero.whisper || t.home.hero.subtitle}
-                    </div>
+                    <!-- Simplified subheadline - one unified block -->
+                    <p class="hero-subheadline">
+                        {t.home.hero.subtitle}
+                    </p>
 
                     <!-- Actions -->
                     <div class="hero-actions">
@@ -80,31 +83,10 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                         </a>
                     </div>
 
-                    <!-- Proof stats -->
-                    <div class="hero-proof">
-                        <div class="proof-item">
-                            <div class="proof-value">{t.home.trust.restaurants}</div>
-                            <div class="proof-label">{t.home.hero.proofRestaurants || 'Restaurants'}</div>
-                        </div>
-                        <div class="proof-item">
-                            <div class="proof-value">{t.home.trust.countries}</div>
-                            <div class="proof-label">{t.home.hero.proofCountries || 'Länder'}</div>
-                        </div>
-                        <div class="proof-item">
-                            <div class="proof-value">1</div>
-                            <div class="proof-label">{t.home.hero.proofChampion || 'Schwingerkönig'}</div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Right Column: TV Set with parallax -->
                 <div class="hero-visual" data-parallax data-speed="0.3">
-                    <!-- Evidence Label -->
-                    <div class="evidence-label">
-                        <span class="evidence-text">{t.home.hero.evidenceLabel || 'Beweisstück A'}</span>
-                        <span class="evidence-arrow">→</span>
-                    </div>
-
                     <!-- TV Frame -->
                     <div class="tv-frame">
                         <div class="tv-screen">
@@ -118,6 +100,12 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                             <div class="tv-dial"></div>
                         </div>
                     </div>
+
+                    <!-- Evidence Link - below video with up arrow -->
+                    <a href="#video-proof" class="evidence-link">
+                        <span class="evidence-arrow">↑</span>
+                        <span class="evidence-text">{t.home.hero.evidenceLabel || 'Beweisstück A'}</span>
+                    </a>
 
                     <!-- Floating annotation card -->
                     <div class="tv-annotation">
@@ -166,6 +154,24 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <div class="country-item"><span class="country-flag">GB</span><span>{t.countries?.unitedKingdom || 'United Kingdom'}</span></div>
                     <div class="country-item"><span class="country-flag">ES</span><span>{t.countries?.spain || 'Spain'}</span></div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Stats Section - moved from hero for better breathing room -->
+    <section class="trust-stats">
+        <div class="trust-stats-inner">
+            <div class="trust-stat">
+                <div class="trust-stat-value">{t.home.trust.restaurants}</div>
+                <div class="trust-stat-label">{t.home.hero.proofRestaurants || 'Restaurants'}</div>
+            </div>
+            <div class="trust-stat">
+                <div class="trust-stat-value">{t.home.trust.countries}</div>
+                <div class="trust-stat-label">{t.home.hero.proofCountries || 'Länder'}</div>
+            </div>
+            <div class="trust-stat">
+                <div class="trust-stat-value">1</div>
+                <div class="trust-stat-label">{t.home.hero.proofChampion || 'Schwingerkönig'}</div>
             </div>
         </div>
     </section>
@@ -448,7 +454,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         background: var(--planted-cream);
         display: flex;
         align-items: center;
-        padding: 4rem 0;
+        padding: 6rem 0 4rem;
         position: relative;
         overflow: hidden;
     }
@@ -518,6 +524,121 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         height: 28px;
         border-radius: 50%;
     }
+    /* Green Badge Variant */
+    .hero-badge--green {
+        background: rgba(107, 191, 89, 0.1);
+        border: 1px solid var(--planted-green);
+        color: var(--planted-green);
+    }
+
+    .b-corp-checkmark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background: var(--planted-green);
+        border-radius: 50%;
+    }
+
+    .b-corp-checkmark svg {
+        width: 14px;
+        height: 14px;
+        stroke: white;
+    }
+
+    /* Simplified subheadline */
+    .hero-subheadline {
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        color: var(--planted-charcoal);
+        opacity: 0.7;
+        margin-top: 1rem;
+        max-width: 420px;
+        line-height: 1.6;
+        animation: fadeInUp 0.6s ease 0.2s forwards;
+        opacity: 0;
+    }
+
+    /* Evidence Link - below video */
+    .evidence-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background: rgba(97, 38, 158, 0.05);
+        border-radius: 100px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .evidence-link:hover {
+        background: rgba(97, 38, 158, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .evidence-link .evidence-arrow {
+        font-size: 1rem;
+        color: var(--planted-purple);
+        animation: bounceUp 1.5s ease-in-out infinite;
+    }
+
+    .evidence-link .evidence-text {
+        font-family: 'VC Henrietta', serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--planted-purple);
+    }
+
+    @keyframes bounceUp {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+    }
+
+    /* Trust Stats Section */
+    .trust-stats {
+        background: white;
+        padding: 3rem 1.5rem;
+        border-top: 1px solid rgba(97, 38, 158, 0.08);
+    }
+
+    .trust-stats-inner {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .trust-stat {
+        text-align: center;
+    }
+
+    .trust-stat-value {
+        font-family: 'VC Henrietta', serif;
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-weight: 800;
+        color: var(--planted-purple);
+        line-height: 1;
+    }
+
+    .trust-stat-label {
+        font-size: 0.85rem;
+        color: var(--planted-charcoal);
+        opacity: 0.6;
+        margin-top: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+        .trust-stats-inner {
+            gap: 2rem;
+        }
+        .trust-stat-value {
+            font-size: 1.75rem;
+        }
+    }
+
+
 
     .hero-headline {
         animation: fadeInUp 0.6s ease 0.1s forwards;
@@ -532,28 +653,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         color: var(--planted-purple);
         transform: rotate(-1deg);
         margin-bottom: 12px;
-    }
-
-    .hero-subtext {
-        font-family: 'VC Henrietta', serif;
-        font-size: clamp(1.4rem, 2.8vw, 2rem);
-        font-weight: 600;
-        color: var(--planted-green);
-        margin-left: 16px;
-        transform: rotate(-0.5deg);
-    }
-
-    .hero-whisper {
-        font-size: 0.95rem;
-        color: #6B7280;
-        max-width: 400px;
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background: white;
-        border-radius: 0.75rem;
-        border-left: 3px solid var(--planted-purple);
-        animation: fadeInUp 0.6s ease 0.2s forwards;
-        opacity: 0;
     }
 
     .hero-actions {
@@ -571,34 +670,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         margin-left: 0.25rem;
     }
 
-    .hero-proof {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-top: 2rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid rgba(97, 38, 158, 0.1);
-        animation: fadeInUp 0.6s ease 0.4s forwards;
-        opacity: 0;
-    }
-
-    .proof-item {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .proof-value {
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: var(--planted-purple);
-    }
-
-    .proof-label {
-        font-size: 0.85rem;
-        color: #6B7280;
-    }
-
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -613,43 +684,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
     @keyframes fadeIn {
         to { opacity: 1; }
-    }
-
-    /* Evidence Label */
-    .evidence-label {
-        position: absolute;
-        bottom: 55%;
-        right: calc(100% + 12px);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        white-space: nowrap;
-        z-index: 5;
-    }
-
-    .evidence-text {
-        font-family: 'VC Henrietta', serif;
-        font-size: 1.4rem;
-        font-weight: 600;
-        color: var(--planted-purple);
-        font-style: italic;
-    }
-
-    .evidence-arrow {
-        font-size: 1.5rem;
-        color: var(--planted-purple);
-        animation: pointRight 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pointRight {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(6px); }
-    }
-
-    @media (max-width: 1024px) {
-        .evidence-label {
-            display: none;
-        }
     }
 
     .tv-frame {
@@ -1343,12 +1377,12 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 200px;
+        height: 220px;
         overflow: hidden;
     }
 
     .product-pack-image {
-        max-height: 150px;
+        max-height: 180px;
         width: auto;
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1873,8 +1907,9 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         inset: 0;
         background: linear-gradient(
             to top,
-            rgba(0, 0, 0, 0.85) 0%,
-            rgba(0, 0, 0, 0.6) 40%,
+            rgba(0, 0, 0, 0.9) 0%,
+            rgba(0, 0, 0, 0.7) 35%,
+            rgba(0, 0, 0, 0.3) 60%,
             transparent 100%
         );
         display: flex;
@@ -1890,7 +1925,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         font-weight: 700;
         margin-bottom: 0.5rem;
         line-height: 1.2;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     .recipe-meta {
@@ -2195,7 +2230,8 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     .ambassador-name {
         font-weight: 700;
         color: var(--planted-purple);
-        font-size: 1.1rem;
+        font-size: 1.75rem;
+        font-family: 'VC Henrietta', serif;
         margin-bottom: 0.25rem;
     }
 
