@@ -24,24 +24,11 @@ export function initHeroAnimations(): void {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) return;
 
-  // Scroll-fade effect on hero content
-  // IMPORTANT: Ensure hero content starts at full opacity
-  // Only start fading after user scrolls down (20% of hero height to prevent immediate fade)
+  // Hero text - ALWAYS VISIBLE (no scroll-fade)
+  // The scroll-fade animation was removed because ScrollTrigger's scrub
+  // applies partial animation even at scroll=0, causing text to disappear.
   if (heroContent) {
-    // Force initial state to be visible
-    gsap.set(heroContent, { opacity: 1, yPercent: 0 });
-
-    gsap.to(heroContent, {
-      opacity: 0,
-      yPercent: -10,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: '20% top', // Changed from 10% to 20% to prevent immediate fade
-        end: '60% top',   // Changed from 50% to 60% for smoother transition
-        scrub: true,
-      },
-    });
+    gsap.set(heroContent, { opacity: 1 });
   }
 
   // Parallax is handled by Layout.astro's generic parallax system
