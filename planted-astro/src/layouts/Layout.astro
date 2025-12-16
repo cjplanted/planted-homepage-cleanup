@@ -293,6 +293,8 @@ const schemaOrg = {
         import { initTransformationAnimations } from '../scripts/animations/transformation';
         import { initStatsAnimations } from '../scripts/animations/stats';
         import { initMagneticEffects } from '../scripts/interactions/magnetic';
+        import { initPageLoadSequence, initLazyVideos, initPerformanceHints } from '../scripts/animations/page-load';
+        import { initScrollFeedback } from '../scripts/interactions/scroll-velocity';
 
         let lenisInstance: ReturnType<typeof initSmoothScroll> | null = null;
 
@@ -312,6 +314,16 @@ const schemaOrg = {
 
             // Initialize magnetic and interactive effects
             initMagneticEffects();
+
+            // Initialize page load sequence
+            initPageLoadSequence();
+
+            // Initialize lazy loading and performance hints
+            initLazyVideos();
+            initPerformanceHints();
+
+            // Initialize scroll velocity feedback
+            initScrollFeedback();
 
             // Initialize data-animate elements with ScrollTrigger
             const animatedElements = document.querySelectorAll('[data-animate]');
