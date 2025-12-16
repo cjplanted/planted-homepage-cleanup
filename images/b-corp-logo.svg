@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Official B Corp Certified badge style -->
+  <circle cx="50" cy="50" r="48" fill="#000000"/>
+  <circle cx="50" cy="50" r="44" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+  <!-- B letter -->
+  <path d="M35 25h18c7.5 0 13 5.5 13 12.5 0 4.5-2.5 8-6 10 5 2 8.5 6.5 8.5 12.5 0 8-6.5 14-15 14H35V25zm17 19c4 0 7-2.5 7-6.5s-3-6.5-7-6.5H43v13h9zm1 20c4.5 0 8-3 8-7.5s-3.5-7.5-8-7.5H43v15h10z" fill="#FFFFFF"/>
+  <!-- Text: CERTIFIED -->
+  <text x="50" y="88" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="8" font-weight="bold" letter-spacing="1.5">CERTIFIED</text>
+</svg>

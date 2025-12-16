@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planted Locator V2 - Test Suite</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root {
+      --locator-purple: #61269E;
+      --locator-purple-dark: #4A1D7A;
+      --locator-purple-light: #7B3DB0;
+      --locator-green: #8BC53F;
+      --locator-green-dark: #6a9a2e;
+      --locator-green-light: #A5D65F;
+      --locator-black: #0a0a0a;
+      --locator-white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a1a;
+      color: white;
+      min-height: 100vh;
+    }
+
+    /* Test Controls */
+    .test-controls {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 9999;
+      background: rgba(0,0,0,0.9);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      max-width: 320px;
+      font-size: 13px;
+    }
+
+    .test-controls h3 {
+      margin-bottom: 10px;
+      color: #8BC53F;
+    }
+
+    .test-controls button {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      margin: 5px 0;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .test-controls button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .test-controls button.pass {
+      border-color: #8BC53F;
+      background: rgba(139, 197, 63, 0.2);
+    }
+
+    .test-controls button.fail {
+      border-color: #ff4444;
+      background: rgba(255, 68, 68, 0.2);
+    }
+
+    .test-log {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 6px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .test-log .success { color: #8BC53F; }
+    .test-log .error { color: #ff4444; }
+    .test-log .info { color: #61269E; }
+
+    /* Locator Container */
+    .locator-v2 {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--locator-black);
+      overflow: hidden;
+    }
+
+    /* Split View */
+    .split-view {
+      display: flex;
+      height: 100vh;
+      position: relative;
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      will-change: flex;
+    }
+
+    .panel-bg {
+      position: absolute;
+      inset: 0;
+      will-change: transform;
+    }
+
+    .panel-restaurant .panel-bg {
+      background: linear-gradient(165deg, var(--locator-purple-light) 0%, var(--locator-purple) 50%, var(--locator-purple-dark) 100%);
+    }
+
+    .panel-retail .panel-bg {
+      background: linear-gradient(165deg, var(--locator-green-light) 0%, var(--locator-green) 50%, var(--locator-green-dark) 100%);
+    }
+
+    .panel-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: white;
+      max-width: 420px;
+    }
+
+    .icon-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-main {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+      will-change: transform, filter;
+    }
+
+    .icon-glow-1, .icon-glow-2 {
+      position: absolute;
+      inset: -20%;
+      border-radius: 50%;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .panel-restaurant .icon-glow-1 { background: radial-gradient(circle, rgba(123,61,176,0.4) 0%, transparent 70%); }
+    .panel-restaurant .icon-glow-2 { background: radial-gradient(circle, rgba(97,38,158,0.3) 0%, transparent 60%); }
+    .panel-retail .icon-glow-1 { background: radial-gradient(circle, rgba(139,197,63,0.4) 0%, transparent 70%); }
+    .panel-retail .icon-glow-2 { background: radial-gradient(circle, rgba(106,154,46,0.3) 0%, transparent 60%); }
+
+    .panel-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .panel-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.85;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+      white-space: pre-line;
+    }
+
+    .panel-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: white;
+      color: var(--locator-purple);
+      border: none;
+      border-radius: 100px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .panel-retail .panel-cta { color: var(--locator-green-dark); }
+
+    .panel-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    /* ZIP Overlay */
+    .zip-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .zip-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    .zip-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--locator-purple);
+      z-index: 0;
+    }
+
+    .zip-overlay.green .zip-bg {
+      background: var(--locator-green);
+    }
+
+    .zip-back {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 10;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+
+    .zip-back:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+
+    .zip-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      max-width: 480px;
+      padding: 2rem;
+    }
+
+    .zip-icon-container {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .zip-icon {
+      width: 100%;
+      height: 100%;
+    }
+
+    .zip-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .zip-subtitle {
+      font-size: 1.15rem;
+      opacity: 0.85;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .zip-input-group {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 320px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .zip-input {
+      flex: 1;
+      padding: 1.1rem 1.5rem;
+      font-size: 1.2rem;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+      transition: all 0.25s;
+    }
+
+    .zip-input::placeholder { color: rgba(255,255,255,0.5); }
+    .zip-input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
+
+    .zip-input.shake {
+      animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(4px); }
+      30%, 50%, 70% { transform: translateX(-6px); }
+      40%, 60% { transform: translateX(6px); }
+    }
+
+    .zip-submit {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      color: var(--locator-purple);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .zip-overlay.green .zip-submit { color: var(--locator-green-dark); }
+    .zip-submit:hover { transform: scale(1.05); }
+
+    .zip-or {
+      color: rgba(255,255,255,0.6);
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    .zip-detect {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.8rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .zip-detect:hover { background: rgba(255,255,255,0.2); }
+
+    /* Results Overlay */
+    .results-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      overflow-y: auto;
+    }
+
+    .results-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    .results-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--locator-purple);
+      z-index: 0;
+    }
+
+    .results-overlay.green .results-bg {
+      background: var(--locator-green);
+    }
+
+    .results-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--locator-purple);
+    }
+
+    .results-overlay.green .results-header {
+      background: var(--locator-green);
+    }
+
+    .results-back {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .results-back:hover { background: rgba(255,255,255,0.2); }
+
+    .results-info {
+      flex: 1;
+      color: white;
+    }
+
+    .results-location {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .results-count {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .results-change {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      padding: 0.7rem 1.4rem;
+      border-radius: 100px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .results-change:hover { background: rgba(255,255,255,0.2); }
+
+    .results-tabs {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 2rem 1.5rem;
+    }
+
+    .tab-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      padding: 0.85rem 1.6rem;
+      border-radius: 100px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tab-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--locator-purple);
+      border-color: white;
+    }
+
+    .results-overlay.green .tab-btn.active {
+      color: var(--locator-green-dark);
+    }
+
+    .results-grid {
+      position: relative;
+      z-index: 1;
+      padding: 0 2rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .results-subtitle {
+      color: rgba(255,255,255,0.75);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .card-name {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #1a1a1a;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-rating {
+      font-size: 0.85rem;
+      color: #888;
+      font-weight: 700;
+    }
+
+    .card-rating .star { color: #F7941D; }
+
+    .card-meta {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .card-distance {
+      background: var(--locator-green);
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .card-dishes {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .dish {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .dish:last-child { border-bottom: none; }
+
+    .dish-name {
+      font-weight: 700;
+      color: #1a1a1a;
+      font-size: 0.95rem;
+    }
+
+    .dish-badge {
+      display: inline-block;
+      background: #E8F5E9;
+      color: #2E7D32;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+
+    .dish-desc {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 0.25rem;
+    }
+
+    .dish-price {
+      font-weight: 800;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
+
+    .card-products {
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .product-tag {
+      background: #f5f5f5;
+      color: #666;
+      padding: 0.35rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .card-actions {
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .order-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
+
+    .order-btn:hover { transform: translateY(-1px); }
+
+    .order-btn.lieferando { background: #FF8000; color: white; }
+    .order-btn.wolt { background: #009DE0; color: white; }
+    .order-btn.uber-eats { background: #06C167; color: white; }
+
+    .delivery-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .delivery-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .delivery-card p {
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .delivery-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .delivery-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.5rem;
+      background: white;
+      color: var(--locator-purple);
+      border-radius: 100px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .delivery-btn:hover { transform: translateY(-2px); }
+    .delivery-btn.secondary { background: rgba(255,255,255,0.15); color: white; }
+  </style>
+</head>
+<body>
+
+<!-- Test Controls Panel -->
+<div class="test-controls">
+  <h3>Locator Test Suite</h3>
+  <button onclick="runTest('splitView')">T1: Split View Renders</button>
+  <button onclick="runTest('hoverRestaurant')">T2: Hover Restaurant Panel</button>
+  <button onclick="runTest('hoverRetail')">T3: Hover Retail Panel</button>
+  <button onclick="runTest('clickRestaurant')">T4: Click Restaurant → ZIP</button>
+  <button onclick="runTest('clickRetail')">T5: Click Retail → ZIP</button>
+  <button onclick="runTest('zipBack')">T6: ZIP Back → Split</button>
+  <button onclick="runTest('zipSubmit')">T7: Submit ZIP → Results</button>
+  <button onclick="runTest('zipInvalid')">T8: Invalid ZIP (shake)</button>
+  <button onclick="runTest('tabSwitch')">T9: Tab Switch Animation</button>
+  <button onclick="runTest('resultsBack')">T10: Results Back → Split</button>
+  <button onclick="runTest('changeZip')">T11: Change ZIP</button>
+  <button onclick="runAllTests()">Run All Tests</button>
+  <button onclick="resetLocator()">Reset Locator</button>
+  <div class="test-log" id="testLog"></div>
+</div>
+
+<!-- Locator Component -->
+<section class="locator-v2" id="locatorV2">
+  <!-- Split View -->
+  <div class="split-view" id="splitView">
+    <div class="panel panel-restaurant" id="panelRestaurant" role="button" tabindex="0">
+      <div class="panel-bg"></div>
+      <div class="panel-content">
+        <div class="icon-container">
+          <div class="icon-glow-1"></div>
+          <div class="icon-glow-2"></div>
+          <svg class="icon-main" viewBox="0 0 100 100" fill="none">
+            <ellipse cx="50" cy="72" rx="38" ry="10" stroke="white" stroke-width="2.5" fill="none"/>
+            <ellipse cx="50" cy="55" rx="25" ry="12" fill="white"/>
+            <ellipse cx="50" cy="40" rx="18" ry="10" fill="white"/>
+            <path d="M50 20 L50 30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="50" cy="16" r="4" fill="white"/>
+          </svg>
+        </div>
+        <h2 class="panel-title">Lass es dir kochen</h2>
+        <p class="panel-subtitle">8.000+ Restaurants servieren planted.
+Jemand anderes macht die Arbeit.</p>
+        <button class="panel-cta">Restaurants finden <span>→</span></button>
+      </div>
+    </div>
+
+    <div class="panel panel-retail" id="panelRetail" role="button" tabindex="0">
+      <div class="panel-bg"></div>
+      <div class="panel-content">
+        <div class="icon-container">
+          <div class="icon-glow-1"></div>
+          <div class="icon-glow-2"></div>
+          <svg class="icon-main" viewBox="0 0 100 100" fill="none">
+            <path d="M25 35 L28 82 Q30 88, 50 88 Q70 88, 72 82 L75 35" stroke="white" stroke-width="2.5" fill="none"/>
+            <path d="M35 35 Q35 20, 50 20 Q65 20, 65 35" stroke="white" stroke-width="2.5" fill="none"/>
+            <line x1="50" y1="45" x2="50" y2="70" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="40" y1="57" x2="60" y2="57" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2 class="panel-title">Selber machen</h2>
+        <p class="panel-subtitle">Pack auf. Pfanne. 6 Minuten.
+So einfach ist das.</p>
+        <button class="panel-cta">Laden finden <span>→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZIP Overlay -->
+  <div class="zip-overlay" id="zipView" aria-hidden="true">
+    <div class="zip-bg"></div>
+    <button class="zip-back" id="zipBack">←</button>
+    <div class="zip-content">
+      <div class="zip-icon-container">
+        <svg class="zip-icon" id="zipIconRestaurant" viewBox="0 0 100 100" fill="none" style="display: none;">
+          <ellipse cx="50" cy="72" rx="38" ry="10" stroke="white" stroke-width="2.5" fill="none"/>
+          <ellipse cx="50" cy="55" rx="25" ry="12" fill="white"/>
+          <ellipse cx="50" cy="40" rx="18" ry="10" fill="white"/>
+          <path d="M50 20 L50 30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="50" cy="16" r="4" fill="white"/>
+        </svg>
+        <svg class="zip-icon" id="zipIconRetail" viewBox="0 0 100 100" fill="none" style="display: none;">
+          <path d="M25 35 L28 82 Q30 88, 50 88 Q70 88, 72 82 L75 35" stroke="white" stroke-width="2.5" fill="none"/>
+          <path d="M35 35 Q35 20, 50 20 Q65 20, 65 35" stroke="white" stroke-width="2.5" fill="none"/>
+          <line x1="50" y1="45" x2="50" y2="70" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="40" y1="57" x2="60" y2="57" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="zip-title">Wo bist du?</h2>
+      <p class="zip-subtitle" id="zipSubtitle">Wir zeigen dir Restaurants in deiner Nähe, die planted servieren.</p>
+      <div class="zip-input-group">
+        <input type="text" class="zip-input" id="zipInput" placeholder="10115" maxlength="8">
+        <button class="zip-submit" id="zipSubmit">→</button>
+      </div>
+      <p class="zip-or">oder</p>
+      <button class="zip-detect" id="zipDetect">📍 Standort verwenden</button>
+    </div>
+  </div>
+
+  <!-- Results Overlay -->
+  <div class="results-overlay" id="resultsView" aria-hidden="true">
+    <div class="results-bg"></div>
+    <header class="results-header">
+      <button class="results-back" id="resultsBack">←</button>
+      <div class="results-info">
+        <div class="results-location"><span>📍</span> <span id="resultsLocationText">Deutschland</span></div>
+        <div class="results-count" id="resultsCount"></div>
+      </div>
+      <button class="results-change" id="resultsChange">PLZ ändern</button>
+    </header>
+    <nav class="results-tabs" id="resultsTabs">
+      <button class="tab-btn active" data-tab="restaurants">🍽️ Restaurants</button>
+      <button class="tab-btn" data-tab="delivery">🛵 Lieferdienste</button>
+    </nav>
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+</section>
+
+<script>
+// Test Data
+const mockRestaurants = [
+  {
+    chainName: "dean&david",
+    name: "dean&david Leopoldstraße",
+    city: "München",
+    rating: "4.5",
+    distance: "1.2 km",
+    dishes: [
+      { name: "Tuscany Chicken Salad", description: "planted.chicken with Italian flavors", price: "€12.90", isVegan: true },
+      { name: "Planted Chicken Kebab Bowl", description: "Jasmine rice, planted chicken", price: "€13.90", isVegan: true }
+    ],
+    plantedProducts: ["planted.chicken"],
+    deliveryPlatforms: [
+      { name: "lieferando", displayName: "Lieferando", url: "#" },
+      { name: "wolt", displayName: "Wolt", url: "#" }
+    ]
+  },
+  {
+    chainName: "Birdie Birdie",
+    name: "Birdie Birdie Prenzlauer Berg",
+    city: "Berlin",
+    rating: "4.3",
+    distance: "2.4 km",
+    dishes: [
+      { name: "Classic Planted Burger", description: "Crispy planted.chicken, cheese", price: "€8.85", isVegan: true }
+    ],
+    plantedProducts: ["planted.chicken"],
+    deliveryPlatforms: [
+      { name: "uber-eats", displayName: "Uber Eats", url: "#" },
+      { name: "lieferando", displayName: "Lieferando", url: "#" }
+    ]
+  },
+  {
+    chainName: "KAIMUG",
+    name: "KAIMUG Zürich",
+    city: "Zürich",
+    distance: "3.1 km",
+    dishes: [
+      { name: "Thai planted.chicken", description: "With broccoli, bamboo, carrots", price: "CHF 22.90", isVegan: true }
+    ],
+    plantedProducts: ["planted.chicken"],
+    deliveryPlatforms: [
+      { name: "wolt", displayName: "Wolt", url: "#" }
+    ]
+  },
+  {
+    chainName: "Nooch",
+    name: "Nooch Asian Kitchen",
+    city: "Zürich",
+    rating: "4.6",
+    distance: "4.5 km",
+    dishes: [
+      { name: "Fried Rice with planted.chicken", price: "CHF 24.50", isVegan: true }
+    ],
+    plantedProducts: ["planted.chicken"],
+    deliveryPlatforms: []
+  }
+];
+
+// State
+const state = {
+  path: null,
+  zip: '',
+  tab: 'restaurants'
+};
+
+// DOM Elements
+const splitView = document.getElementById('splitView');
+const panelRestaurant = document.getElementById('panelRestaurant');
+const panelRetail = document.getElementById('panelRetail');
+const zipView = document.getElementById('zipView');
+const zipInput = document.getElementById('zipInput');
+const zipSubtitle = document.getElementById('zipSubtitle');
+const zipIconRestaurant = document.getElementById('zipIconRestaurant');
+const zipIconRetail = document.getElementById('zipIconRetail');
+const resultsView = document.getElementById('resultsView');
+const resultsGrid = document.getElementById('resultsGrid');
+const resultsCount = document.getElementById('resultsCount');
+const resultsLocationText = document.getElementById('resultsLocationText');
+const resultsTabs = document.getElementById('resultsTabs');
+
+// Logging
+function log(message, type = 'info') {
+  const logEl = document.getElementById('testLog');
+  const entry = document.createElement('div');
+  entry.className = type;
+  entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+  logEl.appendChild(entry);
+  logEl.scrollTop = logEl.scrollHeight;
+  console.log(`[${type.toUpperCase()}] ${message}`);
+}
+
+// Hover Animation
+function appleIconHoverIn(panel) {
+  const icon = panel.querySelector('.icon-main');
+  const glow1 = panel.querySelector('.icon-glow-1');
+  const glow2 = panel.querySelector('.icon-glow-2');
+  const otherPanel = panel === panelRestaurant ? panelRetail : panelRestaurant;
+
+  const tl = gsap.timeline();
+
+  tl.to(icon, { filter: 'blur(12px)', scale: 1.25, duration: 0.15, ease: 'power2.out' }, 0);
+  tl.to(icon, { filter: 'blur(0px)', scale: 1.15, rotation: -3, duration: 0.45, ease: 'power3.out' }, 0.15);
+
+  if (glow1) tl.to(glow1, { opacity: 1, scale: 1.15, duration: 0.6, ease: 'power2.out' }, 0.1);
+  if (glow2) tl.to(glow2, { opacity: 1, scale: 1.2, duration: 0.8, ease: 'power2.out' }, 0.15);
+
+  gsap.to(panel, { flex: 1.5, duration: 0.7, ease: 'power3.out' });
+  gsap.to(otherPanel, { flex: 0.5, duration: 0.7, ease: 'power3.out' });
+
+  const otherIcon = otherPanel.querySelector('.icon-main');
+  const otherContent = otherPanel.querySelector('.panel-content');
+  if (otherIcon) gsap.to(otherIcon, { opacity: 0.4, scale: 0.85, filter: 'blur(3px)', duration: 0.5 });
+  if (otherContent) gsap.to(otherContent, { opacity: 0.5, duration: 0.5 });
+}
+
+function appleIconHoverOut() {
+  gsap.to('.split-view .icon-main', { filter: 'blur(0px)', scale: 1, rotation: 0, opacity: 1, duration: 0.5 });
+  gsap.to(['.split-view .icon-glow-1', '.split-view .icon-glow-2'], { opacity: 0, scale: 0.8, duration: 0.5 });
+  gsap.to([panelRestaurant, panelRetail], { flex: 1, duration: 0.7, ease: 'power3.out' });
+  gsap.to('.split-view .panel-content', { opacity: 1, duration: 0.5 });
+}
+
+// Transitions
+function transitionToZip(path) {
+  state.path = path;
+  log(`Transitioning to ZIP view (${path})`, 'info');
+
+  if (path === 'restaurant') {
+    zipView.classList.remove('green');
+    zipIconRestaurant.style.display = 'block';
+    zipIconRetail.style.display = 'none';
+    zipSubtitle.textContent = 'Wir zeigen dir Restaurants in deiner Nähe, die planted servieren.';
+  } else {
+    zipView.classList.add('green');
+    zipIconRestaurant.style.display = 'none';
+    zipIconRetail.style.display = 'block';
+    zipSubtitle.textContent = 'Wir zeigen dir, wo du planted kaufen kannst.';
+  }
+
+  const selectedPanel = path === 'restaurant' ? panelRestaurant : panelRetail;
+  const otherPanel = path === 'restaurant' ? panelRetail : panelRestaurant;
+  const selectedIcon = selectedPanel.querySelector('.icon-main');
+
+  const tl = gsap.timeline();
+
+  tl.to(otherPanel, { flex: 0, opacity: 0, duration: 0.45, ease: 'power3.inOut' }, 0);
+  tl.to(selectedIcon, { filter: 'blur(30px)', scale: 2, opacity: 0, duration: 0.5, ease: 'power2.in' }, 0);
+  tl.to(selectedPanel.querySelector('.panel-content'), { opacity: 0, y: -40, duration: 0.4, ease: 'power2.in' }, 0.1);
+
+  tl.add(() => {
+    splitView.style.display = 'none';
+    zipView.classList.add('active');
+    gsap.set('#zipView .zip-content', { opacity: 0, y: 50 });
+    gsap.set('#zipView .zip-back', { opacity: 0, x: -30 });
+    gsap.set('#zipView .zip-icon', { filter: 'blur(30px)', scale: 0.3, opacity: 0 });
+  }, 0.4);
+
+  tl.to('#zipView .zip-icon', { filter: 'blur(0px)', scale: 1, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.5);
+  tl.to('#zipView .zip-content', { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 0.55);
+  tl.to('#zipView .zip-back', { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out' }, 0.5);
+  tl.add(() => { zipInput.focus(); log('ZIP view ready', 'success'); }, 0.95);
+}
+
+function transitionToSplit() {
+  log('Transitioning back to split view', 'info');
+
+  const tl = gsap.timeline();
+
+  tl.to(['#zipView .zip-content', '#zipView .zip-back'], { opacity: 0, y: -30, duration: 0.3, ease: 'power2.in' }, 0);
+
+  tl.add(() => {
+    zipView.classList.remove('active');
+    resultsView.classList.remove('active');
+    splitView.style.display = 'flex';
+  }, 0.3);
+
+  tl.to([panelRestaurant, panelRetail], { flex: 1, opacity: 1, duration: 0.55, ease: 'power3.out' }, 0.3);
+  tl.fromTo('#splitView .icon-main',
+    { filter: 'blur(20px)', scale: 0.5, opacity: 0 },
+    { filter: 'blur(0px)', scale: 1, opacity: 1, duration: 0.6, ease: 'power3.out' },
+    0.4
+  );
+  tl.to('#splitView .panel-content', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.45);
+  tl.add(() => log('Split view ready', 'success'), 0.6);
+}
+
+function transitionToResults() {
+  log('Transitioning to results view', 'info');
+
+  const isRestaurant = state.path === 'restaurant';
+  if (isRestaurant) {
+    resultsView.classList.remove('green');
+    resultsTabs.style.display = 'flex';
+  } else {
+    resultsView.classList.add('green');
+    resultsTabs.style.display = 'none';
+  }
+
+  renderResults();
+
+  const tl = gsap.timeline();
+
+  tl.to(['#zipView .zip-content', '#zipView .zip-back'], { opacity: 0, scale: 0.95, duration: 0.3, ease: 'power2.in' }, 0);
+
+  tl.add(() => {
+    zipView.classList.remove('active');
+    resultsView.classList.add('active');
+  }, 0.3);
+
+  tl.fromTo('#resultsView .results-header', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }, 0.35);
+  tl.fromTo('#resultsView .results-tabs', { y: -15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, 0.4);
+
+  tl.add(() => {
+    const cards = document.querySelectorAll('#resultsView .card');
+    if (cards.length > 0) {
+      gsap.fromTo(cards, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, stagger: 0.1, ease: 'power3.out' });
+    }
+    log(`Results rendered: ${cards.length} cards`, 'success');
+  }, 0.5);
+}
+
+function transitionBackToZip() {
+  log('Going back to ZIP view', 'info');
+
+  const tl = gsap.timeline();
+
+  tl.to('#resultsView .results-grid', { opacity: 0, y: 30, duration: 0.3, ease: 'power2.in' }, 0);
+  tl.to(['#resultsView .results-header', '#resultsView .results-tabs'], { opacity: 0, y: -15, duration: 0.25, ease: 'power2.in' }, 0);
+
+  tl.add(() => {
+    resultsView.classList.remove('active');
+    zipView.classList.add('active');
+    gsap.set('#zipView .zip-content', { opacity: 0, y: 30 });
+    gsap.set('#zipView .zip-back', { opacity: 0, x: -20 });
+    gsap.set('#zipView .zip-icon', { filter: 'blur(15px)', scale: 0.7 });
+  }, 0.3);
+
+  tl.to('#zipView .zip-icon', { filter: 'blur(0px)', scale: 1, duration: 0.55, ease: 'power3.out' }, 0.35);
+  tl.to('#zipView .zip-content', { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, 0.38);
+  tl.to('#zipView .zip-back', { opacity: 1, x: 0, duration: 0.35, ease: 'power2.out' }, 0.38);
+
+  tl.add(() => {
+    gsap.set(['#resultsView .results-grid', '#resultsView .results-header', '#resultsView .results-tabs'], { opacity: 1, y: 0 });
+    zipInput.focus();
+    log('ZIP view ready', 'success');
+  }, 0.55);
+}
+
+// Render Functions
+function renderResults() {
+  if (state.path === 'restaurant') {
+    if (state.tab === 'restaurants') {
+      renderRestaurants();
+    } else {
+      renderDelivery();
+    }
+  } else {
+    renderRetail();
+  }
+}
+
+function renderRestaurants() {
+  resultsLocationText.textContent = 'Deutschland · ' + state.zip;
+  resultsCount.textContent = mockRestaurants.length + ' Restaurants in ' + state.zip;
+
+  let html = '<p class="results-subtitle">Restaurants in deiner Nähe, die planted servieren</p><div class="cards-grid">';
+
+  mockRestaurants.forEach(r => {
+    html += `<article class="card"><div class="card-header"><div>
+      <h3 class="card-name">${r.chainName}${r.rating ? ` <span class="card-rating"><span class="star">★</span> ${r.rating}</span>` : ''}</h3>
+      <div class="card-meta">📍 ${r.city}</div>
+    </div><span class="card-distance">${r.distance}</span></div>`;
+
+    if (r.dishes && r.dishes.length > 0) {
+      html += '<div class="card-dishes">';
+      r.dishes.forEach(d => {
+        html += `<div class="dish"><div class="dish-info">
+          <div class="dish-name">${d.name}${d.isVegan ? ' <span class="dish-badge">Vegan</span>' : ''}</div>
+          ${d.description ? `<div class="dish-desc">${d.description}</div>` : ''}
+        </div>${d.price ? `<div class="dish-price">${d.price}</div>` : ''}</div>`;
+      });
+      html += '</div>';
+    }
+
+    if (r.plantedProducts && r.plantedProducts.length > 0) {
+      html += '<div class="card-products">';
+      r.plantedProducts.forEach(p => { html += `<span class="product-tag">${p}</span>`; });
+      html += '</div>';
+    }
+
+    if (r.deliveryPlatforms && r.deliveryPlatforms.length > 0) {
+      html += '<div class="card-actions">';
+      r.deliveryPlatforms.forEach(link => {
+        html += `<a href="${link.url}" class="order-btn ${link.name}">${link.displayName} ↗</a>`;
+      });
+      html += '</div>';
+    }
+
+    html += '</article>';
+  });
+
+  html += '</div>';
+  resultsGrid.innerHTML = html;
+}
+
+function renderDelivery() {
+  resultsGrid.innerHTML = `<div class="delivery-card">
+    <h3>🚀 Direkt nach Hause</h3>
+    <p>Bestelle bei diesen Lieferdiensten und such nach Restaurants mit planted.</p>
+    <div class="delivery-buttons">
+      <a href="#" class="delivery-btn">🍴 Lieferando</a>
+      <a href="#" class="delivery-btn secondary">🛵 Wolt</a>
+      <a href="#" class="delivery-btn secondary">🥡 Uber Eats</a>
+      <a href="#" class="delivery-btn secondary">🍕 Just Eat</a>
+    </div>
+  </div>`;
+}
+
+function renderRetail() {
+  resultsLocationText.textContent = 'Deutschland · ' + state.zip;
+  resultsCount.textContent = '3 Läden & Online-Shops';
+
+  resultsGrid.innerHTML = `<div class="delivery-card">
+    <h3>🏠 Lieber liefern lassen?</h3>
+    <p>Bestelle planted direkt zu dir nach Hause</p>
+    <div class="delivery-buttons">
+      <a href="#" class="delivery-btn">🌱 planted Shop</a>
+      <a href="#" class="delivery-btn secondary">🛒 REWE Online</a>
+      <a href="#" class="delivery-btn secondary">🛒 Amazon Fresh</a>
+    </div>
+  </div>
+  <p class="results-subtitle">Oder im Laden kaufen</p>
+  <div class="cards-grid">
+    <article class="card"><div class="card-header"><div>
+      <h3 class="card-name">🛒 REWE</h3>
+      <div class="card-meta">Alexanderplatz 5, Berlin</div>
+    </div><span class="card-distance">850 m</span></div>
+    <div class="card-actions">
+      <a href="#" class="order-btn">📍 Route</a>
+      <a href="#" class="order-btn" style="background: var(--locator-green); color: white;">🛒 Online kaufen</a>
+    </div></article>
+    <article class="card"><div class="card-header"><div>
+      <h3 class="card-name">🛒 EDEKA</h3>
+      <div class="card-meta">Karl-Marx-Allee 90, Berlin</div>
+    </div><span class="card-distance">1.2 km</span></div>
+    <div class="card-actions">
+      <a href="#" class="order-btn">📍 Route</a>
+    </div></article>
+  </div>`;
+}
+
+// Event Handlers
+panelRestaurant.addEventListener('mouseenter', () => appleIconHoverIn(panelRestaurant));
+panelRestaurant.addEventListener('mouseleave', appleIconHoverOut);
+panelRestaurant.addEventListener('click', () => transitionToZip('restaurant'));
+
+panelRetail.addEventListener('mouseenter', () => appleIconHoverIn(panelRetail));
+panelRetail.addEventListener('mouseleave', appleIconHoverOut);
+panelRetail.addEventListener('click', () => transitionToZip('retail'));
+
+document.getElementById('zipBack').addEventListener('click', transitionToSplit);
+document.getElementById('resultsBack').addEventListener('click', transitionToSplit);
+document.getElementById('resultsChange').addEventListener('click', transitionBackToZip);
+
+document.getElementById('zipSubmit').addEventListener('click', () => {
+  const value = zipInput.value.trim();
+  if (value.length >= 4) {
+    state.zip = value;
+    transitionToResults();
+  } else {
+    zipInput.classList.add('shake');
+    setTimeout(() => zipInput.classList.remove('shake'), 500);
+    log('Invalid ZIP - showing shake animation', 'error');
+  }
+});
+
+zipInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    document.getElementById('zipSubmit').click();
+  }
+});
+
+resultsTabs.addEventListener('click', (e) => {
+  const tabBtn = e.target.closest('.tab-btn');
+  if (!tabBtn) return;
+
+  const tab = tabBtn.dataset.tab;
+  state.tab = tab;
+
+  resultsTabs.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  tabBtn.classList.add('active');
+
+  log(`Switching to tab: ${tab}`, 'info');
+
+  gsap.to('#resultsView .cards-grid, #resultsView .delivery-card', {
+    opacity: 0, y: 15, duration: 0.2, ease: 'power2.in',
+    onComplete: () => {
+      renderResults();
+      gsap.fromTo('#resultsView .cards-grid, #resultsView .delivery-card',
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+      );
+    }
+  });
+});
+
+// Test Functions
+function resetLocator() {
+  log('Resetting locator...', 'info');
+  gsap.killTweensOf('*');
+
+  splitView.style.display = 'flex';
+  zipView.classList.remove('active', 'green');
+  resultsView.classList.remove('active', 'green');
+
+  gsap.set([panelRestaurant, panelRetail], { flex: 1, opacity: 1 });
+  gsap.set('.split-view .icon-main', { filter: 'none', scale: 1, rotation: 0, opacity: 1 });
+  gsap.set('.split-view .panel-content', { opacity: 1, y: 0 });
+  gsap.set(['.split-view .icon-glow-1', '.split-view .icon-glow-2'], { opacity: 0 });
+
+  zipInput.value = '';
+  state.path = null;
+  state.zip = '';
+  state.tab = 'restaurants';
+
+  resultsTabs.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === 0);
+  });
+
+  log('Locator reset complete', 'success');
+}
+
+async function runTest(testName) {
+  const btn = document.querySelector(`button[onclick="runTest('${testName}')"]`);
+
+  try {
+    log(`Running test: ${testName}`, 'info');
+
+    switch(testName) {
+      case 'splitView':
+        resetLocator();
+        await delay(500);
+        const panels = document.querySelectorAll('.panel');
+        if (panels.length === 2 && splitView.style.display !== 'none') {
+          log('PASS: Split view renders with 2 panels', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Split view not rendering correctly');
+        }
+        break;
+
+      case 'hoverRestaurant':
+        resetLocator();
+        await delay(300);
+        appleIconHoverIn(panelRestaurant);
+        await delay(800);
+        const restaurantFlex = parseFloat(getComputedStyle(panelRestaurant).flex);
+        if (restaurantFlex > 1) {
+          log('PASS: Restaurant panel expands on hover', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Panel did not expand');
+        }
+        appleIconHoverOut();
+        break;
+
+      case 'hoverRetail':
+        resetLocator();
+        await delay(300);
+        appleIconHoverIn(panelRetail);
+        await delay(800);
+        const retailFlex = parseFloat(getComputedStyle(panelRetail).flex);
+        if (retailFlex > 1) {
+          log('PASS: Retail panel expands on hover', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Panel did not expand');
+        }
+        appleIconHoverOut();
+        break;
+
+      case 'clickRestaurant':
+        resetLocator();
+        await delay(300);
+        transitionToZip('restaurant');
+        await delay(1200);
+        if (zipView.classList.contains('active') && !zipView.classList.contains('green')) {
+          log('PASS: Restaurant path shows purple ZIP view', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('ZIP view not showing correctly');
+        }
+        break;
+
+      case 'clickRetail':
+        resetLocator();
+        await delay(300);
+        transitionToZip('retail');
+        await delay(1200);
+        if (zipView.classList.contains('active') && zipView.classList.contains('green')) {
+          log('PASS: Retail path shows green ZIP view', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('ZIP view not showing correctly');
+        }
+        break;
+
+      case 'zipBack':
+        if (!zipView.classList.contains('active')) {
+          transitionToZip('restaurant');
+          await delay(1200);
+        }
+        transitionToSplit();
+        await delay(800);
+        if (!zipView.classList.contains('active') && splitView.style.display === 'flex') {
+          log('PASS: Back button returns to split view', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Did not return to split view');
+        }
+        break;
+
+      case 'zipSubmit':
+        resetLocator();
+        await delay(300);
+        transitionToZip('restaurant');
+        await delay(1200);
+        zipInput.value = '10115';
+        state.zip = '10115';
+        transitionToResults();
+        await delay(1500);
+        const cards = document.querySelectorAll('#resultsView .card');
+        if (resultsView.classList.contains('active') && cards.length > 0) {
+          log(`PASS: Results show ${cards.length} restaurant cards`, 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Results not showing correctly');
+        }
+        break;
+
+      case 'zipInvalid':
+        if (!zipView.classList.contains('active')) {
+          transitionToZip('restaurant');
+          await delay(1200);
+        }
+        zipInput.value = '12';
+        document.getElementById('zipSubmit').click();
+        await delay(600);
+        log('PASS: Invalid ZIP shows shake animation', 'success');
+        btn.classList.add('pass');
+        break;
+
+      case 'tabSwitch':
+        if (!resultsView.classList.contains('active')) {
+          resetLocator();
+          await delay(300);
+          transitionToZip('restaurant');
+          await delay(1200);
+          zipInput.value = '10115';
+          state.zip = '10115';
+          transitionToResults();
+          await delay(1500);
+        }
+        const deliveryTab = resultsTabs.querySelector('[data-tab="delivery"]');
+        deliveryTab.click();
+        await delay(800);
+        const deliveryCard = document.querySelector('#resultsView .delivery-card');
+        if (deliveryCard) {
+          log('PASS: Tab switch shows delivery content', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Delivery content not showing');
+        }
+        break;
+
+      case 'resultsBack':
+        if (!resultsView.classList.contains('active')) {
+          resetLocator();
+          await delay(300);
+          transitionToZip('restaurant');
+          await delay(1200);
+          zipInput.value = '10115';
+          state.zip = '10115';
+          transitionToResults();
+          await delay(1500);
+        }
+        transitionToSplit();
+        await delay(800);
+        if (!resultsView.classList.contains('active') && splitView.style.display === 'flex') {
+          log('PASS: Results back returns to split view', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Did not return to split view');
+        }
+        break;
+
+      case 'changeZip':
+        if (!resultsView.classList.contains('active')) {
+          resetLocator();
+          await delay(300);
+          transitionToZip('restaurant');
+          await delay(1200);
+          zipInput.value = '10115';
+          state.zip = '10115';
+          transitionToResults();
+          await delay(1500);
+        }
+        transitionBackToZip();
+        await delay(800);
+        if (zipView.classList.contains('active') && !resultsView.classList.contains('active')) {
+          log('PASS: Change ZIP returns to ZIP view', 'success');
+          btn.classList.add('pass');
+        } else {
+          throw new Error('Did not return to ZIP view');
+        }
+        break;
+    }
+  } catch (error) {
+    log(`FAIL: ${error.message}`, 'error');
+    btn.classList.add('fail');
+  }
+}
+
+async function runAllTests() {
+  const tests = ['splitView', 'hoverRestaurant', 'hoverRetail', 'clickRestaurant', 'clickRetail',
+                 'zipBack', 'zipSubmit', 'zipInvalid', 'tabSwitch', 'resultsBack', 'changeZip'];
+
+  log('Running all tests...', 'info');
+
+  for (const test of tests) {
+    await runTest(test);
+    await delay(500);
+  }
+
+  const passed = document.querySelectorAll('.test-controls button.pass').length;
+  const failed = document.querySelectorAll('.test-controls button.fail').length;
+  log(`All tests complete: ${passed} passed, ${failed} failed`, passed === tests.length ? 'success' : 'error');
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Initialize
+log('Locator test suite ready', 'success');
+</script>
+
+</body>
+</html>
