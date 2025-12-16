@@ -4,8 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://cgjen-box.github.io',
-  base: '/planted-website',
+  site: 'https://cjplanted.github.io',
+  base: '/planted-homepage-cleanup',
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/api/'),

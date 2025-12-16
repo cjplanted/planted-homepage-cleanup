@@ -454,7 +454,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         background: var(--planted-cream);
         display: flex;
         align-items: center;
-        padding: 6rem 0 4rem;
+        padding: 4rem 0 3rem;
         position: relative;
         overflow: hidden;
     }
@@ -474,7 +474,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         width: 100%;
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - 160px);
+        min-height: auto;
     }
 
     /* Scroll indicator positioning */
@@ -873,8 +873,8 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     .approved-badge {
         position: absolute;
         bottom: -16px;
-        left: 24px;
-        transform: rotate(-3deg);
+        right: 24px;
+        transform: rotate(3deg);
         z-index: 10;
         animation: badgePop 0.5s ease 1s forwards;
         opacity: 0;
@@ -887,9 +887,9 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     @keyframes badgePop {
-        0% { opacity: 0; transform: rotate(-3deg) scale(0.8); }
-        50% { transform: rotate(-3deg) scale(1.05); }
-        100% { opacity: 1; transform: rotate(-3deg) scale(1); }
+        0% { opacity: 0; transform: rotate(3deg) scale(0.8); }
+        50% { transform: rotate(3deg) scale(1.05); }
+        100% { opacity: 1; transform: rotate(3deg) scale(1); }
     }
 
     /* Countries Modal */
