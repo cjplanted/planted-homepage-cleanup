@@ -289,12 +289,17 @@ const schemaOrg = {
     <!-- Smooth Scroll with GSAP + Lenis -->
     <script>
         import { initSmoothScroll, destroySmoothScroll, gsap, ScrollTrigger } from '../scripts/smooth-scroll';
+        import { initHeroAnimations, initHeroEntrance } from '../scripts/animations/hero';
 
         let lenisInstance: ReturnType<typeof initSmoothScroll> | null = null;
 
         function initScrollAnimations() {
             // Initialize Lenis smooth scroll
             lenisInstance = initSmoothScroll();
+
+            // Initialize hero section animations
+            initHeroAnimations();
+            initHeroEntrance();
 
             // Initialize data-animate elements with ScrollTrigger
             const animatedElements = document.querySelectorAll('[data-animate]');
