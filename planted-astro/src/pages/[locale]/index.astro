@@ -47,45 +47,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     <section class="hero">
         <div class="hero-container">
             <div class="hero-grid">
-                <!-- Left Column: Text Content -->
-                <div class="hero-text">
-                    <!-- Badge - Green checkmark style -->
-                    <div class="hero-badge hero-badge--green">
-                        <span class="b-corp-checkmark">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </span>
-                        <span>{t.home.hero.badge}</span>
-                    </div>
-
-                    <!-- Headline -->
-                    <div class="hero-headline">
-                        <h1>{t.home.hero.title}</h1>
-                    </div>
-
-                    <!-- Simplified subheadline - one unified block -->
-                    <p class="hero-subheadline">
-                        {t.home.hero.subtitle}
-                    </p>
-
-                    <!-- Actions -->
-                    <div class="hero-actions">
-                        <a href="#locator" class="btn btn-primary">
-                            {t.nav.findUs}
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                        </a>
-                        <a href="#products" class="btn btn-secondary">
-                            {t.home.products.viewAll}
-                        </a>
-                    </div>
-
-                </div>
-
-                <!-- Right Column: TV Set with parallax -->
+                <!-- Left Column: TV Set with parallax -->
                 <div class="hero-visual" data-parallax data-speed="0.3">
                     <!-- TV Frame -->
                     <div class="tv-frame">
@@ -121,6 +83,44 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <div class="approved-badge">
                         <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" />
                     </div>
+                </div>
+
+                <!-- Right Column: Text Content -->
+                <div class="hero-text">
+                    <!-- Badge - Green checkmark style -->
+                    <div class="hero-badge hero-badge--green">
+                        <span class="b-corp-checkmark">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span>{t.home.hero.badge}</span>
+                    </div>
+
+                    <!-- Headline -->
+                    <div class="hero-headline">
+                        <h1>{t.home.hero.title}</h1>
+                    </div>
+
+                    <!-- Simplified subheadline - one unified block -->
+                    <p class="hero-subheadline">
+                        {t.home.hero.subtitle}
+                    </p>
+
+                    <!-- Actions -->
+                    <div class="hero-actions">
+                        <a href="#locator" class="btn btn-primary">
+                            {t.nav.findUs}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-icon">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </a>
+                        <a href="#products" class="btn btn-secondary">
+                            {t.home.products.viewAll}
+                        </a>
+                    </div>
+
                 </div>
             </div>
 
@@ -495,7 +495,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: 1fr 1.15fr;
+        grid-template-columns: 1.15fr 1fr;
         gap: 3rem;
         align-items: center;
     }
@@ -800,7 +800,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     .tv-annotation {
         position: absolute;
         top: -24px;
-        right: -28px;
+        left: -28px;
         z-index: 20;
         animation: annotationFloat 4s ease-in-out infinite, fadeInDown 0.6s ease 0.8s forwards;
         opacity: 0;
@@ -1017,7 +1017,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         .hero-actions { justify-content: center; }
         .hero-proof { justify-content: center; }
         .hero-visual { order: 1; max-width: 550px; margin: 0 auto; }
-        .tv-annotation { right: -12px; top: -16px; }
+        .tv-annotation { left: -12px; top: -16px; }
         .annotation-card { max-width: 220px; padding: 16px 20px; }
         .annotation-text { font-size: 0.9rem; }
     }
