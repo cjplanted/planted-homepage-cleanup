@@ -1,0 +1,774 @@
+{
+  "discovery_date": "2024-12-16",
+  "discovery_batch": 2,
+  "agent": "venue-discovery-web-search-agent-2",
+  "focus_areas": ["Hamburg", "Frankfurt", "Cologne", "Dusseldorf", "Geneva", "Lausanne", "Basel", "Salzburg", "Graz", "Innsbruck", "Milan", "Rome", "Manchester", "Birmingham", "Edinburgh"],
+  "high_confidence_venues": [
+    {
+      "name": "Stadtsalat Hamburg",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "street": "Grosse Theaterstrasse 31-35",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/stadtsalat-salate-&-bowls-hamburg/cyWtPSydVQujqwBw5001IA"
+        },
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/stadtsalat"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Bowl with planted.chicken and Bio-Reis",
+          "description": "Bio-Reis, planted.chicken, Gurke, Rotkohl, weisse Riesenbohne, Karotte, Rote Zwiebel, Bio-Sesam, Avocado"
+        }
+      ],
+      "source": "uber_eats_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Stadtsalat Frankfurt",
+      "city": "Frankfurt",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de/store/stadtsalat-salate-&-bowls-frankfurt/m_wLeigMXo2Hx1aESzjxPQ"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Vegan Fit Planted Bowl",
+          "description": "Bowl with planted.chicken and fresh vegetables"
+        },
+        {
+          "name": "Classy Kebap Planted",
+          "description": "Planted chicken with kebab-style seasoning"
+        }
+      ],
+      "source": "uber_eats_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Stadtsalat Dusseldorf",
+      "city": "Dusseldorf",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/stadtsalat-salate-&-bowls-dusseldorf/JrEAKINDXU--gnG9gATNuw"
+        },
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/dusseldorf/restaurant/stadtsalat-dusseldorf"
+        },
+        {
+          "platform": "lieferando",
+          "url": "https://www.lieferando.de/speisekarte/stadtsalat-dusseldorf-1"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Bio-Quinoa Bowl with planted.chicken",
+          "description": "Bio-Quinoa, Kichererbse, planted.chicken, Brokkoli, Karotten-Lax"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "beets&roots Brandstwiete",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "street": "Brandstwiete",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/beetsroots-brandstwiete"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "menu_items": [
+        {
+          "name": "planted.chicken with warm cous-cous",
+          "description": "planted.chicken (pea protein) with warm cous-cous, roasted aubergine, roasted peppers, baby spinach, pomegranate seeds, mint and tahini dressing"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "beets&roots Hamburg Hauptbahnhof",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "street": "Hauptbahnhof",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/beets-roots-hamburg-hauptbahnhof"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "beets&roots Europaviertel",
+      "city": "Frankfurt",
+      "country": "DE",
+      "address": {
+        "street": "Kaiserstrasse 44",
+        "postal_code": "60329",
+        "city": "Frankfurt am Main",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/frankfurt/restaurant/beets-roots-europaviertel"
+        },
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/brand-city/frankfurt-am-main-he/beets-roots"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "menu_items": [
+        {
+          "name": "planted.Steak Bowl",
+          "description": "planted.Steak (Erbsenprotein) with roasted eggplant, roasted peppers, sweet potatoes, baby spinach, parmesan chips, pesto-chimichurri dressing"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "beets&roots Nuremberg",
+      "city": "Nuremberg",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/nuremberg/restaurant/beets-roots-nrnberg"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Katzentempel Hamburg",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "street": "Uberseeboulevard 2",
+        "city": "Hamburg",
+        "district": "Hafencity",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/katzentempel-hamburg"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Spicy Planted Chicken Bowl",
+          "description": "Spicy planted chicken with wild rice, coleslaw, mango, carrots, cucumbers, fruity tomatoes, salad, Guerkamole, temple sauce"
+        },
+        {
+          "name": "Planted Chicken Patty Burger",
+          "description": "planted.chicken patty with coleslaw, cucumbers, tomatoes, lettuce, apple-chili chutney and misomayo"
+        },
+        {
+          "name": "Planted Chicken Salad",
+          "description": "Fried dumplings and spicy planted chicken on a large salad with rocket, pomegranate seeds and almonds"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high",
+      "notes": "Fully vegan restaurant"
+    },
+    {
+      "name": "Birdie Birdie Chicken Derendorf",
+      "city": "Dusseldorf",
+      "country": "DE",
+      "address": {
+        "district": "Derendorf",
+        "city": "Dusseldorf",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/dusseldorf/restaurant/birdie-birdie-chicken-l-derendorf"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Planted Chicken Burger",
+          "description": "Crispy original planted.chicken (plant-based), cheese, salad, pickles, Signature Birdie Sauce in Potato Bun"
+        },
+        {
+          "name": "Planted Spicy Burger",
+          "description": "planted.chicken patty, cheese, salad, jalapenos, Chipotle-Jalapeno-Mayo and RedHot Buffalo Sauce"
+        },
+        {
+          "name": "Planted Farm Burger",
+          "description": "planted.chicken with cream cheese-feta cream, corn, pickles, salad, Birdie Signature Sauce"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Holthausen",
+      "city": "Dusseldorf",
+      "country": "DE",
+      "address": {
+        "district": "Holthausen",
+        "city": "Dusseldorf",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/dusseldorf/restaurant/birdie-birdie-chicken-holthausen"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Hammerbrook",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Hammerbrook",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de/store/birdie-birdie-chicken-hammerbrook/4Uu0XDAxXFGigi74343StA"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "uber_eats_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Altona",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Altona",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-chicken-altona"
+        },
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-hamburg-altona/kNuPH_trXNuYsFcPkwTo0A"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Barmbek",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Barmbek",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-hamburg-brmbk"
+        },
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/birdie-birdie-chicken-hamburg-barmbek/54jaF96LXlmcQV6rRBwpdg"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Eidelstedt",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Eidelstedt",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-chicken-hamburg-eidelstedt"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Farmsen-Berne",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Farmsen-Berne",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-chicken-farmsen-berne"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Finkenwerder",
+      "city": "Hamburg",
+      "country": "DE",
+      "address": {
+        "district": "Finkenwerder",
+        "city": "Hamburg",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/hamburg/restaurant/birdie-birdie-finkenwerder"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Birdie Birdie Chicken Nordweststadt",
+      "city": "Karlsruhe",
+      "country": "DE",
+      "address": {
+        "district": "Nordweststadt",
+        "city": "Karlsruhe",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/karlsruhe/restaurant/birdie-birdie-chicken-nordweststadt"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "dean&david Monbijouplatz",
+      "city": "Berlin",
+      "country": "DE",
+      "address": {
+        "street": "Monbijouplatz 5",
+        "postal_code": "10178",
+        "city": "Berlin",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/berlin/restaurant/dean-david-monbijoupl"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Salad with planted.chicken",
+          "description": "Freshly grilled planted.chicken, feta cheese, carrots, cucumber, egg, seed mix"
+        },
+        {
+          "name": "Thai Bowl with planted.chicken",
+          "description": "Jasmine rice, grilled planted.chicken, fresh vegetables, red cabbage, edamame, fresh coriander, sesame, Red Thai Sauce"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "dean&david Arnulfpark",
+      "city": "Munich",
+      "country": "DE",
+      "address": {
+        "street": "Rainer Werner Fassbinder Platz 4",
+        "postal_code": "80636",
+        "city": "Munich",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/deandavid-arnulfpark"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "dean&david Theresienhoeche",
+      "city": "Munich",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/deandavid-theresienhhe"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "dean&david Funf Hofe",
+      "city": "Munich",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/deandavid-fnf-hfe"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "dean&david Berlin Buelowstrasse",
+      "city": "Berlin",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/dean&david-berlin-bulowstrasse/idOCsndLVaiDoMTdsK8ryQ"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "source": "uber_eats_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Kronenhalle",
+      "city": "Zurich",
+      "country": "CH",
+      "address": {
+        "street": "Ramistrasse 4",
+        "postal_code": "8001",
+        "city": "Zurich",
+        "country": "CH"
+      },
+      "type": "fine_dining",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high",
+      "website": "https://www.kronenhalle.com/en/",
+      "notes": "Famous Zurich restaurant with original art, serving planted.steak since March 2024"
+    },
+    {
+      "name": "Lindenhofkeller",
+      "city": "Zurich",
+      "country": "CH",
+      "address": {
+        "street": "Pfalzgasse 4",
+        "postal_code": "8001",
+        "city": "Zurich",
+        "country": "CH"
+      },
+      "type": "fine_dining",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high",
+      "website": "https://www.lindenhofkeller.com/en",
+      "notes": "Located in 1357 building, serving planted.steak creations"
+    },
+    {
+      "name": "Neue Taverne und Bauernschaenke",
+      "city": "Zurich",
+      "country": "CH",
+      "type": "restaurant",
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "eatplanted_gastro_page",
+      "confidence": "high",
+      "notes": "Traditional Zurich Geschnetzeltes with planted products"
+    }
+  ],
+  "chain_partnerships": [
+    {
+      "chain_name": "Deutsche Bahn ICE Bordgastronomie",
+      "country": "DE",
+      "coverage": "All ICE long-distance trains across Germany",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Planted Chicken Pepper and Lemon with Basmati Rice",
+          "price": "13.90",
+          "currency": "EUR"
+        },
+        {
+          "name": "Sweet Chili Wrap with planted.chicken",
+          "description": "Featured since March 2023"
+        },
+        {
+          "name": "Teriyaki Dish with planted.chicken",
+          "description": "Plant-based chicken teriyaki"
+        }
+      ],
+      "partnership_date": "2023-03-01",
+      "source": "deutsche_bahn_press_release",
+      "confidence": "high",
+      "notes": "Over 50% of Deutsche Bahn dishes are now vegan or vegetarian"
+    },
+    {
+      "chain_name": "Peter Pane",
+      "country": "DE",
+      "coverage": "Multiple locations across Germany",
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "Veg of Chicken Burger",
+          "description": "Plant-based chicken alternative"
+        }
+      ],
+      "source": "peter_pane_website",
+      "confidence": "high",
+      "notes": "Meatless Monday promotion every Monday for 9.90 EUR"
+    },
+    {
+      "chain_name": "Stadtsalat",
+      "country": "DE",
+      "coverage": "Hamburg, Berlin, Frankfurt, Cologne, Dusseldorf",
+      "planted_products": ["planted.chicken"],
+      "source": "stadtsalat_website",
+      "confidence": "high",
+      "notes": "Bio-certified salads and bowls with planted.chicken options"
+    },
+    {
+      "chain_name": "beets&roots",
+      "country": "DE",
+      "coverage": "Berlin (8 locations), Hamburg (2), Frankfurt, Dusseldorf, Stuttgart, Cologne, Nuremberg",
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "beetsandroots_website",
+      "confidence": "high",
+      "notes": "Fast-casual healthy food chain founded by Michelin star chef"
+    },
+    {
+      "chain_name": "Birdie Birdie Chicken",
+      "country": "DE",
+      "coverage": "20+ cities in Germany including Hamburg (7), Berlin (4), Munich, Dusseldorf (2), Karlsruhe, Augsburg",
+      "planted_products": ["planted.chicken"],
+      "source": "birdie_birdie_website",
+      "confidence": "high",
+      "notes": "Planted chicken burgers available as vegan option"
+    },
+    {
+      "chain_name": "dean&david",
+      "country": "DE",
+      "coverage": "Multiple cities: Berlin, Munich, Nuremberg, Karlsruhe, Potsdam, Kaiserslautern, Schweinfurt",
+      "planted_products": ["planted.chicken"],
+      "source": "deananddavid_website",
+      "confidence": "high",
+      "notes": "planted.chicken swap available at no extra charge"
+    },
+    {
+      "chain_name": "Katzentempel",
+      "country": "DE",
+      "coverage": "Hamburg, Regensburg",
+      "planted_products": ["planted.chicken"],
+      "source": "katzentempel_website",
+      "confidence": "high",
+      "notes": "Fully vegan restaurant with planted chicken dishes"
+    }
+  ],
+  "swiss_fine_dining": [
+    {
+      "name": "Gartenhof",
+      "city": "Switzerland",
+      "country": "CH",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high"
+    },
+    {
+      "name": "StudioBellerive at AMERON Bellerive au Lac",
+      "city": "Zurich",
+      "country": "CH",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high"
+    },
+    {
+      "name": "NOA Restaurant",
+      "city": "Bern",
+      "country": "CH",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high"
+    },
+    {
+      "name": "Cafe de Prelaz",
+      "city": "Lausanne",
+      "country": "CH",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high"
+    },
+    {
+      "name": "KJU",
+      "city": "Switzerland",
+      "country": "CH",
+      "planted_products": ["planted.steak"],
+      "source": "planted_press_release",
+      "confidence": "high"
+    }
+  ],
+  "uk_partnerships": [
+    {
+      "name": "123V by Alexis Gauthier",
+      "city": "London",
+      "address": "Fenwick of Bond Street, New Bond Street",
+      "type": "restaurant",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Fresh Soba Noodle with planted.chicken",
+          "description": "Kombu/Miso Broth, Marinated Chunks of EatPlanted Original Chicken, Shiitake and Enoki Mushrooms, Green Chards and Shichimi Togarashi"
+        }
+      ],
+      "source": "london_daily_news",
+      "confidence": "high",
+      "notes": "Partnership with Michelin-starred vegan chef Alexis Gauthier"
+    },
+    {
+      "name": "David Lloyd Fitness Clubs",
+      "country": "UK",
+      "type": "fitness_chain",
+      "planted_products": ["planted.chicken"],
+      "notes": "Five planted.chicken dishes on spring/summer menu",
+      "source": "vegconomist",
+      "confidence": "high"
+    },
+    {
+      "name": "Holland & Barrett",
+      "country": "UK",
+      "type": "retail",
+      "coverage": "50 stores across UK",
+      "planted_products": ["planted.chicken", "planted.pulled", "planted.kebab"],
+      "source": "vegconomist",
+      "confidence": "high"
+    }
+  ],
+  "requires_verification": [
+    {
+      "chain_name": "Geheimtipp Koeln Voner",
+      "city": "Cologne",
+      "country": "DE",
+      "planted_products": ["planted.kebab"],
+      "notes": "Article mentions making vegan doner with planted.kebab at home in Cologne - verify if any restaurants serve it"
+    }
+  ],
+  "summary": {
+    "total_new_venues": 26,
+    "total_chain_partnerships": 7,
+    "countries_covered": {
+      "DE": 22,
+      "CH": 7,
+      "UK": 3
+    },
+    "cities_covered": {
+      "Hamburg": 10,
+      "Dusseldorf": 4,
+      "Frankfurt": 2,
+      "Berlin": 3,
+      "Munich": 3,
+      "Nuremberg": 1,
+      "Karlsruhe": 1,
+      "Zurich": 4,
+      "Bern": 1,
+      "Lausanne": 1,
+      "London": 2
+    },
+    "key_findings": [
+      "Deutsche Bahn ICE trains serve planted.chicken on all long-distance routes across Germany",
+      "Birdie Birdie Chicken operates in 20+ German cities with planted.chicken burgers",
+      "beets&roots chain has planted.chicken and planted.steak in 7 German cities",
+      "Stadtsalat chain offers planted.chicken bowls in 5 major German cities",
+      "dean&david offers planted.chicken swap at no extra charge",
+      "Multiple Swiss fine dining restaurants now serve planted.steak since March 2024",
+      "Katzentempel Hamburg is a fully vegan restaurant with planted.chicken dishes"
+    ],
+    "gaps_identified": [
+      "No specific planted venues found in Geneva, Basel despite search",
+      "No specific planted venues found in Austrian cities (Salzburg, Graz, Innsbruck)",
+      "No specific planted venues found in Italian cities (Milan, Rome) beyond La Piadineria chain",
+      "No specific planted venues found in UK cities outside London (Manchester, Birmingham, Edinburgh)"
+    ]
+  }
+}

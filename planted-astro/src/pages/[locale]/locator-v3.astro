@@ -586,7 +586,8 @@ const initialVenues: VenueV3[] = [];
         throw new Error('Missing coordinates - could not geocode ZIP');
       }
 
-      const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=10&type=restaurant&limit=20`;
+      // T028: Use slim=true for faster locator display (reduced payload ~18KB -> ~6KB)
+      const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=10&type=restaurant&limit=20&slim=true`;
       console.log('[V3] Fetching venues from:', apiUrl);
 
       const response = await fetch(apiUrl);

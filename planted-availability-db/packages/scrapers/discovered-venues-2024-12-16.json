@@ -1,0 +1,285 @@
+{
+  "discovery_date": "2024-12-16",
+  "agent": "venue-discovery-web-search",
+  "high_confidence_venues": [
+    {
+      "name": "Doen Doen Planted Kebap",
+      "city": "Berlin",
+      "country": "DE",
+      "address": {
+        "street": "Kopernikusstrasse 17",
+        "postal_code": "10245",
+        "city": "Berlin",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/berlin/restaurant/doen-doen-planted-kebap-berlin"
+        },
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/doen-doen-planted-kebap/sne7dq9YT3iXmoAkE4jtMQ"
+        },
+        {
+          "platform": "lieferando",
+          "url": "https://www.lieferando.de/en/menu/doen-doen-planted-kebap-berlin"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "Planted Kebab Doner",
+          "description": "Vegan doner with planted.kebab pea protein, salad, vegetables, sauce of choice"
+        }
+      ],
+      "source": "wolt_search",
+      "confidence": "high",
+      "website": "https://www.doen-doen-planted-kebap-berlin.de/"
+    },
+    {
+      "name": "Doen Doen Planted Kebap",
+      "city": "Stuttgart",
+      "country": "DE",
+      "address": {
+        "street": "Josef-Hirn-Platz 8",
+        "city": "Stuttgart",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/stuttgart/restaurant/doen-doen-planted-kebap"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "source": "wolt_search",
+      "confidence": "high"
+    },
+    {
+      "name": "Doen Doen Planted Kebap",
+      "city": "Stuttgart",
+      "country": "DE",
+      "address": {
+        "street": "Boblingerstrasse 19",
+        "city": "Stuttgart",
+        "country": "DE"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.kebab"],
+      "source": "web_search",
+      "confidence": "high"
+    },
+    {
+      "name": "NENI am Prater",
+      "city": "Vienna",
+      "country": "AT",
+      "address": {
+        "street": "Superbude Vienna Prater",
+        "city": "Vienna",
+        "country": "AT"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Jerusalem Spiced PLANTED Chicken",
+          "description": "NENI Classic Hummus, Jerusalem Spiced PLANTED Chicken, Amba, Red Pepper, Har Bracha Tahina, Pita Bread",
+          "price": "16.50",
+          "currency": "EUR"
+        }
+      ],
+      "source": "neni_website",
+      "confidence": "high",
+      "website": "https://www.superbude.com/en/hotel-wien/prater/neni-am-prater/"
+    },
+    {
+      "name": "planted.bistro by Hiltl",
+      "city": "Kemptthal",
+      "country": "CH",
+      "address": {
+        "street": "Kemptpark 32/34",
+        "postal_code": "8310",
+        "city": "Kemptthal",
+        "country": "CH"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.chicken", "planted.kebab", "planted.pulled", "planted.schnitzel"],
+      "source": "hiltl_website",
+      "confidence": "high",
+      "notes": "Located at Planted Foods AG headquarters"
+    },
+    {
+      "name": "Yardbird Southern Fried Chicken",
+      "city": "Zurich",
+      "country": "CH",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/ch-de/store/yardbird-southern-fried-chicken-zurich/A7HIDGsIRq22hJtbjOy5Cg"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "BBQ Style Planted",
+          "description": "BBQ Style Planted chicken with side dish"
+        }
+      ],
+      "source": "uber_eats_search",
+      "confidence": "high"
+    }
+  ],
+  "chain_partnerships": [
+    {
+      "chain_name": "Subway",
+      "country": "CH",
+      "coverage": "All Swiss locations",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Planted Teriyaki Sandwich",
+          "description": "Planted chicken in Teriyaki style with fresh vegetables and baked bread",
+          "price": "6.90",
+          "currency": "CHF",
+          "availability": "Permanent menu item, Sub of the Day on Saturdays"
+        }
+      ],
+      "partnership_date": "2025-10-01",
+      "source": "green_queen_news",
+      "confidence": "high"
+    },
+    {
+      "chain_name": "La Piadineria",
+      "country": "IT",
+      "coverage": "400+ stores across Italy",
+      "planted_products": ["planted.pulled"],
+      "menu_items": [
+        {
+          "name": "La Supergreen",
+          "description": "planted.pulled Spicy Herbs with fresh veggies in artisan Piadina Wrap"
+        }
+      ],
+      "source": "vegconomist",
+      "confidence": "high"
+    }
+  ],
+  "requires_verification": [
+    {
+      "chain_name": "beets&roots",
+      "locations": [
+        {"name": "Grosse Hamburger Str", "city": "Berlin", "address": "Grosse Hamburger Str. 38, 10115 Berlin"},
+        {"name": "Leipziger Strasse", "city": "Berlin", "address": "Leipziger Strasse 96, 10117 Berlin"},
+        {"name": "BER Airport", "city": "Berlin", "address": "Terminal 1 Food Court"},
+        {"name": "Ostbahnhof", "city": "Berlin", "address": "Berlin Ostbahnhof"},
+        {"name": "Potsdamer Platz", "city": "Berlin"},
+        {"name": "Schluterstrasse", "city": "Berlin"},
+        {"name": "Bahnhof Friedrichstrasse", "city": "Berlin"},
+        {"name": "Europaviertel", "city": "Frankfurt"},
+        {"name": "Mainzer Landstrasse", "city": "Frankfurt"}
+      ],
+      "planted_products": ["planted.chicken", "planted.duck", "planted.steak"],
+      "notes": "Check if locations exist in current database"
+    },
+    {
+      "chain_name": "FAT MONK",
+      "locations": [
+        {"name": "Kaufingerstrasse", "city": "Munich", "country": "DE"},
+        {"name": "Kaufingertor", "city": "Munich", "country": "DE"},
+        {"name": "Stachus", "city": "Munich", "country": "DE"},
+        {"name": "Pasing Arcaden", "city": "Munich", "country": "DE"},
+        {"name": "Schottentor", "city": "Vienna", "country": "AT"},
+        {"name": "Wien Westbahnhof", "city": "Vienna", "country": "AT"}
+      ],
+      "planted_products": ["planted.kebab"],
+      "notes": "Serves planted.kebab bowls"
+    },
+    {
+      "chain_name": "Birdie Birdie Chicken",
+      "locations": [
+        {"name": "Charlottenburg", "city": "Berlin", "country": "DE"},
+        {"name": "Nollendorfkiez", "city": "Berlin", "country": "DE"},
+        {"name": "Prenzlauer Berg", "city": "Berlin", "country": "DE"},
+        {"name": "Stadtmitte", "city": "Berlin", "country": "DE"},
+        {"name": "Laim", "city": "Munich", "country": "DE"},
+        {"name": "Augsburg", "city": "Augsburg", "country": "DE"}
+      ],
+      "planted_products": ["planted.chicken"],
+      "notes": "Uses planted.chicken for vegan burger options"
+    },
+    {
+      "chain_name": "dean&david",
+      "locations": [
+        {"name": "Funf Hofe", "city": "Munich", "country": "DE"},
+        {"name": "Nuremberg", "city": "Nuremberg", "country": "DE"},
+        {"name": "Furth", "city": "Furth", "country": "DE"},
+        {"name": "Erlangen", "city": "Erlangen", "country": "DE"},
+        {"name": "Kaiserslautern", "city": "Kaiserslautern", "country": "DE"},
+        {"name": "Potsdam", "city": "Potsdam", "country": "DE"}
+      ],
+      "planted_products": ["planted.chicken"],
+      "notes": "Offers planted.chicken swap at no extra charge on multiple dishes"
+    },
+    {
+      "chain_name": "Hiltl",
+      "locations": [
+        {"name": "Haus Hiltl", "city": "Zurich", "country": "CH", "address": "Sihlstrasse 28"},
+        {"name": "Hiltl Dachterrasse", "city": "Zurich", "country": "CH"},
+        {"name": "Hiltl Sihlpost", "city": "Zurich", "country": "CH", "address": "Main Station"},
+        {"name": "Hiltl Langstrasse", "city": "Zurich", "country": "CH"},
+        {"name": "Hiltl Pflanzbar", "city": "Zurich", "country": "CH", "address": "Paradeplatz"}
+      ],
+      "planted_products": ["planted.chicken", "planted.kebab"],
+      "notes": "World's oldest vegetarian restaurant, serves planted Tikka Masala and Zurcher Geschnetzeltes"
+    },
+    {
+      "chain_name": "NENI",
+      "locations": [
+        {"name": "NENI am Naschmarkt", "city": "Vienna", "country": "AT"},
+        {"name": "NENI Berlin", "city": "Berlin", "country": "DE", "notes": "Currently closed for renovation"},
+        {"name": "NENI Hamburg", "city": "Hamburg", "country": "DE"},
+        {"name": "NENI Zurich", "city": "Zurich", "country": "CH"}
+      ],
+      "planted_products": ["planted.chicken"],
+      "notes": "Verify planted options at each location"
+    }
+  ],
+  "uk_partnerships": [
+    {
+      "name": "The Gate",
+      "city": "London",
+      "district": "Marylebone",
+      "type": "restaurant",
+      "partnership_type": "limited_edition_menu",
+      "planted_products": ["eatplanted products"],
+      "source": "london_daily_news",
+      "confidence": "medium",
+      "notes": "Created 5-course menu with Eatplanted in Oct 2022"
+    },
+    {
+      "name": "123V by Alexis Gauthier",
+      "city": "London",
+      "address": "Fenwick of Bond Street, New Bond Street",
+      "type": "restaurant",
+      "planted_products": ["eatplanted products"],
+      "source": "london_daily_news",
+      "confidence": "medium"
+    }
+  ],
+  "michelin_starred_with_planted": [
+    {
+      "name": "Restaurant Tim Raue",
+      "city": "Berlin",
+      "country": "DE",
+      "address": "Rudi-Dutschke-Str. 26, 10969 Berlin",
+      "stars": 2,
+      "planted_products": ["planted.chicken", "planted.duck"],
+      "notes": "Planted products are fixed part of vegan menu",
+      "source": "tim_raue_website"
+    }
+  ]
+}
