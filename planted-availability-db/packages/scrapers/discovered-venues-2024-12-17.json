@@ -1,0 +1,737 @@
+{
+  "discovery_date": "2024-12-17",
+  "agent": "venue-discovery-web-search",
+  "discovery_method": "WebSearch targeting underserved regions and new markets",
+  "statistics": {
+    "new_high_confidence_venues": 28,
+    "new_chains_discovered": 6,
+    "countries_searched": ["DE", "CH", "AT", "UK", "IT", "NL", "BE", "FR"],
+    "planted_products_found": ["planted.chicken", "planted.kebab", "planted.steak", "planted.schnitzel", "planted.pulled", "planted.duck", "planted.bratwurst"]
+  },
+  "high_confidence_venues": [
+    {
+      "name": "Vhy Restaurant",
+      "city": "Stuttgart",
+      "country": "DE",
+      "address": {
+        "street": "Reinsburgstrasse 13",
+        "postal_code": "70178",
+        "city": "Stuttgart",
+        "district": "Stuttgart-West"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Planted Chicken Dish",
+          "description": "Contemporary vegetable cuisine featuring planted.chicken alongside buckwheat, Bulgur Kofte, and tempura of cauliflower"
+        }
+      ],
+      "source": "zvw.de news article",
+      "confidence": "high",
+      "notes": "100% vegan restaurant with planted.chicken on menu. Weekend vegan brunch available."
+    },
+    {
+      "name": "Yuicery Hospitalstrasse",
+      "city": "Stuttgart",
+      "country": "DE",
+      "address": {
+        "street": "Hospitalstrasse 19",
+        "postal_code": "70174",
+        "city": "Stuttgart"
+      },
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/yuicery-hospitalstrasse/AE2so1DeU12KTwXV2j5Wrw"
+        },
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/stuttgart/restaurant/yucery-milaneo"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Cezar Chick'n Bowl",
+          "description": "Salad, Quinoa, planted.Chicken Lemon & Herbs, Edamame, Cucumbers, Spring Onions, Plant-based Yoghurt Sauce, Almond Chips, Cashew Flakes, Cranberries"
+        },
+        {
+          "name": "Thai Chicken Bowl",
+          "description": "Rice, planted.Chicken Lemon & Herbs, Red Cabbage, Edamame, Sweet Peppers, Thai Sauce, Sesame, Peanuts"
+        }
+      ],
+      "source": "uber_eats_menu",
+      "confidence": "high",
+      "notes": "Germany's first 100% plant-based fast food chain"
+    },
+    {
+      "name": "Peter Pane Stuttgart Hauptbahnhof",
+      "city": "Stuttgart",
+      "country": "DE",
+      "address": {
+        "city": "Stuttgart",
+        "notes": "Near Hauptbahnhof (main train station)"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "KEBAB KLAUS",
+          "description": "Veg'von Beef patty, planted.kebab, microgreens, lemon thyme sauce"
+        }
+      ],
+      "source": "peterpane.de",
+      "confidence": "high",
+      "chain_name": "Peter Pane",
+      "notes": "Part of 51+ location chain serving planted.kebab in vegan burger"
+    },
+    {
+      "name": "Peter Pane Dresden Am Zwinger",
+      "city": "Dresden",
+      "country": "DE",
+      "type": "restaurant",
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "Veg' von Beef-Bratling with planted.kebab",
+          "description": "Plant-based burger with planted.kebab, arugula, and garlic mayo"
+        }
+      ],
+      "source": "opentable",
+      "confidence": "high",
+      "chain_name": "Peter Pane"
+    },
+    {
+      "name": "Figlmuller Backerstrasse",
+      "city": "Vienna",
+      "country": "AT",
+      "address": {
+        "street": "Backerstrasse 6",
+        "postal_code": "1010",
+        "city": "Vienna"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.schnitzel"],
+      "menu_items": [
+        {
+          "name": "Planted Wiener Schnitzel",
+          "description": "Vegan alternative to classic schnitzel made from pea protein, served with green leaf salad",
+          "price": "22.50",
+          "currency": "EUR"
+        }
+      ],
+      "source": "figlmueller.at",
+      "confidence": "high",
+      "website": "https://www.figlmueller.at/en/baeckerstrasse/menu/",
+      "notes": "World-famous schnitzel restaurant since 1905. Planted.schnitzel only at Backerstrasse location."
+    },
+    {
+      "name": "Restaurant Tim Raue",
+      "city": "Berlin",
+      "country": "DE",
+      "address": {
+        "street": "Rudi-Dutschke-Str. 26",
+        "postal_code": "10969",
+        "city": "Berlin",
+        "district": "Kreuzberg"
+      },
+      "type": "fine_dining",
+      "planted_products": ["planted.chicken", "planted.duck"],
+      "menu_items": [
+        {
+          "name": "planted.chicken breast",
+          "description": "Plant-based chicken breast with Asian-inspired preparation"
+        },
+        {
+          "name": "Vegan Peking Duck",
+          "description": "planted.duck with specially created five-spice marinade"
+        }
+      ],
+      "source": "meininger.de/vegconomist",
+      "confidence": "high",
+      "michelin_stars": 2,
+      "notes": "Tim Raue is Planted brand ambassador. Vegan set menu available for EUR 248."
+    },
+    {
+      "name": "Moon Restaurant",
+      "city": "Zurich",
+      "country": "CH",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/ch/store/moon-restaurant/Kc0FdmTPVXObP852GoTFAQ"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "Planted Kebab",
+          "price": "16.00",
+          "currency": "CHF"
+        },
+        {
+          "name": "Planted Kebab Teller",
+          "description": "Served with rice or fries and salad",
+          "price": "23.00",
+          "currency": "CHF"
+        },
+        {
+          "name": "Pide Planted",
+          "price": "19.00",
+          "currency": "CHF"
+        },
+        {
+          "name": "Pizza Planted",
+          "price": "20.00",
+          "currency": "CHF"
+        }
+      ],
+      "source": "moonrestaurant.ch",
+      "confidence": "high",
+      "website": "https://www.moonrestaurant.ch/produkt/planted-kebab/",
+      "notes": "Rated 4.7/5 on Restaurant Guru with 255 reviews"
+    },
+    {
+      "name": "Veganitas Bern",
+      "city": "Bern",
+      "country": "CH",
+      "address": {
+        "street": "Bahnhofpl. 10/1, UG",
+        "postal_code": "3011",
+        "city": "Bern",
+        "notes": "Located in basement of Bern railway station"
+      },
+      "type": "fast_food",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/ch-fr/store/veganitas-bern/bxPY2FdIX6ubIfhvVpG9Pw"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "THE ROASTED CHICK'N",
+          "description": "Pita with Cocktail Sauce, Tomatoes, Carrots, Roasted planted.Chicken, Cabbage, Iceberg Salad"
+        }
+      ],
+      "source": "veganitas.com",
+      "confidence": "high",
+      "website": "https://www.veganitas.com/menu",
+      "notes": "Switzerland's first vegan fast-food company. Also has locations in Zurich, Lucerne, and Kemptthal."
+    },
+    {
+      "name": "Veganitas Zurich",
+      "city": "Zurich",
+      "country": "CH",
+      "type": "fast_food",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "THE ROASTED CHICK'N",
+          "description": "Pita with planted.chicken"
+        }
+      ],
+      "source": "veganitas.com",
+      "confidence": "high",
+      "chain_name": "Veganitas"
+    },
+    {
+      "name": "Veganitas Lucerne",
+      "city": "Lucerne",
+      "country": "CH",
+      "type": "fast_food",
+      "planted_products": ["planted.chicken"],
+      "source": "veganitas.com",
+      "confidence": "high",
+      "chain_name": "Veganitas"
+    },
+    {
+      "name": "FAT MONK Kaufingerstrasse",
+      "city": "Munich",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/fat-monk-kaufingerstrae"
+        }
+      ],
+      "planted_products": ["planted.kebab", "planted.duck"],
+      "menu_items": [
+        {
+          "name": "Planted Kebab Bowl",
+          "description": "Rice, teriyaki sauce, planted kebab, corn, kidney beans, avocado mash, tomato salsa, aioli mayo, tortilla chips, spring onions"
+        },
+        {
+          "name": "Planted Duck Bowl",
+          "description": "Rice, poke, edamame, red cabbage, sweet potato puree, crispy carrot strips, peanut cream, sesame"
+        }
+      ],
+      "source": "wolt",
+      "confidence": "high",
+      "website": "https://www.fatmonk.com/de/page/menu"
+    },
+    {
+      "name": "FAT MONK Stachus Passagen",
+      "city": "Munich",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/fat-monk-stachus-passagen"
+        }
+      ],
+      "planted_products": ["planted.kebab", "planted.duck"],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "FAT MONK"
+    },
+    {
+      "name": "FAT MONK Westbahnhof",
+      "city": "Vienna",
+      "country": "AT",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/aut/vienna/restaurant/fat-monk-westbahnhof"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "planted.kebap bowl",
+          "description": "Rice, teriyaki, sweetcorn, kidney beans, avocado mash, tomato salsa, aioli mayo, nachos, spring onion"
+        }
+      ],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "FAT MONK"
+    },
+    {
+      "name": "FAT MONK Schottentor",
+      "city": "Vienna",
+      "country": "AT",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/aut/vienna/restaurant/fat-monk-schottentor"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "FAT MONK"
+    },
+    {
+      "name": "FAT MONK Am Wienerberg",
+      "city": "Vienna",
+      "country": "AT",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/aut/vienna/restaurant/fat-monk-am-wienerberg"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "FAT MONK"
+    },
+    {
+      "name": "FAT MONK Wien Mitte",
+      "city": "Vienna",
+      "country": "AT",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "lieferando",
+          "url": "https://www.lieferando.at/en/menu/fat-monk-wien-mitte"
+        },
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/aut/vienna/restaurant/fat-monk-mitte"
+        }
+      ],
+      "planted_products": ["planted.kebab"],
+      "source": "wolt/lieferando",
+      "confidence": "high",
+      "chain_name": "FAT MONK"
+    },
+    {
+      "name": "Swing Kitchen Zurich",
+      "city": "Zurich",
+      "country": "CH",
+      "address": {
+        "notes": "Located at entrance to Niederdorf quarter, overlooking River Limmat"
+      },
+      "type": "fast_food",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/ch-de/store/swing-kitchen-real-vegan-burger/QtsFH3LeQfm0iqXuMLHJog"
+        }
+      ],
+      "planted_products": ["planted.pulled"],
+      "menu_items": [
+        {
+          "name": "PLANTED Pulled BBQ Burger",
+          "description": "Brioche Bun, PLANTED Pulled BBQ, Plant based Cheez, Burgersauce, BBQ Sauce"
+        }
+      ],
+      "source": "uber_eats",
+      "confidence": "high",
+      "website": "https://www.swingkitchen.com/en/",
+      "notes": "100% vegan fast food chain from Austria"
+    },
+    {
+      "name": "Swing Kitchen Bern",
+      "city": "Bern",
+      "country": "CH",
+      "type": "fast_food",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/ch-de/store/swing-kitchen-real-vegan-burger-bern/KfAxzw2EQ9CdQpprNRo8yA"
+        }
+      ],
+      "planted_products": ["planted.pulled"],
+      "source": "uber_eats",
+      "confidence": "high",
+      "chain_name": "Swing Kitchen"
+    },
+    {
+      "name": "Swing Kitchen Leipzig",
+      "city": "Leipzig",
+      "country": "DE",
+      "type": "fast_food",
+      "planted_products": ["planted.pulled"],
+      "source": "falstaff.com",
+      "confidence": "high",
+      "chain_name": "Swing Kitchen"
+    },
+    {
+      "name": "beets&roots Berlin Grosse Hamburger Str",
+      "city": "Berlin",
+      "country": "DE",
+      "address": {
+        "street": "Grosse Hamburger Str. 38",
+        "postal_code": "10115",
+        "city": "Berlin"
+      },
+      "type": "restaurant",
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "menu_items": [
+        {
+          "name": "planted.chicken Bowl",
+          "description": "With Miso-Coconut-Curry, Udon noodles, baby spinach, pickled red onions, coriander"
+        },
+        {
+          "name": "planted.Steak Bowl",
+          "description": "With roasted eggplant, roasted peppers, sweet potatoes, baby spinach, Parmesan chips, Pesto-Chimichurri"
+        }
+      ],
+      "source": "ubereats/tripadvisor",
+      "confidence": "high",
+      "website": "https://www.beetsandroots.de/",
+      "notes": "Serves both planted.chicken and planted.steak in various bowls"
+    },
+    {
+      "name": "beets&roots Stuttgart Schlossstrasse",
+      "city": "Stuttgart",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de/store/beets&roots-schlossstr/baYnpY8XVNyxIfhuARp03w"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "uber_eats",
+      "confidence": "high",
+      "chain_name": "beets&roots"
+    },
+    {
+      "name": "beets&roots Hamburg Brandswiete",
+      "city": "Hamburg",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "uber_eats",
+          "url": "https://www.ubereats.com/de-en/store/beets&roots-brandswiete/uzBVfSaHQ6SQIBpZL2BTDQ"
+        }
+      ],
+      "planted_products": ["planted.chicken", "planted.steak"],
+      "source": "uber_eats",
+      "confidence": "high",
+      "chain_name": "beets&roots"
+    },
+    {
+      "name": "Birdie Birdie Chicken Stadtmitte",
+      "city": "Berlin",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/berlin/restaurant/birdie-birdie-stadtmitte"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "planted.chicken Combo",
+          "description": "Original planted.chicken Tenders, Fries and small coleslaw salad"
+        },
+        {
+          "name": "planted.chicken Burger",
+          "description": "Crispy fried original planted.chicken Tenders (plant-based), cheese, salad, pickles with Signature Birdie Sauce in brioche bun"
+        }
+      ],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "Birdie Birdie Chicken"
+    },
+    {
+      "name": "Birdie Birdie Chicken Laim",
+      "city": "Munich",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/munich/restaurant/birdie-birdie-laim"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "planted.chicken Farm Burger",
+          "description": "Crispy original planted.chicken (plant-based), cream cheese-feta cream, corn, pickles, salad, Signature Birdie Sauce in potato bun"
+        }
+      ],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "Birdie Birdie Chicken"
+    },
+    {
+      "name": "dean&david Dortmund Westenhellweg",
+      "city": "Dortmund",
+      "country": "DE",
+      "type": "restaurant",
+      "delivery_platforms": [
+        {
+          "platform": "wolt",
+          "url": "https://wolt.com/en/deu/dortmund/restaurant/dean-david"
+        }
+      ],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "planted.chicken Bowl",
+          "description": "Warm quinoa-wholegrain rice, salad, freshly grilled planted.chicken, avocado, crispy peppers, cherry tomatoes, coriander, spring onions, lime, Lemon Herbs Sauce"
+        },
+        {
+          "name": "planted.chicken Salad",
+          "description": "Freshly grilled planted.chicken, feta cheese, watermelon, cucumber, marinated onions, crunchy chickpeas, mint"
+        }
+      ],
+      "source": "wolt",
+      "confidence": "high",
+      "chain_name": "dean&david",
+      "notes": "planted.chicken swap available at no extra charge"
+    },
+    {
+      "name": "dean&david Hanover",
+      "city": "Hanover",
+      "country": "DE",
+      "type": "restaurant",
+      "planted_products": ["planted.chicken"],
+      "source": "falstaff street food guide 2024",
+      "confidence": "high",
+      "chain_name": "dean&david"
+    },
+    {
+      "name": "Vienna Taqueria",
+      "city": "Vienna",
+      "country": "AT",
+      "type": "restaurant",
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Vegan Taco with planted",
+          "description": "Daily changing menu always includes vegan taco option with planted (tacos salsa verde, pastor, salsa roja etc.)"
+        }
+      ],
+      "source": "magdamagdas.com",
+      "confidence": "medium",
+      "notes": "Menu changes daily but always has planted option. Recommend arriving before 7pm."
+    }
+  ],
+  "chain_partnerships": [
+    {
+      "chain_name": "Peter Pane",
+      "total_locations": "51+",
+      "countries": ["DE", "AT"],
+      "planted_products": ["planted.kebab"],
+      "menu_items": [
+        {
+          "name": "KEBAB KLAUS Burger",
+          "description": "Veg'von Beef patty with planted.kebab, microgreens, lemon thyme sauce"
+        }
+      ],
+      "website": "https://peterpane.de/en/locations/",
+      "source": "peterpane.de",
+      "confidence": "high",
+      "notes": "Vegan Meatless Monday every Monday - all vegan burgers EUR 9.90"
+    },
+    {
+      "chain_name": "FAT MONK",
+      "total_locations": 6,
+      "countries": ["DE", "AT"],
+      "cities": {
+        "Munich": 2,
+        "Vienna": 4
+      },
+      "planted_products": ["planted.kebab", "planted.duck"],
+      "website": "https://www.fatmonk.com/",
+      "source": "wolt",
+      "confidence": "high",
+      "notes": "Deli Bowl concept with signature planted kebab and duck bowls"
+    },
+    {
+      "chain_name": "Veganitas",
+      "total_locations": 4,
+      "countries": ["CH"],
+      "cities": ["Zurich", "Bern", "Lucerne", "Kemptthal"],
+      "planted_products": ["planted.chicken"],
+      "website": "https://www.veganitas.com/",
+      "source": "veganitas.com",
+      "confidence": "high",
+      "notes": "Switzerland's first vegan fast-food company, freshly baked pitas with planted.chicken"
+    },
+    {
+      "chain_name": "Swing Kitchen",
+      "total_locations": 10,
+      "countries": ["AT", "CH", "DE"],
+      "cities_AT": ["Vienna (5)", "Graz", "Innsbruck"],
+      "cities_CH": ["Zurich", "Bern"],
+      "cities_DE": ["Berlin (2)", "Leipzig"],
+      "planted_products": ["planted.pulled"],
+      "website": "https://www.swingkitchen.com/en/",
+      "source": "swingkitchen.com",
+      "confidence": "high",
+      "notes": "100% vegan burger chain using PLANTED Pulled BBQ"
+    },
+    {
+      "chain_name": "David Lloyd Fitness Clubs",
+      "total_locations": "99 UK locations",
+      "countries": ["UK"],
+      "planted_products": ["planted.chicken"],
+      "menu_items": [
+        {
+          "name": "Eatplanted.chicken Katsu Curry",
+          "description": "Lemon & herb planted.chicken in katsu curry style"
+        }
+      ],
+      "source": "vegconomist",
+      "confidence": "high",
+      "notes": "First UK nationwide listing for Eatplanted. 5 dishes on spring/summer menu including 2 kids menu options."
+    },
+    {
+      "chain_name": "HOFMANNS Catering",
+      "type": "corporate_catering",
+      "countries": ["DE"],
+      "planted_products": ["planted.kebab", "planted.bratwurst"],
+      "menu_items": [
+        {
+          "name": "Planted Kebab Thai Style",
+          "description": "planted.kebab with rice"
+        },
+        {
+          "name": "Planted Bratwurst Curry Style"
+        },
+        {
+          "name": "Planted Kebab Chilli Style"
+        },
+        {
+          "name": "Planted Bolognese"
+        }
+      ],
+      "source": "vegconomist",
+      "confidence": "high",
+      "notes": "Major German corporate caterer serving workplaces. Part of Compass Group."
+    }
+  ],
+  "uk_retail_with_foodservice_potential": [
+    {
+      "retailer": "Morrisons",
+      "products": ["Original Chicken", "Kebab"],
+      "notes": "Fifth largest UK supermarket chain, products in butchery section"
+    },
+    {
+      "retailer": "Holland & Barrett",
+      "products": ["Original Chicken", "Original Kebab"],
+      "locations": "50 stores across UK",
+      "notes": "Health food chain, potential for in-store dining expansion"
+    },
+    {
+      "retailer": "Tesco",
+      "products": ["Chicken Lemon & Herb", "Kebab", "planted.duck"],
+      "notes": "Nationwide availability"
+    }
+  ],
+  "italy_expansion": {
+    "retailer": "Esselunga",
+    "locations": "198 stores across Italy",
+    "regions": ["Lombardy", "Tuscany", "Piedmont", "Veneto", "Liguria", "Emilia Romagna", "Lazio"],
+    "planted_products": ["planted products"],
+    "source": "vegconomist",
+    "confidence": "high",
+    "notes": "Major Italian retail chain with Planted products"
+  },
+  "france_expansion": {
+    "event": "SIAL Paris 2024",
+    "date": "October 19-23, 2024",
+    "planted_products": ["planted.steak"],
+    "notes": "Planted launched in French restaurants and select supermarkets following SIAL Paris debut"
+  },
+  "summary": {
+    "new_individual_venues": 28,
+    "new_chain_locations": {
+      "Peter Pane": "51+ locations (DE, AT)",
+      "FAT MONK": "6 locations (Munich, Vienna)",
+      "Veganitas": "4 locations (CH)",
+      "Swing Kitchen": "10 locations (AT, CH, DE)",
+      "David Lloyd": "99 UK locations"
+    },
+    "underserved_cities_with_coverage": [
+      "Stuttgart (Vhy, Yuicery, Peter Pane, beets&roots, Doen Doen)",
+      "Dresden (Peter Pane)",
+      "Leipzig (Swing Kitchen)",
+      "Hanover (dean&david)",
+      "Dortmund (dean&david)",
+      "Munich (FAT MONK x2, Birdie Birdie)",
+      "Vienna (FAT MONK x4, Figlmuller, Taqueria)",
+      "Bern (Veganitas, Swing Kitchen)",
+      "Zurich (Moon Restaurant, Veganitas, Swing Kitchen)"
+    ],
+    "products_by_frequency": {
+      "planted.chicken": "Most common - available at dean&david, Yuicery, Veganitas, Tim Raue, Birdie Birdie, David Lloyd, beets&roots, NENI, Hiltl",
+      "planted.kebab": "Second most common - FAT MONK, Peter Pane, Moon Restaurant, HOFMANNS, doen doen",
+      "planted.steak": "Growing - beets&roots, France expansion",
+      "planted.schnitzel": "Premium - Figlmuller Vienna",
+      "planted.pulled": "Swing Kitchen chain",
+      "planted.duck": "FAT MONK, Tim Raue, rabowls"
+    }
+  }
+}
