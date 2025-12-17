@@ -16,6 +16,14 @@ const https = require('https');
 const http = require('http');
 const { URL } = require('url');
 
+// Try to load pdf-parse for PDF analysis
+let pdfParse = null;
+try {
+  pdfParse = require('pdf-parse');
+} catch (e) {
+  console.log('Note: pdf-parse not installed. Run: npm install pdf-parse');
+}
+
 // Planted product keywords to search for
 const PLANTED_KEYWORDS = [
   'planted',
@@ -55,6 +63,40 @@ const MENU_PATH_PATTERNS = [
   '/abend',
 ];
 
+// Subpages to also crawl (restaurants often have menu on subpages)
+const SUBPAGE_PATTERNS = [
+  '/restaurant',
+  '/restaurant/',
+  '/en',
+  '/en/',
+  '/de',
+  '/de/',
+  '/bar',
+  '/cuisine',
+  '/kulinarik',
+];
+
+// Common PDF menu paths to try directly
+const COMMON_PDF_PATHS = [
+  '/media/menu.pdf',
+  '/media/speisekarte.pdf',
+  '/media/restaurant.pdf',
+  '/media/restaurant_d.pdf',
+  '/media/restaurant_en.pdf',
+  '/media/restaurant_mo_-_fr_d.pdf',
+  '/media/mittag.pdf',
+  '/media/lunch.pdf',
+  '/media/dinner.pdf',
+  '/media/abend.pdf',
+  '/downloads/menu.pdf',
+  '/downloads/speisekarte.pdf',
+  '/assets/menu.pdf',
+  '/files/menu.pdf',
+  '/pdf/menu.pdf',
+  '/menu.pdf',
+  '/speisekarte.pdf',
+];
+
 // PDF patterns
 const PDF_PATTERNS = [
   /href=["']([^"']*\.pdf)["']/gi,
@@ -69,6 +111,61 @@ const results = {
   errors: [],
   needsManualCheck: [],
 };
+
+/**
+ * Fetch a PDF and extract text using pdf-parse
+ */
+async function fetchAndParsePdf(url) {
+  if (!pdfParse) {
+    return { success: false, error: 'pdf-parse not installed' };
+  }
+
+  return new Promise((resolve) => {
+    const urlObj = new URL(url);
+    const protocol = urlObj.protocol === 'https:' ? https : http;
+
+    const options = {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/pdf,*/*',
+      },
+      timeout: 30000,
+    };
+
+    const req = protocol.get(url, options, (res) => {
+      // Handle redirects
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        const redirectUrl = res.headers.location.startsWith('http')
+          ? res.headers.location
+          : new URL(res.headers.location, url).href;
+        return fetchAndParsePdf(redirectUrl).then(resolve);
+      }
+
+      if (res.statusCode >= 400) {
+        resolve({ success: false, error: `HTTP ${res.statusCode}` });
+        return;
+      }
+
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', async () => {
+        try {
+          const buffer = Buffer.concat(chunks);
+          const data = await pdfParse(buffer);
+          resolve({ success: true, text: data.text, pages: data.numpages });
+        } catch (err) {
+          resolve({ success: false, error: err.message });
+        }
+      });
+    });
+
+    req.on('error', (err) => resolve({ success: false, error: err.message }));
+    req.on('timeout', () => {
+      req.destroy();
+      resolve({ success: false, error: 'Request timeout' });
+    });
+  });
+}
 
 /**
  * Fetch a URL with proper error handling
@@ -249,13 +346,35 @@ async function verifyVenueMenu(venue) {
 
   const allFound = [];
   const checkedUrls = new Set();
+  const checkedPdfs = new Set();
   const urlsToCheck = [venue.website];
+  const pdfsToCheck = [];
 
   // Also try common menu paths
   for (const path of MENU_PATH_PATTERNS) {
     try {
       const menuUrl = new URL(path, venue.website).href;
       urlsToCheck.push(menuUrl);
+    } catch (e) {
+      // Skip invalid URLs
+    }
+  }
+
+  // Try subpages too
+  for (const path of SUBPAGE_PATTERNS) {
+    try {
+      const subUrl = new URL(path, venue.website).href;
+      urlsToCheck.push(subUrl);
+    } catch (e) {
+      // Skip invalid URLs
+    }
+  }
+
+  // Try common PDF paths directly
+  for (const path of COMMON_PDF_PATHS) {
+    try {
+      const pdfUrl = new URL(path, venue.website).href;
+      pdfsToCheck.push(pdfUrl);
     } catch (e) {
       // Skip invalid URLs
     }
@@ -307,15 +426,9 @@ async function verifyVenueMenu(venue) {
       }
 
       if (pdfLinks.length > 0) {
-        console.log(`  Found ${pdfLinks.length} PDF menus (manual check needed):`);
-        pdfLinks.forEach(pdf => {
-          console.log(`    - ${pdf}`);
-          results.needsManualCheck.push({
-            venue,
-            reason: 'PDF menu found',
-            url: pdf,
-          });
-        });
+        console.log(`  Found ${pdfLinks.length} PDF menus to check`);
+        // Add discovered PDFs at the FRONT (higher priority than common paths)
+        pdfsToCheck.unshift(...pdfLinks);
       }
 
       // Rate limiting
@@ -324,6 +437,52 @@ async function verifyVenueMenu(venue) {
     } catch (err) {
       console.log(`  Error: ${err.message}`);
     }
+  }
+
+  // Now check PDFs
+  if (pdfsToCheck.length > 0 && pdfParse) {
+    console.log(`\nChecking ${pdfsToCheck.length} PDF menus...`);
+
+    for (const pdfUrl of pdfsToCheck) {
+      if (checkedPdfs.has(pdfUrl)) continue;
+      checkedPdfs.add(pdfUrl);
+
+      // Limit to 10 PDFs
+      if (checkedPdfs.size > 10) break;
+
+      console.log(`  PDF: ${pdfUrl.substring(0, 70)}...`);
+
+      const pdfResult = await fetchAndParsePdf(pdfUrl);
+
+      if (pdfResult.success) {
+        console.log(`    Parsed ${pdfResult.pages} pages`);
+        const found = searchForPlanted(pdfResult.text, pdfUrl);
+
+        if (found.length > 0) {
+          console.log(`    FOUND ${found.length} planted mentions!`);
+          found.forEach(f => {
+            console.log(`      - "${f.keyword}" in: "...${f.context.substring(0, 80)}..."`);
+          });
+          allFound.push(...found);
+        } else {
+          console.log(`    No planted keywords found`);
+        }
+      } else {
+        console.log(`    Error: ${pdfResult.error}`);
+      }
+
+      // Rate limiting
+      await new Promise(r => setTimeout(r, 500));
+    }
+  } else if (pdfsToCheck.length > 0 && !pdfParse) {
+    console.log(`\nFound ${pdfsToCheck.length} PDFs but pdf-parse not installed`);
+    pdfsToCheck.slice(0, 5).forEach(pdf => {
+      results.needsManualCheck.push({
+        venue,
+        reason: 'PDF menu found (pdf-parse not installed)',
+        url: pdf,
+      });
+    });
   }
 
   // Determine result
