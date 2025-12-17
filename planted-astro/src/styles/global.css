@@ -138,7 +138,7 @@ h1, h2, h3, .display {
 
 .btn-green {
     background: var(--planted-green);
-    color: var(--planted-black);
+    color: var(--planted-purple);
 }
 
 .btn-green:hover {
