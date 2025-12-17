@@ -113,13 +113,10 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                             <div class="annotation-text">
                                 {t.home.hero.annotationText || 'Ja, wir zeigen dir ein Video von brutzelndem Essen. Das ist quasi Manipulation. Aber es ist auch einfach die Wahrheit.'}
                             </div>
-                            <div class="annotation-signature">{t.home.hero.annotationSignature || 'Das Marketing-Team'}</div>
+                            <div class="annotation-badge">
+                                <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" />
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Approved badge -->
-                    <div class="approved-badge">
-                        <img src={`${base}/images/approvedclaim.svg`} alt="Approved by Meat Lovers" />
                     </div>
                 </div>
             </div>
@@ -485,10 +482,12 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         transform: translateX(-50%);
         z-index: 10;
         color: var(--planted-purple);
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
     }
 
     .hero .scroll-indicator__arrow {
         stroke: var(--planted-purple);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
     }
 
     .hero-grid {
@@ -696,6 +695,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             0 15px 30px rgba(0,0,0,0.2),
             inset 0 1px 0 rgba(255,255,255,0.1),
             inset 0 -1px 0 rgba(0,0,0,0.3);
+        transform: rotate(-2deg);
     }
 
     .tv-frame::before {
@@ -857,39 +857,17 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         color: #1F2937;
     }
 
-    .annotation-signature {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed rgba(97, 38, 158, 0.2);
-        font-size: 0.8rem;
-        color: #9CA3AF;
+    .annotation-badge {
+        margin-top: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .annotation-signature::before {
-        content: '— ';
-    }
-
-    /* Approved Badge */
-    .approved-badge {
-        position: absolute;
-        bottom: -16px;
-        right: 24px;
-        transform: rotate(3deg);
-        z-index: 10;
-        animation: badgePop 0.5s ease 1s forwards;
-        opacity: 0;
-        filter: drop-shadow(0 10px 30px rgba(97, 38, 158, 0.35));
-    }
-
-    .approved-badge img {
-        width: 180px;
+    .annotation-badge img {
+        width: 140px;
         height: auto;
-    }
-
-    @keyframes badgePop {
-        0% { opacity: 0; transform: rotate(3deg) scale(0.8); }
-        50% { transform: rotate(3deg) scale(1.05); }
-        100% { opacity: 1; transform: rotate(3deg) scale(1); }
+        filter: drop-shadow(0 4px 12px rgba(97, 38, 158, 0.2));
     }
 
     /* Countries Modal */
@@ -1768,19 +1746,19 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         align-items: center;
         gap: 0.75rem;
         background: var(--planted-green);
-        color: var(--planted-black);
+        color: var(--planted-purple);
         padding: 1.15rem 2.5rem;
         border-radius: 100px;
         font-weight: 700;
         font-size: 1rem;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 4px 20px rgba(107, 191, 89, 0.3);
+        box-shadow: 0 8px 24px rgba(107, 191, 89, 0.4);
     }
 
     .impact-btn:hover {
         transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 16px 40px rgba(107, 191, 89, 0.4);
+        box-shadow: 0 16px 48px rgba(107, 191, 89, 0.5);
     }
 
     .impact-btn svg {
@@ -1926,6 +1904,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         font-weight: 700;
         margin-bottom: 0.5rem;
         line-height: 1.2;
+        color: white !important;
         text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
     }
 

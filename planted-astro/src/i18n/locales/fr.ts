@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Champion de lutte',
             evidenceLabel: 'Pièce à conviction A',
             annotationText: 'Oui, on vous montre une vidéo de nourriture qui grésille. C\'est de la manipulation. Mais c\'est aussi la vérité.',
-            annotationSignature: 'L\'équipe Marketing',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [

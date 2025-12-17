@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Schwingerkönig',
             evidenceLabel: 'Beweisstück A',
             annotationText: 'Ja, wir zeigen dir ein Video von brutzelndem Essen. Das ist quasi Manipulation. Aber es ist auch einfach die Wahrheit.',
-            annotationSignature: 'Das Marketing-Team',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [

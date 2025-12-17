@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Campione di lotta',
             evidenceLabel: 'Prova A',
             annotationText: 'Sì, ti stiamo mostrando un video di cibo sfrigolante. È praticamente manipolazione. Ma è anche solo la verità.',
-            annotationSignature: 'Il Team Marketing',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [
