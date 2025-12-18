@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Campeón de Schwingen',
             evidenceLabel: 'Prueba A',
             annotationText: 'Sí, te estamos mostrando un video de comida chisporroteante. Eso es básicamente manipulación. Pero también es la verdad.',
-            annotationSignature: 'El Equipo de Marketing',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [

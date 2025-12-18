@@ -90,7 +90,7 @@ async function main() {
   console.log(EXECUTE ? 'EXECUTING CHAIN DISH COPY' : 'DRY RUN - No changes will be made');
   console.log('='.repeat(60));
 
-  const extraChains = ['katzentempel'];
+  const extraChains = ['katzentempel', 'swing kitchen', 'veganitas', 'dean&david'];
   let totalCopied = 0;
 
   for (const chain of extraChains) {

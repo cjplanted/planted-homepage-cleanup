@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Worstelkampioen',
             evidenceLabel: 'Bewijs A',
             annotationText: 'Ja, we laten je een video zien van sisend eten. Dat is eigenlijk manipulatie. Maar het is ook gewoon de waarheid.',
-            annotationSignature: 'Het Marketingteam',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [

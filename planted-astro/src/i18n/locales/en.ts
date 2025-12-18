@@ -26,7 +26,7 @@ export default {
             proofChampion: 'Wrestling Champion',
             evidenceLabel: 'Exhibit A',
             annotationText: 'Yes, we\'re showing you a video of sizzling food. That\'s basically manipulation. But it\'s also just the truth.',
-            annotationSignature: 'The Marketing Team',
+            annotationSignature: 'Approved by Meat Lovers',
         },
         ticker: {
             testimonials: [

@@ -65,7 +65,7 @@ scripts\chrome-debug.bat
 
 | Metric | Count | Target | Progress |
 |--------|-------|--------|----------|
-| Total production venues | 1925 | - | - |
+| Total production venues | 1944 | - | +19 from batch 2 |
 | Venues with dishes | 355 | 385 | **92.2%** |
 | Venues with 0 dishes | 1570 | 0 | - |
 | - Retail (no dishes expected) | 1540 | - | BILLA/INTERSPAR/Coop/REWE (4 chains) |
