@@ -101,12 +101,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                         </div>
                     </div>
 
-                    <!-- Evidence Link - below video with up arrow -->
-                    <a href="#video-proof" class="evidence-link">
-                        <span class="evidence-arrow">↑</span>
-                        <span class="evidence-text">{t.home.hero.evidenceLabel || 'Beweisstück A'}</span>
-                    </a>
-
                     <!-- Floating annotation card -->
                     <div class="tv-annotation">
                         <div class="annotation-card">
@@ -558,42 +552,6 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         opacity: 0;
     }
 
-    /* Evidence Link - below video */
-    .evidence-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        background: rgba(97, 38, 158, 0.05);
-        border-radius: 100px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-
-    .evidence-link:hover {
-        background: rgba(97, 38, 158, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .evidence-link .evidence-arrow {
-        font-size: 1rem;
-        color: var(--planted-purple);
-        animation: bounceUp 1.5s ease-in-out infinite;
-    }
-
-    .evidence-link .evidence-text {
-        font-family: 'VC Henrietta', serif;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--planted-purple);
-    }
-
-    @keyframes bounceUp {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
-    }
-
     /* Trust Stats Section */
     .trust-stats {
         background: white;
@@ -865,7 +823,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
     }
 
     .annotation-badge img {
-        width: 140px;
+        width: 161px;
         height: auto;
         filter: drop-shadow(0 4px 12px rgba(97, 38, 158, 0.2));
     }
