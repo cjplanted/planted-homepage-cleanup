@@ -37,6 +37,10 @@ jobs:
         run: pnpm install
         working-directory: planted-availability-db
 
+      - name: Build core package
+        run: pnpm --filter @pad/core build
+        working-directory: planted-availability-db
+
       - name: Type check
         run: pnpm --filter @pad/admin-dashboard-v2 typecheck
         working-directory: planted-availability-db
