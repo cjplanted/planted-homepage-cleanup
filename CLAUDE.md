@@ -38,7 +38,7 @@ Once Chrome is running, use the `website-review` skill to:
 |-------------|-----|
 | Local Astro | http://localhost:4321 |
 | Local Admin | http://localhost:5175 |
-| GitHub Pages | https://cgjen-box.github.io/planted-website/ |
+| GitHub Pages | https://cjplanted.github.io/planted-homepage-cleanup/ |
 | Admin Prod | https://admin.planted.com |
 | Production | https://planted.com |
 
