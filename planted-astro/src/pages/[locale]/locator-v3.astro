@@ -877,7 +877,15 @@ const initialVenues: VenueV3[] = [];
     setupInfiniteScroll();
   }
 
-  document.addEventListener('DOMContentLoaded', initialize);
+  // Handle DOMContentLoaded - but check if DOM is already ready
+  // (Astro places define:vars scripts after </body>, so DOMContentLoaded may have already fired)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    // DOM is already ready, call initialize immediately
+    initialize();
+  }
+
   document.addEventListener('astro:page-load', () => {
     initialized = false;
     initialize();
