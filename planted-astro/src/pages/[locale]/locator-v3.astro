@@ -243,92 +243,26 @@ const initialVenues: VenueV3[] = [];
    */
 
   // Client-side postal code lookup using data passed from server
-  function lookupPostalCode(zip: string, country: string): { lat: number; lng: number; city: string } | null {
-    const countryData = (postalCodesData as any)[country.toLowerCase()];
+  // NOTE: No TypeScript here - this runs as plain JavaScript in the browser
+  function lookupPostalCode(zip, country) {
+    const countryData = postalCodesData[country.toLowerCase()];
     if (!countryData) return null;
     const data = countryData[zip];
     if (!data) return null;
     return { lat: data.lat, lng: data.lng, city: data.city };
   }
 
-  interface ApiPrice {
-    amount: number;
-    currency: string;
-  }
-
-  interface ApiDish {
-    id: string;
-    name: string;
-    description?: string;
-    price: ApiPrice;
-    image_url?: string;
-    dietary_tags?: string[];
-    planted_products: string[];
-    cuisine_type?: string;
-  }
-
-  interface ApiDeliveryPlatform {
-    platform: string;
-    url: string;
-    active?: boolean;
-  }
-
-  interface ApiVenue {
-    id: string;
-    name: string;
-    type: string;
-    address: {
-      street: string;
-      city: string;
-      postal_code: string;
-      country: string;
-    };
-    location: { latitude: number; longitude: number };
-    delivery_platforms?: ApiDeliveryPlatform[];
-    distance_km: number;
-  }
-
-  interface NearbyResult {
-    venue: ApiVenue;
-    dishes: ApiDish[];
-    is_open: boolean;
-    next_open: string | null;
-    today_hours: string;
-  }
-
-  interface NearbyResponse {
-    results: NearbyResult[];
-    total: number;
-    has_more: boolean;
-  }
-
-  interface VenueV3 {
-    id: string;
-    name: string;
-    location: string;
-    category: string;
-    distance: string;
-    distanceMeters?: number;
-    products: string[];
-    dishes: Array<{
-      name: string;
-      price: string;
-      description?: string;
-      image?: string;
-      isVegan?: boolean;
-      plantedProduct?: string;
-    }>;
-    iconType?: 'restaurant' | 'bowl' | 'burger' | 'kebab';
-    heroImage?: string;
-    deliveryPartners?: Array<{
-      name: string;
-      url: string;
-      icon?: string;
-    }>;
-  }
+  // NOTE: This is plain JavaScript (define:vars scripts don't process TypeScript)
+  // API types are described in comments for documentation:
+  // ApiPrice: { amount: number, currency: string }
+  // ApiDish: { id, name, description?, price, image_url?, dietary_tags?, planted_products, cuisine_type? }
+  // ApiVenue: { id, name, type, address: {street, city, postal_code, country}, location, delivery_platforms?, distance_km }
+  // NearbyResult: { venue, dishes, is_open, next_open, today_hours }
+  // NearbyResponse: { results, total, has_more }
+  // VenueV3: { id, name, location, category, distance, distanceMeters?, products, dishes, iconType?, heroImage?, deliveryPartners? }
 
   // Platform icon mapping
-  const platformIcons: Record<string, string> = {
+  const platformIcons = {
     'uber_eats': 'uber-eats',
     'uber-eats': 'uber-eats',
     'ubereats': 'uber-eats',
@@ -345,7 +279,7 @@ const initialVenues: VenueV3[] = [];
   };
 
   // Map API response to VenueV3 format
-  function mapToVenueV3(result: NearbyResult): VenueV3 {
+  function mapToVenueV3(result) {
     const venue = result.venue;
     const dishes = result.dishes || [];
 
@@ -363,8 +297,8 @@ const initialVenues: VenueV3[] = [];
       : `${distanceKm.toFixed(1)}km`;
 
     // Determine icon type based on venue type and dish cuisines
-    const cuisines = dishes.map(d => d.cuisine_type).filter(Boolean) as string[];
-    let iconType: VenueV3['iconType'] = 'restaurant';
+    const cuisines = dishes.map(d => d.cuisine_type).filter(Boolean);
+    let iconType = 'restaurant';
     if (cuisines.some(c => /burger/i.test(c))) iconType = 'burger';
     else if (cuisines.some(c => /bowl|poke|asian/i.test(c))) iconType = 'bowl';
     else if (cuisines.some(c => /kebab|döner|turkish/i.test(c))) iconType = 'kebab';
@@ -407,7 +341,7 @@ const initialVenues: VenueV3[] = [];
   }
 
   // Render a venue card HTML
-  function renderVenueCard(venue: VenueV3, index: number, translations: any): string {
+  function renderVenueCard(venue, index, translations) {
     const previewDishes = venue.dishes.slice(0, 2);
     const isHidden = index >= 3;
 
@@ -459,9 +393,9 @@ const initialVenues: VenueV3[] = [];
   }
 
   // Geocode ZIP code using local database first, with Nominatim API as fallback
-  async function geocodeZip(zip: string, countryCode: string): Promise<{ lat: number; lng: number } | null> {
+  async function geocodeZip(zip, countryCode) {
     // FIRST: Check local postal code database (fast, no API call)
-    const localData = lookupPostalCode(zip, countryCode as 'ch' | 'de' | 'at');
+    const localData = lookupPostalCode(zip, countryCode);
     if (localData) {
       console.log('[V3] Found ZIP in local database:', zip, localData);
       return { lat: localData.lat, lng: localData.lng };
@@ -471,7 +405,7 @@ const initialVenues: VenueV3[] = [];
     console.log('[V3] ZIP not in local DB, falling back to Nominatim:', zip);
 
     // Country code to name mapping for Nominatim
-    const countryNames: Record<string, string> = {
+    const countryNames = {
       'ch': 'Switzerland',
       'de': 'Germany',
       'at': 'Austria',
@@ -552,7 +486,7 @@ const initialVenues: VenueV3[] = [];
 
   // Main loader function
   async function loadVenues() {
-    const config = (window as any).__v3Config;
+    const config = window.__v3Config;
     if (!config) return;
 
     const cardGrid = document.getElementById('v3CardGrid');
@@ -570,7 +504,7 @@ const initialVenues: VenueV3[] = [];
       let { lat, lng, apiBaseUrl, zip, countryCode } = config;
 
       // T030: Update header location dynamically with correct country from URL params
-      const countryDisplayNames: Record<string, string> = {
+      const countryDisplayNames = {
         'ch': 'Schweiz',
         'de': 'Deutschland',
         'at': 'Österreich',
@@ -627,7 +561,7 @@ const initialVenues: VenueV3[] = [];
       // Store in state management
       allVenues = venues;
       filteredVenues = [...venues];
-      (window as any).__v3Venues = venues;
+      window.__v3Venues = venues;
 
       // Remove skeleton loading
       removeSkeletonLoading();
@@ -703,7 +637,7 @@ const initialVenues: VenueV3[] = [];
   const BATCH_SIZE = 3;
   let currentFilter = 'all';
   let isLoading = false;
-  let scrollDebounceTimer: number | null = null;
+  let scrollDebounceTimer = null;
 
   // ========================================
   // LOAD MORE - Proper progressive loading
@@ -715,7 +649,7 @@ const initialVenues: VenueV3[] = [];
     if (remaining <= 0) return;
 
     isLoading = true;
-    const config = (window as any).__v3Config;
+    const config = window.__v3Config;
     const cardGrid = document.getElementById('v3CardGrid');
 
     if (!cardGrid) {
@@ -783,9 +717,9 @@ const initialVenues: VenueV3[] = [];
   // ========================================
   // FILTER HANDLING
   // ========================================
-  function applyFilter(filter: string) {
+  function applyFilter(filter) {
     currentFilter = filter;
-    const config = (window as any).__v3Config;
+    const config = window.__v3Config;
 
     // Filter venues based on criteria
     switch (filter) {
@@ -820,7 +754,7 @@ const initialVenues: VenueV3[] = [];
   // RENDER INITIAL CARDS (first 3)
   // ========================================
   function renderInitialCards() {
-    const config = (window as any).__v3Config;
+    const config = window.__v3Config;
     const cardGrid = document.getElementById('v3CardGrid');
     const noResultsEl = document.getElementById('v3NoResults');
 
