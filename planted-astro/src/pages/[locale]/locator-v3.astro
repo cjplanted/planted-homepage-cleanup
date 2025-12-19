@@ -472,7 +472,9 @@ const initialVenues: VenueV3[] = [];
     // Insert skeleton before the actual grid
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = skeletonHtml;
-    mainContent.insertBefore(tempDiv.firstElementChild!, cardGrid);
+    if (tempDiv.firstElementChild) {
+      mainContent.insertBefore(tempDiv.firstElementChild, cardGrid);
+    }
   }
 
   // Remove skeleton loading
@@ -593,7 +595,7 @@ const initialVenues: VenueV3[] = [];
         errorEl.innerHTML = `
           <div class="v3-error-icon">⚠️</div>
           <p>${config.translations.errorLoading}</p>
-          <p style="font-size: 0.875rem; color: #999; margin-top: 0.5rem;">${(error as Error).message}</p>
+          <p style="font-size: 0.875rem; color: #999; margin-top: 0.5rem;">${error.message || error}</p>
         `;
         mainContent.insertBefore(errorEl, mainContent.firstChild?.nextSibling || null);
       }
