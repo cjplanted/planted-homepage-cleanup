@@ -9,7 +9,17 @@ import LocatorResultsV3 from '../../components/locator/LocatorResultsV3.astro';
 import { allLocales, type LocaleCode } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
 import type { VenueV3 } from '../../components/locator/VenueCardV3.astro';
-import { lookupPostalCode } from '../../data/postal-codes';
+// Import postal code JSON directly for client-side use
+import postalCodesCH from '../../data/postal-codes-ch.json';
+import postalCodesDE from '../../data/postal-codes-de.json';
+import postalCodesAT from '../../data/postal-codes-at.json';
+
+// Combine postal codes for client-side lookup
+const postalCodesData = {
+  ch: postalCodesCH,
+  de: postalCodesDE,
+  at: postalCodesAT
+};
 
 export async function getStaticPaths() {
   return allLocales.map((locale) => ({
@@ -227,10 +237,20 @@ const initialVenues: VenueV3[] = [];
   console.log('[V3] Config from URL:', window.__v3Config);
 </script>
 
-<script>
+<script define:vars={{ postalCodesData }}>
   /**
    * V3 API Loader - Fetches real venue data from the Planted API
    */
+
+  // Client-side postal code lookup using data passed from server
+  function lookupPostalCode(zip: string, country: string): { lat: number; lng: number; city: string } | null {
+    const countryData = (postalCodesData as any)[country.toLowerCase()];
+    if (!countryData) return null;
+    const data = countryData[zip];
+    if (!data) return null;
+    return { lat: data.lat, lng: data.lng, city: data.city };
+  }
+
   interface ApiPrice {
     amount: number;
     currency: string;
