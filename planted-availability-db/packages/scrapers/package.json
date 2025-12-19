@@ -21,11 +21,13 @@
     "dish-finder": "tsx src/cli/run-dish-finder.ts",
     "review-dishes": "tsx src/cli/review-dishes.ts",
     "check-dishes": "tsx src/cli/check-dish-coverage.ts",
-    "fix-missing-dishes": "tsx src/fix-missing-dishes.ts"
+    "fix-missing-dishes": "tsx src/fix-missing-dishes.ts",
+    "geocode-venues": "tsx src/cli/geocode-venues.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
     "@google/generative-ai": "^0.24.1",
+    "@googlemaps/google-maps-services-js": "^3.4.0",
     "@pad/core": "workspace:*",
     "@pad/database": "workspace:*",
     "axios": "^1.7.7",
