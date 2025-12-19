@@ -1,6 +1,6 @@
 import { onRequest, HttpsOptions } from 'firebase-functions/v2/https';
 import type { Request, Response } from 'express';
-import { initializeFirestore, venues, dishes } from '@pad/database';
+import { initializeFirestore, venues, dishes, discoveredVenues } from '@pad/database';
 import { isVenueOpen, getNextOpeningTime, getTodayHoursString } from '@pad/core';
 import type { Venue, Dish, GeoPoint } from '@pad/core';
 import { publicRateLimit } from '../../middleware/withRateLimit.js';
@@ -155,6 +155,215 @@ function toSlimDish(dish: Dish): SlimDish {
   };
 }
 
+// ============================================================================
+// Haversine distance calculation for geo queries
+// ============================================================================
+function calculateDistance(point1: GeoPoint, point2: { latitude: number; longitude: number }): number {
+  const R = 6371; // Earth's radius in km
+  const dLat = ((point2.latitude - point1.latitude) * Math.PI) / 180;
+  const dLon = ((point2.longitude - point1.longitude) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((point1.latitude * Math.PI) / 180) *
+      Math.cos((point2.latitude * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+// ============================================================================
+// Query discovered_venues with geo filtering (fallback for empty venues collection)
+// ============================================================================
+interface DiscoveredVenueResult {
+  venue: Venue & { distance_km: number };
+  dishes: Dish[];
+}
+
+async function queryDiscoveredVenuesNearby(
+  center: GeoPoint,
+  radiusKm: number,
+  venueType?: string,
+  limit: number = 20
+): Promise<DiscoveredVenueResult[]> {
+  // Query discovered_venues directly from Firestore without orderBy to avoid index requirements
+  // This is a workaround for the missing created_at index on discovered_venues
+  const { getFirestore } = await import('firebase-admin/firestore');
+  const db = getFirestore();
+
+  console.log('[Nearby] Querying discovered_venues directly from Firestore...');
+
+  // Query without orderBy to avoid index requirement
+  const snapshot = await db.collection('discovered_venues')
+    .where('status', 'in', ['discovered', 'verified', 'promoted'])
+    .limit(500) // Get reasonable batch to filter
+    .get();
+
+  console.log(`[Nearby] Direct query returned ${snapshot.size} documents`);
+
+  // Log stats about coordinates
+  let withCoords = 0;
+  let withoutCoords = 0;
+  const countryStats: Record<string, number> = {};
+
+  for (const doc of snapshot.docs) {
+    const data = doc.data();
+    const country = data.address?.country || 'unknown';
+    countryStats[country] = (countryStats[country] || 0) + 1;
+
+    if (data.coordinates?.latitude && data.coordinates?.longitude) {
+      withCoords++;
+    } else {
+      withoutCoords++;
+    }
+  }
+  console.log(`[Nearby] Venues with coords: ${withCoords}, without: ${withoutCoords}`);
+  console.log(`[Nearby] By country: ${JSON.stringify(countryStats)}`);
+
+  // Filter by coordinates and calculate distance
+  const validVenues: Array<{
+    id: string;
+    data: FirebaseFirestore.DocumentData;
+    distance_km: number;
+  }> = [];
+
+  // Infer country from center coordinates (rough approximation)
+  // Switzerland: 45.8-47.8 lat, 5.9-10.5 lng
+  // Austria: 46.4-49.0 lat, 9.5-17.2 lng
+  // Germany: 47.3-55.0 lat, 5.9-15.0 lng
+  let inferredCountry: string | null = null;
+  if (center.latitude >= 45.8 && center.latitude <= 47.8 &&
+      center.longitude >= 5.9 && center.longitude <= 10.5) {
+    inferredCountry = 'CH';
+  } else if (center.latitude >= 46.4 && center.latitude <= 49.0 &&
+             center.longitude >= 9.5 && center.longitude <= 17.2) {
+    inferredCountry = 'AT';
+  } else if (center.latitude >= 47.3 && center.latitude <= 55.0 &&
+             center.longitude >= 5.9 && center.longitude <= 15.0) {
+    inferredCountry = 'DE';
+  }
+  console.log(`[Nearby] Inferred country from coordinates: ${inferredCountry || 'unknown'}`);
+
+  // Calculate bounding box for quick pre-filtering
+  const latDelta = radiusKm / 111.32;
+  const lngDelta = radiusKm / (111.32 * Math.cos((center.latitude * Math.PI) / 180));
+  const minLat = center.latitude - latDelta;
+  const maxLat = center.latitude + latDelta;
+  const minLng = center.longitude - lngDelta;
+  const maxLng = center.longitude + lngDelta;
+
+  // First pass: venues WITH coordinates (geo-based filtering)
+  for (const doc of snapshot.docs) {
+    const data = doc.data();
+    const coords = data.coordinates;
+
+    // Skip if no valid coordinates
+    if (!coords?.latitude || !coords?.longitude) {
+      continue;
+    }
+
+    const lat = coords.latitude;
+    const lng = coords.longitude;
+
+    // Bounding box filter
+    if (lat < minLat || lat > maxLat || lng < minLng || lng > maxLng) {
+      continue;
+    }
+
+    // Calculate actual distance
+    const distance = calculateDistance(center, { latitude: lat, longitude: lng });
+
+    if (distance <= radiusKm) {
+      validVenues.push({ id: doc.id, data, distance_km: distance });
+    }
+  }
+
+  console.log(`[Nearby] ${validVenues.length} venues with geo-matching`);
+
+  // FALLBACK: If no geo-matching venues found and we have a country, filter by country
+  if (validVenues.length === 0 && inferredCountry) {
+    console.log(`[Nearby] No geo results, falling back to country filter: ${inferredCountry}`);
+    let countryCount = 0;
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      if (data.address?.country === inferredCountry) {
+        // Assign a fake distance based on order (since we don't have coordinates)
+        validVenues.push({ id: doc.id, data, distance_km: 10 + countryCount * 0.1 });
+        countryCount++;
+        if (countryCount >= limit) break;
+      }
+    }
+    console.log(`[Nearby] Found ${countryCount} venues in ${inferredCountry} (country fallback)`);
+  }
+
+  // Sort by distance and limit
+  validVenues.sort((a, b) => a.distance_km - b.distance_km);
+  const results = validVenues.slice(0, limit);
+
+  // Convert to expected format
+  return results.map(({ id, data: dv, distance_km }) => {
+    // Convert discovered venue to Venue format
+    // Use 0,0 as fallback if venue has no coordinates (country fallback case - locator won't show on map)
+    const venue: Venue & { distance_km: number } = {
+      id,
+      type: 'restaurant', // Default type
+      name: dv.name || 'Unknown',
+      chain_id: dv.chain_id,
+      location: {
+        latitude: dv.coordinates?.latitude ?? 0,
+        longitude: dv.coordinates?.longitude ?? 0,
+      },
+      address: {
+        street: dv.address?.street || '',
+        city: dv.address?.city || '',
+        postal_code: dv.address?.postal_code || '',
+        country: dv.address?.country || '',
+      },
+      opening_hours: undefined, // Discovered venues don't have opening hours
+      contact: {},
+      delivery_platforms: (dv.delivery_platforms || []).map((dp: any) => ({
+        partner: dp.platform,
+        platform: dp.platform,
+        url: dp.url,
+        active: true,
+      })),
+      source: {
+        type: 'discovery_agent',
+        discovery_date: dv.created_at?.toDate?.()?.toISOString?.() || new Date().toISOString(),
+      },
+      last_verified: dv.created_at?.toDate?.() || new Date(),
+      status: 'active',
+      created_at: dv.created_at?.toDate?.() || new Date(),
+      updated_at: dv.updated_at?.toDate?.() || new Date(),
+      distance_km,
+    };
+
+    // Convert embedded dishes to Dish format
+    const convertedDishes: Dish[] = (dv.dishes || []).map((d: any, idx: number) => ({
+      id: `${id}-dish-${idx}`,
+      venue_id: id,
+      name: d.name || 'Unknown Dish',
+      description: d.description || '',
+      planted_products: d.planted_products || [],
+      price: {
+        amount: typeof d.price === 'number' ? d.price :
+                typeof d.price === 'string' ? parseFloat(d.price) || 0 :
+                d.price?.amount || 0,
+        currency: d.price?.currency || 'CHF',
+      },
+      dietary_tags: [],
+      availability: { type: 'permanent' as const },
+      source: { type: 'discovered' as const },
+      last_verified: dv.created_at?.toDate?.() || new Date(),
+      status: 'active',
+      created_at: dv.created_at?.toDate?.() || new Date(),
+      updated_at: dv.updated_at?.toDate?.() || new Date(),
+    }));
+
+    return { venue, dishes: convertedDishes };
+  });
+}
+
 const functionOptions: HttpsOptions = {
   region: 'europe-west6',
   cors: true,
@@ -225,33 +434,21 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
       return;
     }
 
-    // Query nearby venues
-    const nearbyVenues = await venues.queryNearby({
-      center,
-      radiusKm: params.radius_km,
-      type: params.type === 'all' ? undefined : (params.type as 'retail' | 'restaurant' | 'delivery_kitchen' | undefined),
-      status: 'active',
-      limit: params.limit + 10, // Fetch extra for filtering
-    });
-
-    // Batch fetch dishes for all venues (much more efficient than N+1 queries)
-    const venueIds = nearbyVenues.map(v => v.id);
-    const dishesMap = await dishes.getByVenues(venueIds);
-
     // Build results - if deduping chains, track which chain_ids we've seen
     const results: NearbyResult[] = [];
     const seenChainIds = new Set<string>();
 
-    for (const venue of nearbyVenues) {
-      const is_open = isVenueOpen(venue.opening_hours);
+    // PRIMARY SOURCE: Query discovered_venues (most complete data)
+    console.log('[Nearby] Querying discovered_venues as primary source...');
+    const discoveredResults = await queryDiscoveredVenuesNearby(
+      center,
+      params.radius_km,
+      params.type === 'all' ? undefined : params.type,
+      params.limit + 10
+    );
 
-      // Skip closed venues if open_now filter is set
-      if (params.open_now && !is_open) {
-        continue;
-      }
-
-      // Chain deduplication: skip if we already have a venue from this chain
-      // (venues are sorted by distance, so we keep the closest)
+    for (const { venue, dishes: venueDishes } of discoveredResults) {
+      // Chain deduplication
       if (params.dedupe_chains && venue.chain_id) {
         if (seenChainIds.has(venue.chain_id)) {
           continue;
@@ -259,35 +456,96 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
         seenChainIds.add(venue.chain_id);
       }
 
-      // Get dishes for this venue from the batch result
-      let venueDishes = dishesMap.get(venue.id) || [];
-
       // Filter by product SKU if specified
+      let filteredDishes = venueDishes;
       if (params.product_sku) {
-        venueDishes = venueDishes.filter((dish) =>
+        filteredDishes = venueDishes.filter((dish) =>
           dish.planted_products.includes(params.product_sku!)
         );
-        // Skip venues with no matching dishes
-        if (venueDishes.length === 0) {
+        if (filteredDishes.length === 0) {
           continue;
         }
       }
 
-      const next_open = is_open ? null : getNextOpeningTime(venue.opening_hours);
-
       results.push({
-        venue: venue as Venue & { distance_km: number },
-        dishes: venueDishes,
-        is_open,
-        next_open: next_open ? next_open.toISOString() : null,
-        today_hours: getTodayHoursString(venue.opening_hours),
+        venue,
+        dishes: filteredDishes,
+        is_open: true, // Assume open for discovered venues (no hours data)
+        next_open: null,
+        today_hours: '',
       });
 
-      // Stop if we have enough results
       if (results.length >= params.limit) {
         break;
       }
     }
+    console.log(`[Nearby] Found ${results.length} venues from discovered_venues`);
+
+    // SECONDARY: Also check production venues collection for additional results
+    if (results.length < params.limit) {
+      const nearbyVenues = await venues.queryNearby({
+        center,
+        radiusKm: params.radius_km,
+        type: params.type === 'all' ? undefined : (params.type as 'retail' | 'restaurant' | 'delivery_kitchen' | undefined),
+        status: 'active',
+        limit: params.limit - results.length + 5,
+      });
+
+      if (nearbyVenues.length > 0) {
+        // Batch fetch dishes for production venues
+        const venueIds = nearbyVenues.map(v => v.id);
+        const dishesMap = await dishes.getByVenues(venueIds);
+
+        for (const venue of nearbyVenues) {
+          // Skip if already in results (by chain or name match)
+          if (params.dedupe_chains && venue.chain_id) {
+            if (seenChainIds.has(venue.chain_id)) {
+              continue;
+            }
+            seenChainIds.add(venue.chain_id);
+          }
+
+          const is_open = isVenueOpen(venue.opening_hours);
+
+          // Skip closed venues if open_now filter is set
+          if (params.open_now && !is_open) {
+            continue;
+          }
+
+          let venueDishes = dishesMap.get(venue.id) || [];
+
+          if (params.product_sku) {
+            venueDishes = venueDishes.filter((dish) =>
+              dish.planted_products.includes(params.product_sku!)
+            );
+            if (venueDishes.length === 0) {
+              continue;
+            }
+          }
+
+          const next_open = is_open ? null : getNextOpeningTime(venue.opening_hours);
+
+          results.push({
+            venue: venue as Venue & { distance_km: number },
+            dishes: venueDishes,
+            is_open,
+            next_open: next_open ? next_open.toISOString() : null,
+            today_hours: getTodayHoursString(venue.opening_hours),
+          });
+
+          if (results.length >= params.limit) {
+            break;
+          }
+        }
+      }
+    }
+
+    // Sort final results by distance
+    results.sort((a, b) => (a.venue.distance_km || 0) - (b.venue.distance_km || 0));
+
+    // Calculate has_more: true if we had more candidates than results returned
+    const totalCandidates = discoveredResults.length;
+    const hasMore = totalCandidates > results.length;
 
     // Set cache headers for CDN
     res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
@@ -308,13 +566,13 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
       response = {
         results: slimResults,
         total: slimResults.length,
-        has_more: nearbyVenues.length > results.length,
+        has_more: hasMore,
       };
     } else {
       response = {
         results,
         total: results.length,
-        has_more: nearbyVenues.length > results.length,
+        has_more: hasMore,
       };
     }
 
