@@ -77,24 +77,8 @@ const { translations } = Astro.props;
 </div>
 
 <script>
-  // Detail Panel Controller
+  // Detail Panel Controller - Plain JavaScript (no TypeScript syntax allowed in inline scripts)
   class V3DetailPanel {
-    private overlay: HTMLElement | null;
-    private panel: HTMLElement | null;
-    private closeBtn: HTMLElement | null;
-    private nameEl: HTMLElement | null;
-    private typeEl: HTMLElement | null;
-    private distanceEl: HTMLElement | null;
-    private logoEl: HTMLElement | null;
-    private logoTextEl: HTMLElement | null;
-    private dishCountEl: HTMLElement | null;
-    private productsEl: HTMLElement | null;
-    private dishesEl: HTMLElement | null;
-    private taglineCountEl: HTMLElement | null;
-    private routeButtonEl: HTMLElement | null;
-    private orderButtonEl: HTMLElement | null;
-    private currentVenue: any = null;
-
     constructor() {
       this.overlay = document.getElementById('v3DetailOverlay');
       this.panel = document.getElementById('v3DetailPanel');
@@ -110,29 +94,36 @@ const { translations } = Astro.props;
       this.taglineCountEl = document.getElementById('v3TaglineCount');
       this.routeButtonEl = document.getElementById('v3RouteButton');
       this.orderButtonEl = document.getElementById('v3OrderButton');
+      this.currentVenue = null;
 
       this.init();
     }
 
-    private init() {
+    init() {
       // Close button
-      this.closeBtn?.addEventListener('click', () => this.hide());
+      if (this.closeBtn) {
+        this.closeBtn.addEventListener('click', () => this.hide());
+      }
 
       // Click outside to close
-      this.overlay?.addEventListener('click', (e) => {
-        if (e.target === this.overlay) this.hide();
-      });
+      if (this.overlay) {
+        this.overlay.addEventListener('click', (e) => {
+          if (e.target === this.overlay) this.hide();
+        });
+      }
 
       // ESC key to close
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.overlay?.classList.contains('active')) {
+        if (e.key === 'Escape' && this.overlay && this.overlay.classList.contains('active')) {
           this.hide();
         }
       });
 
       // Listen for venue card clicks
       document.addEventListener('click', (e) => {
-        const card = (e.target as HTMLElement).closest('.v3-venue-card');
+        const target = e.target;
+        if (!target || typeof target.closest !== 'function') return;
+        const card = target.closest('.v3-venue-card');
         if (card) {
           const venueId = card.getAttribute('data-venue-id');
           if (venueId) {
@@ -142,7 +133,7 @@ const { translations } = Astro.props;
       });
     }
 
-    private generateLogoInitials(name: string): string {
+    generateLogoInitials(name) {
       // Extract first letter of each word, max 3 letters
       const words = name.split(/[\s&-]+/).filter(w => w.length > 0);
       if (words.length === 0) return '?';
@@ -156,16 +147,16 @@ const { translations } = Astro.props;
       return initials || '?';
     }
 
-    public showVenueById(venueId: string) {
+    showVenueById(venueId) {
       // Get venue data from the global venues array
-      const venues = (window as any).__v3Venues || [];
-      const venue = venues.find((v: any) => v.id === venueId);
+      const venues = window.__v3Venues || [];
+      const venue = venues.find(v => v.id === venueId);
       if (venue) {
         this.show(venue);
       }
     }
 
-    public show(venue: any) {
+    show(venue) {
       this.currentVenue = venue;
 
       // Update name
@@ -194,7 +185,7 @@ const { translations } = Astro.props;
       }
 
       // Update dish count
-      const dishCount = venue.dishes?.length || 0;
+      const dishCount = venue.dishes ? venue.dishes.length : 0;
       if (this.dishCountEl) {
         this.dishCountEl.textContent = dishCount.toString();
       }
@@ -207,7 +198,7 @@ const { translations } = Astro.props;
       // Update products with dot icon
       if (this.productsEl) {
         const dotIconSvg = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>';
-        this.productsEl.innerHTML = (venue.products || []).map((p: string) =>
+        this.productsEl.innerHTML = (venue.products || []).map(p =>
           `<span class="panel-product-tag">${dotIconSvg}${p}</span>`
         ).join('');
       }
@@ -220,7 +211,7 @@ const { translations } = Astro.props;
           <path d="M21 15l-5-5L5 21"/>
         </svg>`;
 
-        this.dishesEl.innerHTML = (venue.dishes || []).map((dish: any) => {
+        this.dishesEl.innerHTML = (venue.dishes || []).map(dish => {
           const ingredients = dish.ingredients || dish.description || '';
 
           return `
@@ -243,24 +234,24 @@ const { translations } = Astro.props;
 
       // Update footer buttons
       if (this.routeButtonEl && venue.mapsUrl) {
-        (this.routeButtonEl as HTMLAnchorElement).href = venue.mapsUrl;
+        this.routeButtonEl.href = venue.mapsUrl;
       }
       if (this.orderButtonEl && venue.orderUrl) {
-        (this.orderButtonEl as HTMLAnchorElement).href = venue.orderUrl;
+        this.orderButtonEl.href = venue.orderUrl;
       }
 
       // Show panel
-      this.overlay?.classList.add('active');
-      this.panel?.classList.add('active');
+      if (this.overlay) this.overlay.classList.add('active');
+      if (this.panel) this.panel.classList.add('active');
       document.body.style.overflow = 'hidden';
 
       // Focus management for accessibility
-      this.closeBtn?.focus();
+      if (this.closeBtn) this.closeBtn.focus();
     }
 
-    public hide() {
-      this.overlay?.classList.remove('active');
-      this.panel?.classList.remove('active');
+    hide() {
+      if (this.overlay) this.overlay.classList.remove('active');
+      if (this.panel) this.panel.classList.remove('active');
       document.body.style.overflow = '';
       this.currentVenue = null;
     }
@@ -268,13 +259,13 @@ const { translations } = Astro.props;
 
   // Initialize panel controller
   document.addEventListener('DOMContentLoaded', () => {
-    (window as any).__v3DetailPanel = new V3DetailPanel();
+    window.__v3DetailPanel = new V3DetailPanel();
   });
 
   // Also initialize on astro:page-load for client-side navigation
   document.addEventListener('astro:page-load', () => {
-    if (!(window as any).__v3DetailPanel) {
-      (window as any).__v3DetailPanel = new V3DetailPanel();
+    if (!window.__v3DetailPanel) {
+      window.__v3DetailPanel = new V3DetailPanel();
     }
   });
 </script>
