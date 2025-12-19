@@ -73,7 +73,40 @@ Track data quality improvements in `attackZeroProgress.md`. This file logs:
 - Bug fixes and their task IDs (T001, T002, etc.)
 - Session logs with timestamps
 
+## Skills Reference
+
+### commit-deploy
+
+Use the `commit-deploy` skill for deploying to GitHub Pages and Firebase. This skill implements a 6-phase workflow:
+
+1. **Pre-commit verification** - Build checks, TypeScript, secrets detection
+2. **Commit creation** - Semantic commit messages with HEREDOC format
+3. **Push to remote** - Git push to main
+4. **GitHub Actions monitoring** - `gh run watch --exit-status`
+5. **Deployment verification** - HTTP health checks
+6. **Post-deploy verification** - Console/network error checks via MCP
+
+See `.claude/skills/commit-deploy/SKILL.md` for full documentation.
+
+### website-review
+
+Use for QA reviews of Planted web properties. Requires Chrome debug mode running.
+
+See `.claude/skills/website-review/SKILL.md` for full documentation.
+
 ## Common Tasks
+
+### Deploy to GitHub Pages
+```bash
+# Commits to main trigger automatic deployment
+git push origin main
+
+# Monitor deployment
+gh run watch --exit-status
+
+# Verify deployment
+curl -I https://cjplanted.github.io/planted-homepage-cleanup/ch-de/
+```
 
 ### Deploy Firebase Functions
 ```bash
