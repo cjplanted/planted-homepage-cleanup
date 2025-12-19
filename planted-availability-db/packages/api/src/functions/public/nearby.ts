@@ -227,23 +227,6 @@ async function queryDiscoveredVenuesNearby(
     distance_km: number;
   }> = [];
 
-  // Infer country from center coordinates (rough approximation)
-  // Switzerland: 45.8-47.8 lat, 5.9-10.5 lng
-  // Austria: 46.4-49.0 lat, 9.5-17.2 lng
-  // Germany: 47.3-55.0 lat, 5.9-15.0 lng
-  let inferredCountry: string | null = null;
-  if (center.latitude >= 45.8 && center.latitude <= 47.8 &&
-      center.longitude >= 5.9 && center.longitude <= 10.5) {
-    inferredCountry = 'CH';
-  } else if (center.latitude >= 46.4 && center.latitude <= 49.0 &&
-             center.longitude >= 9.5 && center.longitude <= 17.2) {
-    inferredCountry = 'AT';
-  } else if (center.latitude >= 47.3 && center.latitude <= 55.0 &&
-             center.longitude >= 5.9 && center.longitude <= 15.0) {
-    inferredCountry = 'DE';
-  }
-  console.log(`[Nearby] Inferred country from coordinates: ${inferredCountry || 'unknown'}`);
-
   // Calculate bounding box for quick pre-filtering
   const latDelta = radiusKm / 111.32;
   const lngDelta = radiusKm / (111.32 * Math.cos((center.latitude * Math.PI) / 180));
@@ -257,8 +240,10 @@ async function queryDiscoveredVenuesNearby(
     const data = doc.data();
     const coords = data.coordinates;
 
-    // Skip if no valid coordinates
-    if (!coords?.latitude || !coords?.longitude) {
+    // Skip if no valid coordinates or if coordinates are 0,0 (invalid/placeholder)
+    if (!coords?.latitude || !coords?.longitude ||
+        (coords.latitude === 0 && coords.longitude === 0)) {
+      console.warn(`[Nearby] Skipping venue ${doc.id} - invalid coordinates`);
       continue;
     }
 
@@ -280,20 +265,9 @@ async function queryDiscoveredVenuesNearby(
 
   console.log(`[Nearby] ${validVenues.length} venues with geo-matching`);
 
-  // FALLBACK: If no geo-matching venues found and we have a country, filter by country
-  if (validVenues.length === 0 && inferredCountry) {
-    console.log(`[Nearby] No geo results, falling back to country filter: ${inferredCountry}`);
-    let countryCount = 0;
-    for (const doc of snapshot.docs) {
-      const data = doc.data();
-      if (data.address?.country === inferredCountry) {
-        // Assign a fake distance based on order (since we don't have coordinates)
-        validVenues.push({ id: doc.id, data, distance_km: 10 + countryCount * 0.1 });
-        countryCount++;
-        if (countryCount >= limit) break;
-      }
-    }
-    console.log(`[Nearby] Found ${countryCount} venues in ${inferredCountry} (country fallback)`);
+  // If no venues found within radius, return empty results
+  if (validVenues.length === 0) {
+    console.log('[Nearby] No venues found within radius - returning empty results');
   }
 
   // Sort by distance and limit
@@ -303,15 +277,14 @@ async function queryDiscoveredVenuesNearby(
   // Convert to expected format
   return results.map(({ id, data: dv, distance_km }) => {
     // Convert discovered venue to Venue format
-    // Use 0,0 as fallback if venue has no coordinates (country fallback case - locator won't show on map)
     const venue: Venue & { distance_km: number } = {
       id,
       type: 'restaurant', // Default type
       name: dv.name || 'Unknown',
       chain_id: dv.chain_id,
       location: {
-        latitude: dv.coordinates?.latitude ?? 0,
-        longitude: dv.coordinates?.longitude ?? 0,
+        latitude: dv.coordinates.latitude,
+        longitude: dv.coordinates.longitude,
       },
       address: {
         street: dv.address?.street || '',
@@ -376,7 +349,7 @@ const functionOptions: HttpsOptions = {
  *
  * Query Parameters:
  * - lat, lng: Required coordinates
- * - radius_km: Search radius (default: 10, max: 50)
+ * - radius_km: Search radius (default: 5, max: 50)
  * - type: Filter by venue type (restaurant, retail, delivery_kitchen, all)
  * - limit: Max results (default: 20, max: 100)
  * - slim: Return reduced payload for faster locator display (default: false)

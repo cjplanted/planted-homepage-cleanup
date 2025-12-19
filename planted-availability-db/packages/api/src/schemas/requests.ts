@@ -73,7 +73,7 @@ export const nearbyQuerySchema = z
     radius_km: z
       .string()
       .optional()
-      .transform((v) => (v ? Math.min(parseFloat(v), 50) : 10))
+      .transform((v) => (v ? Math.min(parseFloat(v), 50) : 5))
       .refine((v) => !isNaN(v) && v > 0, 'Radius must be a positive number'),
     type: z.enum(['retail', 'restaurant', 'delivery_kitchen', 'all']).optional().default('all'),
     open_now: z
