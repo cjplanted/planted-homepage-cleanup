@@ -9,6 +9,7 @@ import LocatorResultsV3 from '../../components/locator/LocatorResultsV3.astro';
 import { allLocales, type LocaleCode } from '../../i18n/config';
 import { getTranslations } from '../../i18n/index';
 import type { VenueV3 } from '../../components/locator/VenueCardV3.astro';
+import { lookupPostalCode } from '../../data/postal-codes';
 
 export async function getStaticPaths() {
   return allLocales.map((locale) => ({
@@ -437,42 +438,19 @@ const initialVenues: VenueV3[] = [];
     `;
   }
 
-  // Known ZIP coordinates fallback (for direct page access)
-  const knownZipCoords: Record<string, { lat: number; lng: number }> = {
-    // Switzerland
-    '8000': { lat: 47.3769, lng: 8.5417 },
-    '8001': { lat: 47.3686, lng: 8.5391 },
-    '8004': { lat: 47.3776, lng: 8.5244 },
-    '8005': { lat: 47.3904, lng: 8.5182 },
-    '8008': { lat: 47.3531, lng: 8.5570 },
-    '8048': { lat: 47.3842, lng: 8.4831 },
-    '8304': { lat: 47.4150, lng: 8.5950 },
-    '6000': { lat: 47.0502, lng: 8.3093 },
-    '3000': { lat: 46.9480, lng: 7.4474 },
-    '4000': { lat: 47.5596, lng: 7.5886 },
-    '1000': { lat: 46.5197, lng: 6.6323 },
-    '1200': { lat: 46.2044, lng: 6.1432 },
-    // Germany
-    '10115': { lat: 52.5200, lng: 13.4050 },
-    '10117': { lat: 52.5170, lng: 13.3889 },
-    '80331': { lat: 48.1351, lng: 11.5820 },
-    '80335': { lat: 48.1392, lng: 11.5651 },
-    '20095': { lat: 53.5511, lng: 9.9937 },
-    '50667': { lat: 50.9375, lng: 6.9603 },
-    '60311': { lat: 50.1109, lng: 8.6821 },
-    // Austria
-    '1010': { lat: 48.2082, lng: 16.3738 },
-    '1020': { lat: 48.2167, lng: 16.4000 }
-  };
-
-  // Geocode ZIP code using Nominatim API
+  // Geocode ZIP code using local database first, with Nominatim API as fallback
   async function geocodeZip(zip: string, countryCode: string): Promise<{ lat: number; lng: number } | null> {
-    // Check local lookup first
-    if (knownZipCoords[zip]) {
-      return knownZipCoords[zip];
+    // FIRST: Check local postal code database (fast, no API call)
+    const localData = lookupPostalCode(zip, countryCode as 'ch' | 'de' | 'at');
+    if (localData) {
+      console.log('[V3] Found ZIP in local database:', zip, localData);
+      return { lat: localData.lat, lng: localData.lng };
     }
 
-    // Country code to name mapping
+    // FALLBACK: Only use Nominatim if not in local DB (rare, for edge cases)
+    console.log('[V3] ZIP not in local DB, falling back to Nominatim:', zip);
+
+    // Country code to name mapping for Nominatim
     const countryNames: Record<string, string> = {
       'ch': 'Switzerland',
       'de': 'Germany',
@@ -571,6 +549,30 @@ const initialVenues: VenueV3[] = [];
       // Build API URL - geocode ZIP if coordinates missing
       let { lat, lng, apiBaseUrl, zip, countryCode } = config;
 
+      // T030: Update header location dynamically with correct country from URL params
+      const countryDisplayNames: Record<string, string> = {
+        'ch': 'Schweiz',
+        'de': 'Deutschland',
+        'at': 'Österreich',
+        'uk': 'United Kingdom',
+        'nl': 'Nederland',
+        'fr': 'France',
+        'it': 'Italia',
+        'es': 'España'
+      };
+      const countryDisplay = countryDisplayNames[countryCode] || countryCode.toUpperCase();
+      const headerLocation = document.querySelector('.v3-header-location');
+      if (headerLocation && zip) {
+        // Keep the icon, update the text
+        headerLocation.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          ${countryDisplay} · ${zip}
+        `;
+      }
+
       // If coordinates missing but ZIP present, geocode the ZIP
       if ((!lat || !lng) && zip) {
         console.log('[V3] Missing coordinates, geocoding ZIP:', zip);
@@ -587,7 +589,8 @@ const initialVenues: VenueV3[] = [];
       }
 
       // T028: Use slim=true for faster locator display (reduced payload ~18KB -> ~6KB)
-      const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=10&type=restaurant&limit=20&slim=true`;
+      // T029: Use 5km radius to match API default and ensure accurate distance filtering
+      const apiUrl = `${apiBaseUrl}/nearby?lat=${lat}&lng=${lng}&radius_km=5&type=restaurant&limit=20&slim=true`;
       console.log('[V3] Fetching venues from:', apiUrl);
 
       const response = await fetch(apiUrl);
