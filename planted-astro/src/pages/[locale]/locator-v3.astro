@@ -606,7 +606,7 @@ const initialVenues: VenueV3[] = [];
     cards.forEach(card => {
       card.addEventListener('click', (e) => {
         // Don't trigger on button click (let button handle it)
-        if ((e.target as HTMLElement).closest('.v3-view-details-btn')) return;
+        if (e.target.closest('.v3-view-details-btn')) return;
 
         const venueId = card.getAttribute('data-venue-id');
         if (venueId) {
@@ -665,7 +665,7 @@ const initialVenues: VenueV3[] = [];
       const cardHtml = renderVenueCard(venue, visibleCount + i, config.translations);
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = cardHtml.trim();
-      const card = tempDiv.firstElementChild as HTMLElement;
+      const card = tempDiv.firstElementChild;
 
       // Start hidden for animation
       card.style.opacity = '0';
@@ -779,7 +779,7 @@ const initialVenues: VenueV3[] = [];
       const cardHtml = renderVenueCard(venue, i, config.translations);
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = cardHtml.trim();
-      const card = tempDiv.firstElementChild as HTMLElement;
+      const card = tempDiv.firstElementChild;
       card.classList.remove('v3-card-hidden');
 
       // Animation delay for stagger effect
