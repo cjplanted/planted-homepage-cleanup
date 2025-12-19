@@ -2249,6 +2249,300 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             padding: 6rem 5rem;
         }
     }
+
+    /* ============================================
+       LARGE SCREEN: 1920px+ (27" displays)
+       ============================================ */
+    @media (min-width: 1920px) {
+        /* Hero Container Expansion */
+        .hero-container {
+            max-width: 1800px;
+        }
+
+        /* Hero Headline Scaling */
+        .hero-headline h1 {
+            font-size: clamp(4rem, 6vw, 140px);
+        }
+
+        /* Hero Subheadline Scaling */
+        .hero-subheadline {
+            font-size: clamp(1.1rem, 1.2vw, 1.5rem);
+            max-width: 600px;
+        }
+
+        /* Hero Grid Gap */
+        .hero-grid {
+            gap: clamp(3rem, 5vw, 8rem);
+        }
+
+        /* TV Frame Scale */
+        .tv-frame {
+            transform: rotate(-2deg) scale(1.1);
+        }
+
+        /* Badge Enhancement */
+        .beweisstueck-badge {
+            font-size: clamp(0.7rem, 0.8vw, 0.9rem);
+            padding: 0.5rem 1.25rem;
+        }
+
+        /* Hero Button Scaling */
+        .hero .btn {
+            padding: clamp(1rem, 1.2vw, 1.5rem) clamp(1.75rem, 2.5vw, 2.5rem);
+            font-size: clamp(1rem, 0.9vw, 1.15rem);
+        }
+
+        /* Products Section */
+        .products-scroll {
+            gap: clamp(24px, 2.5vw, 48px);
+        }
+
+        .product-card {
+            width: clamp(280px, 16vw, 380px);
+        }
+
+        .product-card-inner {
+            height: clamp(264px, 18vw, 360px);
+        }
+
+        .product-badge-new {
+            font-size: clamp(0.65rem, 0.6vw, 0.8rem);
+            padding: 0.4rem 0.85rem;
+        }
+
+        /* Impact Section */
+        .impact-stat-value,
+        .stat-value {
+            font-size: clamp(5rem, 10vw, 10rem);
+        }
+
+        .impact-stat-label,
+        .stat-label {
+            font-size: clamp(1rem, 1.1vw, 1.4rem);
+        }
+
+        .impact-tagline {
+            font-size: clamp(2rem, 4vw, 4.5rem);
+        }
+
+        .impact-stats {
+            gap: clamp(24px, 4vw, 80px);
+        }
+
+        .floating-cow {
+            width: clamp(120px, 10vw, 180px);
+        }
+
+        .floating-plant {
+            width: clamp(80px, 7vw, 120px);
+        }
+
+        /* Trust Stats Section */
+        .trust-stats-inner {
+            max-width: 1000px;
+            gap: 6rem;
+        }
+
+        .trust-stat-value {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+        }
+
+        .trust-stat-label {
+            font-size: clamp(1rem, 1vw, 1.25rem);
+        }
+
+        /* Statement Section */
+        .statement-inner {
+            max-width: 1000px;
+        }
+
+        .statement h2 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+        }
+
+        .statement p {
+            font-size: clamp(1.1rem, 1.2vw, 1.4rem);
+        }
+
+        /* Recipes Section */
+        .recipes-container {
+            max-width: 1800px;
+        }
+
+        .recipes-grid {
+            gap: clamp(1.5rem, 2vw, 3rem);
+        }
+
+        /* Business Section */
+        .business-card {
+            max-width: 1500px;
+        }
+
+        .business h2 {
+            font-size: clamp(2rem, 3.5vw, 3.5rem);
+        }
+
+        .business p {
+            font-size: clamp(1.1rem, 1.2vw, 1.4rem);
+        }
+
+        .business-stat-value {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        /* Ambassador Section */
+        .ambassador {
+            padding: 8rem 6rem;
+        }
+
+        .ambassador-card {
+            max-width: 1500px;
+        }
+    }
+
+    /* ============================================
+       EXTRA LARGE SCREEN: 2560px+ (2K/QHD displays)
+       ============================================ */
+    @media (min-width: 2560px) {
+        /* Hero Container Expansion */
+        .hero-container {
+            max-width: 2100px;
+        }
+
+        /* Hero Headline - Maximum Impact */
+        .hero-headline h1 {
+            font-size: clamp(5rem, 5vw, 180px);
+        }
+
+        /* Hero Subheadline */
+        .hero-subheadline {
+            font-size: clamp(1.3rem, 1vw, 1.75rem);
+            max-width: 700px;
+        }
+
+        /* Hero Grid Gap */
+        .hero-grid {
+            gap: clamp(4rem, 6vw, 10rem);
+        }
+
+        /* TV Frame Scale */
+        .tv-frame {
+            transform: rotate(-2deg) scale(1.2);
+        }
+
+        /* Hero Button Scaling */
+        .hero .btn {
+            padding: clamp(1.25rem, 1.5vw, 1.75rem) clamp(2rem, 3vw, 3rem);
+            font-size: clamp(1.1rem, 1vw, 1.3rem);
+        }
+
+        /* Products Section */
+        .products-scroll {
+            gap: clamp(32px, 2vw, 56px);
+        }
+
+        .product-card {
+            width: clamp(320px, 14vw, 420px);
+        }
+
+        .product-card-inner {
+            height: clamp(300px, 16vw, 420px);
+        }
+
+        /* Impact Section - Ultra Dramatic */
+        .impact-stat-value,
+        .stat-value {
+            font-size: clamp(7rem, 8vw, 14rem);
+        }
+
+        .impact-stat-label,
+        .stat-label {
+            font-size: clamp(1.2rem, 1vw, 1.6rem);
+        }
+
+        .impact-tagline {
+            font-size: clamp(3rem, 4vw, 6rem);
+        }
+
+        .impact-stats {
+            gap: clamp(48px, 5vw, 120px);
+        }
+
+        .floating-cow {
+            width: clamp(160px, 8vw, 240px);
+        }
+
+        .floating-plant {
+            width: clamp(100px, 6vw, 160px);
+        }
+
+        /* Trust Stats Section */
+        .trust-stats-inner {
+            max-width: 1200px;
+            gap: 8rem;
+        }
+
+        .trust-stat-value {
+            font-size: clamp(3rem, 4vw, 5rem);
+        }
+
+        .trust-stat-label {
+            font-size: clamp(1.1rem, 0.9vw, 1.4rem);
+        }
+
+        /* Statement Section */
+        .statement-inner {
+            max-width: 1200px;
+        }
+
+        .statement h2 {
+            font-size: clamp(3rem, 4vw, 5.5rem);
+        }
+
+        .statement p {
+            font-size: clamp(1.25rem, 1vw, 1.6rem);
+        }
+
+        /* Recipes Section - 5 Columns */
+        .recipes-container {
+            max-width: 2200px;
+        }
+
+        .recipes-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: clamp(2rem, 2vw, 3.5rem);
+        }
+
+        .recipe-info {
+            padding: clamp(1.25rem, 1.5vw, 1.75rem);
+        }
+
+        /* Business Section */
+        .business-card {
+            max-width: 1800px;
+        }
+
+        .business h2 {
+            font-size: clamp(2.5rem, 3vw, 4.5rem);
+        }
+
+        .business-stat-value {
+            font-size: clamp(3rem, 3.5vw, 5rem);
+        }
+
+        .business-stats {
+            gap: clamp(3rem, 4vw, 6rem);
+        }
+
+        /* Ambassador Section */
+        .ambassador {
+            padding: 10rem 8rem;
+        }
+
+        .ambassador-card {
+            max-width: 1800px;
+        }
+    }
 </style>
 
 <script>

@@ -44,6 +44,50 @@
 
     /* Touch Target Minimum (accessibility) */
     --touch-target: 44px;
+
+    /* ============================================
+       BREAKPOINT REFERENCE VARIABLES
+       ============================================ */
+    --bp-sm: 640px;    /* Mobile landscape / Small tablets */
+    --bp-md: 768px;    /* Tablets portrait */
+    --bp-lg: 1024px;   /* Tablets landscape / Small laptops */
+    --bp-xl: 1280px;   /* Standard laptops */
+    --bp-2xl: 1440px;  /* Large laptops / Standard desktops */
+    --bp-3xl: 1920px;  /* Full HD / 27" displays */
+    --bp-4xl: 2560px;  /* 2K / QHD displays */
+    --bp-5xl: 3840px;  /* 4K UHD displays */
+
+    /* ============================================
+       FLUID TYPOGRAPHY VARIABLES
+       ============================================ */
+    --font-hero: clamp(3rem, 5vw + 1.5rem, 8rem);
+    --font-h1: clamp(2.5rem, 4vw + 1rem, 6rem);
+    --font-h2: clamp(1.75rem, 3vw + 0.75rem, 4rem);
+    --font-h3: clamp(1.25rem, 2vw + 0.5rem, 2.5rem);
+    --font-body: clamp(1rem, 0.5vw + 0.875rem, 1.25rem);
+    --font-small: clamp(0.875rem, 0.3vw + 0.75rem, 1rem);
+    --font-micro: clamp(0.75rem, 0.2vw + 0.65rem, 0.875rem);
+
+    /* ============================================
+       FLUID SPACING VARIABLES
+       ============================================ */
+    --space-section: clamp(4rem, 6vw, 10rem);
+    --space-component: clamp(2rem, 3vw, 5rem);
+    --space-card-gap: clamp(1rem, 2vw, 2rem);
+    --space-content-padding: clamp(1.5rem, 5vw, 5rem);
+
+    /* ============================================
+       CONTAINER WIDTH VARIABLES
+       ============================================ */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+    --container-2xl: 1440px;
+    --container-3xl: 1800px;  /* For 1920px+ screens */
+    --container-4xl: 2100px;  /* For 2560px+ screens */
+    --container-5xl: 2400px;  /* For 3840px+ screens */
+    --container-fluid: min(90vw, 2200px);
 }
 
 /* ============================================
@@ -593,5 +637,160 @@ img {
 @media (min-width: 1440px) {
     .page-header {
         padding: 9rem 5rem 4rem;
+    }
+}
+
+/* ============================================
+   LARGE SCREEN: 1920px+ (27" displays)
+   ============================================ */
+@media (min-width: 1920px) {
+    /* Page header scaling */
+    .page-header {
+        padding: 10rem 6rem 5rem;
+    }
+
+    .page-header h1 {
+        font-size: clamp(4rem, 6vw, 7rem);
+    }
+
+    /* Enhanced reveal animations - larger travel distance */
+    .reveal {
+        transform: translateY(40px);
+        transition-duration: 0.9s;
+    }
+
+    .reveal-left {
+        transform: translateX(-40px);
+        transition-duration: 0.9s;
+    }
+
+    .reveal-right {
+        transform: translateX(40px);
+        transition-duration: 0.9s;
+    }
+
+    .reveal-scale {
+        transform: scale(0.92);
+        transition-duration: 0.9s;
+    }
+
+    .stagger-item {
+        transform: translateY(30px);
+        transition-duration: 0.7s;
+    }
+
+    /* Product card hover effect */
+    .product-card:hover {
+        transform: translateY(-6px);
+    }
+
+    /* Recipe card hover effect */
+    .recipe-card:hover {
+        transform: translateY(-8px);
+    }
+
+    /* Product name scaling */
+    .product-name {
+        font-size: clamp(1.3rem, 1.3vw, 1.6rem);
+    }
+
+    .product-variant {
+        font-size: clamp(1rem, 1vw, 1.2rem);
+    }
+
+    /* Recipe title scaling */
+    .recipe-title {
+        font-size: clamp(1.2rem, 1.2vw, 1.5rem);
+    }
+
+    .recipe-meta {
+        font-size: clamp(0.85rem, 0.9vw, 1rem);
+    }
+
+    .recipe-tag {
+        font-size: clamp(0.75rem, 0.7vw, 0.9rem);
+    }
+}
+
+/* ============================================
+   EXTRA LARGE SCREEN: 2560px+ (2K/QHD displays)
+   ============================================ */
+@media (min-width: 2560px) {
+    /* Page header scaling */
+    .page-header {
+        padding: 12rem 8rem 6rem;
+    }
+
+    .page-header h1 {
+        font-size: clamp(5rem, 5vw, 9rem);
+    }
+
+    /* Larger reveal travel distance */
+    .reveal {
+        transform: translateY(50px);
+        transition-duration: 1s;
+    }
+
+    .reveal-left {
+        transform: translateX(-50px);
+        transition-duration: 1s;
+    }
+
+    .reveal-right {
+        transform: translateX(50px);
+        transition-duration: 1s;
+    }
+
+    /* Product name scaling */
+    .product-name {
+        font-size: clamp(1.5rem, 1.2vw, 1.8rem);
+    }
+
+    /* Recipe title scaling */
+    .recipe-title {
+        font-size: clamp(1.35rem, 1.1vw, 1.75rem);
+    }
+
+    .recipe-meta {
+        font-size: clamp(0.9rem, 0.8vw, 1.1rem);
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY: REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale,
+    .stagger-item {
+        transform: none !important;
+        transition: opacity 0.01ms !important;
+    }
+
+    .product-card:hover,
+    .recipe-card:hover {
+        transform: none !important;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY: HIGH CONTRAST
+   ============================================ */
+@media (prefers-contrast: high) {
+    .product-card-inner,
+    .recipe-card {
+        border: 2px solid currentColor;
+    }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .reveal,
+    .reveal-left,
+    .reveal-right {
+        opacity: 1 !important;
     }
 }
