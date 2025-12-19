@@ -26,7 +26,8 @@
       "Bash(planted-availability-db/TECHNICAL-DOCUMENTATION.md )",
       "Bash(planted-availability-db/USER-GUIDE.md)",
       "Bash(cat:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(pnpm run dev)"
     ]
   }
 }
