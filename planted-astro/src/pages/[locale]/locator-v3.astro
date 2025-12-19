@@ -321,6 +321,7 @@ const initialVenues: VenueV3[] = [];
     return {
       id: venue.id,
       name: venue.name,
+      logoInitials: venue.name.split(/[\s&-]+/).map(w => w[0]).join('').toUpperCase().slice(0, 2),
       location: venue.address?.city || '',
       category,
       distance: distanceStr,
@@ -330,6 +331,7 @@ const initialVenues: VenueV3[] = [];
         name: d.name,
         price: d.price ? `${d.price.currency} ${d.price.amount.toFixed(2)}` : '',
         description: d.description,
+        ingredients: d.description || d.name,
         image: d.image_url,
         isVegan: d.dietary_tags?.includes('vegan'),
         plantedProduct: d.planted_products?.[0]
