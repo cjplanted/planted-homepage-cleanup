@@ -552,7 +552,7 @@ const initialVenues: VenueV3[] = [];
         throw new Error(`API error: ${response.status}`);
       }
 
-      const data: NearbyResponse = await response.json();
+      const data = await response.json();
       console.log('[V3] Received', data.total, 'venues');
 
       // Map to VenueV3 format
@@ -631,8 +631,8 @@ const initialVenues: VenueV3[] = [];
   // ========================================
   // STATE MANAGEMENT - Single source of truth
   // ========================================
-  let allVenues: VenueV3[] = [];
-  let filteredVenues: VenueV3[] = [];
+  let allVenues = [];
+  let filteredVenues = [];
   let visibleCount = 0;
   const BATCH_SIZE = 3;
   let currentFilter = 'all';
