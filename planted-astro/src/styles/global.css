@@ -159,13 +159,24 @@ h1, h2, h3, .display {
 }
 
 .btn-primary {
+    background: var(--planted-green);
+    color: var(--planted-purple);
+    box-shadow: 0 8px 24px rgba(139, 197, 63, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(139, 197, 63, 0.4);
+}
+
+/* Context-aware variant: Purple button for green backgrounds */
+.btn-primary--on-green {
     background: var(--planted-purple);
     color: white;
     box-shadow: 0 8px 24px rgba(97, 38, 158, 0.3);
 }
 
-.btn-primary:hover {
-    transform: translateY(-3px);
+.btn-primary--on-green:hover {
     box-shadow: 0 12px 32px rgba(97, 38, 158, 0.4);
 }
 

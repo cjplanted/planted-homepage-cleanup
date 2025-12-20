@@ -11,9 +11,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // This must happen BEFORE any ScrollTrigger instances are created
 gsap.registerPlugin(ScrollTrigger);
 
-// Verify plugin registration
-if (!gsap.registerEffect || !ScrollTrigger) {
+// Verify plugin registration - check for ScrollTrigger specifically
+if (!ScrollTrigger || typeof ScrollTrigger.create !== 'function') {
   console.error('GSAP ScrollTrigger plugin failed to register');
+} else {
+  console.log('ScrollTrigger plugin registered successfully');
 }
 
 // Lenis instance (exported for use in other modules)
@@ -24,6 +26,10 @@ let lenis: Lenis | null = null;
  * Connected to GSAP ScrollTrigger for scroll-driven animations
  */
 export function initSmoothScroll(): Lenis {
+  // CRITICAL: Re-register ScrollTrigger plugin to ensure it's available
+  // This guards against module loading race conditions
+  gsap.registerPlugin(ScrollTrigger);
+
   // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

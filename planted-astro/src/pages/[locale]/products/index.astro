@@ -69,7 +69,7 @@ const categories = [...new Set(products.map(p => p.data.category))];
         <div class="cta-content">
             <h2 class="reveal">{t.home.locator.title}</h2>
             <p class="reveal reveal-delay-1">{t.home.locator.subtitle}</p>
-            <a href={`${base}/${locale}#locator`} class="btn btn-primary reveal reveal-delay-2">
+            <a href={`${base}/${locale}#locator`} class="btn btn-primary btn-primary--on-green reveal reveal-delay-2">
                 {t.home.locator.button}
             </a>
         </div>
@@ -259,16 +259,6 @@ const categories = [...new Set(products.map(p => p.data.category))];
         transition: all 0.3s ease;
     }
 
-    .btn-primary {
-        background: var(--planted-purple);
-        color: white;
-        box-shadow: 0 6px 20px rgba(97,38,158,0.35);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(97,38,158,0.4);
-    }
 
     /* Animations */
     .reveal, .reveal-scale {

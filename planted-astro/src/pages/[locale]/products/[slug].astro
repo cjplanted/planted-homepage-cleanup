@@ -385,7 +385,7 @@ const breadcrumbJsonLd = {
     <section class="cta">
         <h2>{t.products.tryIt}</h2>
         <div class="cta-buttons">
-            <a href={`${base}/${locale}#locator`} class="btn btn-primary">{t.home.locator.button}</a>
+            <a href={`${base}/${locale}#locator`} class="btn btn-primary btn-primary--on-green">{t.home.locator.button}</a>
             <a href={`${base}/${locale}/products`} class="btn btn-secondary">{t.home.products.viewAll}</a>
         </div>
     </section>
@@ -919,8 +919,6 @@ const breadcrumbJsonLd = {
         transition: all 0.3s ease;
     }
 
-    .btn-primary { background: var(--purple); color: white; box-shadow: 0 6px 20px rgba(97,38,158,0.35); }
-    .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(97,38,158,0.4); }
     .btn-secondary { background: white; color: var(--purple); }
     .btn-secondary:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
 
