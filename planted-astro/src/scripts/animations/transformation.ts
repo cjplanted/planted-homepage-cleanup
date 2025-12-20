@@ -3,11 +3,9 @@
  * Scroll-driven reveals and effects for products and impact sections
  */
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../smooth-scroll';
 
-// Ensure ScrollTrigger is registered before any animations
-gsap.registerPlugin(ScrollTrigger);
+// ScrollTrigger is already registered in smooth-scroll.ts
 
 /**
  * Initialize products section scroll effects

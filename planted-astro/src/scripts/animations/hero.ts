@@ -3,11 +3,9 @@
  * Enhanced scroll-driven effects with brand-compliant motion
  */
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../smooth-scroll';
 
-// Ensure ScrollTrigger is registered before any animations
-gsap.registerPlugin(ScrollTrigger);
+// ScrollTrigger is already registered in smooth-scroll.ts
 
 /**
  * Initialize hero section animations

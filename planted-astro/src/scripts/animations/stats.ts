@@ -3,11 +3,9 @@
  * Enhanced counter animations with GSAP
  */
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap, ScrollTrigger } from '../smooth-scroll';
 
-// Ensure ScrollTrigger is registered before any animations
-gsap.registerPlugin(ScrollTrigger);
+// ScrollTrigger is already registered in smooth-scroll.ts
 
 /**
  * Animate a number counter from 0 to target value

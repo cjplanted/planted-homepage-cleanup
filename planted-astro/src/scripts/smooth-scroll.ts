@@ -4,8 +4,13 @@
  */
 
 import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap as gsapModule } from 'gsap';
+import { ScrollTrigger as ScrollTriggerModule } from 'gsap/ScrollTrigger';
+
+// CRITICAL: Use window.gsap if available (from CDN), otherwise use bundled version
+// This prevents dual-instance issues when both CDN and bundled GSAP exist
+const gsap = (typeof window !== 'undefined' && (window as any).gsap) || gsapModule;
+const ScrollTrigger = (typeof window !== 'undefined' && (window as any).ScrollTrigger) || ScrollTriggerModule;
 
 // CRITICAL: Register GSAP plugins immediately at module load
 // This must happen BEFORE any ScrollTrigger instances are created
@@ -15,7 +20,7 @@ gsap.registerPlugin(ScrollTrigger);
 if (!ScrollTrigger || typeof ScrollTrigger.create !== 'function') {
   console.error('GSAP ScrollTrigger plugin failed to register');
 } else {
-  console.log('ScrollTrigger plugin registered successfully');
+  console.log('ScrollTrigger plugin registered successfully (source: ' + ((window as any).gsap ? 'CDN' : 'bundled') + ')');
 }
 
 // Lenis instance (exported for use in other modules)

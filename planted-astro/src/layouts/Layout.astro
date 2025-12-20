@@ -293,13 +293,7 @@ const schemaOrg = {
 
     <!-- Smooth Scroll with GSAP + Lenis -->
     <script>
-        import { gsap } from 'gsap';
-        import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-        // Register ScrollTrigger FIRST before any other imports
-        gsap.registerPlugin(ScrollTrigger);
-
-        import { initSmoothScroll, destroySmoothScroll } from '../scripts/smooth-scroll';
+        import { gsap, ScrollTrigger, initSmoothScroll, destroySmoothScroll } from '../scripts/smooth-scroll';
         import { initHeroAnimations } from '../scripts/animations/hero';
         import { initTransformationAnimations } from '../scripts/animations/transformation';
         import { initStatsAnimations } from '../scripts/animations/stats';
