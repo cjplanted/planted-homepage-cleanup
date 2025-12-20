@@ -1,6 +1,6 @@
 import { onRequest, HttpsOptions } from 'firebase-functions/v2/https';
 import type { Request, Response } from 'express';
-import { initializeFirestore, venues, dishes, discoveredVenues } from '@pad/database';
+import { initializeFirestore, venues, dishes, discoveredVenues, chains } from '@pad/database';
 import { isVenueOpen, getNextOpeningTime, getTodayHoursString } from '@pad/core';
 import type { Venue, Dish, GeoPoint } from '@pad/core';
 import { publicRateLimit } from '../../middleware/withRateLimit.js';
@@ -86,6 +86,7 @@ interface SlimVenue {
   name: string;
   type: string;
   chain_id?: string;
+  chain_logo?: string;
   location: { latitude: number; longitude: number };
   address: { city: string; country: string };
   delivery_platforms?: Array<{ platform: string; url: string; active?: boolean }>;
@@ -119,12 +120,13 @@ interface SlimNearbyResponse {
 /**
  * Convert full venue to slim venue (only fields needed for display)
  */
-function toSlimVenue(venue: Venue & { distance_km: number }): SlimVenue {
+function toSlimVenue(venue: Venue & { distance_km: number }, chainLogo?: string): SlimVenue {
   return {
     id: venue.id,
     name: venue.name,
     type: venue.type,
     chain_id: venue.chain_id,
+    chain_logo: chainLogo,
     location: venue.location,
     address: {
       city: venue.address?.city || '',
@@ -528,13 +530,33 @@ export const nearbyHandler = onRequest(functionOptions, publicRateLimit(async (r
     let response: NearbyResponse | SlimNearbyResponse;
 
     if (slimMode) {
+      // T034: Batch-fetch chain logos for venues with chain_ids
+      const chainIds = [...new Set(
+        results
+          .map(r => r.venue.chain_id)
+          .filter((id): id is string => !!id)
+      )];
+
+      const chainLogosMap = new Map<string, string>();
+      if (chainIds.length > 0) {
+        const chainDocs = await chains.getByIds(chainIds);
+        for (const chain of chainDocs) {
+          if (chain.logo_url) {
+            chainLogosMap.set(chain.id, chain.logo_url);
+          }
+        }
+      }
+
       // Convert to slim response format (reduced payload size)
-      const slimResults: SlimNearbyResult[] = results.map(r => ({
-        venue: toSlimVenue(r.venue),
-        dishes: r.dishes.map(toSlimDish),
-        is_open: r.is_open,
-        today_hours: r.today_hours,
-      }));
+      const slimResults: SlimNearbyResult[] = results.map(r => {
+        const chainLogo = r.venue.chain_id ? chainLogosMap.get(r.venue.chain_id) : undefined;
+        return {
+          venue: toSlimVenue(r.venue, chainLogo),
+          dishes: r.dishes.map(toSlimDish),
+          is_open: r.is_open,
+          today_hours: r.today_hours,
+        };
+      });
 
       response = {
         results: slimResults,

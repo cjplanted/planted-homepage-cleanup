@@ -322,6 +322,7 @@ const initialVenues: VenueV3[] = [];
       id: venue.id,
       name: venue.name,
       logoInitials: venue.name.split(/[\s&-]+/).map(w => w[0]).join('').toUpperCase().slice(0, 2),
+      chain_logo: venue.chain_logo,
       location: venue.address?.city || '',
       category,
       distance: distanceStr,

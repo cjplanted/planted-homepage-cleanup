@@ -174,10 +174,12 @@ const { translations } = Astro.props;
         this.distanceEl.textContent = venue.distance || '';
       }
 
-      // Update logo - show image or initials
+      // Update logo - show chain logo, venue logo, or initials
       if (this.logoEl && this.logoTextEl) {
-        if (venue.logo) {
-          this.logoEl.innerHTML = `<img src="${venue.logo}" alt="${venue.name}" loading="lazy">`;
+        // T034: Check for chain_logo first, then venue logo, then fall back to initials
+        const logoUrl = venue.chain_logo || venue.logo;
+        if (logoUrl) {
+          this.logoEl.innerHTML = `<img src="${logoUrl}" alt="${venue.name}" loading="lazy">`;
         } else {
           const initials = this.generateLogoInitials(venue.name);
           this.logoTextEl.textContent = initials;

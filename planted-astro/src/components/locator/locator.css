@@ -1417,6 +1417,7 @@ body.locator-results-active {
 /* Panel Header with Restaurant Branding */
 .panel-header {
   position: relative;
+  z-index: 10;
   background: linear-gradient(135deg, var(--locator-v3-purple) 0%, var(--locator-v3-purple-dark) 100%);
   padding: 20px 20px 24px;
   color: white;
@@ -1628,7 +1629,8 @@ body.locator-results-active {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--locator-cream-dark);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  will-change: transform;
 }
 
 .dish-item:last-child {
@@ -1638,14 +1640,13 @@ body.locator-results-active {
 
 .dish-item:hover {
   background: var(--locator-cream);
-  margin: -8px;
-  padding: 8px;
-  padding-bottom: 24px;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   border-radius: 8px;
 }
 
 .dish-item:last-child:hover {
-  padding-bottom: 8px;
+  /* No special override needed with transform approach */
 }
 
 .dish-content {

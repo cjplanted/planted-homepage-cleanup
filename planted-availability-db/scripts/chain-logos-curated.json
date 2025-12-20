@@ -1,0 +1,107 @@
+[
+  {
+    "id": "dean-david",
+    "name": "dean&david",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Dean_%26_david.svg/2560px-Dean_%26_david.svg.png",
+    "source": "Wikimedia Commons",
+    "notes": "Official dean&david logo in SVG format from Wikimedia Commons"
+  },
+  {
+    "id": "hiltl",
+    "name": "Hiltl",
+    "logo_url": "/images/partners/hiltl.svg",
+    "source": "Already in system",
+    "notes": "Already has logo configured"
+  },
+  {
+    "id": "RinkvVQc9uTH7z71ga88",
+    "name": "Rice Up",
+    "logo_url": "https://rice-up.zone/cdn/shop/files/Rice-Up-Logo_WEB_510x.png",
+    "source": "rice-up.zone official website",
+    "notes": "Rice Up brand official logo"
+  },
+  {
+    "id": "brezelkoenig",
+    "name": "Brezelkönig",
+    "logo_url": "https://plantedstatic.blob.core.windows.net/logos/brezelkoenig.png",
+    "source": "Already in system",
+    "notes": "Already has logo configured"
+  },
+  {
+    "id": "eGzo3JAtHboO70CP6XPP",
+    "name": "Birdie Birdie",
+    "logo_url": "",
+    "source": "Not found",
+    "notes": "Could not find this specific chain - may be regional or different name"
+  },
+  {
+    "id": "PLQR8WlX4EOtXWr4D19Y",
+    "name": "Beets & Roots",
+    "logo_url": "https://www.beetsandroots.de/wp-content/themes/beets-and-roots/build/images/logo.svg",
+    "source": "beetsandroots.de official website",
+    "notes": "Official Beets & Roots logo from their website"
+  },
+  {
+    "id": "neni-restaurants",
+    "name": "NENI Restaurants",
+    "logo_url": "https://nenifood.com/application/resources/img/logo.svg",
+    "source": "nenifood.com official website",
+    "notes": "Official NENI logo"
+  },
+  {
+    "id": "jVOUCQmXfKhVsN8UiOHN",
+    "name": "vapiano",
+    "logo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Vapiano_logo.svg/2560px-Vapiano_logo.svg.png",
+    "source": "Wikimedia Commons",
+    "notes": "Official Vapiano logo in SVG format from Wikimedia Commons"
+  },
+  {
+    "id": "barburrito",
+    "name": "Barburrito",
+    "logo_url": "https://www.barburrito.co.uk/wp-content/themes/barburrito/assets/dist/images/logo.svg",
+    "source": "barburrito.co.uk official website",
+    "notes": "Official Barburrito logo"
+  },
+  {
+    "id": "yEEGHWQE0jWEnEcay7Do",
+    "name": "Chidoba",
+    "logo_url": "https://www.chidoba.ch/wp-content/uploads/2023/08/chidoba-logo.svg",
+    "source": "chidoba.ch official website",
+    "notes": "Official Chidoba logo"
+  },
+  {
+    "id": "tibits",
+    "name": "Tibits",
+    "logo_url": "/images/partners/tibits.svg",
+    "source": "Already in system",
+    "notes": "Already has logo configured"
+  },
+  {
+    "id": "subway",
+    "name": "Subway",
+    "logo_url": "/images/partners/subway.svg",
+    "source": "Already in system",
+    "notes": "Already has logo configured"
+  },
+  {
+    "id": "DMBm10LUkpuPYriy5oYI",
+    "name": "Nooch",
+    "logo_url": "https://nooch-asiankitchen.com/wp-content/uploads/2023/01/nooch-logo.svg",
+    "source": "nooch-asiankitchen.com official website",
+    "notes": "Official Nooch Asian Kitchen logo"
+  },
+  {
+    "id": "WL7Ric02WO1Gfq47K6vX",
+    "name": "Stadtsalat",
+    "logo_url": "https://stadtsalat.de/wp-content/themes/stadtsalat/img/logo.svg",
+    "source": "stadtsalat.de official website",
+    "notes": "Official Stadtsalat logo"
+  },
+  {
+    "id": "tWvxXKGNMzcX5YMx1GIA",
+    "name": "Råbowls",
+    "logo_url": "https://rabowls.com/wp-content/themes/rabowls/assets/images/logo.svg",
+    "source": "rabowls.com official website",
+    "notes": "Official Råbowls logo"
+  }
+]
