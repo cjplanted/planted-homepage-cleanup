@@ -16,11 +16,9 @@ const ScrollTrigger = (typeof window !== 'undefined' && (window as any).ScrollTr
 // This must happen BEFORE any ScrollTrigger instances are created
 gsap.registerPlugin(ScrollTrigger);
 
-// Verify plugin registration - check for ScrollTrigger specifically
+// Verify plugin registration
 if (!ScrollTrigger || typeof ScrollTrigger.create !== 'function') {
   console.error('GSAP ScrollTrigger plugin failed to register');
-} else {
-  console.log('ScrollTrigger plugin registered successfully (source: ' + ((window as any).gsap ? 'CDN' : 'bundled') + ')');
 }
 
 // Lenis instance (exported for use in other modules)

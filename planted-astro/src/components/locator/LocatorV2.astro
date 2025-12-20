@@ -165,17 +165,7 @@ const translationsJson = JSON.stringify(t);
   }} />
 </section>
 
-<!-- GSAP from CDN - load first -->
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script is:inline>
-  // Register ScrollTrigger globally to prevent "missing plugin" warnings
-  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-  }
-</script>
-
-<!-- Main locator script -->
+<!-- Main locator script (GSAP loaded globally in Layout.astro head) -->
 <script is:inline>
 (function() {
   'use strict';
