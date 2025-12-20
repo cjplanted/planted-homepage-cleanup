@@ -6,6 +6,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://cjplanted.github.io',
   base: '/planted-homepage-cleanup',
+  vite: {
+    optimizeDeps: {
+      include: ['gsap', 'gsap/ScrollTrigger'],
+    },
+    resolve: {
+      dedupe: ['gsap'],
+    },
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/api/'),
