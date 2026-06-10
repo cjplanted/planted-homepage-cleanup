@@ -682,7 +682,6 @@ const translationsJson = JSON.stringify(t);
         // Ensure proper slash between baseUrl and locale
         var normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
         var v3Url = normalizedBase + '/' + locale + '/locator-v3?' + params.toString();
-        console.log('[LocatorV2] Redirecting to V3:', v3Url);
         window.location.href = v3Url;
         return;
       }
@@ -1567,7 +1566,6 @@ const translationsJson = JSON.stringify(t);
       }
     });
 
-    console.log('LocatorV2 initialized');
   }
 
   // Initialize when DOM is ready

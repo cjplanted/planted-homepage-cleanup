@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { allLocales, locales, type LocaleCode, getLocalizedProductName } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
+import { shopifyImage, shopifySrcset } from '../../../utils/images';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -46,12 +47,19 @@ const categories = [...new Set(products.map(p => p.data.category))];
                             {/* Hover image - shows lifestyle/dish photo */}
                             {product.data.images.hover && (
                                 <div class="product-hover-image">
-                                    <img src={product.data.images.hover} alt="" loading="lazy">
+                                    <img src={shopifyImage(product.data.images.hover, 600)}
+                                         srcset={shopifySrcset(product.data.images.hover, [400, 600, 800])}
+                                         sizes="(max-width: 640px) 90vw, (max-width: 1200px) 45vw, 350px"
+                                         alt="" loading="lazy">
                                 </div>
                             )}
                             {/* Default image - product packaging */}
                             <div class="product-pack-image">
-                                <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} loading="lazy">
+                                <img src={shopifyImage(product.data.images.main, 600)}
+                                     srcset={shopifySrcset(product.data.images.main, [400, 600, 800])}
+                                     sizes="(max-width: 640px) 90vw, (max-width: 1200px) 45vw, 350px"
+                                     alt={`${product.data.name} ${product.data.variant}`}
+                                     loading={index < 4 ? 'eager' : 'lazy'}>
                             </div>
                         </div>
                         <div class="product-info">

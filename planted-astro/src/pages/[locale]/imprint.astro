@@ -16,16 +16,16 @@ const t = getTranslations(locale);
 const localeData = locales[locale];
 ---
 
-<Layout title="Imprint – Planted" description="Legal information about Planted Foods AG." currentPage="imprint" locale={locale}>
+<Layout title={`${t.legal.imprint.title} – Planted`} description="Legal information about Planted Foods AG." currentPage="imprint" locale={locale}>
     <article class="legal-page">
         <div class="legal-header">
-            <h1>Imprint</h1>
-            <p class="subtitle">Legal Information</p>
+            <h1>{t.legal.imprint.title}</h1>
+            <p class="subtitle">{t.legal.imprint.subtitle}</p>
         </div>
 
         <div class="legal-content">
             <section class="company-info">
-                <h2>Company Information</h2>
+                <h2>{t.legal.imprint.company}</h2>
                 <div class="info-card">
                     <div class="info-logo">
                         <svg viewBox="0 0 193.58 66.22" xmlns="http://www.w3.org/2000/svg">
@@ -53,7 +53,7 @@ const localeData = locales[locale];
             </section>
 
             <section>
-                <h2>Registration</h2>
+                <h2>{t.legal.imprint.registration}</h2>
                 <div class="info-grid">
                     <div class="info-item">
                         <span class="label">Company Number</span>
@@ -75,7 +75,7 @@ const localeData = locales[locale];
             </section>
 
             <section>
-                <h2>Contact</h2>
+                <h2>{t.legal.imprint.contact}</h2>
                 <div class="contact-grid">
                     <div class="contact-card">
                         <div class="contact-icon">
@@ -123,12 +123,12 @@ const localeData = locales[locale];
             </section>
 
             <section>
-                <h2>Management</h2>
+                <h2>{t.legal.imprint.management}</h2>
                 <p>The company is represented by its Board of Directors and Executive Management Team.</p>
             </section>
 
             <section>
-                <h2>Responsible for Content</h2>
+                <h2>{t.legal.imprint.contentResponsibility}</h2>
                 <p>Planted Foods AG<br>
                 Kemptpark 56<br>
                 8310 Kemptthal<br>
@@ -136,18 +136,18 @@ const localeData = locales[locale];
             </section>
 
             <section>
-                <h2>Disclaimer</h2>
+                <h2>{t.legal.imprint.disclaimer}</h2>
                 <p>Despite careful content control, we assume no liability for the content of external links. The operators of the linked pages are solely responsible for their content.</p>
                 <p>The content of our pages was created with the greatest care. However, we cannot guarantee the accuracy, completeness, and timeliness of the content.</p>
             </section>
 
             <section>
-                <h2>Copyright</h2>
+                <h2>{t.legal.imprint.copyright}</h2>
                 <p>The content and works on these pages created by the site operators are subject to Swiss copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of copyright law requires the prior written consent of Planted Foods AG.</p>
             </section>
 
             <section>
-                <h2>Online Dispute Resolution</h2>
+                <h2>{t.legal.imprint.disputes}</h2>
                 <p>The European Commission provides a platform for online dispute resolution (OS): <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a></p>
                 <p>We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.</p>
             </section>

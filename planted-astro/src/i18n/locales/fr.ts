@@ -436,6 +436,103 @@ export default {
         },
     },
 
+    // Our Mission page (new)
+    mission: {
+        pageTitle: 'Notre mission',
+        hero: {
+            badge: 'Notre mission',
+            title: 'Nous prouvons que la viande n\'a pas besoin de venir des animaux.',
+            subtitle: 'Le même plaisir. Une fraction de l\'empreinte.',
+        },
+        problem: {
+            title: 'Le monde adore la viande.',
+            text1: 'Et on comprend. Le grésillement, la texture, le plaisir : la viande est profondément ancrée dans notre façon de manger, de célébrer et de partager.',
+            text2: 'Mais la manière dont nous produisons la viande aujourd\'hui coûte cher à la planète. Alors on s\'est dit : et si on pouvait avoir tout ce qu\'on aime dans la viande, à partir de plantes ?',
+        },
+        origin: {
+            title: 'Tout a commencé avec quatre amis et une question.',
+            text1: 'En 2019, Pascal, Eric, Christoph et Lukas, scientifiques de l\'alimentation et entrepreneurs, ont commencé à expérimenter dans un petit laboratoire à Zurich.',
+            text2: 'Ils ne cherchaient pas à convertir les végétariens. Ils voulaient convaincre les amateurs de viande. Créer quelque chose de si bon que choisir les plantes ne ressemble plus à un sacrifice.',
+            text3: 'Cette obsession du goût, et non du compromis, a guidé chaque produit que nous avons créé depuis.',
+        },
+        statement: {
+            quote: 'Nous ne faisons pas d\'alternatives à la viande. Nous faisons de la viande. À partir de plantes.',
+            explanation: 'Il ne s\'agit pas d\'enlever quoi que ce soit. Il s\'agit d\'offrir aux gens un meilleur choix : un choix au goût incroyable, qui laisse la planète en meilleur état.',
+        },
+        timeline: {
+            title: 'Comment on en est arrivés là',
+            subtitle: 'Du labo à l\'assiette, étape par étape.',
+            y2019: {
+                title: 'Les débuts',
+                desc: 'Quatre scientifiques de l\'alimentation et entrepreneurs, Pascal Bieri, Eric Stirnemann, Christoph Jenny et Lukas Böni, commencent à expérimenter avec des protéines végétales dans un petit laboratoire de l\'ETH Zurich.',
+            },
+            y2020: {
+                title: 'Lancement de planted.chicken',
+                desc: 'Le premier planted.chicken arrive dans les rayons suisses. Rupture de stock en quelques jours. La nouvelle se répand : ça a un goût différent. Meilleur.',
+            },
+            y2021: {
+                title: 'Certifiés B Corp',
+                desc: 'Nous devenons officiellement une B Corporation et rejoignons une communauté mondiale qui utilise l\'entreprise comme une force pour le bien.',
+            },
+            y2022: {
+                title: 'Expansion européenne',
+                desc: 'De la Suisse vers l\'Allemagne, l\'Autriche et au-delà. L\'appétit pour de meilleures alternatives à la viande ne connaît pas de frontières.',
+            },
+            y2023: {
+                title: 'planted.steak',
+                desc: 'Nous lançons le premier steak végétal entier fermenté au monde. Une avancée majeure en texture et en goût.',
+            },
+            y2024: {
+                title: 'CHF 70 millions & 8 000+ restaurants',
+                desc: 'Une levée de fonds majeure accélère notre mission. Des étoilés Michelin aux cantines, planted est servi dans plus de 8 000 établissements.',
+            },
+            y2025: {
+                title: 'Le plus grand site d\'Europe',
+                desc: 'Notre site de Memmingen ouvre ses portes : l\'usine de viande végétale la plus avancée d\'Europe. 100% d\'énergie renouvelable.',
+            },
+        },
+        values: {
+            title: 'Ce qui nous anime',
+            taste: {
+                title: 'Le goût d\'abord. Toujours.',
+                desc: 'Si les amateurs de viande ne se resservent pas, on retourne au labo. Sans exception.',
+            },
+            simple: {
+                title: 'Des ingrédients simples.',
+                desc: 'Protéine de pois. Eau. Huile de colza. Huile de tournesol. Des choses que vous reconnaissez. Rien de bizarre.',
+            },
+            planet: {
+                title: 'La planète avant le profit.',
+                desc: 'Certifiés B Corp. Chaque décision prend en compte son impact. Pas parce que c\'est tendance, parce que c\'est nécessaire.',
+            },
+            science: {
+                title: 'La science rencontre la cuisine.',
+                desc: 'L\'innovation food tech alliée à l\'art culinaire. Nous sommes aussi à l\'aise dans un labo que dans une cuisine étoilée.',
+            },
+        },
+        bcorp: {
+            title: 'L\'entreprise comme force pour le bien',
+            text1: 'En 2021, nous sommes devenus une B Corporation certifiée. Ce n\'est pas un badge marketing, c\'est un engagement de responsabilité.',
+            text2: 'Chaque année, nous sommes évalués sur la façon dont nous traitons nos collaborateurs, les communautés, nos clients et la planète. Et nous publions les résultats.',
+        },
+        future: {
+            title: 'Où nous allons',
+            text1: 'Nous ne faisons que commencer. De nouveaux produits, de nouveaux marchés, de nouvelles façons de faire du choix végétal le choix le plus simple.',
+            text2: 'Notre objectif n\'est pas d\'être la plus grande entreprise végétale. C\'est d\'être celle qui fait enfin changer les amateurs de viande, parce qu\'ils en ont envie.',
+        },
+        founders: {
+            title: 'L\'équipe',
+            subtitle: 'Les personnes derrière planted.',
+            niceToMeet: 'Enchantés !',
+            leadershipText: 'Voici Judith, Chris, Pascal, Lukas, Marion, David, Rasmus et Joanna : les quatre premiers sont les fondateurs de Planted, et le groupe entier forme notre équipe de direction. Ils guident nos équipes vers notre objectif : inspirer les gens à passer durablement à une meilleure protéine, où qu\'ils mangent. Planted est bien plus qu\'un produit (très) savoureux, c\'est un état d\'esprit. Ils donnent chaque jour à notre équipe les moyens de prendre des décisions importantes, d\'évoluer et de révéler tout son potentiel. Nous sommes tous convaincus que nous ne pourrons atteindre nos objectifs ambitieux qu\'avec la meilleure équipe.',
+            gangTitle: 'Découvrez quelques visages de notre gang !',
+        },
+        cta: {
+            title: 'Prêt à goûter la différence ?',
+            subtitle: 'Trouvez planted près de chez vous et découvrez ce que la viande végétale peut vraiment être.',
+        },
+    },
+
     // 404 page
     notFound: {
         title: 'Page non trouvée',
@@ -533,6 +630,106 @@ export default {
             analyticsDesc: 'Nous aident à comprendre comment les visiteurs interagissent avec notre site.',
             marketing: 'Marketing',
             marketingDesc: 'Utilisés pour diffuser des publicités personnalisées.',
+        },
+    },
+
+    // FAQ page
+    faq: {
+        pageTitle: 'FAQ',
+        hero: {
+            badge: 'Centre d\'aide',
+            title: 'Questions fréquentes',
+            subtitle: 'Tout ce que vous devez savoir sur les produits planted.',
+        },
+        categories: {
+            general: 'Général',
+            ingredients: 'Ingrédients',
+            sustainability: 'Durabilité',
+            gastronomy: 'Gastronomie & B2B',
+        },
+        contact: {
+            title: 'Encore des questions ?',
+            subtitle: 'Vous ne trouvez pas ce que vous cherchez ? Notre équipe est là pour vous aider.',
+            button: 'Contactez-nous',
+            business: 'Pour les demandes professionnelles',
+        },
+    },
+
+    // Press page
+    press: {
+        pageTitle: 'Presse & Médias',
+        hero: {
+            badge: 'Presse & Médias',
+            title: 'Les actualités de Planted',
+            subtitle: 'Ressources pour les journalistes et les professionnels des médias.',
+        },
+        contact: {
+            title: 'Contact presse',
+            subtitle: 'Pour les demandes presse, les demandes d\'interview et les opportunités médias :',
+        },
+        facts: {
+            title: 'L\'entreprise en un coup d\'œil',
+            founded: 'Fondée en',
+            headquarters: 'Siège social',
+            employees: 'Collaborateurs',
+            markets: 'Marchés',
+            productsCount: 'Produits',
+            restaurantPartners: 'Restaurants partenaires',
+        },
+        resources: {
+            title: 'Ressources médias',
+            subtitle: 'Téléchargez les visuels et supports officiels de la marque.',
+            logos: 'Pack de logos',
+            logosDesc: 'Logos officiels de Planted en différents formats (SVG, PNG, EPS) pour le print et le digital.',
+            brand: 'Charte graphique',
+            brandDesc: 'Guide de style complet de la marque : couleurs, typographie et règles d\'utilisation.',
+            images: 'Images produits',
+            imagesDesc: 'Photos produits haute résolution, visuels packaging et images lifestyle.',
+            video: 'Contenu vidéo',
+            videoDesc: 'Images B-roll, vidéos produits et contenu des coulisses.',
+            bios: 'Biographies des dirigeants',
+            biosDesc: 'Biographies et portraits des dirigeants et fondateurs de Planted.',
+            data: 'Données de durabilité',
+            dataDesc: 'Rapports ACV, données d\'impact environnemental et certifications de durabilité.',
+            contact: 'Contactez press@eatplanted.com',
+        },
+        news: {
+            title: 'Actualités récentes',
+            subtitle: 'Dernières annonces et nouvelles de l\'entreprise.',
+            viewAll: 'Voir toutes les actualités',
+        },
+        about: {
+            title: 'À propos de Planted',
+            boilerplate: 'Ce texte de présentation peut être utilisé dans les supports de presse.',
+            description1: 'Planted est une entreprise suisse de technologie alimentaire qui révolutionne notre façon de penser la viande. Fondée en 2019 à Zurich, l\'entreprise crée des produits de viande végétale grâce à une technologie de fermentation innovante et des ingrédients simples et reconnaissables. Les produits Planted sont vendus dans les grandes enseignes à travers l\'Europe et servis dans plus de 8 000 restaurants.',
+            description2: 'L\'entreprise est certifiée B Corp et s\'engage à respecter les normes les plus élevées en matière de performance sociale et environnementale. La mission de Planted est de rendre une alimentation délicieuse et durable accessible à tous, en prouvant que le goût et la responsabilité environnementale peuvent aller de pair.',
+        },
+        social: {
+            title: 'Suivez Planted',
+        },
+    },
+
+    // Legal pages
+    legal: {
+        privacy: {
+            title: 'Politique de confidentialité',
+            lastUpdated: 'Dernière mise à jour',
+        },
+        terms: {
+            title: 'Conditions générales',
+            lastUpdated: 'Dernière mise à jour',
+        },
+        imprint: {
+            title: 'Mentions légales',
+            subtitle: 'Informations légales',
+            company: 'Informations sur l\'entreprise',
+            registration: 'Immatriculation',
+            contact: 'Contact',
+            management: 'Direction',
+            contentResponsibility: 'Responsable du contenu',
+            disclaimer: 'Clause de non-responsabilité',
+            copyright: 'Droits d\'auteur',
+            disputes: 'Règlement des litiges en ligne',
         },
     },
 } as const;

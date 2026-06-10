@@ -632,4 +632,104 @@ export default {
             marketingDesc: 'Gebruikt om gepersonaliseerde advertenties te leveren.',
         },
     },
+
+    // FAQ page
+    faq: {
+        pageTitle: 'FAQ',
+        hero: {
+            badge: 'Helpcentrum',
+            title: 'Veelgestelde vragen',
+            subtitle: 'Alles wat je wilt weten over de producten van planted.',
+        },
+        categories: {
+            general: 'Algemeen',
+            ingredients: 'Ingrediënten',
+            sustainability: 'Duurzaamheid',
+            gastronomy: 'Horeca & B2B',
+        },
+        contact: {
+            title: 'Nog vragen?',
+            subtitle: 'Niet gevonden wat je zocht? Ons team helpt je graag verder.',
+            button: 'Neem contact op',
+            business: 'Voor zakelijke vragen',
+        },
+    },
+
+    // Press page
+    press: {
+        pageTitle: 'Pers & Media',
+        hero: {
+            badge: 'Pers & Media',
+            title: 'Nieuws van Planted',
+            subtitle: 'Bronnen voor journalisten en mediaprofessionals.',
+        },
+        contact: {
+            title: 'Perscontact',
+            subtitle: 'Voor persvragen, interviewverzoeken en mediasamenwerkingen:',
+        },
+        facts: {
+            title: 'Het bedrijf in één oogopslag',
+            founded: 'Opgericht',
+            headquarters: 'Hoofdkantoor',
+            employees: 'Medewerkers',
+            markets: 'Markten',
+            productsCount: 'Producten',
+            restaurantPartners: 'Restaurantpartners',
+        },
+        resources: {
+            title: 'Mediamateriaal',
+            subtitle: 'Download officiële merkassets en materialen.',
+            logos: 'Logopakket',
+            logosDesc: 'Officiële Planted-logo\'s in verschillende formaten (SVG, PNG, EPS) voor print en digitaal gebruik.',
+            brand: 'Merkrichtlijnen',
+            brandDesc: 'Complete merkstijlgids met kleuren, typografie en gebruiksrichtlijnen.',
+            images: 'Productafbeeldingen',
+            imagesDesc: 'Productfotografie in hoge resolutie, verpakkingsfoto\'s en lifestylebeelden.',
+            video: 'Videomateriaal',
+            videoDesc: 'B-roll-beelden, productvideo\'s en content van achter de schermen.',
+            bios: 'Biografieën van het management',
+            biosDesc: 'Biografieën en portretfoto\'s van de leiding en oprichters van Planted.',
+            data: 'Duurzaamheidsdata',
+            dataDesc: 'LCA-rapporten, gegevens over milieu-impact en duurzaamheidscertificeringen.',
+            contact: 'Contact: press@eatplanted.com',
+        },
+        news: {
+            title: 'Recent nieuws',
+            subtitle: 'De nieuwste aankondigingen en bedrijfsupdates.',
+            viewAll: 'Al het nieuws bekijken',
+        },
+        about: {
+            title: 'Over Planted',
+            boilerplate: 'Deze standaardtekst kan in persmateriaal worden gebruikt.',
+            description1: 'Planted is een Zwitsers foodtechbedrijf dat de manier waarop we over vlees denken radicaal verandert. Het bedrijf, opgericht in 2019 in Zürich, maakt plantaardige vleesproducten met innovatieve fermentatietechnologie en simpele, herkenbare ingrediënten. De producten van Planted liggen bij grote retailers in heel Europa en worden geserveerd in meer dan 8.000 restaurants.',
+            description2: 'Het bedrijf is B Corp gecertificeerd en committeert zich aan de hoogste normen voor sociale en ecologische prestaties. De missie van Planted is om heerlijk, duurzaam eten voor iedereen toegankelijk te maken en te bewijzen dat geweldige smaak en verantwoordelijkheid voor de planeet prima samengaan.',
+        },
+        social: {
+            title: 'Volg Planted',
+        },
+    },
+
+    // Legal pages
+    legal: {
+        privacy: {
+            title: 'Privacyverklaring',
+            lastUpdated: 'Laatst bijgewerkt',
+        },
+        terms: {
+            title: 'Algemene voorwaarden',
+            lastUpdated: 'Laatst bijgewerkt',
+        },
+        imprint: {
+            title: 'Colofon',
+            subtitle: 'Juridische informatie',
+            company: 'Bedrijfsgegevens',
+            registration: 'Registratie',
+            contact: 'Contact',
+            management: 'Directie',
+            contentResponsibility: 'Verantwoordelijk voor de inhoud',
+            disclaimer: 'Disclaimer',
+            copyright: 'Auteursrecht',
+            disputes: 'Onlinegeschillenbeslechting',
+        },
+    },
 } as const;

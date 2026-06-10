@@ -16,11 +16,11 @@ const t = getTranslations(locale);
 const localeData = locales[locale];
 ---
 
-<Layout title="Privacy Policy – Planted" description="Learn how Planted Foods AG collects, uses, and protects your personal data." currentPage="privacy" locale={locale}>
+<Layout title={`${t.legal.privacy.title} – Planted`} description="Learn how Planted Foods AG collects, uses, and protects your personal data." currentPage="privacy" locale={locale}>
     <article class="legal-page">
         <div class="legal-header">
-            <h1>Privacy Policy</h1>
-            <p class="last-updated">Last updated: December 2025</p>
+            <h1>{t.legal.privacy.title}</h1>
+            <p class="last-updated">{t.legal.privacy.lastUpdated}: December 2025</p>
         </div>
 
         <div class="legal-content">

@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
+import { shopifyImage, shopifySrcset } from '../../../utils/images';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -112,7 +113,7 @@ const productFilters = productFilterIds
                        data-product={recipe.data.product || 'other'}
                        style={`--delay: ${Math.min(index * 0.02, 0.3)}s`}>
                         <div class="recipe-image">
-                            <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
+                            <img src={shopifyImage(recipe.data.image, 600)} srcset={shopifySrcset(recipe.data.image, [400, 600, 800])} sizes="(max-width: 640px) 90vw, 30vw" alt={recipe.data.title} loading="lazy">
                             <div class="recipe-badge">{t.recipes.difficulty[recipe.data.difficulty.toLowerCase() as 'easy' | 'medium' | 'hard'] || recipe.data.difficulty}</div>
                         </div>
                         <div class="recipe-info">

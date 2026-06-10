@@ -16,11 +16,11 @@ const t = getTranslations(locale);
 const localeData = locales[locale];
 ---
 
-<Layout title="Terms of Service – Planted" description="Terms and conditions for using the Planted website and services." currentPage="terms" locale={locale}>
+<Layout title={`${t.legal.terms.title} – Planted`} description="Terms and conditions for using the Planted website and services." currentPage="terms" locale={locale}>
     <article class="legal-page">
         <div class="legal-header">
-            <h1>Terms of Service</h1>
-            <p class="last-updated">Last updated: December 2025</p>
+            <h1>{t.legal.terms.title}</h1>
+            <p class="last-updated">{t.legal.terms.lastUpdated}: December 2025</p>
         </div>
 
         <div class="legal-content">

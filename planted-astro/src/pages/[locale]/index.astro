@@ -6,6 +6,7 @@ import { getTranslations } from '../../i18n/index';
 import LocatorV2 from '../../components/locator/LocatorV2.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import MeatLoverTicker from '../../components/MeatLoverTicker.astro';
+import { shopifyImage, shopifySrcset } from '../../utils/images';
 
 export async function getStaticPaths() {
     return allLocales.map((locale) => ({
@@ -90,7 +91,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <!-- TV Frame -->
                     <div class="tv-frame">
                         <div class="tv-screen">
-                            <video autoplay muted loop playsinline>
+                            <video autoplay muted loop playsinline preload="metadata" poster={`${base}/images/hero-poster.jpg`} width="1920" height="1080">
                                 <source src={`${base}/video/hero.mp4`} type="video/mp4">
                             </video>
                         </div>
@@ -183,14 +184,13 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
         <div class="intro-content">
             <div class="intro-label reveal">
                 <span class="intro-flag">🇨🇭</span>
-                <span>Swiss-made</span>
+                <span>{t.home.intro.label}</span>
             </div>
             <h2 class="reveal reveal-delay-1">
-                Wir glauben, dass Fleisch nicht von Tieren kommen muss, um gut zu schmecken.
+                {t.home.intro.title}
             </h2>
             <p class="reveal reveal-delay-2">
-                Deshalb entwickeln wir in der Schweiz pflanzliche Alternativen, die so authentisch schmecken,
-                dass selbst eingefleischte Fleischliebhaber begeistert sind.
+                {t.home.intro.text}
             </p>
             <div class="intro-badges reveal reveal-delay-3">
                 <div class="intro-badge">
@@ -198,25 +198,25 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                         <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5z"/>
                         <circle cx="12" cy="16" r="1"/>
                     </svg>
-                    <span>100% pflanzlich</span>
+                    <span>{t.home.intro.badges.plantBased}</span>
                 </div>
                 <div class="intro-badge">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
                     </svg>
-                    <span>Keine Zusatzstoffe</span>
+                    <span>{t.home.intro.badges.noAdditives}</span>
                 </div>
                 <div class="intro-badge">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
                         <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
-                    <span>High Protein</span>
+                    <span>{t.home.intro.badges.highProtein}</span>
                 </div>
                 <div class="intro-badge">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="intro-badge-icon">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
-                    <span>B Corp</span>
+                    <span>{t.home.intro.badges.bCorp}</span>
                 </div>
             </div>
         </div>
@@ -239,7 +239,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                     <a href={`${base}/${locale}/products/${product.data.slug}`} class="product-card" data-color={product.data.color}>
                         <div class="product-image">
                             {product.data.isNew && <span class="product-badge">{t.common.new}</span>}
-                            <img src={product.data.images.main} alt={`${product.data.name} ${product.data.variant}`} class="product-pack-image" loading="lazy">
+                            <img src={shopifyImage(product.data.images.main, 600)} srcset={shopifySrcset(product.data.images.main, [400, 600, 800])} sizes="(max-width: 640px) 80vw, 340px" alt={`${product.data.name} ${product.data.variant}`} class="product-pack-image" loading="lazy">
                         </div>
                         <div class="product-info">
                             <span class="product-category">{getLocalizedProductName(product.data.name, locale)}</span>
@@ -380,7 +380,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
             <div class="recipes-grid">
                 {featuredRecipes.map((recipe) => (
                     <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card reveal-scale">
-                        <img src={recipe.data.image} alt={recipe.data.title} class="recipe-image" loading="lazy">
+                        <img src={shopifyImage(recipe.data.image, 700)} srcset={shopifySrcset(recipe.data.image, [400, 700, 1000])} sizes="(max-width: 640px) 90vw, 45vw" alt={recipe.data.title} class="recipe-image" loading="lazy">
                         <div class="recipe-overlay">
                             <div class="recipe-title">{recipe.data.title}</div>
                             <div class="recipe-meta">{recipe.data.cookTime} {t.recipes.time} • {t.recipes.difficulty[recipe.data.difficulty.toLowerCase() as 'easy' | 'medium' | 'hard'] || recipe.data.difficulty}</div>
@@ -399,6 +399,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
 
     <!-- Newsletter Signup -->
     <NewsletterSignup
+        locale={locale}
         translations={{
             badge: t.newsletter.title,
             title: t.newsletter.subtitle,
@@ -432,7 +433,7 @@ const ambassadorQuote = ambassador ? (localeData.language === 'en' ? ambassador.
                 </a>
             </div>
             <div class="business-image">
-                <img src="https://eatplanted.com/cdn/shop/files/DSC_2472.jpg?v=1662454073" alt="Restaurant kitchen" loading="lazy">
+                <img src={`${base}/images/business-kitchen.jpg`} alt="Restaurant kitchen" width="1600" height="1064" loading="lazy">
             </div>
         </div>
     </section>

@@ -669,6 +669,12 @@ export default {
         },
         facts: {
             title: 'Company at a Glance',
+            founded: 'Founded',
+            headquarters: 'Headquarters',
+            employees: 'Employees',
+            markets: 'Markets',
+            productsCount: 'Products',
+            restaurantPartners: 'Restaurant Partners',
         },
         resources: {
             title: 'Media Resources',
@@ -695,6 +701,8 @@ export default {
         about: {
             title: 'About Planted',
             boilerplate: 'This boilerplate text can be used in press materials.',
+            description1: 'Planted is a Swiss food technology company revolutionizing the way we think about meat. Founded in 2019 in Zurich, the company creates plant-based meat products using innovative fermentation technology and simple, recognizable ingredients. Planted\'s products are sold in major retailers across Europe and served in over 8,000 restaurants.',
+            description2: 'The company is B Corp certified, committed to the highest standards of social and environmental performance. Planted\'s mission is to make delicious, sustainable food accessible to everyone, proving that great taste and environmental responsibility can go hand in hand.',
         },
         social: {
             title: 'Follow Planted',

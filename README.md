@@ -1,32 +1,39 @@
-# Planted Website Prototype
+# Planted Website Monorepo
 
-A consumer-focused website redesign for [Planted Foods](https://eatplanted.com), featuring Apple-style scroll animations and brand-compliant design.
+Consumer website prototype + availability backend for [Planted Foods](https://eatplanted.com).
 
-## 🌱 Features
+## Structure
 
-- **Apple-style scroll transitions** - Video transforms as you scroll
-- **Scroll reveal animations** - Sections fade in smoothly
-- **Counter animations** - Impact stats count up
-- **Mobile-first responsive design**
-- **Brand-compliant typography** - VC Henrietta + Galano Grotesque
+| Directory | What it is |
+|---|---|
+| `planted-astro/` | Astro 5 frontend — 18 locales, ~3,500 static pages, deployed to GitHub Pages |
+| `planted-availability-db/` | Firebase backend monorepo (Cloud Functions API, Firestore, scrapers, admin dashboard) |
+| `scripts/` | Dev tooling (Chrome debug launcher for the website-review skill) |
 
-## 🎨 Brand Elements
+## Frontend (`planted-astro`)
 
-- Purple primary (#61269E)
-- Green accent (#6BBF59)
-- Cream background (#FDF8F3)
-- Master Logo Top variant
+- **Stack**: Astro 5, GSAP + Lenis scroll animations, optional Sanity CMS (configured, not active)
+- **Content**: products, recipes, retailers as local JSON in `src/content/`; images served from the Shopify CDN with on-the-fly resizing (`src/utils/images.ts`)
+- **i18n**: 6 languages / 18 locale variants in `src/i18n/locales/` — validate with `pnpm exec tsx scripts/validate-translations.ts`
+- **Store locator**: talks to the Firebase API at runtime (`src/data/padApi.ts`)
 
-## 📁 Files
+```bash
+cd planted-astro
+pnpm install
+pnpm dev        # http://localhost:4321
+pnpm build      # static build into dist/
+pnpm preview
+```
 
-- `index.html` - Main website
-- `*.woff2, *.woff, *.otf` - Brand fonts
-- `*.mp4` - Hero background video
+Deployment: pushes to `main` trigger `.github/workflows/deploy.yml`, which builds `planted-astro` and publishes `dist/` to GitHub Pages at <https://cjplanted.github.io/planted-homepage-cleanup/>.
 
-## 🚀 Deploy
+Analytics: GTM only renders when `PUBLIC_GTM_ID` is set at build time (consent-gated via the cookie banner).
 
-This site is ready for GitHub Pages, Netlify, or Vercel deployment.
+## Brand
 
----
+- Purple `#61269E`, green `#6BBF59`, cream `#FDF8F3`
+- Type: VC Henrietta (display) + Galano Grotesque (body), self-hosted in `planted-astro/public/fonts/`
 
-Made with 💜 for Planted Foods
+## Backend (`planted-availability-db`)
+
+See `planted-availability-db/README.md` and `CLAUDE.md` for architecture, commit policy, and deploy commands (`firebase deploy --only functions`).

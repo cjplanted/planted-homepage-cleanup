@@ -200,7 +200,6 @@ const dishesFoundText = translations.dishesFound.replace('{count}', String(total
 
       // Skip the rest if API loader is active (locator-v3.astro handles card loading)
       if ((window as any).__v3Config) {
-        console.log('[V3Controller] Card handling disabled - API loader is active');
         this.disabled = true;
         return;
       }

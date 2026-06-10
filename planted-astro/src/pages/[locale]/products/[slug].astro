@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import { allLocales, locales, type LocaleCode, getLocalizedProductName } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
 import { getProductTranslation } from '../../../i18n/products/index';
+import { shopifyImage, shopifySrcset } from '../../../utils/images';
 
 export async function getStaticPaths() {
     const products = await getCollection('products');
@@ -111,7 +112,7 @@ const features = productT?.features || [
 const localizedName = getLocalizedProductName(product.data.name, locale);
 
 // Generate JSON-LD structured data for product
-const siteUrl = `https://cgjen-box.github.io${base}`;
+const siteUrl = `${Astro.site?.origin || 'https://cjplanted.github.io'}${base}`;
 const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -189,13 +190,19 @@ const breadcrumbJsonLd = {
 
             {product.data.images.hover && (
                 <div class="hero-dish" id="heroDish">
-                    <img src={product.data.images.hover} alt={`${localizedName} dish`} loading="eager">
+                    <img src={shopifyImage(product.data.images.hover, 1600)}
+                         srcset={shopifySrcset(product.data.images.hover, [800, 1200, 1600, 2000])}
+                         sizes="100vw"
+                         alt={`${localizedName} dish`} loading="lazy">
                 </div>
             )}
 
             <div class="hero-pack" id="heroPack">
                 {product.data.isNew && <span class="product-badge-new">{t.common.new}</span>}
-                <img src={product.data.images.main} alt={`${localizedName} ${product.data.variant}`} loading="eager">
+                <img src={shopifyImage(product.data.images.main, 900)}
+                     srcset={shopifySrcset(product.data.images.main, [500, 900, 1200])}
+                     sizes="(max-width: 700px) 92vw, min(85vw, 900px)"
+                     alt={`${localizedName} ${product.data.variant}`} loading="eager" fetchpriority="high">
             </div>
 
             <div class="hero-info" id="heroInfo">
@@ -289,7 +296,10 @@ const breadcrumbJsonLd = {
     <section class="nutrition">
         <div class="nutrition-layout">
             <div class="nutrition-image">
-                <img src={product.data.images.hover || product.data.images.main} alt={localizedName} loading="lazy">
+                <img src={shopifyImage(product.data.images.hover || product.data.images.main, 800)}
+                     srcset={shopifySrcset(product.data.images.hover || product.data.images.main, [500, 800, 1100])}
+                     sizes="(min-width: 800px) 33vw, 100vw"
+                     alt={localizedName} loading="lazy">
             </div>
             <div class="nutrition-content">
                 <div class="nutrition-header">
@@ -370,7 +380,10 @@ const breadcrumbJsonLd = {
             {featuredRecipes.map((recipe) => (
                 <a href={`${base}/${locale}/recipes/${recipe.data.slug}`} class="recipe-card">
                     <div class="recipe-img">
-                        <img src={recipe.data.image} alt={recipe.data.title} loading="lazy">
+                        <img src={shopifyImage(recipe.data.image, 600)}
+                             srcset={shopifySrcset(recipe.data.image, [400, 600, 800])}
+                             sizes="300px"
+                             alt={recipe.data.title} loading="lazy" width="600" height="450">
                     </div>
                     <div class="recipe-info">
                         <h3>{recipe.data.title}</h3>
@@ -612,6 +625,7 @@ const breadcrumbJsonLd = {
     }
 
     @media (max-width: 700px) {
+        .hero-pack { width: 92vw; }
         .hero-info { flex-direction: column; align-items: flex-start; padding: 0 2rem; bottom: 6rem; gap: 1rem; }
         .hero-protein { text-align: left; }
     }

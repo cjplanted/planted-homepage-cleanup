@@ -15,19 +15,21 @@ interface Props {
     locale?: LocaleCode;
 }
 
+const base = import.meta.env.BASE_URL;
+const siteOrigin = Astro.site?.origin || 'https://cjplanted.github.io';
+const siteUrl = `${siteOrigin}${base}`;
+
 const {
     title,
     description = 'Plant-based meat that actually tastes like meat. Made in Switzerland. B Corp certified.',
-    image = 'https://cdn.shopify.com/s/files/1/0049/5383/3521/files/planted-og-image.jpg',
+    image = `${siteUrl}/images/og-image.jpg`,
     currentPage = '',
     locale = defaultLocale
 } = Astro.props;
 const localeData = locales[locale];
 const langCode = localeData?.language || 'en';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const base = import.meta.env.BASE_URL;
-const siteOrigin = Astro.site?.origin || 'https://cgjen-box.github.io';
-const siteUrl = `${siteOrigin}${base}`;
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
 
 // Get current page path without locale prefix for hreflang generation
 const currentPath = Astro.url.pathname.replace(base, '').replace(/^\/[a-z]{2}(-[a-z]{2})?\//, '/').replace(/^\/?/, '');
@@ -53,7 +55,7 @@ const schemaOrg = {
             "url": siteUrl,
             "logo": {
                 "@type": "ImageObject",
-                "url": `${siteUrl}images/planted-logo.svg`
+                "url": `${siteUrl}/favicon.svg`
             },
             "sameAs": [
                 "https://www.instagram.com/eatplanted/",
@@ -95,27 +97,27 @@ const schemaOrg = {
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`}>
     <link rel="apple-touch-icon" href={`${base}/favicon.svg`}>
 
-    <!-- Google Tag Manager -->
-    <script is:inline>
-        // Only load GTM if user has consented to analytics
-        (function() {
-            const consent = localStorage.getItem('planted_cookie_consent');
-            if (consent) {
-                try {
-                    const consentData = JSON.parse(consent);
-                    const GTM_ID = ''; // set real GTM container ID to enable
-                    if (consentData.analytics && GTM_ID) {
-                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                        })(window,document,'script','dataLayer',GTM_ID);
-                    }
-                } catch (e) {}
-            }
-        })();
-    </script>
-    <!-- End Google Tag Manager -->
+    <!-- Google Tag Manager (only rendered when PUBLIC_GTM_ID is configured) -->
+    {gtmId && (
+        <script is:inline define:vars={{ gtmId }}>
+            // Only load GTM if user has consented to analytics
+            (function() {
+                const consent = localStorage.getItem('planted_cookie_consent');
+                if (consent) {
+                    try {
+                        const consentData = JSON.parse(consent);
+                        if (consentData.analytics) {
+                            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                            })(window,document,'script','dataLayer',gtmId);
+                        }
+                    } catch (e) {}
+                }
+            })();
+        </script>
+    )}
 
     <!-- SEO: prototype stays out of Google until this becomes the real site -->
     <meta name="robots" content="noindex, nofollow">
@@ -201,6 +203,10 @@ const schemaOrg = {
     <ViewTransitions />
 </head>
 <body>
+    {gtmId && (
+        <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    )}
 
     <Navbar currentPage={currentPage} locale={locale} />
     <main class="main-content">

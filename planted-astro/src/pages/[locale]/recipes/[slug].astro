@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { allLocales, locales, type LocaleCode } from '../../../i18n/config';
 import { getTranslations } from '../../../i18n/index';
+import { shopifyImage, shopifySrcset } from '../../../utils/images';
 
 export async function getStaticPaths() {
     const recipes = await getCollection('recipes');
@@ -37,7 +38,7 @@ const ingredients = recipe.data.ingredients || [];
 const instructions = recipe.data.instructions || [];
 
 // Generate JSON-LD structured data for recipe
-const siteUrl = `https://cgjen-box.github.io${base}`;
+const siteUrl = `${Astro.site?.origin || 'https://cjplanted.github.io'}${base}`;
 const recipeJsonLd = {
     "@context": "https://schema.org",
     "@type": "Recipe",
@@ -139,7 +140,7 @@ const breadcrumbJsonLd = {
                 </div>
             </div>
             <div class="hero-image reveal-scale">
-                <img src={recipe.data.image} alt={recipe.data.title} />
+                <img src={shopifyImage(recipe.data.image, 1400)} srcset={shopifySrcset(recipe.data.image, [800, 1100, 1400, 1800])} sizes="100vw" alt={recipe.data.title} />
             </div>
         </header>
 
