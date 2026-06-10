@@ -84,7 +84,6 @@ const schemaOrg = {
 };
 ---
 
-<!-- Deploy test: cycle 5/5, 2025-12-19T16:01:00Z -->
 <!DOCTYPE html>
 <html lang={langCode}>
 <head>
@@ -104,12 +103,13 @@ const schemaOrg = {
             if (consent) {
                 try {
                     const consentData = JSON.parse(consent);
-                    if (consentData.analytics) {
+                    const GTM_ID = ''; // set real GTM container ID to enable
+                    if (consentData.analytics && GTM_ID) {
                         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                        })(window,document,'script','dataLayer','GTM-XXXXXXX');
+                        })(window,document,'script','dataLayer',GTM_ID);
                     }
                 } catch (e) {}
             }
@@ -117,7 +117,8 @@ const schemaOrg = {
     </script>
     <!-- End Google Tag Manager -->
 
-    <!-- SEO -->
+    <!-- SEO: prototype stays out of Google until this becomes the real site -->
+    <meta name="robots" content="noindex, nofollow">
     <title>{title}</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalURL}>
@@ -197,25 +198,9 @@ const schemaOrg = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- GSAP CDN - Load in head to ensure window.gsap exists before bundled scripts -->
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script is:inline>
-        // Register ScrollTrigger immediately after loading
-        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-            gsap.registerPlugin(ScrollTrigger);
-            window.gsap = gsap;
-            window.ScrollTrigger = ScrollTrigger;
-        }
-    </script>
-
     <ViewTransitions />
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <Navbar currentPage={currentPage} locale={locale} />
     <main class="main-content">
@@ -305,7 +290,7 @@ const schemaOrg = {
 
     <!-- Smooth Scroll with GSAP + Lenis -->
     <script>
-        import { gsap, ScrollTrigger, initSmoothScroll, destroySmoothScroll } from '../scripts/smooth-scroll';
+        import { initSmoothScroll, destroySmoothScroll, gsap, ScrollTrigger } from '../scripts/smooth-scroll';
         import { initHeroAnimations } from '../scripts/animations/hero';
         import { initTransformationAnimations } from '../scripts/animations/transformation';
         import { initStatsAnimations } from '../scripts/animations/stats';
